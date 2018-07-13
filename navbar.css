@@ -2,6 +2,7 @@ body {
   padding-bottom: 20px;
 }
 
+td { padding: 5px; }
 .navbar {
   margin-bottom: 20px;
 }
@@ -38,4 +39,13 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+	border:1px solid black;
+  color: black;
+  display: none;
+  .padding: 100px 20px;
+  height: 100%;
 }

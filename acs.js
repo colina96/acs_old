@@ -1,11 +1,6 @@
-$(document).ready(function(){
-  $('.modal').modal('show');
-//Get the element with id="defaultOpen" and click on it
-  document.getElementById("defaultOpen").click();
-});
 
 function openPage(pageName, elmnt, color) {
-	console.log("opening page ",pagename);
+	console.log("opening page ",pageName);
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -23,6 +18,7 @@ function openPage(pageName, elmnt, color) {
     document.getElementById(pageName).style.display = "block";
 
     // Add the specific color to the button used to open the tab content
-    elmnt.style.backgroundColor = color;
+  //  elmnt.style.backgroundColor = color;
 }
 
+document.getElementById("defaultOpen").click();
