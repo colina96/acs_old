@@ -1,6 +1,7 @@
 <?php include 'acs_head.php' ?>
-<div class="container">
-<?php include 'users.php' ?>
-</div>
-  </body>
-</html>
+<script>
+var default_tab = 'USERS'; 
+
+
+</script> 
+<?php include 'acs_footer.php' ?>

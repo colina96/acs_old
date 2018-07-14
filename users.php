@@ -20,7 +20,7 @@
 		}
 		else {
 			show_users();
-			// echo "<div class='draw_screen_btn'><a class='users_link' href='acs_users.php?new=1'>New User</a></div>";
+			echo "<div class='draw_screen_btn'><a class='users_link' href='acs_users.php?new=1'>New User</a></div>";
 		}
 	}
 }
@@ -42,8 +42,8 @@ function show_users()
 			echo "<td>".$row['firstname']." ".$row['lastname']."</td>";
 			echo "<td>".$row['function']."</td>";
 			echo "<td>".$row['last_login']."</td>";
-			echo "<td><a href='?edit=".$row['id']."'>edit</a></td>";
-			echo "<td><A href='?delete=".$row['id']."'>del</a></td>";
+			echo "<td><a href='acs_users.php?edit=".$row['id']."'>edit</a></td>";
+			echo "<td><A href='acs_users.php?delete=".$row['id']."'>del</a></td>";
 			echo "</tr>";
 		}
 		echo "</table>";

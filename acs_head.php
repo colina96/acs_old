@@ -42,7 +42,7 @@ session_start();
 
         <div class="collapse navbar-collapse" id="codebrainery-toggle-nav">
           <ul class="nav navbar-nav">
-            <li onclick="openPage('USERS', this, 'red')"><a href="#">USERS</a></li>
+            <li onclick="openPage('USERS', this, 'red')"><a onclick="openPage('USERS', this, 'red')" href="#">USERS</a></li>
             <li onclick="openPage('MENU', this, 'red')"><a href="#">MENU</a></li>
             <li onclick="openPage('SETTINGS', this, 'red')"><a href="#">SETTINGS</a></li>
             <li onclick="openPage('REPORTS', this, 'red')"><a href="#">REPORTS</a></li>
@@ -68,8 +68,8 @@ session_start();
 </div>
 
 <div id="SETTINGS" class="tabcontent">
-  <h3>Contact</h3>
-  <p>Get in touch, or swing by for a cup of coffee.</p>
+  <h3>Settings</h3>
+  <?php include 'acs_settings.php' ?>
 </div>
 
 <div id="REPORTS" class="tabcontent">
