@@ -13,7 +13,7 @@ session_start();
 
     <!-- Bootstrap -->
 <link href="bootstrap.min.css" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="jquery.min.js"></script>
 <script src="bootstrap.min.js"></script>
 <!-- script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script -->
 
@@ -42,11 +42,11 @@ session_start();
 
         <div class="collapse navbar-collapse" id="codebrainery-toggle-nav">
           <ul class="nav navbar-nav">
-            <li onclick="openPage('USERS', this, 'red')"><a onclick="openPage('USERS', this, 'red')" href="#">USERS</a></li>
-            <li onclick="openPage('MENU', this, 'red')"><a href="#">MENU</a></li>
-            <li onclick="openPage('SETTINGS', this, 'red')"><a href="#">SETTINGS</a></li>
-            <li onclick="openPage('REPORTS', this, 'red')"><a href="#">REPORTS</a></li>
-            <li onclick="openPage('LABELS', this, 'red')"><a href="#">LABELS SUPPLY</a></li>
+            <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('USERS', this, 'red')" href="#">USERS</a></li>
+            <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="#">MENU</a></li>
+            <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a href="#">SETTINGS</a></li>
+            <li class='tabclass' onclick="openPage('REPORTS', this, 'red','tabcontent','tabclass')"><a href="#">REPORTS</a></li>
+            <li class='tabclass' onclick="openPage('LABELS', this, 'red','tabcontent','tabclass')"><a href="#">LABELS SUPPLY</a></li>
             
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -63,8 +63,7 @@ session_start();
 </div>
 
 <div id="MENU" class="tabcontent">
-  <h3>MENU</h3>
-  <p>Some news this fine day!</p> 
+  <?php include 'menu.php' ?>
 </div>
 
 <div id="SETTINGS" class="tabcontent">

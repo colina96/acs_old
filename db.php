@@ -6,6 +6,9 @@
 	$dbname = "acs";
 	$con = @mysqli_connect($hostname,$dbuser, $dbpw,$dbname); #pconnect is php pooled connections
 	$GLOBALS['con'] = $con;
+	$logout = get_url_token("logout");
+	
+	if (!empty($logout)) check_login();
 	if (empty($_SESSION['userID'])) { 
 		check_login();
 	}
@@ -31,7 +34,7 @@ function get_url_token($tok)
 	if (isset($_GET[$tok])) {
 		return($_GET[$tok]);
 	}
-	return("");
+	return(NULL);
 }
 
 function mysql_query($sql) { return(mysqli_query($GLOBALS['con'],$sql)); }
@@ -45,8 +48,8 @@ function test_mysql_query($sql)
 {
 	$result = mysql_query($sql);
 	if (mysql_errno() != 0) {
-		echo(mysql_error());
-		echo("<br>".$sql."<br><hr>");
+	//	echo(mysql_error());
+		echo("<br>ERROR with ".$sql."<br><hr>");
 		// var_dump(debug_backtrace());
 	}
 	return($result);
@@ -55,7 +58,7 @@ function test_mysql_query($sql)
 function check_login()
 {
 	$email = get_url_token("email");
-	echo "checking login";
+	// echo "checking login";
 	$password = get_url_token("password");
 	$login = get_url_token("login");
 	$logout = get_url_token("logout");

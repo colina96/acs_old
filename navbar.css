@@ -43,9 +43,133 @@ td { padding: 5px; }
 
 /* Style the tab content (and add height:100% for full page content) */
 .tabcontent {
-	border:1px solid black;
+	.border:1px solid black;
   color: black;
   display: none;
   .padding: 100px 20px;
+  height: 90vh;
+}
+.menu_details {
+	color: black;
+  display: none;
+  .padding: 100px 20px;
   height: 100%;
+  overflow:auto;
+}
+
+.menu_details_active {
+	color: black;
+  display: block;
+  .padding: 100px 20px;
+  height: 100%;
+}
+.acs_main {
+	position: relative;
+	height:80%;
+	width:100%;
+	border: 1px solid blue;
+	.padding: 10vw;
+    .spacing: 10vw;
+    border-radius: 15px 15px;
+}
+.acs_container {
+	padding: 10px;
+    spacing: 10px;
+}
+.acs_sidebar {
+position: relative;
+	height:100%;
+	width:25%;
+	.border: 1px solid blue;
+	padding: 15px;
+    spacing: 15px;
+    border-radius: 15px 0 0 15px;
+    background: #648AFB;
+}
+.acs_right_content {
+	position: absolute;
+	top:0;
+	left:25%;
+	width:75%;
+	height:100%;
+	.border: 1px solid blue;
+	padding: 15px;
+    spacing: 15px;
+    background: white;
+    border-radius: 0 15px 15px 0;
+    
+}
+	
+.acs_menu_btn {
+	width:90%;
+	padding: 15px;
+    spacing: 15px;
+	background:#5375DA;
+	border-radius: 15px 15px;
+	margin:5%;
+	border:none;
+	color:white;
+}
+
+.acs_menu_space {
+	width:90%;
+	padding: 15px;
+    spacing: 15px;
+	.background:#5375DA;
+	.border-radius: 15px 15px;
+	.color: #648AFB;
+	margin:5%;
+	border:none;
+}
+
+.rightdiv {
+background-color: #EEEEEE;
+}
+#add_new_menu {
+	background:#37DD9F
+}
+#add_menu_component_modal {
+	position:absolute;
+	left: 10vw;
+	top: 10vh;
+	width:70%;
+	padding: 10px;
+    spacing: 10px;
+    display: none;
+    border: 2px solid red;
+	background: #648AFB;
+    border-radius: 15px;
+    zindex:1000;
+}
+#del_menu_component_modal {
+	position:absolute;
+	left: 10vw;
+	top: 10vh;
+	width:70%;
+	padding: 10px;
+    spacing: 10px;
+    display: none;
+    border: 2px solid red;
+	background: #648AFB;
+    border-radius: 15px;
+    zindex:1000;
+}
+.acs_btn {
+	border-radius: 15px;
+	background:white;
+	padding: 5px;
+    spacing: 5px;
+}
+.menu_item_row {
+	background: #648AFB;
+}
+.close_modal {
+	position:absolute;
+	padding: 0 5px;
+    top: 4px;
+    right: 4px;
+	border: 2px solid red;
+	
+    border-radius: 10px;
+	
 }

@@ -4,6 +4,8 @@
 
 #use PHPMailer\PHPMailer\PHPMailer;
 ?>
+<div class='acs_main'>
+<div class='acs_container'>
 <?php 
 {
 	if( !empty($_SESSION['userID'] && $_SESSION['admin'] == 1)) { // logged in
@@ -20,11 +22,13 @@
 		}
 		else {
 			show_users();
-			echo "<div class='draw_screen_btn'><a class='users_link' href='acs_users.php?new=1'>New User</a></div>";
+			// echo "<div class='draw_screen_btn'><a class='users_link' href='acs_users.php?new=1'>New User</a></div>";
 		}
 	}
 }
-
+?>
+</div></div>
+<?php 
 
 function show_users()
 {
@@ -72,7 +76,7 @@ function show_user($edit_id)
 	}
 	if ($result || $edit_id == -1) {
 
-		echo "<form method='POST' action='acs_users.php'><table class='users'>";
+		echo "<form method='POST' action='acs_users.php'><table class='users' width='100%'>";
 	//	while ($row = mysql_fetch_array($result) )
 		{
 			// echo "<tr><td>".$row['id']."</td>";
@@ -83,7 +87,7 @@ function show_user($edit_id)
 				else if (substr($types[$fieldname],0,7) == "varchar" )
 				{
 					echo "<tr><td>".$fieldname."</td><td class='length_inputs'>";
-					echo "<input name='".$fieldname."' value=\"".$row[$fieldname]."\"></td></tr>";
+					echo "<input name='".$fieldname."' value=\"".$row[$fieldname]."\" width='100%'></td></tr>";
 				}
 			}
 		}
@@ -110,7 +114,7 @@ function update_user()
 	$fieldnames = array();
 	$types = array();
 	$result = mysql_query("show columns from "."USERS");
-	while ($row = mysql_fetch_assoc($result)) {
+	while ($row = mysql_fetch_array($result)) {
 
 		$fieldname = $row['Field'];
 		$fieldnames[] = $fieldname;
@@ -157,15 +161,12 @@ function email_new_user()
 }
 function new_user()
 {
-	$edit_id =  getNextID('USERS');
-	if ($edit_id < 0) {
-		return(0);
-	}
+	
 	// $fieldnames = ["username","password","organisation","email","firstname","lastname"];
 	$fieldnames = array();
 	$types = array();
 	$result = mysql_query("show columns from "."USERS");
-	while ($row = mysql_fetch_assoc($result)) {
+	while ($row = mysql_fetch_array($result)) {
 
 		$fieldname = $row['Field'];
 		$fieldnames[] = $fieldname;
@@ -174,17 +175,12 @@ function new_user()
 
 
 	$sql = "insert into USERS ";
-	$flds = "(";
-	$vals = " values (";
+	$flds = "(id";
+	$vals = " values (null";
 	$n = 0;
 	foreach ($fieldnames as $i => $fieldname) {
 		if ($fieldname == "id") {
-			if ($n > 0) {
-				$flds .= ",";
-				$vals .= ",";
-			}
-			$flds .= "id";
-			$vals .= $edit_id;
+			
 		}
 		else if (substr($types[$fieldname],0,7) == "varchar" )
 		{
@@ -198,11 +194,13 @@ function new_user()
 		}
 		$n++;
 	}
-	$flds .= ",date_added)";
-	$vals .= ",now())";
+	//$flds .= ",date_added)";
+	//$vals .= ",now())";
+	$flds .= ")";
+	$vals .= ")";
 	
 	$sql .= $flds.$vals;
 	test_mysql_query($sql);
-	email_new_user();
+	// email_new_user();
 }
 ?>

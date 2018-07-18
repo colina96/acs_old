@@ -57,6 +57,39 @@ insert into CORRECTIVE_ACTIONS values (null,5,'Discard Product');
 insert into CORRECTIVE_ACTIONS values (null,5,'Retrain Staff');
 insert into CORRECTIVE_ACTIONS values (null,5,'Low Risk Item, QA Sign-Off');
 
+create TABLE MENUS (
+	id int not null  auto_increment,
+	start_date datetime,
+	end_date datetime,
+	description varchar(100),
+	code varchar(20),
+	comment varchar(100),
+	
+	constraint pk_example primary key (id)
+);
 
-	
-	
+insert into MENUS values (1,now(),now(),'INTERNATIONAL','35A',"N/A");
+
+create TABLE MENU_ITEMS (
+	id int not null  auto_increment,
+	menu_id int not null,
+	code varchar(20),
+	dish_name varchar(100),
+	constraint pk_example primary key (id)
+);	
+
+insert into MENU_ITEMS values (1,1,'F0601408','Duck Rillettes, Apple Beetroot Jelly');
+insert into MENU_ITEMS values (2,1,'F4489315','Vanilla Sauce');
+
+create TABLE MENU_ITEM_COMPONENTS (
+	id int not null  auto_increment,
+	menu_item_id int not null,
+	description varchar(100),
+	prep_type int,
+	probe_type int,
+	constraint pk_example primary key (id)
+);	
+
+insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1);
+insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2);
+insert into MENU_ITEM_COMPONENTS values (3,2,'Vanilla Sauce',2,0);
