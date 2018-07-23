@@ -44,7 +44,7 @@ session_start();
           <ul class="nav navbar-nav">
             <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('USERS', this, 'red')" href="#">USERS</a></li>
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="#">MENU</a></li>
-            <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a href="#">SETTINGS</a></li>
+            <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')" href="#">SETTINGS</a></li>
             <li class='tabclass' onclick="openPage('REPORTS', this, 'red','tabcontent','tabclass')"><a href="#">REPORTS</a></li>
             <li class='tabclass' onclick="openPage('LABELS', this, 'red','tabcontent','tabclass')"><a href="#">LABELS SUPPLY</a></li>
             

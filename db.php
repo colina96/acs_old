@@ -39,6 +39,7 @@ function get_url_token($tok)
 
 function mysql_query($sql) { return(mysqli_query($GLOBALS['con'],$sql)); }
 function mysql_errno() { return(mysqli_errno($GLOBALS['con'])); }
+function mysql_insert_id() { return(mysqli_insert_id ( $GLOBALS['con'] )); }
 
 function mysql_escape_string($s) { return (mysqli_escape_string($GLOBALS['con'],$s)); }
 function mysql_fetch_array($s) { return (mysqli_fetch_array($s)); }
