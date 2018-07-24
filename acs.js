@@ -57,3 +57,4 @@ function close_menu_component_modal(id)
 	document.getElementById(id).style.display = "none";
 	
 }
+

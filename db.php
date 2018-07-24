@@ -13,7 +13,7 @@
 		check_login();
 	}
 	else {
-		echo "<!-- user: ".$_SESSION['userID']." ".$_SESSION['user']. "-->";
+		// echo "<!-- user: ".$_SESSION['userID']." ".$_SESSION['user']. "-->";
 	}
 
 function add_var($varname)

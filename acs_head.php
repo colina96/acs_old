@@ -13,7 +13,14 @@ session_start();
 
     <!-- Bootstrap -->
 <link href="bootstrap.min.css" rel="stylesheet">
-<script src="jquery.min.js"></script>
+<script src="jquery/jquery.min.js"></script>
+<script src="jquery/jquery-ui.min.js"></script -->
+<link rel="stylesheet" href="jquery/jquery-ui.min.css"/>
+  <!--  link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
+  <!--  script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script -->
+
 <script src="bootstrap.min.js"></script>
 <!-- script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script -->
 
@@ -46,7 +53,7 @@ session_start();
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="#">MENU</a></li>
             <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')" href="#">SETTINGS</a></li>
             <li class='tabclass' onclick="openPage('REPORTS', this, 'red','tabcontent','tabclass')"><a href="#">REPORTS</a></li>
-            <li class='tabclass' onclick="openPage('LABELS', this, 'red','tabcontent','tabclass')"><a href="#">LABELS SUPPLY</a></li>
+            <li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="#">KITCHEN</a></li>
             
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -75,6 +82,9 @@ session_start();
   <h3>About</h3>
   <p>Who we are and what we do.</p>
 </div>
+<div id="KITCHEN" class="tabcontent">
+  <?php include 'search.php' ?>
+</div>
 </div>
 <div class="modal fade">
     <div class="modal-dialog" role="document">
@@ -85,7 +95,7 @@ session_start();
           </button>
           <h2 class="form-signin-heading">Please sign in</h2>
         </div>
-        <div class="container">
+        <div class="acs_container">
 
       		<form class="form-signin" method="post">
         
