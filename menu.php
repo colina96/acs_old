@@ -124,7 +124,7 @@ function load_menus()
 		if (!empty($_POST['add_menu_component'])) { add_menu_component(); }
 		if (!empty($_POST['del_menu_component'])) { del_menu_component(); }
 		$menu_id = get_url_token('menu_id'); //  || get_url_token('cc_menu_id');
-		echo "menu id $menu_id   ";
+		// echo "menu id $menu_id   ";
 		if (!empty($menu_id)) {			
 			show_menu($menu_id);
 			echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
@@ -181,7 +181,7 @@ function show_menu($menu_id)
 	}
 	if ($menu_id >= 0) {
 		$sql = "select * from MENUS where ID=".$menu_id;
-		echo $sql;
+		// echo $sql;
 		$result = mysql_query($sql);
 		$row = mysql_fetch_array($result);
 	}

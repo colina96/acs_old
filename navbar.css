@@ -128,7 +128,10 @@ background-color: #EEEEEE;
 #add_new_menu {
 	background:#37DD9F
 }
-#add_menu_component_modal {
+.comp_details {
+	overflow: auto;
+}
+.acs_modal, #add_menu_component_modal, #comp_action_modal_M2 {
 	position:absolute;
 	left: 10vw;
 	top: 10vh;
@@ -172,4 +175,7 @@ background-color: #EEEEEE;
 	
     border-radius: 10px;
 	
+}
+.component_table {
+	width:100%;
 }

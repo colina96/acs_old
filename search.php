@@ -30,9 +30,45 @@
 			</div>
 			<div id='expired_menus' class='comp_details'>
 			</div>
-
+			<div class='acs_modal' id='comp_action_modal_M2'>
+				<div class='modal_header'><span><h1>M2</h1></span>
+				<div class='acs_container'><div id='comp_modal_title_div'></div></div>
+				<div class='close_modal' onclick='close_menu_component_modal("comp_action_modal_M2");'>X</div>
+				</div>
+			
+				<div id='comp_action_body_div'>
+					<table width='100%'>
+					<tr><td>Temperature : <td><input type="text" name="M2_temp" size='3'>
+					<td><div id='M2_target_temp'></div></td>
+					<tr><td colspan=2>Chef: <td><?php select_chef('M2_chef_id') ?>
+					<tr>
+				</table>
+				<div id='comp_M2_correct' class='acs_container'></div>
+				<button type='button' class='acs_comp_btn' href="#" id="comp_M2_action"  
+		  				onclick="comp_M2()">SUBMIT</button>
+				</div>
+			</div>
+			<div class='acs_modal' id='comp_action_modal_M3'>
+				<div class='modal_header'><span><h1>M3</h1></span>
+				<div class='acs_container'><div id='comp_modal_M3_title_div'></div></div>
+				<div class='close_modal' onclick='close_menu_component_modal("comp_action_modal_M3");'>X</div>
+				</div>
+			
+				<div id='comp_action_body_M3_div'>
+					<table width='100%'>
+					<tr><td>Temperature : <td><input type="text" name="M3_temp" size='3'>
+					<td><div id='M3_target_temp'></div></td>
+					<tr><td colspan=2>Chef: <td><?php select_chef('M3_chef_id') ?>
+					<tr>
+				</table>
+				<div id='comp_M3_correct' class='acs_container'></div>
+				<button type='button' class='acs_comp_btn' href="#" id="comp_M3_action"  
+		  				onclick="comp_M3()">SUBMIT</button>
+				</div>
+			</div>
 		</div>
 </div>
+
 <script>
 function new_td(content,classname) {
 	var td = document.createElement('td');
@@ -52,8 +88,13 @@ function show_time(d)
 function show_active_components(data)
 {
 	var div = document.getElementById('active_comps');
+	if (data.length < 1) {
+		div.innerHTML = "<h1>No Active Components</h1>";
+		return;
+	}
 	div.innerHTML = "<h1>Active Components</h1>";
 	var tab = document.createElement('table');
+	tab.className = 'component_table';
 	var tr = document.createElement('tr');
 	tr.appendChild(new_td('ID','comp'));
 	tr.appendChild(new_td('Prep<br>Type','comp'));
@@ -61,6 +102,7 @@ function show_active_components(data)
     tr.appendChild(new_td('M1<br>Time','comp'));
     tr.appendChild(new_td('M1<br>Temp','comp'));
     tr.appendChild(new_td('M2<br>Time','comp'));
+    tr.appendChild(new_td('Action','comp'));
    	tab.appendChild(tr);
    	for (i=0; i<data.length; ++i) {
    		var tr = document.createElement('tr');
@@ -83,9 +125,18 @@ function show_active_components(data)
    	   		var M2_time = M1_time;
    	   		var mins_due = parseInt(get_preptype_val(data[i]['prep_type_id'],'M2_time_minutes'));
    	   		M2_time.setMinutes(M1_time.getMinutes() + mins_due);
-   	   		tr.appendChild(new_td('due:' + show_time(M2_time),'comp'));
+   	   		var now = new Date();
+   	   		var timeDiff = parseInt((now.getTime() - M2_time.getTime()) / (1000 * 60));
+   	   		if (timeDiff > 0) {
+   	   			// tr.appendChild(new_td('due:' + show_time(M2_time) + "-" + timeDiff,'comp'));
+   	   			tr.appendChild(new_td('overdue:' + timeDiff,'comp'));
+   	   		}
+   	   		else {
+   	   			tr.appendChild(new_td('due:' + timeDiff,'comp'));
+   	   		}
    			// tr.appendChild(new_td('due','comp'));
    		}
+   		tr.appendChild(new_td("<button type='button' class='acs_comp_btn' onclick='act_component(" + i + ");'>Action</button>",'comp'));
    		tab.appendChild(tr);
     }
    	div.appendChild(tab);
@@ -114,6 +165,117 @@ function goto_active_components()
 	            console.log("fail load_comps",result);
 	        })
 	    });
+}
+
+var active_component_index = -1;
+function act_component(i)
+{
+	console.log("action for active component ",i);
+	if (i < 0 || i > active_comps.length) {
+		console.log("invalid index ",active_comps.length);
+		return;
+	}
+	active_component_index = i; // global
+	console.log("act_component M2 time ",active_comps[i]['M2_time']);
+	
+	console.log("action for active component ",active_comps[i]['description']);
+	if (active_comps[i]['M2_time'].length < 5) {
+		document.getElementById('comp_M2_correct').innerHTML = "";
+		document.getElementById('comp_action_modal_M2').style.display = 'block';
+		document.getElementById('comp_modal_title_div').innerHTML = active_comps[i]['description'];
+		var body = document.getElementById('comp_action_body_div');
+		
+		document.getElementById('M2_target_temp').innerHTML = "< " + get_preptype_val(active_comps[i]['prep_type_id'],'M2_temp');
+	}
+	else { // M3
+		document.getElementById('comp_M3_correct').innerHTML = "";
+		document.getElementById('comp_action_modal_M3').style.display = 'block';
+		document.getElementById('comp_modal_title_div').innerHTML = active_comps[i]['description'];
+		var body = document.getElementById('comp_action_body_div');
+		
+		document.getElementById('M3_target_temp').innerHTML = "< " + get_preptype_val(active_comps[i]['prep_type_id'],'M3_temp');
+	}
+}
+
+function comp_M2()
+{
+	var M2_temp_reading = parseInt(document.getElementsByName('M2_temp')[0].value);
+	var M2_temp_limit = parseInt(get_preptype_val(active_comps[active_component_index]['prep_type_id'],'M2_temp'));
+	
+	if (M2_temp_reading > M2_temp_limit) {
+		console.log("M2 temp " + M2_temp_reading + " over limit " + M2_temp_limit);
+		document.getElementById('comp_M2_correct').innerHTML = "M2 temp " + M2_temp_reading + " over limit " + M2_temp_limit;
+		document.getElementById('comp_M2_correct').innerHTML += "<br>Take corrective action";
+	}
+	else {
+		// send data to REST interface
+		document.getElementById('comp_action_modal_M2').style.display = 'none';
+		var component = new Object();
+		component.id = active_comps[active_component_index]['id'];
+		component.M2_temp = document.getElementsByName('M2_temp')[0].value;
+		component.M2_chef_id = document.getElementsByName('M2_chef_id')[0].value;
+		var data =  {data: JSON.stringify(component)};
+	    console.log("Sent Off: %j", data);
+	    
+	    $.ajax({
+	        url: 'REST/M2_comp.php',
+	        type: "POST",
+	        data: data,
+
+	        success: function(result) {
+	            console.log("start_component result ",result);
+	            goto_active_components();
+	        },
+	        done: function(result) {
+	            console.log("done start_component result ",result);
+	        },
+	        fail: (function (result) {
+	            console.log("start_componentfail ",result);
+	        })
+	    });
+	    
+	}
+	
+}
+function comp_M3()
+{
+	var M3_temp_reading = parseInt(document.getElementsByName('M3_temp')[0].value);
+	var M3_temp_limit = parseInt(get_preptype_val(active_comps[active_component_index]['prep_type_id'],'M3_temp'));
+	
+	if (M3_temp_reading > M3_temp_limit) {
+		console.log("M3 temp " + M3_temp_reading + " over limit " + M3_temp_limit);
+		document.getElementById('comp_M3_correct').innerHTML = "M3 temp " + M3_temp_reading + " over limit " + M3_temp_limit;
+		document.getElementById('comp_M3_correct').innerHTML += "<br>Take corrective action";
+	}
+	else {
+		// send data to REST interface
+		document.getElementById('comp_action_modal_M3').style.display = 'none';
+		var component = new Object();
+		component.id = active_comps[active_component_index]['id'];
+		component.M3_temp = document.getElementsByName('M3_temp')[0].value;
+		component.M3_chef_id = document.getElementsByName('M3_chef_id')[0].value;
+		var data =  {data: JSON.stringify(component)};
+	    console.log("Sent Off: %j", data);
+	    
+	    $.ajax({
+	        url: 'REST/M3_comp.php',
+	        type: "POST",
+	        data: data,
+
+	        success: function(result) {
+	            console.log("start_component result ",result);
+	            goto_active_components();
+	        },
+	        done: function(result) {
+	            console.log("done start_component result ",result);
+	        },
+	        fail: (function (result) {
+	            console.log("start_componentfail ",result);
+	        })
+	    });
+	    
+	}
+	
 }
 function start_component()
 {
