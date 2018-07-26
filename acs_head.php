@@ -54,6 +54,7 @@ session_start();
             <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')" href="#">SETTINGS</a></li>
             <li class='tabclass' onclick="openPage('REPORTS', this, 'red','tabcontent','tabclass')"><a href="#">REPORTS</a></li>
             <li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="#">KITCHEN</a></li>
+            <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="#">ASSEMBLY</a></li>
             
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -84,6 +85,9 @@ session_start();
 </div>
 <div id="KITCHEN" class="tabcontent">
   <?php include 'kitchen.php' ?>
+</div>
+<div id="ASSEMBLY" class="tabcontent">
+  <?php include 'assembly.php' ?>
 </div>
 </div>
 <div class="modal fade">

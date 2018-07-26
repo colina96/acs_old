@@ -58,3 +58,128 @@ function close_menu_component_modal(id)
 	
 }
 
+function get_preptype_val(id,fld)
+{
+	for (var i = 0; i < preptypes.length; i++) {
+		if (preptypes[i].id == id) {
+			return(preptypes[i][fld]);
+		}
+	}
+	return("not found");
+}
+function load_preptypes()
+{
+console.log("loading prep types");
+    $.ajax({
+        url: "REST/get_preptypes.php",
+        type: "POST",
+       // data: data,
+       //  data: {points: JSON.stringify(points)},
+        dataType: 'json',
+        // contentType: "application/json",
+        success: function(result) {
+            preptypes = result;
+            
+            console.log("got " + result.length + " preptypes");
+            
+        },
+        done: function(result) {
+            console.log("done preptypes ");
+        },
+        fail: (function (result) {
+            console.log("fail preptypes",result);
+        })
+    });
+}
+
+function load_menu_items(menu_id)
+{
+	
+	console.log("loading menu items",menu_id);
+    $.ajax({
+        url: "REST/get_menu_items.php",
+        type: "POST",
+       // data: data,
+       //  data: {points: JSON.stringify(points)},
+        dataType: 'json',
+        // contentType: "application/json",
+        success: function(result) {
+            menu_items = result;
+            $('#search_menu').autocomplete({
+                // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+                minLength: 2,
+        		source: menu_items,
+        		// Once a value in the drop down list is selected, do the following:
+                select: function(event, ui) {
+                    // place the person.given_name value into the textfield called 'select_origin'...
+                    $('#search_menu').val(ui.item.label);
+                    // and place the person.id into the hidden textfield called 'link_origin_id'. 
+                 	console.log('selected ',ui.item.value);
+                 	show_menu_item_components(ui.item.value);
+                    return false;
+                }
+        	
+            })
+            console.log("got " + result.length + " menu itemss");
+            
+        },
+        done: function(result) {
+            console.log("load_menu_items");
+        },
+        fail: (function (result) {
+            console.log("fail load_menu_items",result);
+        })
+    });
+}
+
+function load_comps()
+{
+console.log("loading menu item components");
+    $.ajax({
+        url: "REST/get_comps.php",
+        type: "POST",
+       // data: data,
+       //  data: {points: JSON.stringify(points)},
+        dataType: 'json',
+        // contentType: "application/json",
+        success: function(result) {
+            comps = result;
+            $('#search').autocomplete({
+                // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+                minLength: 2,
+        		source: comps,
+        		select: function(event, ui) {
+                    // place the person.given_name value into the textfield called 'select_origin'...
+                    $('#search').val(ui.item.label);
+                    // and place the person.id into the hidden textfield called 'link_origin_id'. 
+                 	console.log('selected ',ui.item.value);
+                    return false;
+                }  
+            })
+            console.log("got " + result.length + " comps");
+            
+        },
+        done: function(result) {
+            console.log("done load_comps ");
+        },
+        fail: (function (result) {
+            console.log("fail load_comps",result);
+        })
+    });
+}
+
+function new_td(content,classname) {
+	var td = document.createElement('td');
+	td.className = classname;
+	td.innerHTML = content;
+	return(td);
+}
+
+function show_time(d)
+{
+	options = {
+		hour: 'numeric', minute: 'numeric',
+
+	};
+	return (new Intl.DateTimeFormat('en-AU', options).format(d));
+}

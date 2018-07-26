@@ -100,7 +100,7 @@ position: relative;
     overflow: auto;
 }
 	
-.acs_menu_btn, .acs_comp_btn{
+.acs_menu_btn, .acs_comp_btn, .acs_item_btn{
 	width:90%;
 	padding: 15px;
     spacing: 15px;
@@ -111,7 +111,7 @@ position: relative;
 	color:white;
 }
 
-.acs_menu_space, .acs_comp_space {
+.acs_menu_space, .acs_comp_space, .acs_space {
 	width:90%;
 	padding: 15px;
     spacing: 15px;
@@ -119,6 +119,8 @@ position: relative;
 	.border-radius: 15px 15px;
 	.color: #648AFB;
 	margin:5%;
+	color:white;
+	font-size:larger;
 	border:none;
 }
 

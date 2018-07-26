@@ -70,21 +70,7 @@
 </div>
 
 <script>
-function new_td(content,classname) {
-	var td = document.createElement('td');
-	td.className = classname;
-    td.innerHTML = content;
-    return(td);
-}
 
-function show_time(d)
-{
-	options = {
-		hour: 'numeric', minute: 'numeric', 
-		
-	};
-	return (new Intl.DateTimeFormat('en-AU', options).format(d));
-}
 function show_active_components(data)
 {
 	var div = document.getElementById('active_comps');
