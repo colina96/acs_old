@@ -286,7 +286,8 @@ function start_component()
 	component.M1_chef_id = document.getElementsByName('M1_chef_id')[0].value;
 	var data =  {data: JSON.stringify(component)};
     console.log("Sent Off: %j", data);
-    
+    document.getElementsByName('new_comp_desc')[0].value = '';
+    document.getElementsByName('M1_temp')[0].value = '';
     $.ajax({
         url: 'REST/new_comp.php',
         type: "POST",
@@ -294,6 +295,7 @@ function start_component()
 
         success: function(result) {
             console.log("start_component result ",result);
+            goto_active_components();
         },
         done: function(result) {
             console.log("done start_component result ",result);
@@ -302,6 +304,6 @@ function start_component()
             console.log("start_componentfail ",result);
         })
     });
-    goto_active_components();
+    
 }
 </script>

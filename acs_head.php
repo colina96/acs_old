@@ -83,7 +83,7 @@ session_start();
   <p>Who we are and what we do.</p>
 </div>
 <div id="KITCHEN" class="tabcontent">
-  <?php include 'search.php' ?>
+  <?php include 'kitchen.php' ?>
 </div>
 </div>
 <div class="modal fade">

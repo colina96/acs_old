@@ -97,7 +97,7 @@ position: relative;
     spacing: 15px;
     background: white;
     border-radius: 0 15px 15px 0;
-    
+    overflow: auto;
 }
 	
 .acs_menu_btn, .acs_comp_btn{

@@ -43,8 +43,9 @@ session_start();
 	}
 	else {
 ?>
-		<div class='m_main'>
-		<div class='btn'>Continue</div>
+		<div class='m_main'><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?>
+		
+		</div>
 	</div>
 <?php 
 	}

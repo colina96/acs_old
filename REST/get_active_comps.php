@@ -17,7 +17,7 @@ if ($userID > 0) {
 		$types[$fieldname] = $row['Type'];
 	}
 	
-	$sql = "select * from COMPONENT";
+	$sql = "select * from COMPONENT  where M3_time is null";
 	$result = mysql_query($sql);
 	$comps = array();
 	if ($result) {
