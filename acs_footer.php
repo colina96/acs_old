@@ -18,7 +18,8 @@ $(document).ready(function(){
 	openPage(default_tab, this, 'red','tabcontent','tabclass');
 	});
 
-
+	$( function() { $( "#menu_start" ).datepicker({ dateFormat: 'yy-mm-dd' });} );
+	$( function() { $( "#menu_end" ).datepicker({ dateFormat: 'yy-mm-dd' });} );
 
 </script> 
 <div class="container">

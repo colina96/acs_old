@@ -51,7 +51,7 @@ session_start();
 	<div class='mobile_main mobile_main_active' id='mm1'>
 		<div class='m_main'>
 		<div class='m_login'><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?></div>
-		<button type='button'  class='m_btn' onclick="openPage('mm2', this, 'red','mobile_main','tabclass');">Continue</button>
+		<button type='button'  class='m_btn' onclick="goto_m_main();">Continue</button>
 		</div>
 	</div>
 	<div class='mobile_main hidden' id='mm2'>
@@ -63,8 +63,21 @@ session_start();
 		</div>
 		<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
 		<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
-		<div class='m_modal hidden' id='m_search'>SEARCH</div>
-		<!--   button type='button'  class='m_btn' onclick='m_continue1();'>Continue</button -->
+		<div class='m_modal hidden' id='m_search'>SEARCH
+		<input type="text" id="search" width:'100%' size='40' name='new_comp_desc'>
+		</div>
+		
+		
+		</div>
+	</div>
+	<div class='mobile_main hidden' id='m_temp'>
+		<div class='m_label' id='chk_temp_item_div'></div>
+		<div class='m_label' id='chk_temp_item_time_div'></div>
+		<div class='m_modal2' id='m_temp_modal'>
+			<div class='m_label'><spsn>CHECK THE TEMPERATURE</spsn></div>
+			<div><input name='m1_temp' size=4></div>
+			<button type='button' class='m_submit'>Check Now</button>
+			<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
 		</div>
 	</div>
 <?php 
@@ -72,6 +85,24 @@ session_start();
 ?>
   </div>
 <script>
+var default_tab='m_current_tracking_tab';
+
+function goto_m_main()
+{
+	openPage('mm2', this, 'red','mobile_main','tabclass');
+	m_tracking();
+}
+function component_selected(id)
+{
+	openPage('m_temp', this, 'red','mobile_main','tabclass');
+	var comp = get_component_by_id(id);
+	var prep_type_id = comp['prep_type'];
+	console.log('prep_type_id',prep_type_id);
+	if (prep_type_id < 1) prep_type_id = 1;
+	var prep_type_val = get_preptype_val(prep_type_id,'M1_temp');
+	document.getElementById('chk_temp_item_div').innerHTML = comp['description'];
+	document.getElementById('chk_temp_item_time_div').innerHTML = 'M1 REQUIRED: > ' + prep_type_val;
+}
 function m_tracking()
 {
 	console.log('goto_active_components');

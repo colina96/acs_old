@@ -153,6 +153,7 @@ console.log("loading menu item components");
                     $('#search').val(ui.item.label);
                     // and place the person.id into the hidden textfield called 'link_origin_id'. 
                  	console.log('selected ',ui.item.value);
+                 	component_selected(ui.item.value);
                     return false;
                 }  
             })
@@ -182,4 +183,20 @@ function show_time(d)
 
 	};
 	return (new Intl.DateTimeFormat('en-AU', options).format(d));
+}
+function show_date(d)
+{
+	options = {
+		day: 'numeric', month: 'numeric',year: 'numeric',
+
+	};
+	return (new Intl.DateTimeFormat('en-AU', options).format(d));
+}
+
+function get_component_by_id(id)
+{
+	for(i= 0; i < comps.length; i++) {
+		if (comps[i].id == id) return (comps[i]);
+	}
+	return null;
 }

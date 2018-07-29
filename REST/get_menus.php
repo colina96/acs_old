@@ -8,7 +8,7 @@ $userID = $_SESSION['userID'];
 if ($userID > 0) {
 	$fieldnames = array();
 	$types = array();
-	$result = mysql_query("show columns from MENU_ITEM_COMPONENTS");
+	$result = mysql_query("show columns from MENUS");
 	
 	while ($row = mysql_fetch_array($result)) {
 	
@@ -16,11 +16,7 @@ if ($userID > 0) {
 		$fieldnames[] = $fieldname;
 		$types[$fieldname] = $row['Type'];
 	}
-	$sql = "select * from MENU_ITEM_COMPONENTS";
-	$menu_id = get_url_token('menu_id');
-	if (!empty($menu_id) && $menu_id > 0) { 
-		$sql .= " where menu_id=".$menu_id; 
-	}
+	$sql = "select * from MENUS";
 	$result = mysql_query($sql);
 	$comps = array();
 	if ($result) {
@@ -31,8 +27,6 @@ if ($userID > 0) {
 			foreach ($fieldnames as $f) {
 				$comp[$f] = utf8_encode($row[$f]);
 			}
-			$comp['label'] = utf8_encode($row['description']);
-			$comp['value'] = $row['id'];
 			$comps[] = $comp;
 	
 		}

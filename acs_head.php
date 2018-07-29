@@ -3,6 +3,9 @@
 session_start(); 
 ?>
 <?php include 'db.php' ?>
+<?php 
+upload_menu();
+?>
 <html lang="en">
   <head>
     <meta charset="utf-8">
