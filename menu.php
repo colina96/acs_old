@@ -28,6 +28,7 @@
 				<tr><td colspan='3'>
     			Select file to upload:
    				 <input type="file" name="fileToUpload" id="fileToUpload">
+   				 <!--   div class='drop-files-container' id='drop-files-container'></div -->
    				 <input type='submit' name='submit_menu' value='Submit'>
    				 </td></tr></table></form>
 	
@@ -111,6 +112,20 @@ function show_active_menus()
     });
 }
 
+function processFileUpload(droppedFiles) 
+{
+    // add your files to the regular upload form
+	var uploadFormData = new FormData($("#menuUploadForn")[0]); 
+	if(droppedFiles.length > 0) { // checks if any files were dropped
+		console.log("file dropped",droppedFiles.length);
+		
+  	 	for(var f = 0; f < droppedFiles.length; f++) { // for-loop for each file dropped
+  	 		console.log("file dropped",droppedFiles[f]);
+       		uploadFormData.append("fileToUpload",droppedFiles[f]);  // adding every file to the form so you could upload multiple files
+  	 	}
+   	}
+}
+
 function show_menus(active,data)
 {
 	var div = document.getElementById('active_menus');
@@ -181,6 +196,9 @@ function select_chef($s_name)
 
 	echo "</select>";
 }
+
+
+
 
 function load_active_menus()
 {
@@ -267,7 +285,7 @@ function show_menu($menu_id)
 	}
 	if ($result || $menu_id == -1) {
 
-		echo "<form method='POST' action='acs_menu.php'><table class='users'>";
+		echo "<form id='uploadMenuForm' method='POST' action='acs_menu.php'><table class='users'>";
 	//	while ($row = mysql_fetch_array($result) )
 		{
 			// echo "<tr><td>".$row['id']."</td>";

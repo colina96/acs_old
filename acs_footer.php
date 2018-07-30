@@ -17,9 +17,9 @@ $(document).ready(function(){
 	console.log("doc ready open page ",default_tab);
 	openPage(default_tab, this, 'red','tabcontent','tabclass');
 	});
-
-	$( function() { $( "#menu_start" ).datepicker({ dateFormat: 'yy-mm-dd' });} );
-	$( function() { $( "#menu_end" ).datepicker({ dateFormat: 'yy-mm-dd' });} );
+$( function() { $( "#menu_start" ).datepicker({ dateFormat: 'yy-mm-dd' });} );
+$( function() { $( "#menu_end" ).datepicker({ dateFormat: 'yy-mm-dd' });} );
+	
 
 </script> 
 <div class="container">

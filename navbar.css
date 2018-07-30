@@ -100,6 +100,13 @@ position: relative;
     overflow: auto;
 }
 	
+.drop-files-container {
+	width:400px;
+	height:200px;
+	background:#5375DA;
+	border-radius: 15px 15px;
+	border: 2px solid black;
+}
 .acs_menu_btn, .acs_comp_btn, .acs_item_btn{
 	width:90%;
 	padding: 15px;
