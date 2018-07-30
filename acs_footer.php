@@ -20,7 +20,7 @@ $(document).ready(function(){
 $( function() { $( "#menu_start" ).datepicker({ dateFormat: 'yy-mm-dd' });} );
 $( function() { $( "#menu_end" ).datepicker({ dateFormat: 'yy-mm-dd' });} );
 	
-
+$(".datepicker").attr("autocomplete", "off");
 </script> 
 <div class="container">
 

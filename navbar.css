@@ -41,6 +41,13 @@ td { padding: 5px; }
   border-top-right-radius: 0;
 }
 
+.submit {
+	margin:15px;
+	padding:10px;
+	border-radius: 15px;
+	background: #37DD9F;
+	min-width:200px;
+}
 /* Style the tab content (and add height:100% for full page content) */
 .tabcontent {
 	.border:1px solid black;

@@ -23,13 +23,13 @@
 					<td><input name='menu_description'></td>
 					<td><input name='menu_comment'></td>
 				<tr><td>DATE RANGE</td></tr>
-				<tr><td><input type="text" id="menu_start" name="menu_start" placeholder='start date'></td>
-				<td><input type="text" id="menu_end" name="menu_end" placeholder='end date'></td></tr>
+				<tr><td><input type="text" id="menu_start" name="menu_start" placeholder='start date' class='datepicker' readonly="readonly"></td>
+				<td><input type="text" id="menu_end" name="menu_end" placeholder='end date' class='datepicker' readonly="readonly"></td></tr>
 				<tr><td colspan='3'>
     			Select file to upload:
    				 <input type="file" name="fileToUpload" id="fileToUpload">
    				 <!--   div class='drop-files-container' id='drop-files-container'></div -->
-   				 <input type='submit' name='submit_menu' value='Submit'>
+   				 <input type='submit' name='submit_menu' value='Submit' class='submit'>
    				 </td></tr></table></form>
 	
 	
