@@ -99,7 +99,7 @@ function update_plating_team(s,id)
 	$.post("REST/update_menu_item.php",
 		    {
 		        id: id,
-		        plating_team: idx + 1
+		        plating_team: idx
 		    },
 		    function(data, status){
 		        console.log("Data: " + data + "\nStatus: " + status);
@@ -275,13 +275,9 @@ function load_menus()
 		$menu_id = get_url_token('menu_id'); //  || get_url_token('cc_menu_id');
 		// echo "menu id $menu_id   ";
 		if (!empty($menu_id)) {		
-			echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
+			//echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
 			show_menu($menu_id);
-			echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
-		}
-		else if (!empty($_POST['new'])) {
-			show_menu(-1);
-			echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
+			//echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
 		}
 		else {
 			show_menus();
@@ -328,15 +324,26 @@ function show_menu($menu_id)
 		$fieldnames[] = $fieldname;
 		$types[$fieldname] = $row['Type'];
 	}
-	if ($menu_id >= 0) {
-		$sql = "select * from MENUS where ID=".$menu_id;
-		// echo $sql;
-		$result = mysql_query($sql);
-		$row = mysql_fetch_array($result);
-	}
-	if ($result || $menu_id == -1) {
+	
+	$sql = "select * from MENUS where ID=".$menu_id;
+	// echo $sql;
+	$result = mysql_query($sql);
+	$row = mysql_fetch_array($result);
 
-		echo "<form id='uploadMenuForm' method='POST' action='acs_menu.php'><table class='users'>";
+	if ($result) {
+
+		// echo "<form id='uploadMenuForm' method='POST' action='acs_menu.php'><table class='users'>";
+		
+		echo "<table><tr><td>OVERALL INFORMATION</td></tr>";
+		echo "<tr><td>".$row['description']."</td>";
+		echo "<td>".$row['code']."</td>";
+		echo "<td>".$row['comment']."</td>";
+		
+		echo "<tr><td>DATE RANGE</td></tr>";
+		echo "<tr><td>".date('F j Y',strtotime($row['start_date']));
+		echo "<td>".date('F j Y',strtotime($row['end_date']));
+		echo "</table>";
+		/*
 	//	while ($row = mysql_fetch_array($result) )
 		{
 			// echo "<tr><td>".$row['id']."</td>";
@@ -357,6 +364,7 @@ function show_menu($menu_id)
 		}
 		echo "</table>";
 		echo "<input type='submit' name='update_menu' value='update_menu' class='draw_screen_btn users_submit'></form>";
+		*/
 		echo "<hr><h3>Menu items</h3>";
 		echo "<form method='POST' action='acs_menu.php'><table width=100%>";
 		echo "<tr><th>ITEM CODE</th><th>ITEM DESCRIPTION</th><th>PREP TYPE</th><th>SENSOR TYPE</th><th>PLATING TEAM</th><th></th></tr>";
@@ -417,6 +425,7 @@ function show_menu($menu_id)
 function select_plating_team($plating_team,$menu_item_id)
 {
 	echo "<select name='plating_team_".$menu_item_id."' onchange='update_plating_team(this,".$menu_item_id.");'>";
+	echo "<option value='0'>-</option>";
 	for ($i = 1; $i < 11; $i++) {
 		echo "<option value='".$i."'";
 		if ($i == $plating_team) { echo " selected"; }
