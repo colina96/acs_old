@@ -87,6 +87,50 @@ if ($result) {
 </div>
 <script>
 var menus = null;
+function update_plating_team(s,id)
+{
+	
+	// var s = document.getElementById("pt_" + comp_id);
+	
+	var idx = s.selectedIndex;
+	var val = s.options[idx].value;
+	console.log("update plating_team ",id,idx,val);
+	
+	$.post("REST/update_menu_item.php",
+		    {
+		        id: id,
+		        plating_team: idx + 1
+		    },
+		    function(data, status){
+		        console.log("Data: " + data + "\nStatus: " + status);
+		    });
+}
+
+
+function update_probe_type(s,comp_id)
+{
+	
+	// var s = document.getElementById("pt_" + comp_id);
+	
+	var idx = s.selectedIndex;
+	var val = s.options[idx].value;
+	console.log("update component id for ",comp_id,idx,val);
+	var all = document.getElementsByName("probe_" + comp_id);
+	console.log("found dups",all.length);
+	for (i = 0; i < all.length; i++) {
+		all[i].selectedIndex = idx;
+	}
+	$.post("REST/update_component.php",
+		    {
+		        id: comp_id,
+		        probe_type: idx + 1
+		    },
+		    function(data, status){
+		        console.log("Data: " + data + "\nStatus: " + status);
+		    });
+}
+
+
 function update_prep_type(s,comp_id)
 {
 	
@@ -109,6 +153,7 @@ function update_prep_type(s,comp_id)
 		        console.log("Data: " + data + "\nStatus: " + status);
 		    });
 }
+
 function show_active_menus()
 {
 	openPage('active_menus', this, 'red','menu_details','acs_menu_btn');
@@ -186,22 +231,6 @@ function show_menus(active,data)
 </div -->
 <?php 
 
-
-function XXselect_prep_type($s_name,$def)
-{
-	echo "<!-- default $def -->";
-	echo "<select name='$s_name'>";
-	
-	$sql = "select * from PREP_TYPES order by ID";
-	$result = mysql_query($sql);
-	if ($result) {
-		while($row = mysql_fetch_array($result)) {
-			echo "<option value='".$row['id']."'>".$row['code']."</option>";
-		}
-	}
-	
-	echo "</select>";
-}
 
 function select_chef($s_name)
 {
@@ -352,8 +381,8 @@ function show_menu($menu_id)
 		
 			echo "<tr class='menu_item_row'><td>".$row['code']."</td>";
 			echo "<td >".$row['dish_name']."</td><td></td><td></td><td>";
-			select_plating_team($row['plating_team']);
-			echo "</td><td>Save</td><td>Delete</td>";
+			select_plating_team($row['plating_team'],$row['id']);
+			echo "</td></tr>";
 		//	echo "<td><div class='acs_btn' onclick='add_menu_component(".$menu_id.",".$row['id'].",\"".$row['dish_name']."\");'><span>Add</span></div></tr>";
 			$sql = "select * from MENU_ITEM_COMPONENTS where MENU_ITEM_ID=".$row['id'];
 			$sql = "select * from MENU_ITEM_COMPONENTS, MENU_ITEM_LINK where MENU_ITEM_LINK.component_id = MENU_ITEM_COMPONENTS.id and MENU_ITEM_ID=".$row['id'];
@@ -367,8 +396,11 @@ function show_menu($menu_id)
 				echo "<td>".$prep_type."</td>"; */
 				echo "<td>";
 				select_prep_type($prep_types,$row['prep_type'],$row['component_id']);
-				echo "</td><td></td>"; // plating team column
-				echo "<td><div class='acs_btn' onclick='del_menu_component(".$menu_id.",".$row['id'].",\"".$row['description']."\");'><span>Del</span></div></tr>";
+				echo "</td><td>";
+				select_probe_type($row['probe_type'],$row['component_id']);
+				
+       			echo "</td>"; // plating team column
+				//echo "<td><div class='acs_btn' onclick='del_menu_component(".$menu_id.",".$row['id'].",\"".$row['description']."\");'><span>Del</span></div></tr>";
 			}
 		}
 		echo "<tr><td><input name='menu_item_code' size='10'></td>";
@@ -382,9 +414,9 @@ function show_menu($menu_id)
 		
 	}
 }
-function select_plating_team($plating_team)
+function select_plating_team($plating_team,$menu_item_id)
 {
-	echo "<select name='plating_team'>";
+	echo "<select name='plating_team_".$menu_item_id."' onchange='update_plating_team(this,".$menu_item_id.");'>";
 	for ($i = 1; $i < 11; $i++) {
 		echo "<option value='".$i."'";
 		if ($i == $plating_team) { echo " selected"; }
@@ -399,6 +431,19 @@ function select_prep_type($preptypes,$prep_type_id,$comp_id)
 	foreach ($preptypes as $p) {
 		echo "<option value='".$p."'";
 		if ($idx++ == $prep_type_id) { echo " selected"; }
+		echo ">".$p."</option>";
+	}
+	echo "</select>";
+}
+
+function select_probe_type($probe_type_id,$comp_id)
+{
+	echo "<select name='probe_".$comp_id."' onchange='update_probe_type(this,".$comp_id.");'>";
+	$idx = 1;
+	$probetypes = ['IR','Probe','N/A'];
+	foreach ($probetypes as $p) {
+		echo "<option value='".$p."'";
+		if ($idx++ == $probe_type_id) { echo " selected"; }
 		echo ">".$p."</option>";
 	}
 	echo "</select>";

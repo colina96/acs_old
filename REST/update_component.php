@@ -8,10 +8,18 @@ $userID = $_SESSION['userID'];
 if ($userID > 0) {
 	echo "got data ";
 	$comp_id = $_POST['id'];
-	$prep_type = $_POST['prep_type'];
-	echo $_POST['id'];
-	echo $_POST['prep_type'];
-	$sql = "update MENU_ITEM_COMPONENTS set prep_type = ".$prep_type." where id = ".$comp_id;
+	if (!empty($_POST['prep_type'])) {
+		$prep_type = $_POST['prep_type'];
+		$sql = "update MENU_ITEM_COMPONENTS set prep_type = ".$prep_type." where id = ".$comp_id;
+	}
+	
+	if (!empty($_POST['probe_type'])) {
+		$probe_type = $_POST['probe_type'];
+		$sql = "update MENU_ITEM_COMPONENTS set probe_type = ".$probe_type." where id = ".$comp_id;
+	}
+	// echo $_POST['id'];
+	//echo $_POST['prep_type'];
+	//$sql = "update MENU_ITEM_COMPONENTS set prep_type = ".$prep_type." where id = ".$comp_id;
 	test_mysql_query($sql);
 echo $sql;
 	
