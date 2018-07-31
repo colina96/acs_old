@@ -87,6 +87,28 @@ if ($result) {
 </div>
 <script>
 var menus = null;
+function update_prep_type(s,comp_id)
+{
+	
+	// var s = document.getElementById("pt_" + comp_id);
+	
+	var idx = s.selectedIndex;
+	var val = s.options[idx].value;
+	console.log("update component id for ",comp_id,idx,val);
+	var all = document.getElementsByName("pt_" + comp_id);
+	console.log("found dups",all.length);
+	for (i = 0; i < all.length; i++) {
+		all[i].selectedIndex = idx;
+	}
+	$.post("REST/update_component.php",
+		    {
+		        id: comp_id,
+		        prep_type: idx + 1
+		    },
+		    function(data, status){
+		        console.log("Data: " + data + "\nStatus: " + status);
+		    });
+}
 function show_active_menus()
 {
 	openPage('active_menus', this, 'red','menu_details','acs_menu_btn');
@@ -334,6 +356,7 @@ function show_menu($menu_id)
 			echo "</td><td>Save</td><td>Delete</td>";
 		//	echo "<td><div class='acs_btn' onclick='add_menu_component(".$menu_id.",".$row['id'].",\"".$row['dish_name']."\");'><span>Add</span></div></tr>";
 			$sql = "select * from MENU_ITEM_COMPONENTS where MENU_ITEM_ID=".$row['id'];
+			$sql = "select * from MENU_ITEM_COMPONENTS, MENU_ITEM_LINK where MENU_ITEM_LINK.component_id = MENU_ITEM_COMPONENTS.id and MENU_ITEM_ID=".$row['id'];
 			$result = mysql_query($sql);
 			while ($row = mysql_fetch_array($result) ) {
 				echo "<tr><td></td><td>".$row['description']."</td>";
@@ -343,7 +366,7 @@ function show_menu($menu_id)
 				}
 				echo "<td>".$prep_type."</td>"; */
 				echo "<td>";
-				select_prep_type($prep_types,$row['prep_type']);
+				select_prep_type($prep_types,$row['prep_type'],$row['component_id']);
 				echo "</td><td></td>"; // plating team column
 				echo "<td><div class='acs_btn' onclick='del_menu_component(".$menu_id.",".$row['id'].",\"".$row['description']."\");'><span>Del</span></div></tr>";
 			}
@@ -369,12 +392,13 @@ function select_plating_team($plating_team)
 	}
 	echo "</select>";
 }
-function select_prep_type($preptypes,$prep_type_id)
+function select_prep_type($preptypes,$prep_type_id,$comp_id)
 {
-	echo "<select name='prep_type'>";
+	echo "<select name='pt_".$comp_id."' onchange='update_prep_type(this,".$comp_id.");'>";
+	$idx = 1;
 	foreach ($preptypes as $p) {
 		echo "<option value='".$p."'";
-		if ($p == $prep_type_id) { echo " selected"; }
+		if ($idx++ == $prep_type_id) { echo " selected"; }
 		echo ">".$p."</option>";
 	}
 	echo "</select>";

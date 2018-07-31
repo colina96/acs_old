@@ -106,18 +106,27 @@ insert into MENU_ITEMS values (2,1,'F4489315','Vanilla Sauce',null);
 
 create TABLE MENU_ITEM_COMPONENTS (
 	id int not null  auto_increment,
-	menu_item_id int not null,
 	description varchar(100),
 	prep_type int,
 	probe_type int,
 	constraint pk_example primary key (id)
 );	
 
-insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1);
-insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2);
-insert into MENU_ITEM_COMPONENTS values (3,2,'Vanilla Sauce',2,0);
+insert into MENU_ITEM_COMPONENTS values (1,'Duck Rillettes',1,1);
+insert into MENU_ITEM_COMPONENTS values (2,'Apple Beetroot Jelly',1,2);
+insert into MENU_ITEM_COMPONENTS values (3,'Vanilla Sauce',2,0);
 
+create TABLE MENU_ITEM_LINK
+(
+	id smallint unsigned not null auto_increment, 
+	menu_item_id int,
+	component_id int,
+	constraint pk_example primary key (id) 
+);
 
+insert into MENU_ITEM_LINK values (null,1,1);
+insert into MENU_ITEM_LINK values (null,1,2);
+insert into MENU_ITEM_LINK values (null,2,3);
 create table COMPONENT (
 	id smallint unsigned not null auto_increment, 
 	description varchar(50),

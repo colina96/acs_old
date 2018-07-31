@@ -61,13 +61,28 @@ function upload_menu()
 							$ignore_next = true;
 						}
 						if (!$ignore_next) {
-							//	echo "<td></td><td>$ignore_next Component $row[2]\n";
-							$sql = "insert into MENU_ITEM_COMPONENTS ";
-							$flds = "(id,menu_item_id,description)";
-							$vals = " values (null,".$menu_item_id.",";
-							$vals .= "'".mysql_escape_string( $row[2])."')";
-							$sql .= $flds.$vals;
+							// search for component - only create new if not in already there
+							$description = mysql_escape_string( $row[2]);
+						//	echo "found $description";
+							$sql = "select * from MENU_ITEM_COMPONENTS where description='".$description."'";
+							$result = mysql_query($sql);
+							$comp_id = -1;
+							while ($row = mysql_fetch_array($result) ) {
+								$comp_id = $row['id'];
+							// insert new component
+							}
+							if ($comp_id == -1) {
+								$sql = "insert into MENU_ITEM_COMPONENTS ";
+								$flds = "(id,description)";
+								$vals = " values (null,";
+								$vals .= "'".$description."')";
+								$sql .= $flds.$vals;
 							//	echo $sql;
+								test_mysql_query($sql);
+								$comp_id = mysql_insert_id();
+							}
+							$sql = "insert into MENU_ITEM_LINK (id,menu_item_id,component_id) ";
+							$sql .= "values (null,".$menu_item_id.",".$comp_id.")";
 							test_mysql_query($sql);
 							// return(mysql_insert_id());
 							//				add_menu_component($menu_item_id,$row[2],0);
