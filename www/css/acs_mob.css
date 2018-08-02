@@ -1,0 +1,122 @@
+
+.mobile_main {
+	background-image: url('../img/qac_mobile.png');
+	background-repeat: no-repeat;
+	spacing:10px;
+	width:100vw;
+	height:100vh;
+	margin:0;
+	.background:green;
+	top:0;
+}
+.m_btn, .m_submit {
+	position:absolute;
+	bottom:5%;
+	left:10%;
+	background: #23DD9F;
+	border-radius: 15px;
+	padding: 10px;
+    spacing: 5px;
+    width: 80%;
+    font-size:larger;
+}
+.m_submit {
+	bottom:18%;
+	background: #23DD9F;
+	border-radius: 15px;
+}
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+	.mobile_main {
+	width: 100vw;
+	height: 100vh;
+	}
+	.m_btn {
+		bottom:20vh;
+	}
+}
+.hidden {
+	display:none;
+}
+.input {
+	width:80%;
+	margin:2% 10%;
+	font-size:5vw;
+	background-color:white;
+}
+
+.m_main {
+    position: absolute;
+    top: 0;
+    width: 356px;
+    height: 700px;
+    color:red;
+    margin:auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    
+}
+.m_top_menu_container {
+	display:flex;
+	.color:white;
+	font-size:x-small;
+}
+.m_top_menu {
+	margin:5px;
+	width:30vw;
+	color:white;
+	font-size:larger;
+}
+.m_bluedot {
+	background:#5375DA;
+	color:white;
+	border-radius: 15px;
+	padding: 5px 10px;
+}
+.m_label {
+	margin : 0 auto;
+	padding: 10px;
+	background:#5375DA;
+	color:white;
+	border-radius: 15px;
+	font-size: large;
+}
+.m_modal {
+	position: relative;
+	margin:24px;
+	width:80vw;
+	height:80vh;
+	background:white;
+	border-radius: 15px;
+	border:1px solid black;
+	padding:10px;
+	color:black;
+	font-size:small;
+}
+.m_modal2 {
+	position: relative;
+	margin:24px;
+	width:80vw;
+	top:22vh;
+	height:60vh;
+	background:white;
+	border-radius: 15px;
+	border:1px solid black;
+	padding:10px;
+	color:black;
+	font-size:small;
+}
+.m_login {
+	position:absolute;
+	font-size:larger;
+	top:55vh;
+}
+.ui_menu_item {
+	font-size: small;
+}
+#mi_temp {
+	font-size:5vh;
+}
+
