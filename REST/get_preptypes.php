@@ -3,9 +3,10 @@ session_start();
 
 include '../db.php';
 
-$userID = $_SESSION['userID'];
+ $userID = $_SESSION['userID'];
 // echo "userID ".$userID."\n";
-if ($userID > 0) {
+if ($userID > 0) 
+{
 	
 	$sql = "select * from PREP_TYPES order by ID";
 	$result = mysql_query($sql);
@@ -35,6 +36,9 @@ if ($userID > 0) {
 	else {
 		echo mysql_error();
 	}
+}
+else {
+	echo "['error':'1']";
 }
 
 

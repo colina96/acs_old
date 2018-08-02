@@ -36,7 +36,7 @@ INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
  VALUES ( null, 'chef9@gmail.com','acs','Chef','Nine','chef',0);
 INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
  VALUES ( null, 'chef10@gmail.com','acs','Chef','10','chef',0);
-select * from users;
+select * from USERS;
 
 create table PREP_TYPES (
 	id smallint unsigned not null,
