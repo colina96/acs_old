@@ -129,9 +129,10 @@ function upload_menu()
     <![endif]-->
   </head>
   <body>
+  <?php if (!empty($_SESSION['userID'])) { ?> 
  <nav class="navbar navbar-default">
       <div class="container">
-  
+ 
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#codebrainery-toggle-nav" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
@@ -184,13 +185,16 @@ function upload_menu()
   <?php include 'assembly.php' ?>
 </div>
 </div>
+<?php } else { ?>
+
+
 <div class="modal fade">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <!--  button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-          </button>
+          </button -->
           <h2 class="form-signin-heading">Please sign in</h2>
         </div>
         <div class="acs_container">
@@ -198,7 +202,7 @@ function upload_menu()
       		<form class="form-signin" method="post">
         
         	<label for="inputEmail" class="sr-only">Email address</label>
-        	<input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+        	<input id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
         	<label for="inputPassword" class="sr-only">Password</label>
         	<input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
         	<button class="btn btn-lg btn-primary btn-block" type="submit" name="login" value='1'>Sign in</button>
@@ -208,6 +212,7 @@ function upload_menu()
       </div>
     </div>
   </div>
+ <?php } ?> 
 <?php 
 	if (empty($_SESSION['userID'])) {
 ?>

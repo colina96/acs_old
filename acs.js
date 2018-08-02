@@ -58,6 +58,18 @@ function close_menu_component_modal(id)
 	
 }
 
+function get_comp_by_id(id,fld)
+{
+	for (var i = 0; i < comps.length; i++) {
+		if (comps[i].id == id) {
+			var x = comps[i];
+			console.log("comps length ",x.length);
+			console.log ("found comp",id,fld,comps[i].description,comps[i].prep_type);
+			return(comps[i][fld]);
+		}
+	}
+	return(1);
+}
 function get_preptype_val(id,fld)
 {
 	for (var i = 0; i < preptypes.length; i++) {

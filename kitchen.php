@@ -15,9 +15,10 @@
 			<div id='new_comp' class='comp_details menu_details_active'><h1>Start new component</h1>
 			<table width='100%'<tr>
 				<td>Search for component: <td><input type="text" id="search" width:'100%' size='50' name='new_comp_desc'>
-				<!-- >tr><td>Prep type<td> 				
-				<?php // select_prep_type('new_comp_prep_type',-1) ?>
-				<tr -->
+				<input type=hidden name='new_comp_prep_type' value=0>
+				<tr><td>Prep type<td><div id='new_comp_prep_type_code'></div>				
+				
+				<tr>
 				<td>Temperature : <td><input type="text" name="M1_temp" >
 				<tr><td>Chef: <td><?php select_chef('M1_chef_id') ?>
 				<tr>
@@ -73,7 +74,11 @@
 
 function component_selected(id)
 {
-	// do nothing now
+	console.log("loaded ",id);
+	var pt = get_comp_by_id(id,'prep_type');
+	console.log("loaded ",id,pt);
+	document.getElementsByName('new_comp_prep_type')[0].value = pt;
+	document.getElementById('new_comp_prep_type_code').innerHTML = pt;
 }
 function show_active_components(data)
 {
