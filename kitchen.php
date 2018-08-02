@@ -4,7 +4,7 @@
 		  
 		  <div class='acs_menu_space' >SELECT AN ACTION</div>
 		  <button type='button' class='acs_comp_btn' href="#" id="new_comp_btn"  
-		  	onclick="openPage('new_comp', this, 'red','comp_details','acs_comp_btn')">START NEW</button>
+		  	onclick="goto_start_new_comp()">START NEW</button>
 		  <button type='button' class='acs_comp_btn' href="#" id="active_comps_btn" 
 		  	onclick="goto_active_components()">ACTIVE COMPONENTS</button>
 		  
@@ -12,7 +12,7 @@
 		</div>
 	
 		<div class="acs_right_content">
-			<div id='new_comp' class='comp_details menu_details_active'><h1>Start new component</h1>
+			<div id='new_comp' class='comp_details'><h1>Start new component</h1>
 			<table width='100%'<tr>
 				<td>Search for component: <td><input type="text" id="search" width:'100%' size='50' name='new_comp_desc'>
 				<input type=hidden name='new_comp_prep_type' value=0>
@@ -27,7 +27,7 @@
 				<button type='button' class='acs_comp_btn' href="#" id="new_comp_select"  
 		  	onclick="start_component()">START NEW</button>
 			</div>
-			<div id='active_comps' class='comp_details'>
+			<div id='active_comps' class='comp_details menu_details_active'>
 			</div>
 			<div id='expired_menus' class='comp_details'>
 			</div>
@@ -78,7 +78,8 @@ function component_selected(id)
 	var pt = get_comp_by_id(id,'prep_type');
 	console.log("loaded ",id,pt);
 	document.getElementsByName('new_comp_prep_type')[0].value = pt;
-	document.getElementById('new_comp_prep_type_code').innerHTML = pt;
+	
+	document.getElementById('new_comp_prep_type_code').innerHTML = get_preptype_val(pt,'code');;
 }
 function show_active_components(data)
 {
@@ -135,6 +136,12 @@ function show_active_components(data)
    		tab.appendChild(tr);
     }
    	div.appendChild(tab);
+}
+function goto_start_new_comp()
+{
+	console.log('goto_start_new_comp');
+	load_comps();
+	openPage('new_comp', this, 'red','comp_details','acs_comp_btn');
 }
 function goto_active_components()
 {
