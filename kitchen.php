@@ -47,6 +47,8 @@
 				<div id='comp_M2_correct' class='acs_container'></div>
 				<button type='button' class='acs_comp_btn' href="#" id="comp_M2_action"  
 		  				onclick="comp_M2()">SUBMIT</button>
+		  		<button type='button' class='acs_delete_btn' href="#" id="delete_comp_action"  
+		  				onclick="delete_comp()">DELETE</button>
 				</div>
 			</div>
 			<div class='acs_modal' id='comp_action_modal_M3'>
@@ -65,6 +67,8 @@
 				<div id='comp_M3_correct' class='acs_container'></div>
 				<button type='button' class='acs_comp_btn' href="#" id="comp_M3_action"  
 		  				onclick="comp_M3()">SUBMIT</button>
+		  		<button type='button' class='acs_delete_btn' href="#" id="delete_comp_action"  
+		  				onclick="delete_comp()">DELETE</button>
 				</div>
 			</div>
 		</div>
@@ -125,10 +129,10 @@ function show_active_components(data)
    	   		var timeDiff = parseInt((now.getTime() - M2_time.getTime()) / (1000 * 60));
    	   		if (timeDiff > 0) {
    	   			// tr.appendChild(new_td('due:' + show_time(M2_time) + "-" + timeDiff,'comp'));
-   	   			tr.appendChild(new_td('overdue:' + timeDiff,'comp'));
+   	   			tr.appendChild(new_td(format_minutes(timeDiff) + " OVERDUE",'comp red'));
    	   		}
    	   		else {
-   	   			tr.appendChild(new_td('due:' + timeDiff,'comp'));
+   	   			tr.appendChild(new_td(format_minutes(timeDiff) + " remaining",'comp'));
    	   		}
    			// tr.appendChild(new_td('due','comp'));
    		}
@@ -177,6 +181,7 @@ function act_component(i)
 		console.log("invalid index ",active_comps.length);
 		return;
 	}
+	console.log("action for active component ",i,active_comps[i]['id']);
 	active_component_index = i; // global
 	console.log("act_component M2 time ",active_comps[i]['M2_time']);
 	
@@ -239,6 +244,32 @@ function comp_M2()
 	}
 	
 }
+function delete_comp()
+{
+	var component = new Object();
+	component.id = active_comps[active_component_index]['id'];
+
+	var data =  {data: JSON.stringify(component)};
+    console.log("Sent Off: %j", data);
+    
+    $.ajax({
+        url: 'REST/delete_comp.php',
+        type: "POST",
+        data: data,
+
+        success: function(result) {
+            console.log("delete_component result ",result);
+            goto_active_components();
+        },
+        
+        fail: (function (result) {
+            console.log("delete_component fail ",result);
+        })
+    });
+    document.getElementById('comp_action_modal_M2').style.display = 'none';
+    document.getElementById('comp_action_modal_M3').style.display = 'none';
+}
+
 function comp_M3()
 {
 	var M3_temp_reading = parseInt(document.getElementsByName('M3_temp')[0].value);

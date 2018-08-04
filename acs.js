@@ -70,6 +70,17 @@ function get_comp_by_id(id,fld)
 	}
 	return(1);
 }
+
+function format_minutes (min)
+{
+	min = Math.abs(min)
+	 var hours   = Math.floor(min / 60);
+	 var minutes = Math.floor(min - (hours * 60));
+	 if (hours   < 10) {hours   = "0"+hours;}
+	 if (minutes < 10) {minutes = "0"+minutes;}
+	 return hours+':'+minutes;
+}
+
 function get_preptype_val(id,fld)
 {
 	for (var i = 0; i < preptypes.length; i++) {
