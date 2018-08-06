@@ -28,17 +28,20 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
 
     <link rel="stylesheet" type="text/css" href="css/index.css" />
-    <link rel="stylesheet" type="text/css" href="css/acs_mob.css" />
-    <title>Hello World</title>
+  
+    <title>ACS</title>
 </head>
 
 <body>
 <div>
+	<div class='mobile_main' id='splash'>
+		
+	</div> 
 	
-	<div class='mobile_main' id='mm1'>
-		<div class='bold' >>XXXXXXX</div>
+	<div class='mobile_main hidden' id='mm1'>
+		
 		<div class='m_main'>
-		<div class='m_login'>user</div>
+		<div id='m_login'></div>
 		<button type='button'  class='m_btn' onclick="goto_m_main();">Continue</button>
 		</div>
 	</div>
@@ -52,15 +55,28 @@
 		<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
 		<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
 		<div class='m_modal hidden' id='m_search'>SEARCH
-		<input type="text" id="search" width:'100%' size='40' name='new_comp_desc'>
+		<input type="text" id="search" name='new_comp_desc'>
 		</div>
 		
 		
 		</div>
 	</div>
 	<div class='mobile_main hidden' id='m_temp'>
-		<div class='m_label' id='chk_temp_item_div'></div>
-		<div class='m_label' id='chk_temp_item_time_div'></div>
+	
+			<div id='close_m_temp'>&#x02A2F;</div>
+			<div id='chk_temp_pt_div'>CC</div>
+			<div id='chk_temp_item_div'></div>
+			<div id='chk_temp_item_time_div'>
+				<div id='ms_1'>M1</div>
+				<div id='ms_1_text'>1 hour remaining</div>
+			</div>
+			<div id='chk_temp_item_time_div2'>
+				<div id='ms_2'>M1</div>
+				<div id='ms_2_text'>REQUIRED</div>
+				<div id='ms_2_target'>< 21 C</div>
+			</div>
+		
+
 		<div class='m_modal2' id='m_temp_modal'>
 			<div class='m_label'><spsn>CHECK THE TEMPERATURE</spsn></div>
 			<div><input name='m1_temp' size=4></div>
@@ -68,32 +84,35 @@
 			<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
 		</div>
 	</div>
-	<div class='mobile_main hidden' id='login_div'>
-		<div class='m_modal'>
+	<div class='mobile_main' id='login_div'>
+		<div class='m_modal2'>
 			<input name='email' placeholder='email' type='text' class='input'>
 			<input name='password' placeholder='password' type='text' class='input'>
 	
 			<div id='login_btn' class='btn' onclick='login()'>Login</div>
-			<div id='status'>STATUS<div>
+			<div id='login_fail'></div>
 		</div>
 	</div> 
 </div>
+</div></div>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>          
-        <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>  
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+        <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script> 
+         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>     
     <script type="text/javascript" src="js/index.js"></script>
      <script type="text/javascript" src="js/acs.js"></script>
+       <link rel="stylesheet" type="text/css" href="css/acs_mob.css" />
     <script type="text/javascript">
     $(document).ready(function(){
     	check_login();
     	load_comps();
+    	load_preptypes();
     });
     function doclick()
     {
     	document.getElementById("res").innerHTML = 'banana';
-    	load_comps();
+    	
     }
     app.initialize();
     </script>

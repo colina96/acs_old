@@ -39,8 +39,8 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
 
     <link rel="stylesheet" type="text/css" href="css/index.css" />
-    <link rel="stylesheet" type="text/css" href="css/acs_mob.css" />
-    <title>Hello World</title>
+  
+    <title>ACS</title>
 </head>
 
 <body>
@@ -50,9 +50,9 @@
 	</div> 
 	
 	<div class='mobile_main hidden' id='mm1'>
-		<div class='bold' >>XXXXXXX</div>
+		
 		<div class='m_main'>
-		<div class='m_login'>user</div>
+		<div id='m_login'></div>
 		<button type='button'  class='m_btn' onclick="goto_m_main();">Continue</button>
 		</div>
 	</div>
@@ -73,12 +73,25 @@
 		</div>
 	</div>
 	<div class='mobile_main hidden' id='m_temp'>
-		<div class='m_label' id='chk_temp_item_div'></div>
-		<div class='m_label' id='chk_temp_item_time_div'></div>
+	
+			<div id='close_m_temp' onclick="goto_m_main();">&#x02A2F;</div>
+			<div id='chk_temp_pt_div'>CC</div>
+			<div id='chk_temp_item_div'></div>
+			<div id='chk_temp_item_time_div'>
+				<div id='ms_1'>M1</div>
+				<div id='ms_1_text'>1 hour remaining</div>
+			</div>
+			<div id='chk_temp_item_time_div2'>
+				<div id='ms_2'>M1</div>
+				<div id='ms_2_text'>REQUIRED</div>
+				<div id='ms_2_target'>< 21 C</div>
+			</div>
+		
+
 		<div class='m_modal2' id='m_temp_modal'>
 			<div class='m_label'><spsn>CHECK THE TEMPERATURE</spsn></div>
-			<div><input name='m1_temp' size=4></div>
-			<button type='button' class='m_submit'>Check Now</button>
+			<div id='m1_temp_div'><input type='number' name='m1_temp' size=4></div>
+			<button type='button' class='m_submit' onclick='check_temp()'>Check Now</button>
 			<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
 		</div>
 	</div>
@@ -88,7 +101,7 @@
 			<input name='password' placeholder='password' type='text' class='input'>
 	
 			<div id='login_btn' class='btn' onclick='login()'>Login</div>
-			
+			<div id='login_fail'></div>
 		</div>
 	</div> 
 </div>
@@ -101,6 +114,7 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
      <script type="text/javascript" src="js/acs.js"></script>
+       <link rel="stylesheet" type="text/css" href="css/acs_mob.css" />
     <script type="text/javascript">
     function doclick()
     {

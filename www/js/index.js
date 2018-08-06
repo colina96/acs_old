@@ -17,6 +17,8 @@
  * under the License.
  */
 var user_id = -1;
+var user_name = "";
+
 
 var app = {
     // Application Constructor
@@ -55,24 +57,63 @@ var app = {
 
 function check_login()
 {
+var loginString ="";
+console.log("checking login");
+$.ajax({
+    type: "POST",crossDomain: true, cache: false,
+    url:  RESTHOME + "login.php",
+    data: loginString,
+    dataType: 'json',
+    success: function(data){
+    	console.log("got login");
+    	//document.getElementById("res").innerHTML = "Logout Success..!" + data;
+    	if(data['user_id']) {
+        	//document.getElementById("res").innerHTML = "Login ID" + data['user_id'];
+        	user_id = data['user_id'];
+        	user_name = data['user'];
+        	if (user_id <= 0) {
+        		openPage('login_div', this, 'red','mobile_main','tabclass');
+        	}
+        	else {
+        		user_name = data['user'];
+        		document.getElementById('m_login').innerHTML = user_name;
+        		openPage('mm1', this, 'red','mobile_main','tabclass');
+        	}
+           // localStorage.loginstatus = "true";
+           //  window.location.href = "welcome.html";
+        }
+        else if(data == "error")
+        {
+            //$("#status").text("Login Failed..!");
+        }
+    }
+});
+}
+
+function Xcheck_login()
+{
 	if (user_id <= 0) {
 		openPage('login_div', this, 'red','mobile_main','tabclass');
 	}
 	else {
-		openPage('mm2', this, 'red','mobile_main','tabclass');
+		openPage('mm1', this, 'red','mobile_main','tabclass');
+		
 	}
 }
 
 function login(email,password)
 {
-    var email= "colin.p.atkinson@gmail.com";
-    var password= "acs";
+    //var email= "colin.p.atkinson@gmail.com";
+    //var password= "acs";
+    var email = document.getElementsByName('email')[0].value;
+    var password = document.getElementsByName('password')[0].value;
     //$("#status").text("Authenticating...");
     console.log("Authenticating...");
     var loginString ="email="+email+"&password="+password+"&login=login";
+    console.log(loginString);
     $.ajax({
         type: "POST",crossDomain: true, cache: false,
-        url:  "http://10.0.0.32/acs/REST/login.php",
+        url:  RESTHOME + "login.php",
         data: loginString,
         dataType: 'json',
         success: function(data){
@@ -81,12 +122,15 @@ function login(email,password)
             if(data['user_id']) {
            //	document.getElementById("res").innerHTML = "Login ID" + data['user_id'];
             	user_id = data['user_id'];
+            	user_name = data['user'];
             	if (user_id > 0) {
+            		
             		openPage('mm2', this, 'red','mobile_main','tabclass');
             	}
             	else {
-            		document.getElementById('login').style.display = 'block';
-            		document.getElementById('logout').style.display = 'none';
+            		document.getElementById('login_fail').innerHTML = "login fail for "+email + " " + password;
+            		// document.getElementById('login').style.display = 'block';
+            		// document.getElementById('logout').style.display = 'none';
             	}
                // localStorage.loginstatus = "true";
                //  window.location.href = "welcome.html";
@@ -104,7 +148,7 @@ function logout()
     var loginString ="logout=login";
     $.ajax({
         type: "POST",crossDomain: true, cache: false,
-        url:  "http://10.0.0.32/acs/REST/login.php",
+        url:  RESTHOME + "login.php",
         data: loginString,
         dataType: 'json',
         success: function(data){
@@ -135,7 +179,7 @@ function test_load_comps()
 {
 	document.getElementById("res").innerHTML = 'apple';
 	$.ajax({
-        url: "http://10.0.0.32/acs/REST/get_preptypes.php",
+        url: RESTHOME + "get_preptypes.php",
         type: "POST",
        // data: data,
        //  data: {points: JSON.stringify(points)},
@@ -160,30 +204,6 @@ function test_load_comps()
     });
 }
 
-function load_preptypes()
-{
-console.log("loading prep types");
-    $.ajax({
-        url: "REST/get_preptypes.php",
-        type: "POST",
-       // data: data,
-       //  data: {points: JSON.stringify(points)},
-        dataType: 'json',
-        // contentType: "application/json",
-        success: function(result) {
-            preptypes = result;
-            
-            console.log("got " + result.length + " preptypes");
-            
-        },
-        done: function(result) {
-            console.log("done preptypes ");
-        },
-        fail: (function (result) {
-            console.log("fail preptypes",result);
-        })
-    });
-}
 
 function openPage(pageName, elmnt, color,content_class,tab_class) {
 	console.log("opening page ",pageName,content_class);
