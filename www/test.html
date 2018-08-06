@@ -50,7 +50,7 @@
 		<div class='m_top_menu_container'>
 			<div class='m_top_menu' id='m_current_tracking_tab'  onclick="m_tracking()">CURRENT TRACKING</div>
 			<div class='m_top_menu' id='m_reprint_labels_tab'  onclick="openPage('m_reprint_labels', this, 'red','m_modal','tabclass');">RE-PRINT LABELS</div>
-			<div class='m_top_menu' id='m_search_tab'  onclick="openPage('m_search', this, 'red','m_modal','tabclass');">SEARCH</div>
+			<div class='m_top_menu' id='m_search_tab'  onclick="goto_comp_search()">SEARCH</div>
 		</div>
 		<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
 		<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
@@ -61,9 +61,10 @@
 		
 		</div>
 	</div>
+	<!--  kitchen temp pages -->
 	<div class='mobile_main hidden' id='m_temp'>
 	
-			<div id='close_m_temp'>&#x02A2F;</div>
+			<div id='close_m_temp' onclick="goto_m_main();">&#x02A2F;</div>
 			<div id='chk_temp_pt_div'>CC</div>
 			<div id='chk_temp_item_div'></div>
 			<div id='chk_temp_item_time_div'>
@@ -76,14 +77,58 @@
 				<div id='ms_2_target'>< 21 C</div>
 			</div>
 		
-
+<!--  next four pages are for starting a new component at M1 -->
 		<div class='m_modal2' id='m_temp_modal'>
-			<div class='m_label'><spsn>CHECK THE TEMPERATURE</spsn></div>
-			<div><input name='m1_temp' size=4></div>
-			<button type='button' class='m_submit'>Check Now</button>
+			<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
+			<div id='m1_temp_div'><input type='number' name='m1_temp' size=4></div>
+			<button type='button' class='m_submit' onclick="check_temp();">Check Now</button>
 			<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
 		</div>
+		<div class='m_modal2' id='m_temp_modal2'>
+			<div class='m_label'><span>TEMPERATURE</span></div>
+			<div id='m1_temp_div_2' class='temp_reading red'></div>
+			<button type='button' class='m_submit' onclick='goto_m_main();'>Re-Cook</button>
+			<button type='button'  class='m_btn' onclick="openPage('m_temp_modal', this, 'red','m_modal2','tabclass');">Re-Check</button>
+		</div>
+		<div class='m_modal2' id='m_temp_modal3'>
+			<div class='m_label'><span>TEMPERATURE</span></div>
+			
+			<div id='m1_temp_div_3' class='temp_reading'></div>
+			<div id='m1_temp_div'><input type='number' name='m1_chef_id' size=4></div>
+			<button type='button'  class='m_btn' onclick="openPage('m_temp_modal4', this, 'red','m_modal2','tabclass');">Scan Authorised Chef ID</button>
+		</div>
+		<div class='m_modal2' id='m_temp_modal4'>
+			<div class='m_label'><span>TEMPERATURE</span></div>
+			<div id='m1_temp_div_4' class='temp_reading'></div>
+			<button type='button'  class='m_btn' onclick="start_component();">Print Labels</button>
+		</div>
+<!--  next pages are for recording M2 and M3 -->
+		<div class='m_modal2' id='m2_temp_modal'>
+			<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
+			<div id='m2_temp_div'><input type='number' name='m2_temp' size=4></div>
+			<button type='button' class='m_submit' onclick="check_temp_m2();">Check Now</button>
+			<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
+		</div>
+		<div class='m_modal2' id='m2_temp_modal2'>
+			<div class='m_label'><span>TEMPERATURE</span></div>
+			<div id='m2_temp_div_2' class='temp_reading green'></div>
+			<div id='milestone_div_2' class='milestone_div'></div>
+			<button type='button' class='m_submit' onclick='goto_m_main();'>Continue Chilling</button>
+			<button type='button'  class='m_btn' onclick="openPage('m2_temp_modal', this, 'red','m_modal2','tabclass');">Re-Check</button>
+		</div>
+		<div class='m_modal2' id='m2_temp_modal3'>
+			<div class='m_label'><span>TEMPERATURE</span></div>
+			<div id='m2_temp_div_3 class='temp_reading'></div>
+			<div id='milestone_div_3' class='milestone_div'></div>
+			<button type='button'  class='m_btn' onclick="goto_m_main();">Move Product to Coolroom</button>
+		</div>
+		<div class='m_modal2' id='m2_temp_modal4'>
+			<div class='m_label'><span>TEMPERATURE</span></div>
+			<div id='m2_temp_div_4 class='temp_reading'></div>
+			<button type='button'  class='m_btn' onclick="goto_m_main();">Print Labels</button>
+		</div>
 	</div>
+	<!-- end of kitchen temp pages -->
 	<div class='mobile_main' id='login_div'>
 		<div class='m_modal2'>
 			<input name='email' placeholder='email' type='text' class='input'>

@@ -193,13 +193,14 @@
 }
 	
 #m_login {
-	position:absolute;
+	position:relative;
 	font-size:6vw;
 	.background:blue;
 	color:black;
-	margin: 0  auto;
-	top:55vh;
-	
+	margin:0 auto;
+	top:5vh;
+	display:table;
+	min-width:20vw;
 }
 #close_m_temp {
 	position:absolute;
@@ -221,6 +222,23 @@
 .component_table.td {
 	height:10vh;
 	
+}
+
+.temp_reading {
+	font-size: 20vw;
+	margin: 0 auto;
+	display: table;
+}
+.red {
+	color:red;
+}
+.green {
+	color:green;
+}
+.milestone_div {
+	font-size: 10vw;
+	margin: 0 auto;
+	display: table;
 }
 
 .ui-menu .ui-menu-item-wrapper {

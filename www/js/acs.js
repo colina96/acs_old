@@ -1,6 +1,8 @@
 var default_tab='m_current_tracking_tab';
 var comps = null;
 var preptypes = null;
+var active_comp = null; // the component currently being worked on
+var new_comp = null; // start a new component - M1
 var RESTHOME = "http://10.0.0.32/acs/REST/";
 
 function load_preptypes()
@@ -28,6 +30,11 @@ console.log("loading prep types");
     });
 }
 
+function goto_comp_search()
+{
+	$('#search').val('');
+	openPage('m_search', this, 'red','m_modal','tabclass');
+}
 function goto_m_main()
 {
 	openPage('mm2', this, 'red','mobile_main','tabclass');
@@ -48,13 +55,14 @@ function get_preptype_val(id,fld)
 function component_selected(id)
 {
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
-	var comp = get_component_by_id(id);
-	console.log(comp);
-	var prep_type_id = comp['prep_type'];
+	openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
+	new_comp = get_component_by_id(id);
+	console.log(new_comp);
+	var prep_type_id = new_comp['prep_type'];
 	console.log('prep_type_id',prep_type_id);
 	if (prep_type_id < 1) prep_type_id = 1;
 	var prep_type_val = get_preptype_val(prep_type_id,'M1_temp');
-	document.getElementById('chk_temp_item_div').innerHTML = comp['description'];
+	document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 	document.getElementById('ms_1').innerHTML = '';
 	document.getElementById('ms_1_text').innerHTML = '';
 	document.getElementById('ms_2').innerHTML = 'M1';
@@ -64,31 +72,168 @@ function component_selected(id)
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
 
+function check_temp() // start a new component
+{
+	console.log("check temp");
+	console.log(new_comp);
+	var t = document.getElementsByName('m1_temp')[0].value;
+	var prep_type_id = new_comp['prep_type'];
+	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
+	document.getElementById('m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
+	document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
+	document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
+	console.log("check temp",t,M1_temp_target);
+	if (t.length > 0) {
+		if (parseInt(t) < parseInt(M1_temp_target)) {
+			console.log("M1 temp too low");
+			openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
+		}
+		else {
+			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
+		}
+	}
+	
+}
+
+function start_component()
+{
+	var component = new Object();
+	component.description = new_comp['description'];
+	component.prep_type = new_comp['prep_type'];
+	component.M1_temp = document.getElementsByName('m1_temp')[0].value;
+	component.M1_chef_id = document.getElementsByName('m1_chef_id')[0].value;
+	if (component.M1_chef_id < 1) component.M1_chef_id = 1;
+	var data =  {data: JSON.stringify(component)};
+    console.log("Sent Off: %j", data);
+    document.getElementsByName('m1_chef_id')[0].value = '';
+    document.getElementsByName('m1_temp')[0].value = '';
+    $.ajax({
+        url: RESTHOME + "new_comp.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) {
+            console.log("start_component result ",result);
+            goto_m_main();
+        },
+        done: function(result) {
+            console.log("done start_component result ",result);
+        },
+        fail: (function (result) {
+            console.log("start_componentfail ",result);
+        })
+    });
+    
+}
+function comp_milestone()
+{
+	var M2_temp_reading = parseInt(document.getElementsByName('m2_temp')[0].value);
+	
+		// send data to REST interface
+		
+		var component = new Object();
+		component.id = active_comp['id'];
+		var url = '';
+		if (active_comp['M2_time'] == '') { // M2
+			component.M2_temp = document.getElementsByName('m2_temp')[0].value;
+			component.M2_chef_id = 0;
+			url = RESTHOME + 'M2_comp.php';
+		}
+		else {
+			component.M3_temp = document.getElementsByName('m2_temp')[0].value;
+			component.M3_chef_id = 0;
+			url = RESTHOME + 'M3_comp.php';
+		}
+		var data =  {data: JSON.stringify(component)};
+	    console.log("Sent Off: %j", data);
+	    
+	    $.ajax({
+	        url: url,
+	        type: "POST",
+	        data: data,
+
+	        success: function(result) {
+	            console.log("start_component result ",result);
+	            if (active_comp['M2_time'] == '') { 
+	            	// goto_m_main();
+	            }
+	            else {
+	            	openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
+	            }
+	        },
+	        done: function(result) {
+	            console.log("done start_component result ",result);
+	        },
+	        fail: (function (result) {
+	            console.log("start_componentfail ",result);
+	        })
+	    });
+}
+
+function check_temp_m2() // M2 or M3
+{
+	console.log("check temp M2/3");
+	console.log(active_comp);
+	var t = document.getElementsByName('m2_temp')[0].value;
+	console.log("check temp",t);
+	if (t.length > 0) {
+		var prep_type_id = active_comp['prep_type_id'];
+		
+		var temp_target = get_preptype_val(prep_type_id,'M2_temp');
+		var milestone = 'M2';
+		if (active_comp['M2_time'].length > 1) {
+			temp_target = get_preptype_val(prep_type_id,'M3_temp');
+			milestone = 'M3';
+		} 
+		console.log('check_temp_m2 target temp',temp_target,t);
+		
+		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
+		if (t < temp_target) {
+			document.getElementById('milestone_div_2').innerHTML= milestone + " achieved";
+			document.getElementById('milestone_div_3').innerHTML= milestone + " achieved";
+			comp_milestone();
+			if (milestone == 'M2') {
+				
+			}
+			else {
+				
+			}
+		}
+		else {
+			document.getElementById('milestone_div_2').innerHTML= milestone + "";
+		}
+		openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
+	}
+	
+}
+
+
 function active_comp_selected(id) 
 {
 	console.log("active_comp_selected",id);
-	var comp = active_comps[id];
-	console.log(comp);
+	openPage('m2_temp_modal', this, 'red','m_modal2','tabclass');
+	active_comp = active_comps[id];
+	console.log(active_comp);
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
 	
-	var prep_type_id = comp['prep_type_id'];
+	var prep_type_id = active_comp['prep_type_id'];
 	console.log('prep_type_id',prep_type_id);
 	if (prep_type_id < 1) prep_type_id = 1;
 	var prep_type_val = get_preptype_val(prep_type_id,'M2_temp');
-	document.getElementById('chk_temp_item_div').innerHTML = comp['description'];
+	document.getElementById('chk_temp_item_div').innerHTML = active_comp['description'];
 	var milestone_due = 'NA';
 	var remaining = 0;
 	var milestone_temp = "NA";
 	var target_temp = "NA";
-	var M1_time = new Date(comp['M1_time']);
-	var M2_time = new Date(comp['M2_time']);
+	var M1_time = new Date(active_comp['M1_time']);
+	var M2_time = new Date(active_comp['M2_time']);
 
-	console.log("M2 time -",comp['M2_time'],"-");
+	console.log("M2 time -",active_comp['M2_time'],"-");
 	var remaining = 0;
 	var now = new Date();
 	var now_ms = now.getTime();
 	var M1_ms = M1_time.getTime(); // time in millisecs
-	if (comp['M2_time'] == '') {
+	if (active_comp['M2_time'] == '') {
 		milestone_due = 'M2';
 		var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
 		var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
@@ -118,9 +263,7 @@ function active_comp_selected(id)
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
 
-function check_temp()
-{
-}
+
 function m_tracking()
 {
 	console.log('goto_active_components');
