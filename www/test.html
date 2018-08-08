@@ -42,7 +42,9 @@
 		
 		<div class='m_main'>
 		<div id='m_login'></div>
-		<button type='button'  class='m_btn' onclick="goto_m_main();">Continue</button>
+		<button type='button' class='m_btn btn_top' onclick="goto_m_main();">Kitchen</button>
+		<button type='button'  class='m_btn btn_mid' onclick="goto_plating();">Plating</button>
+		<button type='button'  class='m_btn btn_bot' onclick="logout();">Logout</button>
 		</div>
 	</div>
 	<div class='mobile_main hidden' id='mm2'>
@@ -50,7 +52,8 @@
 		<div class='m_top_menu_container'>
 			<div class='m_top_menu' id='m_current_tracking_tab'  onclick="m_tracking()">CURRENT TRACKING</div>
 			<div class='m_top_menu' id='m_reprint_labels_tab'  onclick="openPage('m_reprint_labels', this, 'red','m_modal','tabclass');">RE-PRINT LABELS</div>
-			<div class='m_top_menu' id='m_search_tab'  onclick="goto_comp_search()">SEARCH</div>
+			<div class='m_top_menu larger' id='m_search_tab'  onclick="goto_comp_search()">&#x1F50E</div>
+			<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div>
 		</div>
 		<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
 		<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
@@ -129,6 +132,36 @@
 		</div>
 	</div>
 	<!-- end of kitchen temp pages -->
+	<!--  plating -->
+	<div class='mobile_main' id='plating_div'>
+		<div class='m_main'>
+		<div class='m_top_menu_container'>
+			<div class='m_top_menu' id='m_plating_tab'  onclick="m_tracking()">PLATING SCHEDULE</div>
+			
+			<div class='m_top_menu larger' id='plating_home_tab'  onclick="goto_home()">&#8962;</div>
+		</div>
+		<div class='m_modal' id='m_sel_team' >
+			<div class='m_label'><span>Select Plating Team</span></div>
+				<div id='plating_teams_list' class='center'></div>
+				<button type='button'  class='m_btn' onclick="select_plating_team();">Continue</button>
+			
+		</div>
+		<div class='m_modal hidden' id='m_sel_team_members' >
+			
+				<div id='plating_team_list'></div>
+				<button type='button'  class='m_btn' onclick="add_team_member();">Add Team Members</button>
+			
+		</div>
+		<div class='m_modal hidden' id='m_plating_sched' >CURRENT TRACKING</div>
+		
+		<div class='m_modal hidden' id='m_plating_temp'>SEARCH
+		
+		</div>
+		
+		
+		</div>
+	</div> 
+	<!--  end of plating -->
 	<div class='mobile_main' id='login_div'>
 		<div class='m_modal2'>
 			<input name='email' placeholder='email' type='text' class='input'>

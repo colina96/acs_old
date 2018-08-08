@@ -72,6 +72,8 @@ $.ajax({
         	user_id = data['user_id'];
         	user_name = data['user'];
         	if (user_id <= 0) {
+        		load_comps();
+            	load_preptypes();
         		openPage('login_div', this, 'red','mobile_main','tabclass');
         	}
         	else {
@@ -152,17 +154,13 @@ function logout()
         data: loginString,
         dataType: 'json',
         success: function(data){
-        	document.getElementById("res").innerHTML = "Logout Success..!" + data;
         	if(data['user_id']) {
-            	document.getElementById("res").innerHTML = "Login ID" + data['user_id'];
             	user_id = data['user_id'];
             	if (user_id > 0) {
-            		document.getElementById('login').style.display = 'none';
-            		document.getElementById('logout').style.display = 'block';
+            		openPage('mm2', this, 'red','mobile_main','tabclass');
             	}
             	else {
-            		document.getElementById('login').style.display = 'block';
-            		document.getElementById('logout').style.display = 'none';
+            		openPage('login_div', this, 'red','mobile_main','tabclass');
             	}
                // localStorage.loginstatus = "true";
                //  window.location.href = "welcome.html";
@@ -174,36 +172,6 @@ function logout()
         }
     });
 }
-
-function test_load_comps()
-{
-	document.getElementById("res").innerHTML = 'apple';
-	$.ajax({
-        url: RESTHOME + "get_preptypes.php",
-        type: "POST",
-       // data: data,
-       //  data: {points: JSON.stringify(points)},
-        dataType: 'json',
-        // contentType: "application/json",
-        success: function(result) {
-            preptypes = result;
-            document.getElementById("res").innerHTML = 'ok ' + result.length;
-            console.log("got " + result.length + " preptypes");
-            for (i = 0; i < result.length; i++) {
-            	document.getElementById("res").innerHTML += "<div>" + result[i]['code'] + "</div>";
-            }
-            
-        },
-        done: function(result) {
-            console.log("done preptypes ");
-        },
-        fail: (function (result) {
-        	document.getElementById("res").innerHTML = 'fail';
-            console.log("fail preptypes",result);
-        })
-    });
-}
-
 
 function openPage(pageName, elmnt, color,content_class,tab_class) {
 	console.log("opening page ",pageName,content_class);

@@ -20,6 +20,19 @@
     width: 80%;
     font-size:larger;
 }
+.btn_top {
+	bottom:40vh;
+}
+.btn_mid {
+	bottom:30vh;
+}
+.center {
+	display:table;
+	margin:0 auto;
+}
+.btn_bot {
+	bottom:20vh;
+}
 .m_submit {
 	bottom:30px;
 	background: #23DD9F;
@@ -31,7 +44,7 @@
 	height: 100vh;
 	}
 	.m_btn {
-		bottom:20vh;
+		
 	}
 }
 .hidden {
@@ -58,6 +71,7 @@
     align-items: center;
     
 }
+
 .m_top_menu_container {
 	position:absolute;
 	top:0;
@@ -74,6 +88,9 @@
 	color:white;
 	font-size:larger;
 }
+.larger {
+	font-size:5vw;
+}
 .m_bluedot {
 	background:#5375DA;
 	color:white;
@@ -84,6 +101,9 @@
 }
 #ms_1,#ms_2 {
 	color:orange;
+	margin-right: 2vw;
+}
+#ms_2_text {
 	margin-right: 2vw;
 }
 .m_label {

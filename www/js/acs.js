@@ -1,6 +1,8 @@
 var default_tab='m_current_tracking_tab';
 var comps = null;
 var preptypes = null;
+var menu_items = null;
+var plating_teams = null;
 var active_comp = null; // the component currently being worked on
 var new_comp = null; // start a new component - M1
 var RESTHOME = "http://10.0.0.32/acs/REST/";
@@ -30,8 +32,21 @@ console.log("loading prep types");
     });
 }
 
+function goto_home()
+{
+	openPage('mm1', this, 'red','mobile_main','tabclass');
+}
+
+function goto_plating()
+{
+	
+	load_menu_items();
+	openPage('plating_div', this, 'red','mobile_main','tabclass');
+}
+
 function goto_comp_search()
 {
+	load_comps();
 	$('#search').val('');
 	openPage('m_search', this, 'red','m_modal','tabclass');
 }
@@ -62,12 +77,17 @@ function component_selected(id)
 	console.log('prep_type_id',prep_type_id);
 	if (prep_type_id < 1) prep_type_id = 1;
 	var prep_type_val = get_preptype_val(prep_type_id,'M1_temp');
+	var prep_type_sign = get_preptype_val(prep_type_id,'M1_temp_above');
+	var sign = ' > ';
+	if (prep_type_sign == 0) {
+		sign = ' < ';
+	}
 	document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 	document.getElementById('ms_1').innerHTML = '';
 	document.getElementById('ms_1_text').innerHTML = '';
 	document.getElementById('ms_2').innerHTML = 'M1';
 	document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
-	document.getElementById('ms_2_target').innerHTML = '> ' + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
+	document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
 
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
@@ -79,17 +99,29 @@ function check_temp() // start a new component
 	var t = document.getElementsByName('m1_temp')[0].value;
 	var prep_type_id = new_comp['prep_type'];
 	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
+	var M1_temp_sign = get_preptype_val(prep_type_id,'M1_temp_above');
 	document.getElementById('m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 	document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 	document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
 	console.log("check temp",t,M1_temp_target);
 	if (t.length > 0) {
-		if (parseInt(t) < parseInt(M1_temp_target)) {
-			console.log("M1 temp too low");
-			openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
+		if (M1_temp_sign == 1) {
+			if (parseInt(t) < parseInt(M1_temp_target)) {
+				console.log("M1 temp too low");
+				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
+			}
+			else {
+				openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
+			}
 		}
 		else {
-			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
+			if (parseInt(t) > parseInt(M1_temp_target)) {
+				console.log("M1 temp too high");
+				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
+			}
+			else {
+				openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
+			}
 		}
 	}
 	
@@ -188,7 +220,7 @@ function check_temp_m2() // M2 or M3
 		console.log('check_temp_m2 target temp',temp_target,t);
 		
 		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
-		if (t < temp_target) {
+		if (parseInt(t) < parseInt(temp_target)) {
 			document.getElementById('milestone_div_2').innerHTML= milestone + " achieved";
 			document.getElementById('milestone_div_3').innerHTML= milestone + " achieved";
 			comp_milestone();
@@ -361,6 +393,110 @@ function m_show_active_components(data)
     }
    	div.appendChild(tab);
 }
+
+function find_plating_teams(menu_items)
+{
+	console.log('searching for assigned plating teams ',menu_items.length);
+	if (plating_teams == null) plating_teams = [];
+	for (i = 0; i < menu_items.length; i++) {
+		// console.log("item ",menu_items[i]['code'],menu_items[i]['plating_team']);
+		if (menu_items[i]['plating_team'] != '') {
+			console.log("item ",menu_items[i]['code'],menu_items[i]['plating_team']);
+			plating_teams[menu_items[i]['plating_team']] = [];
+		}
+	}
+	var d = document.getElementById('plating_teams_list');
+	d.innerHTML = '';
+	var select = document.createElement('select');
+	select.name = 'sel_pt';
+	console.log('found plating teams ',plating_teams.length);
+	for (i = 0; i < plating_teams.length; i++) {
+		if (plating_teams[i]) {
+			 option = document.createElement( 'option' );
+			 option.value = i;
+			 option.textContent =  'Team ' + i;
+			
+
+		    select.appendChild( option );
+			console.log(i);
+		}
+		d.appendChild(select);
+	}
+}
+
+function load_chefs(fn)
+{
+	console.log("loading chess");
+    $.ajax({
+    	url: RESTHOME + "get_chefs.php",
+        type: "POST",
+        dataType: 'json',
+        success: function(result) {
+            menu_items = result;
+            if (fn) fn();
+            console.log("got " + result.length + " chefs");    
+        },
+        fail: (function (result) {
+            console.log("fail load_chefss",result);
+        })
+    });
+}
+
+function goto_select_team()
+{
+	console.log('goto_select_team');
+	openPage('m_sel_team_members', this, 'red','m_modal','tabclass');
+}
+
+function select_plating_team()
+{
+	var team = document.getElementsByName('sel_pt')[0].value;
+	if (team > 0) {
+		console.log("Team " + team);
+		load_chefs(goto_select_team);
+	}
+}
+function load_menu_items()
+{	
+	console.log("loading menu items");
+    $.ajax({
+    	url: RESTHOME + "get_menu_items.php",
+        type: "POST",
+       // data: data,
+       //  data: {points: JSON.stringify(points)},
+        dataType: 'json',
+        // contentType: "application/json",
+        success: function(result) {
+            menu_items = result;
+            find_plating_teams(menu_items); // see what plating teams are needed
+            $('#search_menu').autocomplete({
+                // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+                minLength: 2,
+        		source: menu_items,
+        		// Once a value in the drop down list is selected, do the following:
+                select: function(event, ui) {
+                	
+                    // place the person.given_name value into the textfield called 'select_origin'...
+                    $('#search_menu').val(ui.item.label);
+                    // and place the person.id into the hidden textfield called 'link_origin_id'. 
+                 	console.log('selected ',ui.item.value);
+                 	show_menu_item_components(ui.item.value);
+                    return false;
+                }
+        	
+            })
+            console.log("got " + result.length + " menu itemss");
+            
+        },
+        done: function(result) {
+            console.log("load_menu_items");
+        },
+        fail: (function (result) {
+            console.log("fail load_menu_items",result);
+        })
+    });
+}
+
 
 function load_comps()
 {
