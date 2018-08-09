@@ -52,10 +52,12 @@
 	<div class='mobile_main hidden' id='mm1'>
 		
 		<div class='m_main'>
-		<div id='m_login'></div>
-		<button type='button' class='m_btn btn_top' onclick="goto_m_main();">Kitchen</button>
-		<button type='button'  class='m_btn btn_mid' onclick="goto_plating();">Plating</button>
-		<button type='button'  class='m_btn btn_bot' onclick="logout();">Logout</button>
+			<div id='m_login'></div>
+			<div class='btns'>
+			<button type='button' class='m_btn' onclick="goto_m_main();">Kitchen</button>
+			<button type='button'  class='m_btn' onclick="goto_plating_teams();">Plating</button>
+			<button type='button'  class='m_btn' onclick="logout();">Logout</button>
+			</div>
 		</div>
 	</div>
 	<!--  kitchen temp pages -->
@@ -142,19 +144,40 @@
 		</div>
 	</div>
 	<!-- end of kitchen temp pages -->
-	<!--  plating -->
+		<!--  plating -->
 	<div class='mobile_main' id='plating_div'>
 		<div class='m_main'>
-		<div class='m_top_menu_container'>
-			<div class='m_top_menu' id='m_plating_tab'  onclick="m_tracking()">PLATING SCHEDULE</div>
+			<div class='m_top_menu_container'>
+				<div class='m_top_menu' id='m_plating__team_tab'  onclick="goto_plating_teams();">TEAMS</div>
+				<div class='m_top_menu' id='m_plating_tab'  onclick="goto_plating()">PLATING SCHEDULE</div>
+				
+				<div class='m_top_menu larger' id='plating_home_tab'  onclick="goto_home()">&#8962;</div>
+			</div>
+			<div class='m_modal' id='m_sel_team' >
+				<div class='m_label'><span>Select Plating Team</span></div>
+					<div id='plating_teams_list' class='center'></div>
+					<div class='btns'>
+					<button type='button'  class='m_btn' onclick="select_plating_team();">Continue</button>
+					</div>
+			</div>
+			<div class='m_modal hidden' id='m_sel_team_members' >
+				
+					<div id='plating_team_list'></div>
+					<div class='center' id='sel_team_member'></div>
+					<div class='btns'>
+					<button type='button'  class='m_btn' onclick="add_team_member();">Add Team Member</button>
+					<button type='button'  class='m_btn' onclick="save_plating_team();">Continue</button>
+					</div>
+				
+			</div>
+			<div class='m_modal hidden' id='m_plating_sched' >
+			<div id='active_plating_team_head'></div>
+			<div id='plating_sched_list'></div>
+			</div>
 			
-			<div class='m_top_menu larger' id='plating_home_tab'  onclick="goto_home()">&#8962;</div>
-		</div>
-		<div class='m_modal' id='m_plating_sched' >CURRENT TRACKING</div>
-		
-		<div class='m_modal hidden' id='m_plating_temp'>SEARCH
-		
-		</div>
+			<div class='m_modal hidden' id='m_plating_temp'>SEARCH
+			
+			</div>
 		
 		
 		</div>
@@ -173,7 +196,12 @@
 </div></div>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>          
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> 
+        <script type="text/javascript">
+    $(document).bind('mobileinit',function(){
+        $.mobile.loadingMessage = false;
+    })
+</script>           
         <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script> 
          <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>     
     <script type="text/javascript" src="cordova.js"></script>

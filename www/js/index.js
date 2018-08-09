@@ -38,8 +38,7 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
     	check_login();
-    	load_comps();
-    	load_preptypes();
+    	
         app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
@@ -72,11 +71,13 @@ $.ajax({
         	user_id = data['user_id'];
         	user_name = data['user'];
         	if (user_id <= 0) {
-        		load_comps();
-            	load_preptypes();
+        		// load_comps();
+            	// load_preptypes();
         		openPage('login_div', this, 'red','mobile_main','tabclass');
         	}
         	else {
+        		load_comps();
+            	load_preptypes();
         		user_name = data['user'];
         		document.getElementById('m_login').innerHTML = user_name;
         		openPage('mm1', this, 'red','mobile_main','tabclass');

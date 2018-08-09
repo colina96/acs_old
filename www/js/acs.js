@@ -3,8 +3,10 @@ var comps = null;
 var preptypes = null;
 var menu_items = null;
 var plating_teams = null;
+var active_plating_team = 0;
 var active_comp = null; // the component currently being worked on
 var new_comp = null; // start a new component - M1
+var chefs = null;
 var RESTHOME = "http://10.0.0.32/acs/REST/";
 
 function load_preptypes()
@@ -37,11 +39,38 @@ function goto_home()
 	openPage('mm1', this, 'red','mobile_main','tabclass');
 }
 
-function goto_plating()
+function goto_plating_teams()
 {
 	
 	load_menu_items();
 	openPage('plating_div', this, 'red','mobile_main','tabclass');
+	openPage('m_sel_team', this, 'red','m_modal','tabclass');
+}
+
+function save_plating_team()
+{
+	goto_plating();
+}
+
+function goto_plating()
+{
+	
+	// ???? load_menu_items();
+	if (active_plating_team == null) {
+		goto_plating_teams();
+	}
+	openPage('plating_div', this, 'red','mobile_main','tabclass');
+	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
+	var hd = document.getElementById('active_plating_team_head');
+	hd.innerHTML = "Plating Team " + active_plating_team;
+	var t = document.getElementById('plating_sched_list');
+	t.innerHTML = '';
+	var tab = document.createElement('table');
+	for (i = 0; i < menu_items.length; i++) {
+		if (menu_items[i]['plating_team'] == active_plating_team) {
+			t.innerHTML += menu_items[i]['dish_name'] + "<br>";
+		}
+	}
 }
 
 function goto_comp_search()
@@ -402,7 +431,10 @@ function find_plating_teams(menu_items)
 		// console.log("item ",menu_items[i]['code'],menu_items[i]['plating_team']);
 		if (menu_items[i]['plating_team'] != '') {
 			console.log("item ",menu_items[i]['code'],menu_items[i]['plating_team']);
-			plating_teams[menu_items[i]['plating_team']] = [];
+			var pt = menu_items[i]['plating_team'];
+			if (typeof plating_teams[pt] == 'undefined') {
+				plating_teams[menu_items[i]['plating_team']] = [];
+			}
 		}
 	}
 	var d = document.getElementById('plating_teams_list');
@@ -432,7 +464,7 @@ function load_chefs(fn)
         type: "POST",
         dataType: 'json',
         success: function(result) {
-            menu_items = result;
+            chefs = result;
             if (fn) fn();
             console.log("got " + result.length + " chefs");    
         },
@@ -445,14 +477,63 @@ function load_chefs(fn)
 function goto_select_team()
 {
 	console.log('goto_select_team');
+	var s = document.getElementById('sel_team_member');
+	s.innerHTML = null;
+	var select = document.createElement('select');
+	select.name = 'sel_chef';
+	// console.log('found plating teams ',plating_teams.length);
+	for (i = 0; i < chefs.length; i++) {
+		option = document.createElement( 'option' );
+		option.value = i;
+		option.textContent =  chefs[i]['label'];
+		select.appendChild( option );
+		console.log(i);
+	}
+	s.appendChild(select);
 	openPage('m_sel_team_members', this, 'red','m_modal','tabclass');
+	show_plating_team();
+}
+
+function add_team_member()
+{
+	var idx = document.getElementsByName('sel_chef')[0].value;
+	console.log('adding ' + chefs[idx]['value'] + " to plating team " + active_plating_team);
+	
+	var pt = plating_teams[active_plating_team];
+	for (i = 0; i < pt.length; i++) {
+		if (pt[i]['id'] == chefs[idx]['id']) return;
+	}
+	plating_teams[active_plating_team].push(chefs[idx]);
+	console.log('members ',pt.length);
+	show_plating_team();
+}
+
+function rem_pt_mem(team,id) // remove plating team member from plating team
+{
+	delete plating_teams[team][id];
+	show_plating_team();
+}
+function show_plating_team()
+{
+	console.log('show_plating_team',active_plating_team);
+	var hd = document.getElementById('active_plating_team_head');
+	hd.innerHTML = "Plating Team " + active_plating_team;
+	var l = document.getElementById('plating_team_list');
+	var pt = plating_teams[active_plating_team];
+	l.innerHTML = '';
+	for (i = 0; i < pt.length; i++) {
+		var d = "<div class='m_label'>" + pt[i]['label'];
+		d += "<div class='close_modal' onclick='rem_pt_mem(" + active_plating_team + "," + i + ");'>&#x02A2F;</div>";
+		d += "</div>";
+		l.innerHTML += d;
+	}
 }
 
 function select_plating_team()
 {
-	var team = document.getElementsByName('sel_pt')[0].value;
-	if (team > 0) {
-		console.log("Team " + team);
+	active_plating_team = document.getElementsByName('sel_pt')[0].value;
+	if (active_plating_team > 0) {
+		console.log("Team " + active_plating_team);
 		load_chefs(goto_select_team);
 	}
 }

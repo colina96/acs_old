@@ -1,4 +1,6 @@
-
+select {
+	font-size: 6vw;
+}
 .mobile_main {
 	background-image: url('../img/qac_mobile.png');
 	background-repeat: no-repeat;
@@ -10,8 +12,8 @@
 	top:0;
 }
 .m_btn, .m_submit {
-	position:absolute;
-	bottom:5px;
+	
+	position:relative;
 	left:10%;
 	background: #23DD9F;
 	border-radius: 15px;
@@ -19,29 +21,39 @@
     spacing: 5px;
     width: 80%;
     font-size:larger;
+    margin:10px auto;
 }
 .btn_top {
+	position:absolute;
 	bottom:40vh;
 }
 .btn_mid {
+	position:absolute;
 	bottom:30vh;
 }
 .center {
 	display:table;
 	margin:0 auto;
 }
-.btn_bot {
-	bottom:20vh;
+.btns {
+	bottom:5px;
+	width:100%;
+	position:absolute;
+	left:0;
+	display:table;
+	margin:0 auto;
+	background: #eeeeee;
+	border-radius: 15px;
 }
 .m_submit {
-	bottom:30px;
+	.bottom:30px;
 	background: #23DD9F;
 	border-radius: 15px;
 }
 @media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
 	.mobile_main {
-	width: 100vw;
-	height: 100vh;
+	xwidth: 100vw;
+	xheight: 100vh;
 	}
 	.m_btn {
 		
@@ -61,7 +73,7 @@
     position: absolute;
     top: 0;
     width: 356px;
-    height: 700px;
+    height: 620px;
     color:red;
     margin:auto;
     display: flex;
@@ -113,6 +125,11 @@
 	color:white;
 	.border-radius: 15px;
 	font-size: larger;
+	display:flex;
+}
+.floatright {
+	float:right;
+	font-size:6vw;
 }
 #chk_temp_pt_div{
 	position:absolute;
@@ -214,9 +231,9 @@
 	
 #m_login {
 	position:relative;
-	font-size:6vw;
+	font-size:7vw;
 	.background:blue;
-	color:black;
+	color:green;
 	margin:0 auto;
 	top:5vh;
 	display:table;
@@ -261,6 +278,12 @@
 	display: table;
 }
 
+#active_plating_team_head {
+	position:absolute;
+	top:5vh;
+	left:6vw;
+	color:white;
+}
 .ui-menu .ui-menu-item-wrapper {
     position: relative;
     height: 25px;
