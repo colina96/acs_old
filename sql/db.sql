@@ -120,14 +120,15 @@ insert into MENU_ITEM_COMPONENTS values (3,'Vanilla Sauce',2,0,null);
 create TABLE MENU_ITEM_LINK
 (
 	id smallint unsigned not null auto_increment, 
+	menu_id int,
 	menu_item_id int,
 	component_id int,
 	constraint pk_example primary key (id) 
 );
 
-insert into MENU_ITEM_LINK values (null,1,1);
-insert into MENU_ITEM_LINK values (null,1,2);
-insert into MENU_ITEM_LINK values (null,2,3);
+insert into MENU_ITEM_LINK values (null,1,1,1);
+insert into MENU_ITEM_LINK values (null,1,1,2);
+insert into MENU_ITEM_LINK values (null,1,2,3);
 create table COMPONENT (
 	id smallint unsigned not null auto_increment, 
 	description varchar(50),
@@ -149,5 +150,14 @@ create table COMPONENT (
 	M3_action_code int,
 	finished datetime,
 	shelf_life_days int,
+	constraint pk_example primary key (id) 
+);
+create table plating_team_member
+(
+	id smallint unsigned not null auto_increment, 
+	user_id smallint unsigned not null,
+	team_id smallint unsigned not null,
+	time_added datetime,
+	time_removed datetime,
 	constraint pk_example primary key (id) 
 );

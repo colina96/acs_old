@@ -81,8 +81,8 @@ function upload_menu()
 								test_mysql_query($sql);
 								$comp_id = mysql_insert_id();
 							}
-							$sql = "insert into MENU_ITEM_LINK (id,menu_item_id,component_id) ";
-							$sql .= "values (null,".$menu_item_id.",".$comp_id.")";
+							$sql = "insert into MENU_ITEM_LINK (id,menu_id,menu_item_id,component_id) ";
+							$sql .= "values (null,".$menu_id.",".$menu_item_id.",".$comp_id.")";
 							test_mysql_query($sql);
 							// return(mysql_insert_id());
 							//				add_menu_component($menu_item_id,$row[2],0);

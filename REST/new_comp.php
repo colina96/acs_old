@@ -11,6 +11,9 @@ print("php got comp: " . sizeof($comp));
  
 $description = mysql_escape_string($comp['description']);
 $prep_type = $comp['prep_type'];
+if ($prep_type = '') {
+	$prep_type = 1;
+}
 $M1_temp = $comp['M1_temp'];
 $M1_chef_id = $comp['M1_chef_id'];
 

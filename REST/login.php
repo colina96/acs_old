@@ -2,6 +2,7 @@
 session_start();
 
 include '../db.php';
+////check_login();
 // echo "login<br>";
 if (!empty($_SESSION['userID'])) {
 	$userID = $_SESSION['userID'];

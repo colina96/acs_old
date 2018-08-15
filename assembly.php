@@ -64,6 +64,14 @@
 
 <script>
 
+function get_menu_item_by_id(menu_item_id) {
+	// menu_items not a hashed array because the search fn needs it that way
+	for (var i = 0; i < menu_items.length; i++) {
+		if (menu_items[i].id == menu_item_id) return(menu_items[i]);
+	}
+	return(null);
+}
+
 function show_menu_item_components(menu_item_id)
 {
 	
@@ -72,16 +80,22 @@ function show_menu_item_components(menu_item_id)
 	var tab = document.createElement('table');
 	tab.className = 'item_table';
 	var line = 1;
-	for (i = 0; i < comps.length; i++) {
-		if (comps[i].menu_item_id == menu_item_id) {
-			console.log("found ",comps[i].description);
-			var tr = document.createElement('tr');
-			tr.appendChild(new_td(line++,'item'));
-			tr.appendChild(new_td(comps[i].description,'item'));
-			tab.appendChild(tr);
+	menu_item = get_menu_item_by_id(menu_item_id);
+	if (menu_item != null) {
+		console.log("found menu_item ",menu_item.dish_name,menu_item.items.length);
+		var items = menu_item.items;
+		
+		for (var i = 0; i < items.length; i++) {
+			
+				console.log("found ",items[i].description);
+				var tr = document.createElement('tr');
+				tr.appendChild(new_td(line++,'item'));
+				tr.appendChild(new_td(items[i].description,'item'));
+				tab.appendChild(tr);
+			
 		}
+		div.appendChild(tab);
 	}
-	div.appendChild(tab);
 }
 function show_active_item(data)
 {
