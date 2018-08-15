@@ -63,8 +63,12 @@ function get_comp_by_id(id,fld)
 	for (var i = 0; i < comps.length; i++) {
 		if (comps[i].id == id) {
 			var x = comps[i];
-			console.log("comps length ",x.length);
-			console.log ("found comp",id,fld,comps[i].description,comps[i].prep_type);
+			// console.log("comps length ",x.length);
+			console.log ("found comp",id,fld,comps[i].description,parseInt(comps[i].prep_type),'!');
+			if (comps[i].prep_type == '') { // TODO - set default prep_type to 1 (CC) not ideal.....
+				console.log('setting def prep_type');
+				comps[i].prep_type = 1;
+			}
 			return(comps[i][fld]);
 		}
 	}

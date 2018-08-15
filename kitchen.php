@@ -145,6 +145,8 @@ function goto_start_new_comp()
 {
 	console.log('goto_start_new_comp');
 	load_comps();
+	document.getElementById('new_comp_prep_type_code').innerHTML = "...";
+	document.getElementById('search').value = '';
 	openPage('new_comp', this, 'red','comp_details','acs_comp_btn');
 }
 function goto_active_components()
@@ -184,7 +186,9 @@ function act_component(i)
 	console.log("action for active component ",i,active_comps[i]['id']);
 	active_component_index = i; // global
 	console.log("act_component M2 time ",active_comps[i]['M2_time']);
-	
+	if (active_comps[i]['prep_type_id'] < 1) { // default to CC
+		active_comps[i]['prep_type_id'] = 1;
+	}
 	console.log("action for active component ",active_comps[i]['description']);
 	if (active_comps[i]['M2_time'].length < 5) {
 		document.getElementById('comp_M2_correct').innerHTML = "";

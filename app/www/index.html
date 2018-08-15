@@ -42,7 +42,160 @@
   
     <title>ACS</title>
 </head>
+<style>
+.serial {
+width:90vw;
+height:50vh;
+margin:5vw;
+position:absolute;
+top:0;
+left:0;
+border:2px solid green;
+color:white;
+overflow:auto;
+z-index:2000;
+}
+</style>
+<script>
+var serial_started = false;
+var logline = 0;
 
+function log(s)
+{
+	console.log(s);
+	if (logline++ > 10) {
+		document.getElementById('serial').innerHTML = '';
+		logline = 0;
+	}
+	document.getElementById('serial').innerHTML += s + "<br>";
+	document.getElementById('serial').style.display = 'block';
+}
+
+function hide_log()
+{
+	document.getElementById('serial').style.display = 'none';
+}
+function errorCallback(e)
+{
+	log(e);
+	serial_started = false;
+}
+var str;
+var temp_mode = null;
+// var temp_callback = null;
+function temp_callback(s) // works out where to send the temperature reading
+{
+	if (temp_mode == null) {
+		log ('temp_mode not set');
+		return;
+	}
+	if (temp_mode == 'M1') {
+		check_temp(s);
+	}
+	else if (temp_mode == 'M2') {
+		component.M2_temp = temp_reading;
+	} 
+	else {
+		log ("don't know what to do with temperature reading");
+	}
+}
+
+function popup_manual_temp()
+{
+	document.getElementById('manual_entry').style.display = 'block';
+}
+
+function read_temp(m)
+{
+	temp_mode = m;
+	if (typeof(serial) === 'undefined') {
+		console.log('serial undefined');
+		popup_manual_temp();
+	}
+	else {
+		serial.write('R');
+	}
+	serial.write('R');
+}
+
+function start_serial()
+{
+	if (!serial_started) {
+		log("starting serial");
+		serial_started = true;
+		// app.initialize();
+		serial.requestPermission(
+				function(successMessage) {
+					log('got permission');
+			    	serial.open(
+			        	{baudRate: 9600},
+			            function(successMessage) {
+			        		log('openned link');
+			        		hide_log();
+			        		serial.registerReadCallback(
+			        				function success(data){
+			        					var view = new Uint8Array(data);
+			        				// 	log("got reading " + view.length);
+			        					if(view.length >= 1) {
+		                                    for(var i=0; i < view.length; i++) {
+		                                   // 	log("got " + view[i] + " " + String.fromCharCode(view[i]));
+		                                        // if we received a \n, the message is complete, display it
+		                                        if(view[i] == 13) {
+		                                            // check if the read rate correspond to the arduino serial print rate
+		                                            // var now = new Date();
+		                                            //delta.innerText = now - lastRead;
+		                                           // lastRead = now;
+		                                            // display the message
+		                                           // var value = parseInt(str);
+		                                           // pot.innerText = value;
+		                                           document.getElementById('m1_temp_div').innerHTML += "ZZ" + typeof(temp_callback) + "Z";
+		                                         //  if (typeof(temp_callback) == 'function') {
+		                                        //	   document.getElementById('m1_temp_div').innerHTML = 'callback';
+		                                        	   temp_callback(str);
+		                                        	   // temp_callback = null;
+		                                         //  }
+		                                        //   else {
+		                                        //	   document.getElementById('m1_temp_div').innerHTML += 'X';
+		                                        //   }
+		                                       //    document.getElementById('m1_temp_div').innerHTML += "read" + str;
+		                                           log(str);
+		                                            str = '';
+		                                        }
+		                                        // if not, concatenate with the begening of the message
+		                                        else {
+		                                            var temp_str = String.fromCharCode(view[i]);
+		                                            var str_esc = escape(temp_str);
+		                                            str += unescape(str_esc);
+		                                        }
+		                                    }
+		                                  //   log(str);
+		                                }
+			        				},
+			        				function error(){
+			        					new Error("Failed to register read callback");
+			        				});
+			        		serial.write(
+			                	'1',
+			                    function(successMessage) {
+			                		log(successMessage);
+			                    //	alert(successMessage);
+			                    },
+			                    errorCallback
+			        		);
+			        	},
+			        	errorCallback
+			    	);
+			    },
+			    errorCallback
+			);
+	}
+	else {
+		serial.write('R');
+		// serial.read(function success(buf) { log(JSON.stringify(buf));},errorCallback);
+		// log("<hr>");
+	}
+}
+</script>
 <body>
 <div>
 	<div class='mobile_main' id='splash'>
@@ -53,6 +206,7 @@
 		
 		<div class='m_main'>
 			<div id='m_login'></div>
+			<div id='serial' class='serial hidden' onclick='start_serial();'>Serial</div>
 			<div class='btns'>
 			<button type='button' class='m_btn' onclick="goto_m_main();">Kitchen</button>
 			<button type='button'  class='m_btn' onclick="goto_plating_teams();">Plating</button>
@@ -97,9 +251,11 @@
 <!--  next four pages are for starting a new component at M1 -->
 		<div class='m_modal2' id='m_temp_modal'>
 			<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
-			<div id='m1_temp_div'><input type='number' name='m1_temp' size=4></div>
-			<button type='button' class='m_submit' onclick="check_temp();">Check Now</button>
-			<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
+			<div id='m1_temp_div'><!--  input type='number' name='m1_temp' size=4 --></div>
+			<div class='btns'>
+				<button type='button' class='m_submit' onclick="read_M1temp();">Check Now</button>
+				<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
+			</div>
 		</div>
 		<div class='m_modal2' id='m_temp_modal2'>
 			<div class='m_label'><span>TEMPERATURE</span></div>
@@ -123,8 +279,10 @@
 		<div class='m_modal2' id='m2_temp_modal'>
 			<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
 			<div id='m2_temp_div'><input type='number' name='m2_temp' size=4></div>
+			<div class='btns'>
 			<button type='button' class='m_submit' onclick="check_temp_m2();">Check Now</button>
 			<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
+			</div>
 		</div>
 		<div class='m_modal2' id='m2_temp_modal2'>
 			<div class='m_label'><span>TEMPERATURE</span></div>
@@ -189,13 +347,19 @@
 			<input name='password' placeholder='password' type='text' class='input'>
 	
 			<div id='login_btn' class='btn' onclick='login()'>Login</div>
-			<div id='login_fail'></div>
+			<div id='login_fail'>debug area</div>
 		</div>
 	</div> 
+	
 </div>
 </div></div>
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<div class='popup' id='manual_entry'>
+		<h2>Enter Temperature</h2>
+		<input name='manual_temp' length='3' size='3' type='number'>
+		<div onclick='manual_temp_submit()' class='m_btn'>Submit</div>
+	</div>
+    <link rel="stylesheet" href="css/jquery.mobile-1.3.2.min.css" />
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> 
         <script type="text/javascript">
     $(document).bind('mobileinit',function(){
@@ -206,15 +370,16 @@
          <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>     
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-     <script type="text/javascript" src="js/acs.js"></script>
+     <script type="text/javascript" src="js/acs_mob.js"></script>
        <link rel="stylesheet" type="text/css" href="css/acs_mob.css" />
     <script type="text/javascript">
-    function doclick()
-    {
-    	document.getElementById("res").innerHTML = 'banana';
-    	
-    }
+   console.log("initialising serial type",typeof(serial));
     app.initialize();
+    $(document).ready(function(){
+    	check_login();
+    	load_comps();
+    	load_preptypes();
+    });
     </script>
 </body>
 

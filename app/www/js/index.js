@@ -23,6 +23,7 @@ var user_name = "";
 var app = {
     // Application Constructor
     initialize: function() {
+    	console.log("Application Constructor");
         this.bindEvents();
     },
     // Bind Event Listeners
@@ -37,8 +38,9 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+    	console.log("onDeviceReady");
     	check_login();
-    	
+    	start_serial();
         app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
@@ -58,6 +60,7 @@ function check_login()
 {
 var loginString ="";
 console.log("checking login");
+$("#login_fail").text("Checking login ..!");
 $.ajax({
     type: "POST",crossDomain: true, cache: false,
     url:  RESTHOME + "login.php",
@@ -74,8 +77,11 @@ $.ajax({
         		// load_comps();
             	// load_preptypes();
         		openPage('login_div', this, 'red','mobile_main','tabclass');
+        		$("#login_fail").text("Not logged in ..!");
         	}
         	else {
+            $("#login_fail").text("Login OK..!");
+            	console.log("Login OK");
         		load_comps();
             	load_preptypes();
         		user_name = data['user'];
@@ -87,7 +93,7 @@ $.ajax({
         }
         else if(data == "error")
         {
-            //$("#status").text("Login Failed..!");
+            $("#login_fail").text("Login Failed..!");
         }
     }
 });
@@ -120,10 +126,10 @@ function login(email,password)
         data: loginString,
         dataType: 'json',
         success: function(data){
-        //	document.getElementById("res").innerHTML = "Login Success..!" + data['user_id'];
+        	document.getElementById("login_fail").innerHTML = "2 Login Success..!" + data['user_id'];
         	console.log("Authenticated");
             if(data['user_id']) {
-           //	document.getElementById("res").innerHTML = "Login ID" + data['user_id'];
+           	document.getElementById("login_fail").innerHTML = "2 Login ID" + data['user_id'];
             	user_id = data['user_id'];
             	user_name = data['user'];
             	if (user_id > 0) {
@@ -140,7 +146,7 @@ function login(email,password)
             }
             else 
             {
-            	//$("#status").text("login failed");
+            	$("#login_fail").text("login failed unknown error");
             }
         }
     });
