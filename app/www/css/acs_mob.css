@@ -186,7 +186,9 @@ select {
 	font-size:5.5vw;
 	display:flex;
 }
-
+#manual_temp {
+	font-size:50px;
+}
 #chk_temp_item_time_div2 {
 	position:absolute;
 	top: 22vh;

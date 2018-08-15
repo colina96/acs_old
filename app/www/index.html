@@ -100,8 +100,16 @@ function temp_callback(s) // works out where to send the temperature reading
 	}
 }
 
+function manual_temp_submit()
+{
+	var t = document.getElementsByName('manual_temp')[0].value;
+	document.getElementById('manual_entry').style.display = 'none';
+	temp_callback(t);
+}
+
 function popup_manual_temp()
 {
+	document.getElementsByName('manual_temp')[0].value = '';
 	document.getElementById('manual_entry').style.display = 'block';
 }
 
@@ -151,7 +159,7 @@ function start_serial()
 		                                            // display the message
 		                                           // var value = parseInt(str);
 		                                           // pot.innerText = value;
-		                                           document.getElementById('m1_temp_div').innerHTML += "ZZ" + typeof(temp_callback) + "Z";
+		                                          // document.getElementById('m1_temp_div').innerHTML += "ZZ" + typeof(temp_callback) + "Z";
 		                                         //  if (typeof(temp_callback) == 'function') {
 		                                        //	   document.getElementById('m1_temp_div').innerHTML = 'callback';
 		                                        	   temp_callback(str);
@@ -359,7 +367,7 @@ function start_serial()
 <div class='popup' id='manual_entry'>
 		<div class='center'>
 			<h2>Enter Temperature</h2></div>
-			<div class='enter_temp center'><input name='manual_temp' length='3' size='3' type='number'>
+			<div class='enter_temp center'><input name='manual_temp' id='manual_temp' length='3' size='3' type='number'>
 			<button type='button'  class='m_btn' onclick='manual_temp_submit()'>Submit</button></div>
 		</div>
 	</div>

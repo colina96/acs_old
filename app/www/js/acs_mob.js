@@ -173,6 +173,7 @@ function component_selected(id)
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
 	openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
 	new_comp = get_component_by_id(id);
+	if (new_comp['prep_type'] < 1) new_comp['prep_type'] = 1;
 	console.log(new_comp);
 	var prep_type_id = new_comp['prep_type'];
 	console.log('prep_type_id',prep_type_id);
@@ -194,15 +195,19 @@ function component_selected(id)
 }
 
 function read_M1temp(callback){
-	document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
-	
+	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
+	document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M1');
 }
 
+var M1_temp = 0;
 function check_temp(t) // start a new component
 {
-	console.log("check temp");
+	console.log("check temp",t);
+	new_comp.M1_temp = t; // 
+	
 	console.log(new_comp);
+	
 	// var t = document.getElementsByName('m1_temp')[0].value;
 	var prep_type_id = new_comp['prep_type'];
 	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
@@ -240,13 +245,14 @@ function start_component()
 	var component = new Object();
 	component.description = new_comp['description'];
 	component.prep_type = new_comp['prep_type'];
-	component.M1_temp = document.getElementsByName('m1_temp')[0].value;
+	// component.M1_temp = document.getElementsByName('m1_temp')[0].value;
+	component.M1_temp = new_comp['M1_temp'];
 	component.M1_chef_id = document.getElementsByName('m1_chef_id')[0].value;
 	if (component.M1_chef_id < 1) component.M1_chef_id = 1;
 	var data =  {data: JSON.stringify(component)};
     console.log("Sent Off: %j", data);
     document.getElementsByName('m1_chef_id')[0].value = '';
-    document.getElementsByName('m1_temp')[0].value = '';
+   //  document.getElementsByName('m1_temp')[0].value = '';
     $.ajax({
         url: RESTHOME + "new_comp.php",
         type: "POST",
