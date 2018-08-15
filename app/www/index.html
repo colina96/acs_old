@@ -120,6 +120,9 @@ function read_temp(m)
 
 function start_serial()
 {
+	// only gets called in app
+    RESTHOME = "http://10.0.0.32/acs/REST/";
+
 	if (!serial_started) {
 		log("starting serial");
 		serial_started = true;
@@ -378,6 +381,7 @@ function start_serial()
    console.log("initialising serial type",typeof(serial));
     app.initialize();
     $(document).ready(function(){
+    	RESTHOME = "../../REST/";
     	check_login();
     	load_comps();
     	load_preptypes();
