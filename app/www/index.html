@@ -85,6 +85,7 @@ var temp_mode = null;
 // var temp_callback = null;
 function temp_callback(s) // works out where to send the temperature reading
 {
+	console.log('temp_callback',s,temp_mode);
 	if (temp_mode == null) {
 		log ('temp_mode not set');
 		return;
@@ -93,7 +94,8 @@ function temp_callback(s) // works out where to send the temperature reading
 		check_temp(s);
 	}
 	else if (temp_mode == 'M2') {
-		component.M2_temp = temp_reading;
+		// component.M2_temp = temp_reading;
+		check_temp_m2(s);
 	} 
 	else {
 		log ("don't know what to do with temperature reading");
@@ -116,6 +118,7 @@ function popup_manual_temp()
 function read_temp(m)
 {
 	temp_mode = m;
+	console.log('read temp mode',m);
 	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
 	if (typeof(serial.write) === 'undefined') {
 		console.log('serial undefined');
@@ -289,17 +292,20 @@ function start_serial()
 <!--  next pages are for recording M2 and M3 -->
 		<div class='m_modal2' id='m2_temp_modal'>
 			<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
-			<div id='m2_temp_div'><input type='number' name='m2_temp' size=4></div>
+			<div id='m2_temp_div'><!--  input type='number' name='m2_temp' size=4 --></div>
 			<div class='btns'>
-			<button type='button' class='m_submit' onclick="check_temp_m2();">Check Now</button>
+			<button type='button' class='m_submit' onclick="read_M2temp();">Check Now</button>
 			<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
 			</div>
 		</div>
 		<div class='m_modal2' id='m2_temp_modal2'>
-			<div class='m_label'><span>TEMPERATURE</span></div>
-			<div id='m2_temp_div_2' class='temp_reading red'></div>
-			<button type='button' class='m_submit' onclick='goto_m_main();'>Re-Cook</button>
+			<div class='center'>TEMPERATURE</div>
+			<div id='m2_temp_div_2' class='temp_reading'></div>
+			<div id='m2_temp_div_2a' class='temp_achieved'></div>
+			<div class='btns'>
+			<button type='button' class='m_submit' onclick='goto_m_main();'>Continue Chilling</button>
 			<button type='button'  class='m_btn' onclick="goto_m_main();">M2 Re-Check</button>
+			</div>
 		</div>
 		<div class='m_modal2' id='m2_temp_modal3'>
 			<div class='m_label'><span>TEMPERATURE</span></div>

@@ -200,7 +200,12 @@ function read_M1temp(callback){
 	read_temp('M1');
 }
 
-var M1_temp = 0;
+function read_M2temp(callback){
+	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
+	document.getElementById('m1_temp_div').innerHTML = '';
+	read_temp('M2');
+}
+
 function check_temp(t) // start a new component
 {
 	console.log("check temp",t);
@@ -320,13 +325,15 @@ function comp_milestone(temp_reading)
 	    });
 }
 
-function check_temp_m2(temp_reading) // M2 or M3
+function check_temp_m2(t) // M2 or M3
 {
 	console.log("check temp M2/3");
 	console.log(active_comp);
+	
 	// var t = document.getElementsByName('m2_temp')[0].value;
 	console.log("check temp",t);
-	if (temp_reading.length > 0) {
+	if (t.length > 0) {
+		openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
 		var prep_type_id = active_comp['prep_type_id'];
 		
 		var temp_target = get_preptype_val(prep_type_id,'M2_temp');
@@ -339,13 +346,13 @@ function check_temp_m2(temp_reading) // M2 or M3
 		
 		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 		if (parseInt(t) < parseInt(temp_target)) {
-			document.getElementById('milestone_div_2').innerHTML= milestone + " achieved";
-			document.getElementById('milestone_div_3').innerHTML= milestone + " achieved";
-			comp_milestone(temp_reading);
+			document.getElementById('m2_temp_div_2a').innerHTML= milestone + " achieved";
+		//	document.getElementById('m2_temp_div_3').innerHTML= milestone + " achieved";
+			comp_milestone(t);
 			
 		}
 		else {
-			document.getElementById('milestone_div_2').innerHTML= milestone + "";
+			document.getElementById('m2_temp_div_2a').innerHTML= milestone + "";
 		}
 		openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
 	}
