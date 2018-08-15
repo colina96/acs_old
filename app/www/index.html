@@ -108,14 +108,14 @@ function popup_manual_temp()
 function read_temp(m)
 {
 	temp_mode = m;
-	if (typeof(serial) === 'undefined') {
+	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
+	if (typeof(serial.write) === 'undefined') {
 		console.log('serial undefined');
 		popup_manual_temp();
 	}
 	else {
 		serial.write('R');
 	}
-	serial.write('R');
 }
 
 function start_serial()
@@ -303,7 +303,7 @@ function start_serial()
 	</div>
 	<!-- end of kitchen temp pages -->
 		<!--  plating -->
-	<div class='mobile_main' id='plating_div'>
+	<div class='mobile_main hidden' id='plating_div'>
 		<div class='m_main'>
 			<div class='m_top_menu_container'>
 				<div class='m_top_menu' id='m_plating__team_tab'  onclick="goto_plating_teams();">TEAMS</div>
@@ -354,9 +354,11 @@ function start_serial()
 </div>
 </div></div>
 <div class='popup' id='manual_entry'>
-		<h2>Enter Temperature</h2>
-		<input name='manual_temp' length='3' size='3' type='number'>
-		<div onclick='manual_temp_submit()' class='m_btn'>Submit</div>
+		<div class='center'>
+			<h2>Enter Temperature</h2></div>
+			<div class='enter_temp center'><input name='manual_temp' length='3' size='3' type='number'>
+			<button type='button'  class='m_btn' onclick='manual_temp_submit()'>Submit</button></div>
+		</div>
 	</div>
     <link rel="stylesheet" href="css/jquery.mobile-1.3.2.min.css" />
     <link rel="stylesheet" href="css/jquery-ui.min.css">

@@ -117,7 +117,7 @@ function login(email,password)
     var email = document.getElementsByName('email')[0].value;
     var password = document.getElementsByName('password')[0].value;
     //$("#status").text("Authenticating...");
-    console.log("Authenticating...");
+    console.log("Authenticating...",RESTHOME);
     var loginString ="email="+email+"&password="+password+"&login=login";
     console.log(loginString);
     $.ajax({
@@ -133,7 +133,10 @@ function login(email,password)
             	user_id = data['user_id'];
             	user_name = data['user'];
             	if (user_id > 0) {
-            		
+               		load_comps();
+                	load_preptypes();
+            		user_name = data['user'];
+            		document.getElementById('m_login').innerHTML = user_name;
             		openPage('mm2', this, 'red','mobile_main','tabclass');
             	}
             	else {
@@ -155,12 +158,15 @@ function login(email,password)
 function logout()
 {
     var loginString ="logout=login";
+    console.log('logging out');
+    openPage('login_div', this, 'red','mobile_main','tabclass');
     $.ajax({
         type: "POST",crossDomain: true, cache: false,
         url:  RESTHOME + "login.php",
         data: loginString,
         dataType: 'json',
         success: function(data){
+        	console.log('logout got',data);
         	if(data['user_id']) {
             	user_id = data['user_id'];
             	if (user_id > 0) {
