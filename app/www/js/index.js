@@ -60,7 +60,7 @@ function check_login()
 {
 var loginString ="";
 console.log("checking login");
-$("#login_fail").text("Checking login ..!");
+// $("#login_fail").text("Checking login ..!");
 $.ajax({
     type: "POST",crossDomain: true, cache: false,
     url:  RESTHOME + "login.php",
@@ -127,7 +127,7 @@ function login(email,password)
         dataType: 'json',
         success: function(data){
         	document.getElementById("login_fail").innerHTML = "2 Login Success..!" + data['user_id'];
-        	console.log("Authenticated");
+        	console.log("Authenticated |",data,'|');
             if(data['user_id']) {
            	document.getElementById("login_fail").innerHTML = "2 Login ID" + data['user_id'];
             	user_id = data['user_id'];
@@ -137,7 +137,8 @@ function login(email,password)
                 	load_preptypes();
             		user_name = data['user'];
             		document.getElementById('m_login').innerHTML = user_name;
-            		openPage('mm2', this, 'red','mobile_main','tabclass');
+            		// openPage('mm2', this, 'red','mobile_main','tabclass');
+            		goto_home();
             	}
             	else {
             		document.getElementById('login_fail').innerHTML = "login fail for "+email + " " + password;

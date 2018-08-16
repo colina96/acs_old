@@ -59,7 +59,7 @@ function test_mysql_query($sql)
 function check_login()
 {
 	$email = get_url_token("email");
- 	 echo "checking login";
+ 	//  echo "checking login";
 	$password = get_url_token("password");
 	$login = get_url_token("login");
 	$logout = get_url_token("logout");
