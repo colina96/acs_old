@@ -282,12 +282,17 @@ function start_serial()
 			
 			<div id='m1_temp_div_3' class='temp_reading'></div>
 			<div id='m1_temp_div'><input type='number' name='m1_chef_id' size=4></div>
+			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="openPage('m_temp_modal4', this, 'red','m_modal2','tabclass');">Scan Authorised Chef ID</button>
+			</div>
 		</div>
 		<div class='m_modal2' id='m_temp_modal4'>
 			<div class='m_label'><span>TEMPERATURE</span></div>
 			<div id='m1_temp_div_4' class='temp_reading'></div>
+			<div class='center grey'>LABEL QUANTITY<input type='number' name='m1_label_qty' size=4></div>
+			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="start_component();">Print Labels</button>
+			</div>
 		</div>
 <!--  next pages are for recording M2 and M3 -->
 		<div class='m_modal2' id='m2_temp_modal'>
@@ -299,23 +304,29 @@ function start_serial()
 			</div>
 		</div>
 		<div class='m_modal2' id='m2_temp_modal2'>
-			<div class='center'>TEMPERATURE</div>
+			<div class='center modal_head'>TEMPERATURE</div>
 			<div id='m2_temp_div_2' class='temp_reading'></div>
-			<div id='m2_temp_div_2a' class='temp_achieved'></div>
+			<div id='m2_temp_div_2a' class='temp_achieved center'></div>
 			<div class='btns'>
 			<button type='button' class='m_submit' onclick='goto_m_main();'>Continue Chilling</button>
-			<button type='button'  class='m_btn' onclick="goto_m_main();">M2 Re-Check</button>
+			<button type='button'  class='m_btn' onclick="goto_m_main();">Re-Check</button>
 			</div>
 		</div>
 		<div class='m_modal2' id='m2_temp_modal3'>
 			<div class='m_label'><span>TEMPERATURE</span></div>
 			<div id='m2_temp_div_3 class='temp_reading'></div>
-			<button type='button'  class='m_btn' onclick="goto_m_main();">Scan Authorised Chef ID</button>
+			<div id='m2_temp_div_3a' class='temp_achieved center'></div>
+			<div class='btns'>
+			<button type='button'  class='m_btn' onclick="goto_m_main();">Move Product to Coolroom</button>
+			<div class='btns'>
 		</div>
 		<div class='m_modal2' id='m2_temp_modal4'>
 			<div class='m_label'><span>TEMPERATURE</span></div>
-			<div id='m2_temp_div_4 class='temp_reading'></div>
-			<button type='button'  class='m_btn' onclick="goto_m_main();">Print Labels</button>
+			<div id='m2_temp_div_4 class='temp_reading red'></div>
+			<div id='m2_temp_div_4a' class='temp_achieved center'>CORRECTIVE ACTION REQUIRED</div>
+			<div class='btns'>
+			<button type='button'  class='m_btn' onclick="goto_m_main();">Scan Authorised Chef ID</button>
+			</div>
 		</div>
 	</div>
 	<!-- end of kitchen temp pages -->

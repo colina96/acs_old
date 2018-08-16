@@ -345,14 +345,15 @@ function check_temp_m2(t) // M2 or M3
 		console.log('check_temp_m2 target temp',temp_target,t);
 		
 		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
+		document.getElementById('m2_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 		if (parseInt(t) < parseInt(temp_target)) {
 			document.getElementById('m2_temp_div_2a').innerHTML= milestone + " achieved";
-		//	document.getElementById('m2_temp_div_3').innerHTML= milestone + " achieved";
+			document.getElementById('m2_temp_div_3a').innerHTML= milestone + " achieved";
 			comp_milestone(t);
 			
 		}
 		else {
-			document.getElementById('m2_temp_div_2a').innerHTML= milestone + "";
+			// document.getElementById('m2_temp_div_2a').innerHTML= milestone + "";
 		}
 		openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
 	}
