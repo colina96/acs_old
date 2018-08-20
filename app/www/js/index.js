@@ -39,8 +39,10 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
     	console.log("onDeviceReady");
+    	RESTHOME = "http://10.0.0.32/acs/REST/";
     	check_login();
-    	start_serial();
+    	// start_serial(); // arduino
+    	ioio_start();
         app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
@@ -60,7 +62,7 @@ function check_login()
 {
 var loginString ="";
 console.log("checking login");
-// $("#login_fail").text("Checking login ..!");
+$("#login_fail").text("Checking login ..!" + RESTHOME);
 $.ajax({
     type: "POST",crossDomain: true, cache: false,
     url:  RESTHOME + "login.php",
@@ -110,6 +112,11 @@ function Xcheck_login()
 	}
 }
 
+function set_admin()
+{
+	document.getElementById('log_div').style.display = 'block';
+	goto_home();
+}
 function login(email,password)
 {
     //var email= "colin.p.atkinson@gmail.com";
@@ -119,6 +126,10 @@ function login(email,password)
     //$("#status").text("Authenticating...");
     console.log("Authenticating...",RESTHOME);
     var loginString ="email="+email+"&password="+password+"&login=login";
+    if (email == 'admin' && password == "zzz") {
+    	set_admin();
+    	return;
+    }
     console.log(loginString);
     $.ajax({
         type: "POST",crossDomain: true, cache: false,

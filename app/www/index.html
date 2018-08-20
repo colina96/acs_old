@@ -77,16 +77,16 @@ function log(s)
 {
 	console.log(s);
 	if (logline++ > 10) {
-		document.getElementById('serial').innerHTML = '';
+		document.getElementById('log_div').innerHTML = '';
 		logline = 0;
 	}
-	document.getElementById('serial').innerHTML += s + "<br>";
-	document.getElementById('serial').style.display = 'block';
+	document.getElementById('log_div').innerHTML += s + "<br>";
+	document.getElementById('log_div').style.display = 'block';
 }
 
 function hide_log()
 {
-	document.getElementById('serial').style.display = 'none';
+	document.getElementById('log_div').style.display = 'none';
 }
 function errorCallback(e)
 {
@@ -122,24 +122,89 @@ function manual_temp_submit()
 	temp_callback(t);
 }
 
+var ioio_started = false;
+function ioio_start()
+{
+
+   try {
+   log("starting ioio");
+  
+   window.ioio.open({ // start ioio and open ports we need
+      inputs: {
+         analogue: [37,39,40,41],
+         digital:[38]
+      },
+      outputs: {
+         digital:[33],
+         pwm: [
+            {pin: 10, freq: 2}, // set default frequency for the pin 10
+            {pin: 12, freq: 1}
+         ]
+      },
+      delay: 200 // Optionally set minimum delay between receiving data from IOIO
+      }, function() {
+    	  ioio_started = true;
+         log("IOIO OK");
+         log('adding listener');
+         window.ioio.addPinListener(37, function(value) { // parameter value is boolean for digital ports and float for other ports in range from 0.00000 to 1.00000
+            // show('p37',value);
+         	p36 = value;
+         	document.getElementsByName('manual_temp')[0].value = parseInt(value * 100);
+         });
+         // success
+      }, function() {
+         log("fail");
+         //fail
+      }, function(vals) {
+          // global all open pin listener
+    	  
+          for(var i=0;i<vals.length;i++){
+             var pin = vals[i];
+             //for(var key in pin){console.log(key + ":" + pin[key]);}
+             switch(pin.class){
+                case window.ioio.PIN_INPUT_DIGITAL:
+                case window.ioio.PIN_OUTPUT_DIGITAL:
+                case window.ioio.PIN_INPUT_ANALOG:
+                //pin.pin pin.value
+                break;
+                case window.ioio.PIN_OUTPUT_PWM:
+                //pin.pin pin.freq
+                break;
+             }
+          }
+       });
+    }
+    catch (e) {
+       log("error");
+
+       log(e);
+    }
+    
+ }
+ 
 function popup_manual_temp()
 {
 	document.getElementsByName('manual_temp')[0].value = '';
 	document.getElementById('manual_entry').style.display = 'block';
 }
 
+var p37 = 0;
 function read_temp(m)
 {
 	temp_mode = m;
 	console.log('read temp mode',m);
 	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
-	if (typeof(serial.write) === 'undefined') {
+	// if (typeof(serial.write) === 'undefined') {
+//	if (!ioio_started) {
 		console.log('serial undefined');
 		popup_manual_temp();
-	}
+/*	}
 	else {
-		serial.write('R');
-	}
+		// serial.write('R'); arduino
+		var t = parseInt(100.0 * p37);
+		log('read temp ' + t);
+		temp_callback(t);
+	} */
 }
 
 function start_serial()
@@ -233,7 +298,7 @@ function start_serial()
 		
 		<div class='m_main'>
 			<div id='m_login'></div>
-			<div id='serial' class='serial hidden' onclick='start_serial();'>Serial</div>
+			<div id='log_div' class='serial hidden' onclick='XXstart_serial();'></div>
 			<div class='btns'>
 			<button type='button' class='m_btn' onclick="goto_m_main();">Kitchen</button>
 			<button type='button'  class='m_btn' onclick="goto_plating_teams();">Plating</button>
