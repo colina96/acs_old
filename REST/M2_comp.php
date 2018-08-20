@@ -20,6 +20,9 @@ $sql = "update COMPONENT ";
 $sql .= "set M2_temp = " . $M2_temp . ", M2_chef_id=".$M2_chef_id;
 $sql .= ",M2_check_id = ".$_SESSION['userID'];
 $sql .= ",M2_time = now()";
+if (!empty($comp['finished'])) {
+	$sql .= ",finished = now()";
+}
 $sql .= ' where id='.$id;
 echo $sql."\n\n";
 test_mysql_query($sql);

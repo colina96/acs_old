@@ -6,6 +6,11 @@ select {
 	--acs_background:#23DD9F;
 	--acs_grey:#969696;
 	--acs_blue_text: #82A0FD;
+	--acs_blue_background: #3D64E7
+}
+
+.background_div {
+	background: var(--acs_blue_background);
 }
 .mobile_main {
 	background-image: url('../img/qac_mobile.png');
@@ -49,6 +54,11 @@ select {
 }
 .modal_head {
 	color:var(--acs_grey_text);
+	margin-top:35px;
+	font-size:20px;
+}
+.LR_description {
+	color:var(--acs_green);
 	margin-top:35px;
 	font-size:20px;
 }

@@ -25,6 +25,23 @@ var app = {
     initialize: function() {
     	console.log("Application Constructor");
         this.bindEvents();
+        try {
+        	var storage = window.localStorage;
+        	if (storage.getItem('RESTHOME')) {
+        		var s = storage.getItem('RESTHOME');
+        		// alert ("got RESTHOME " + storage.getItem('RESTHOME') + "X" + typeof(storage.getItem('RESTHOME')) + "X");
+        		if (s.length < 2){
+        			// alert ("setting RESTHOME to ",RESTHOME);
+            		storage.setItem('RESTHOME',RESTHOME);
+                }
+        	}
+        	//else {
+        		storage.setItem('RESTHOME',RESTHOME);
+        	// }
+        }
+        catch(e) {
+        	alert("ERROR  " + e);
+        }
     },
     // Bind Event Listeners
     //

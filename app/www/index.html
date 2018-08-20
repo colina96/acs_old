@@ -81,7 +81,7 @@ function log(s)
 		logline = 0;
 	}
 	document.getElementById('log_div').innerHTML += s + "<br>";
-	document.getElementById('log_div').style.display = 'block';
+	// document.getElementById('log_div').style.display = 'block';
 }
 
 function hide_log()
@@ -193,7 +193,7 @@ function read_temp(m)
 {
 	temp_mode = m;
 	console.log('read temp mode',m);
-	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
+// 	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
 	// if (typeof(serial.write) === 'undefined') {
 //	if (!ioio_started) {
 		console.log('serial undefined');
@@ -289,7 +289,7 @@ function start_serial()
 }
 </script>
 <body>
-<div>
+<div class='background_div'>
 	<div class='mobile_main' id='splash'>
 		
 	</div> 
@@ -361,14 +361,25 @@ function start_serial()
 			<div class='m_label'><span>TEMPERATURE</span></div>
 			
 			<div id='m1_temp_div_3' class='temp_reading'></div>
-			<div id='m1_temp_div'><input type='number' name='m1_chef_id' size=4></div>
+			<div id='m1_temp_div'><input name='m1_chef_id' onchange="set_user('m1_chef_id','m_temp_modal4');"></div>
 			<div class='btns'>
-			<button type='button'  class='m_btn' onclick="openPage('m_temp_modal4', this, 'red','m_modal2','tabclass');">Scan Authorised Chef ID</button>
+			<button type='button'  class='m_btn' onclick="set_user('m1_chef_id','m_temp_modal4');", this, 'red','m_modal2','tabclass');">Scan Authorised Chef ID</button>
+			</div>
+		</div>
+		<div class='m_modal2' id='m_temp_modal_LR'>
+			
+			
+			<div id='m1_temp_div_LR_comp' class='LR_description center'></div>
+			<div id='m1_temp_div_LR_comp' class='center modal_head'>PICKED</div>
+			<div id='m1_temp_div'><input name='m1_chef_id_LR' size=10></div>
+			<div class='btns'>
+			<button type='button'  class='m_btn' onclick="set_user('m1_chef_id_LR','m_temp_modal4');">Scan Authorised Chef ID</button>
 			</div>
 		</div>
 		<div class='m_modal2' id='m_temp_modal4'>
-			<div class='m_label'><span>TEMPERATURE</span></div>
+			<div class='center modal_head'><span>TEMPERATURE</span></div>
 			<div id='m1_temp_div_4' class='temp_reading'></div>
+			<div id='m1_temp_div_5' class='center modal_head'></div>
 			<div class='center grey'>LABEL QUANTITY<input type='number' name='m1_label_qty' size=4></div>
 			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="start_component();">Print Labels</button>
@@ -376,7 +387,7 @@ function start_serial()
 		</div>
 <!--  next pages are for recording M2 and M3 -->
 		<div class='m_modal2' id='m2_temp_modal'>
-			<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
+			<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
 			<div id='m2_temp_div'><!--  input type='number' name='m2_temp' size=4 --></div>
 			<div class='btns'>
 			<button type='button' class='m_submit' onclick="read_M2temp();">Check Now</button>
@@ -393,7 +404,7 @@ function start_serial()
 			</div>
 		</div>
 		<div class='m_modal2' id='m2_temp_modal3'>
-			<div class='m_label'><span>TEMPERATURE</span></div>
+			<div class='center modal_head'><span>TEMPERATURE</span></div>
 			<div id='m2_temp_div_3' class='temp_reading'></div>
 			<div id='m2_temp_div_3a' class='temp_achieved center'></div>
 			<div class='btns'>
@@ -401,7 +412,7 @@ function start_serial()
 			</div>
 		</div>
 		<div class='m_modal2' id='m2_temp_modal4'>
-			<div class='m_label'><span>TEMPERATURE</span></div>
+			<div class='center modal_head'><span>TEMPERATURE</span></div>
 			<div id='m2_temp_div_4 class='temp_reading red'></div>
 			<div id='m2_temp_div_4a' class='temp_achieved center'>CORRECTIVE ACTION REQUIRED</div>
 			<div class='btns'>

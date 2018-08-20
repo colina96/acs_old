@@ -22,7 +22,7 @@ if ($userID > 0) {
 		error_log("could not read columns",0);
 	}
 	
-	$sql = "select * from COMPONENT  where M3_time is null";
+	$sql = "select * from COMPONENT  where finished is null";
 	$result = mysql_query($sql);
 	$comps = array();
 	if ($result) {

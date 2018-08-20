@@ -170,31 +170,48 @@ function get_preptype_val(id,fld)
 // called when user searchs for and selects a component - M1 only 
 function component_selected(id)
 {
-	openPage('m_temp', this, 'red','mobile_main','tabclass');
-	openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
+
 	new_comp = get_component_by_id(id);
 	if (new_comp['prep_type'] < 1) new_comp['prep_type'] = 1;
 	console.log(new_comp);
 	var prep_type_id = new_comp['prep_type'];
 	console.log('prep_type_id',prep_type_id);
 	if (prep_type_id < 1) prep_type_id = 1;
-	var prep_type_val = get_preptype_val(prep_type_id,'M1_temp');
+	
+	var M1_temp = get_preptype_val(prep_type_id,'M1_temp');
 	var prep_type_sign = get_preptype_val(prep_type_id,'M1_temp_above');
 	var sign = ' > ';
+	openPage('m_temp', this, 'red','mobile_main','tabclass');
 	if (prep_type_sign == 0) {
 		sign = ' < ';
 	}
-	document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
+	if (M1_temp == null) { // low risk. No temp required
+		console.log("LOW RISK");
+		openPage('m_temp_modal_LR', this, 'red','m_modal2','tabclass');
+		document.getElementById('m1_temp_div_LR_comp').innerHTML = new_comp['description'];
+		document.getElementById('ms_2').innerHTML = ' ';
+		document.getElementById('ms_2_text').innerHTML = ' ';
+		document.getElementById('ms_2_target').innerHTML = "";
+		document.getElementById('chk_temp_item_div').innerHTML = '';
+	}
+	else {
+		openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
+		document.getElementById('ms_2').innerHTML = 'M1';
+		document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
+		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
+		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
+	}
+	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
+	// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 	document.getElementById('ms_1').innerHTML = '';
 	document.getElementById('ms_1_text').innerHTML = '';
-	document.getElementById('ms_2').innerHTML = 'M1';
-	document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
-	document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
+	
 
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
 
 function read_M1temp(callback){
+	load_chefs(null);
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
 	document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M1');
@@ -247,11 +264,23 @@ function check_temp(t) // start a new component
 
 function start_component()
 {
+	load_chefs(null);
 	var component = new Object();
 	component.description = new_comp['description'];
 	component.prep_type = new_comp['prep_type'];
+	prep_type_id = component.prep_type;
+	console.log("start compontent " + component.description + " prep_type" + component.prep_type);
 	// component.M1_temp = document.getElementsByName('m1_temp')[0].value;
-	component.M1_temp = new_comp['M1_temp'];
+	var M2_time = get_preptype_val(prep_type_id,'M2_time_minutes');
+	console.log("At M1, M2 time = " + M2_time);
+	console.log("At M1, M3 time = " + get_preptype_val(prep_type_id,'M3_time_minutes'));
+	if (M2_time == null) {
+		component.finished = 'true';
+	}
+	else {
+		component.M1_temp = new_comp['M1_temp'];
+	}
+	
 	component.M1_chef_id = document.getElementsByName('m1_chef_id')[0].value;
 	if (component.M1_chef_id < 1) component.M1_chef_id = 1;
 	var data =  {data: JSON.stringify(component)};
@@ -277,52 +306,75 @@ function start_component()
     
 }
 
-
+function set_user(input_name,next_page) {
+	var uid = document.getElementsByName(input_name)[0].value;
+	console.log("got user id ",uid);
+	// openPage(next_page, this, 'red','m_modal2','tabclass');
+	if (uid.substring(0,1) == 'u') {
+		uid = parseInt(uid.substring(4));
+		console.log("parsed user id ",uid);
+	}
+	var chef = get_chef_by_id(uid);
+	if (chef) {
+	    console.log("found chef ",chef['label']); 
+	    document.getElementById('m1_temp_div_5').innerHTML = chef['label'];
+	    openPage(next_page, this, 'red','m_modal2','tabclass');
+	}
+		
+	
+}
 function comp_milestone(temp_reading)
 {
-	// var M2_temp_reading = parseInt(document.getElementsByName('m2_temp')[0].value);
+	// send data to REST interface
+	var prep_type_id = active_comp['prep_type_id'];
 	
-		// send data to REST interface
+	var temp_target = get_preptype_val(prep_type_id,'M2_temp');
 		
-		var component = new Object();
-		component.id = active_comp['id'];
-		var url = '';
-		if (active_comp['M2_time'] == '') { // M2
-			// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
-			component.M2_temp = temp_reading;
-			component.M2_chef_id = 0;
-			url = RESTHOME + 'M2_comp.php';
+	var component = new Object();
+	component.id = active_comp['id'];
+	var url = '';
+	if (active_comp['M2_time'] == '') { // M2
+		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
+		component.M2_temp = temp_reading;
+		component.M2_chef_id = 0;
+		var M3_time_minutes = get_preptype_val(prep_type_id,'M3_time_minutes');
+		console.log("At M2, M3 time = " + M3_time_minutes + " ->" + typeof(M3_time_minutes));
+		if (M3_time_minutes == null) {
+			console.log("component finished");
+			component.finished = 'true';
 		}
-		else {
-			//component.M3_temp = document.getElementsByName('m2_temp')[0].value;
-			component.M3_temp = temp_reading;
-			component.M3_chef_id = 0;
-			url = RESTHOME + 'M3_comp.php';
-		}
-		var data =  {data: JSON.stringify(component)};
-	    console.log("Sent Off: %j", data);
-	    
-	    $.ajax({
-	        url: url,
-	        type: "POST",
-	        data: data,
+		url = RESTHOME + 'M2_comp.php';
+	}
+	else {
+		//component.M3_temp = document.getElementsByName('m2_temp')[0].value;
+		component.M3_temp = temp_reading;
+		component.M3_chef_id = 0;
+		url = RESTHOME + 'M3_comp.php';
+	}
+	var data =  {data: JSON.stringify(component)};
+    console.log("Sent Off: %j", data);
+    
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: data,
 
-	        success: function(result) {
-	            console.log("start_component result ",result);
-	            if (active_comp['M2_time'] == '') { 
-	            	// goto_m_main();
-	            }
-	            else {
-	            	openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
-	            }
-	        },
-	        done: function(result) {
-	            console.log("done start_component result ",result);
-	        },
-	        fail: (function (result) {
-	            console.log("start_componentfail ",result);
+        success: function(result) {
+            console.log("start_component result ",result);
+            if (active_comp['M2_time'] == '') { 
+            	// goto_m_main();
+            }
+            else {
+            	openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
+            }
+        },
+        done: function(result) {
+            console.log("done start_component result ",result);
+        },
+        fail: (function (result) {
+            console.log("start_componentfail ",result);
 	        })
-	    });
+    });
 }
 
 function check_temp_m2(t) // M2 or M3
@@ -364,6 +416,7 @@ function check_temp_m2(t) // M2 or M3
 function active_comp_selected(id) 
 {
 	console.log("active_comp_selected",id);
+	load_chefs(null);
 	openPage('m2_temp_modal', this, 'red','m_modal2','tabclass');
 	active_comp = active_comps[id];
 	console.log(active_comp);

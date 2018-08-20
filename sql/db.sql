@@ -13,7 +13,7 @@ admin int,
 last_login datetime,
 constraint pk_example primary key (id) );
 INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'colin.p.atkinson@gmail.com','acs','Colin','Atkinson','admin',1);
+ VALUES ( null, 'col','acs','Colin','Atkinson','admin',1);
  INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
  VALUES ( null, 'david@qamc.co','acs','David','Cox','admin',1);
  INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
