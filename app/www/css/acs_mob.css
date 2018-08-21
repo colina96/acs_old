@@ -6,7 +6,8 @@ select {
 	--acs_background:#23DD9F;
 	--acs_grey:#969696;
 	--acs_blue_text: #82A0FD;
-	--acs_blue_background: #3D64E7
+	--acs_blue_background: #3D64E7;
+	--acs_blue: #7F9FFD;
 }
 
 .background_div {
@@ -338,9 +339,23 @@ select {
 
 #active_plating_team_head {
 	position:absolute;
-	top:5vh;
+	top:1vh;
 	left:6vw;
+	font-size:18px;
 	color:white;
+}
+#plating_sched_list {
+	position:absolute;
+	top:5px;
+}
+table.plating_tab th, table.item_table th {
+	color:white;
+	height:45px;
+	background: var(--acs_blue);
+}
+table.plating_tab td , table.item_table td {
+	color:black;
+	height:45px;
 }
 .ui-menu .ui-menu-item-wrapper {
     position: relative;

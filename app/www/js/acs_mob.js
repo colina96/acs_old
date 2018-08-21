@@ -17,16 +17,28 @@ function set_barcode_mode(mode)
 	keyboard_str = '';
 }
 function process_barcode(s)
-{
+{ 
+	console.log("process_barcode " + s + " mode " + barcode_mode);
 	if (barcode_mode == null) {
 		return;
 	}
 	if (s.substring(0,1) == 'u') { // user barcode scanned
 		var uid = parseInt(s.substring(4));
+		if (barcode_mode == 'login') {
+			login(uid);
+		}
 		if (barcode_mode == 'M1') {
 			set_user('m1_chef_id','m_temp_modal4',uid);
+			barcode_mode = null;
 		}
-		barcode_mode = null;
+		else if (barcode_mode == 'M1_LR') {
+			set_user('m1_chef_id_LR','m_temp_modal4',uid);
+			barcode_mode = null;
+		}
+		else if (barcode_mode == 'PT') { // plating team member
+			add_team_member(uid);
+		}
+		
 	}
 }
 function load_preptypes()
@@ -71,6 +83,7 @@ function save_plating_team()
 {
 	var data =  {data: JSON.stringify(plating_teams)};
 	console.log("Sent Off: %j", data);
+	barcode_mode = null;
 	goto_plating();
     $.ajax({
         url: RESTHOME + "save_plating_teams.php",
@@ -96,7 +109,7 @@ function goto_plating()
 	if (active_plating_team == null) {
 		goto_plating_teams();
 	}
-	openPage('plating_div', this, 'red','mobile_main','tabclass');
+	openPage('m_plating', this, 'red','mobile_main','tabclass');
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 	var hd = document.getElementById('active_plating_team_head');
 	hd.innerHTML = "Plating Team " + active_plating_team;
@@ -142,12 +155,21 @@ function show_menu_item_components(menu_item_id)
 {
 	
 	// var div = document.getElementById('menu_item_components_div');
+	menu_item = get_menu_item_by_id(menu_item_id);
 	var div = document.getElementById('plating_sched_list');
 	div.innerHTML = '';
 	var tab = document.createElement('table');
 	tab.className = 'item_table';
+	var tr = document.createElement('tr');
+	var th = document.createElement('th');
+	th.innerHTML=menu_item.dish_name + "<br>" + menu_item.code;
+	tr.appendChild(th);
+	th = document.createElement('th');
+	th.innerHTML='TEMP';
+	tr.appendChild(th);
+	tab.appendChild(tr);
 	var line = 1;
-	menu_item = get_menu_item_by_id(menu_item_id);
+	
 	if (menu_item != null) {
 		console.log("found menu_item ",menu_item.dish_name,menu_item.items.length);
 		var items = menu_item.items;
@@ -156,8 +178,12 @@ function show_menu_item_components(menu_item_id)
 			
 				console.log("found ",items[i].description);
 				var tr = document.createElement('tr');
-				tr.appendChild(new_td(line++,'item'));
+				// tr.appendChild(new_td(line++,'item'));
 				tr.appendChild(new_td(items[i].description,'item'));
+				var td = document.createElement('td');
+				td.id = 'plating_item_temp_';
+				td.innerHTML = '-';
+				tr.appendChild(td);
 				tab.appendChild(tr);
 			
 		}
@@ -743,13 +769,25 @@ function goto_select_team()
 	show_plating_team();
 }
 
-function add_team_member()
+function add_team_member(id)
 {
-	var idx = document.getElementsByName('sel_chef')[0].value;
+	if (id == -1 ) {
+		idx = document.getElementsByName('sel_chef')[0].value;
+	}
+	else { // idx is the id of the user
+		idx = -1;
+		for (var i = 0; i < chefs.length; i++) {
+			if (chefs[i]['id'] == id) idx = i;
+		}
+	}
+	if (idx < 0) {
+		console.log ("add_team_member ERROR invalid idx ",idx);
+		return;
+	}
 	console.log('adding ' + chefs[idx]['value'] + " to plating team " + active_plating_team);
 	
 	var pt = plating_teams[active_plating_team];
-	for (i = 0; i < pt.length; i++) {
+	for (var i = 0; i < pt.length; i++) {
 		if (pt[i]['id'] == chefs[idx]['id']) return;
 	}
 	plating_teams[active_plating_team].team_id = active_plating_team;
@@ -786,7 +824,8 @@ function show_plating_team()
 function select_plating_team()
 {
 	active_plating_team = document.getElementsByName('sel_pt')[0].value;
-	if (active_plating_team > 0) {
+	if (active_plating_team >= 0) {
+		barcode_mode = 'PT';
 		console.log("Team " + active_plating_team);
 		load_chefs(goto_select_team);
 	}

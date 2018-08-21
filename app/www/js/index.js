@@ -95,6 +95,7 @@ $.ajax({
         	if (user_id <= 0) {
         		// load_comps();
             	// load_preptypes();
+        		barcode_mode = 'login';
         		openPage('login_div', this, 'red','mobile_main','tabclass');
         		$("#login_fail").text("Not logged in ..!");
         	}
@@ -134,19 +135,26 @@ function set_admin()
 	document.getElementById('log_div').style.display = 'block';
 	goto_home();
 }
-function login(email,password)
+
+function login(barcode_uid)
 {
     //var email= "colin.p.atkinson@gmail.com";
     //var password= "acs";
-    var email = document.getElementsByName('email')[0].value;
-    var password = document.getElementsByName('password')[0].value;
+	var loginString = null;
+	if (barcode_uid > 0) {
+		loginString="uid="+barcode_uid+"&login=login";
+	}
+	else {
+		var email = document.getElementsByName('email')[0].value;
+		var password = document.getElementsByName('password')[0].value;
     //$("#status").text("Authenticating...");
-    console.log("Authenticating...",RESTHOME);
-    var loginString ="email="+email+"&password="+password+"&login=login";
-    if (email == 'admin' && password == "zzz") {
-    	set_admin();
-    	return;
-    }
+		console.log("Authenticating...",RESTHOME);
+		loginString ="email="+email+"&password="+password+"&login=login";
+		if (email == 'admin' && password == "zzz") {
+			set_admin();
+			return;
+		}
+	}
     console.log(loginString);
     $.ajax({
         type: "POST",crossDomain: true, cache: false,
@@ -165,16 +173,12 @@ function login(email,password)
                 	load_preptypes();
             		user_name = data['user'];
             		document.getElementById('m_login').innerHTML = user_name;
-            		// openPage('mm2', this, 'red','mobile_main','tabclass');
             		goto_home();
             	}
             	else {
             		document.getElementById('login_fail').innerHTML = "login fail for "+email + " " + password;
-            		// document.getElementById('login').style.display = 'block';
-            		// document.getElementById('logout').style.display = 'none';
+            		
             	}
-               // localStorage.loginstatus = "true";
-               //  window.location.href = "welcome.html";
             }
             else 
             {
@@ -188,6 +192,7 @@ function logout()
 {
     var loginString ="logout=login";
     console.log('logging out');
+    barcode_mode = 'login';
     openPage('login_div', this, 'red','mobile_main','tabclass');
     $.ajax({
         type: "POST",crossDomain: true, cache: false,

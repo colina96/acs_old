@@ -469,30 +469,54 @@ function show_dims()
 					<div id='plating_team_list'></div>
 					<div class='center' id='sel_team_member'></div>
 					<div class='btns'>
-					<button type='button'  class='m_btn' onclick="add_team_member();">Add Team Member</button>
+					<button type='button'  class='m_btn' onclick="add_team_member(-1);">Add Team Member</button>
 					<button type='button'  class='m_btn' onclick="save_plating_team();">Continue</button>
 					</div>
 				
 			</div>
-			<div class='m_modal hidden' id='m_plating_sched' >
+			
+		
+		
+		</div>
+	</div> 
+	<div class='mobile_main hidden' id='m_plating'>
+	
+			
 			<div id='active_plating_team_head'></div>
-			<div id='plating_sched_list'></div>
+			<div id='chk_temp_item_div'></div>
+			<div class='m_modal hidden' id='m_plating_sched' >
+				
+				<div id='plating_sched_list'></div>
+				<div class='btns'>
+					<button type='button'  class='m_btn' onclick="goto_home();">Return</button>
+				</div>
 			</div>
 			
 			<div class='m_modal hidden' id='m_plating_temp'>SEARCH
 			
 			</div>
-		
-		
-		</div>
-	</div> 
+	</div>
+	<div class='mobile_main hidden' id='m_plating2'>
+	
+			<div id='close_m_temp' onclick="goto_plating_teams();">&#x02A2F;</div>
+			<div id='plating_action'>SCAN TEMPERATURE</div>
+			<div id='chk_temp_item_div'></div>
+			<div class='m_modal hidden' id='m_plating_list' >
+				
+				<div id='plating_sched_list'></div>
+			</div>
+			
+			<div class='m_modal hidden' id='m_plating_temp'>SEARCH
+			
+			</div>
+	</div>
 	<!--  end of plating -->
 	<div class='mobile_main' id='login_div'>
 		<div class='m_modal2'>
 			<input name='email' placeholder='email' type='text' class='input'>
 			<input name='password' placeholder='password' type='text' class='input'>
 			<div class='btns'>
-				<div id='login_btn' class='btn' onclick='login()'>Login</div>
+				<div id='login_btn' class='btn' onclick='login(0)'>Login</div>
 				<div id='login_fail' class='hidden'></div>
 			</div>
 		</div>

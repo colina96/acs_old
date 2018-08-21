@@ -61,6 +61,7 @@ function check_login()
 	$email = get_url_token("email");
  	//  echo "checking login";
 	$password = get_url_token("password");
+	$uid = get_url_token("uid");
 	$login = get_url_token("login");
 	$logout = get_url_token("logout");
 	$found = 0;
@@ -79,6 +80,9 @@ function check_login()
 		$sql = NULL;
 		if (!empty($email) && !empty($password)) {
 			$sql="SELECT * FROM USERS where email='" . $email."' and password = '".$password."'" ;
+		}
+		if (!empty($uid)) {
+			$sql="SELECT * FROM USERS where id=" . $uid;
 		}
 		if ($sql) {
 	
