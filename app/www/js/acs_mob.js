@@ -5,6 +5,7 @@ var menu_items = null;
 var plating_teams = null;
 var active_plating_team = 0;
 var active_comp = null; // the component currently being worked on
+var active_menu_item_id = null;
 var new_comp = null; // start a new component - M1
 var chefs = null;
 var RESTHOME = "http://10.0.0.32/acs/REST/";
@@ -151,9 +152,26 @@ function get_menu_item_by_id(menu_item_id) {
 	return(null);
 }
 
+function plating_comp_selected(i)
+{
+	var menu_item = get_menu_item_by_id(active_menu_item_id);
+	var items = menu_item.items;
+	if (i >= 0 && i < items.length) {
+		console.log("selected " + items[i].description);
+	}
+	openPage('m_plating_temp', this, 'red','m_modal','tabclass');
+	$('#chk_plating_item_temp_div').innerHTML = items[i].description;
+	document.getElementById('chk_plating_item_temp_div').innerHTML = items[i].description;
+}
+
+function goto_active_plating()
+{
+	show_menu_item_components(active_menu_item_id)
+}
 function show_menu_item_components(menu_item_id)
 {
-	
+	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
+	active_menu_item_id = menu_item_id; // global - so we can come back to it
 	// var div = document.getElementById('menu_item_components_div');
 	menu_item = get_menu_item_by_id(menu_item_id);
 	var div = document.getElementById('plating_sched_list');
@@ -162,7 +180,7 @@ function show_menu_item_components(menu_item_id)
 	tab.className = 'item_table';
 	var tr = document.createElement('tr');
 	var th = document.createElement('th');
-	th.innerHTML=menu_item.dish_name + "<br>" + menu_item.code;
+	th.innerHTML= menu_item.dish_name + "<br>" + menu_item.code;
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML='TEMP';
@@ -179,7 +197,9 @@ function show_menu_item_components(menu_item_id)
 				console.log("found ",items[i].description);
 				var tr = document.createElement('tr');
 				// tr.appendChild(new_td(line++,'item'));
-				tr.appendChild(new_td(items[i].description,'item'));
+				var clickdiv = "<div onclick='plating_comp_selected(" + i + ");'>" + items[i].description + "</div>"
+				// tr.appendChild(new_td(items[i].description,'item'));
+				tr.appendChild(new_td(clickdiv,'item'));
 				var td = document.createElement('td');
 				td.id = 'plating_item_temp_';
 				td.innerHTML = '-';
