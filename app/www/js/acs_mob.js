@@ -9,6 +9,26 @@ var new_comp = null; // start a new component - M1
 var chefs = null;
 var RESTHOME = "http://10.0.0.32/acs/REST/";
 
+var barcode_mode = null;
+
+function set_barcode_mode(mode)
+{
+	barcode_mode = mode;
+	keyboard_str = '';
+}
+function process_barcode(s)
+{
+	if (barcode_mode == null) {
+		return;
+	}
+	if (s.substring(0,1) == 'u') { // user barcode scanned
+		var uid = parseInt(s.substring(4));
+		if (barcode_mode == 'M1') {
+			set_user('m1_chef_id','m_temp_modal4',uid);
+		}
+		barcode_mode = null;
+	}
+}
 function load_preptypes()
 {
 console.log("loading prep types");
@@ -170,7 +190,8 @@ function get_preptype_val(id,fld)
 // called when user searchs for and selects a component - M1 only 
 function component_selected(id)
 {
-
+	console.log("component selected - loading chefs");
+	load_chefs(null);
 	new_comp = get_component_by_id(id);
 	if (new_comp['prep_type'] < 1) new_comp['prep_type'] = 1;
 	console.log(new_comp);
@@ -187,6 +208,7 @@ function component_selected(id)
 	}
 	if (M1_temp == null) { // low risk. No temp required
 		console.log("LOW RISK");
+		set_barcode_mode("M1_LR");
 		openPage('m_temp_modal_LR', this, 'red','m_modal2','tabclass');
 		document.getElementById('m1_temp_div_LR_comp').innerHTML = new_comp['description'];
 		document.getElementById('ms_2').innerHTML = ' ';
@@ -195,6 +217,7 @@ function component_selected(id)
 		document.getElementById('chk_temp_item_div').innerHTML = '';
 	}
 	else {
+		set_barcode_mode("M1");
 		openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
 		document.getElementById('ms_2').innerHTML = 'M1';
 		document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
@@ -262,9 +285,27 @@ function check_temp(t) // start a new component
 	
 }
 
+function add_chef_select(target_div,input_name) 
+{
+	var s = document.getElementById(target_div);
+	s.innerHTML = null;
+	var select = document.createElement('select');
+	select.name = input_name;
+	// console.log('found plating teams ',plating_teams.length);
+	for (i = 0; i < chefs.length; i++) {
+		option = document.createElement( 'option' );
+		option.value = i;
+		option.textContent =  chefs[i]['label'];
+		select.appendChild( option );
+		// console.log(i);
+	}
+	s.appendChild(select);
+	
+}
+
 function start_component()
 {
-	load_chefs(null);
+	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
 	var component = new Object();
 	component.description = new_comp['description'];
 	component.prep_type = new_comp['prep_type'];
@@ -306,14 +347,20 @@ function start_component()
     
 }
 
-function set_user(input_name,next_page) {
-	var uid = document.getElementsByName(input_name)[0].value;
+function set_user(input_name,next_page,uid) {
+	if (uid == 0) {
+		uid = document.getElementsByName(input_name)[0].value;
+	}
+	else {
+		document.getElementsByName(input_name)[0].value = uid;
+	}
 	console.log("got user id ",uid);
 	// openPage(next_page, this, 'red','m_modal2','tabclass');
-	if (uid.substring(0,1) == 'u') {
+/*	if (uid.substring(0,1) == 'u') {
 		uid = parseInt(uid.substring(4));
 		console.log("parsed user id ",uid);
-	}
+		document.getElementsByName(input_name)[0].value = uid;
+	} */
 	var chef = get_chef_by_id(uid);
 	if (chef) {
 	    console.log("found chef ",chef['label']); 
@@ -515,8 +562,10 @@ function load_plating_teams()
 	        success: function(result) {
 	           //  active_comps = result;
 	           // clear plating teams;
-	        	for (var i = 0; i < plating_teams.length; i++ ) {
-	        		if (plating_teams[i] != null) plating_teams[i] = [];
+	        	if (plating_teams != null) {
+		        	for (var i = 0; i < plating_teams.length; i++ ) {
+		        		if (plating_teams[i] != null) plating_teams[i] = [];
+		        	}
 	        	}
 	            console.log("got " + result.length + " plating_teams");
 	            for (var i = 0; i < result.length;i++) {
@@ -650,7 +699,7 @@ function find_plating_teams(menu_items)
 
 function load_chefs(fn)
 {
-	console.log("loading chess");
+	console.log("loading chefs");
     $.ajax({
     	url: RESTHOME + "get_chefs.php",
         type: "POST",
@@ -658,8 +707,12 @@ function load_chefs(fn)
         success: function(result) {
             chefs = result;
             
-            if (fn) fn();
+            if (fn) {
+            	console.log("calling fn");
+            	fn();
+            }
             load_plating_teams();
+            add_chef_select('m1_temp_div_chef','m1_chef_id');
             console.log("got " + result.length + " chefs");   
             
         },
