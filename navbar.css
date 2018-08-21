@@ -2,6 +2,15 @@ body {
   padding-bottom: 20px;
 }
 
+.phone {
+	border: 40px solid #ddd;
+    border-width: 55px 7px;
+    border-radius: 40px;
+    margin: 50px auto;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    width:374px;
+}
 td { padding: 5px; }
 .navbar {
   margin-bottom: 20px;

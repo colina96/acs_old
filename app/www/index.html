@@ -287,9 +287,32 @@ function start_serial()
 		// log("<hr>");
 	}
 }
+
+var keyboard_str = '';
+
+function global_key(event)
+{
+//	console.log(">>>" + event.keyCode);
+	keyboard_str += String.fromCharCode(event.keyCode);
+//	console.log(">>>" + keyboard_str);
+	if (event.keyCode == 13) {
+		console.log(">>>" + keyboard_str);
+		keyboard_str = '';
+	}
+	
+}
+function show_dims()
+{
+	var div = document.getElementById('log_div');
+	div.style.display = 'block';
+	div.innerHTML = " width: " + window.innerWidth;
+	div.innerHTML += "<br>height: " + window.innerHeight;
+	
+}
 </script>
 <body>
-<div class='background_div'>
+
+<div class='background_div' tabindex="0" onkeypress='global_key(event);'>
 	<div class='mobile_main' id='splash'>
 		
 	</div> 
@@ -303,6 +326,7 @@ function start_serial()
 			<button type='button' class='m_btn' onclick="goto_m_main();">Kitchen</button>
 			<button type='button'  class='m_btn' onclick="goto_plating_teams();">Plating</button>
 			<button type='button'  class='m_btn' onclick="logout();">Logout</button>
+			<!--  button type='button'  class='m_btn' onclick="show_dims();">Dims</button -->
 			</div>
 		</div>
 	</div>
@@ -491,6 +515,7 @@ function start_serial()
     	load_preptypes();
     });
     </script>
+
 </body>
 
 </html>

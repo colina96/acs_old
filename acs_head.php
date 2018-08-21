@@ -147,9 +147,10 @@ function upload_menu()
             <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('USERS', this, 'red')" href="#">USERS</a></li>
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="#">MENU</a></li>
             <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')" href="#">SETTINGS</a></li>
+            <li class='tabclass' onclick="openPage('APP', this, 'red','tabcontent','tabclass')"><a href="#">APP</a></li>
             <li class='tabclass' onclick="openPage('REPORTS', this, 'red','tabcontent','tabclass')"><a href="#">REPORTS</a></li>
-            <li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="#">KITCHEN</a></li>
-            <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="#">ASSEMBLY</a></li>
+            <!--  li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="#">KITCHEN</a></li>
+            <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="#">ASSEMBLY</a></li -->
             
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -174,9 +175,14 @@ function upload_menu()
   <?php include 'acs_settings.php' ?>
 </div>
 
+<div id="APP" class="tabcontent">
+<div class='phone'>
+  <iframe width='360px' height='616px' src='app/www/index.html' class='app_frame'></iframe>
+</div>
+</div>
 <div id="REPORTS" class="tabcontent">
-  <h3>About</h3>
-  <p>Who we are and what we do.</p>
+coming soon.....
+  
 </div>
 <div id="KITCHEN" class="tabcontent">
   <?php include 'kitchen.php' ?>
