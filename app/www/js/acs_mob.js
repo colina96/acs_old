@@ -205,8 +205,7 @@ function show_menu_item_components(menu_item_id)
 	
 	if (plating_item != null) {
 		console.log("found menu_item ",plating_item.dish_name,plating_item.items.length);
-		var items = plating_item.items;
-		
+		var items = plating_item.items;	
 		for (var i = 0; i < items.length; i++) {
 			
 				console.log("found ",items[i].description);
