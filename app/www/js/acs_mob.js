@@ -3,6 +3,7 @@ var comps = null;
 var preptypes = null;
 var menu_items = null;
 var plating_teams = null;
+var plating_item = null;
 var active_plating_team = 0;
 var active_comp = null; // the component currently being worked on
 var active_menu_item_id = null;
@@ -78,6 +79,7 @@ function goto_plating_teams()
 	load_menu_items();
 	openPage('plating_div', this, 'red','mobile_main','tabclass');
 	openPage('m_sel_team', this, 'red','m_modal','tabclass');
+	document.getElementById('plating_comment_div').innerHTML = '';
 }
 
 function save_plating_team()
@@ -154,13 +156,13 @@ function get_menu_item_by_id(menu_item_id) {
 
 function plating_comp_selected(i)
 {
-	var menu_item = get_menu_item_by_id(active_menu_item_id);
+	var menu_item = plating_item; // get_menu_item_by_id(active_menu_item_id);
+	plating_item.active_item = i;
 	var items = menu_item.items;
 	if (i >= 0 && i < items.length) {
 		console.log("selected " + items[i].description);
 	}
 	openPage('m_plating_temp', this, 'red','m_modal','tabclass');
-	$('#chk_plating_item_temp_div').innerHTML = items[i].description;
 	document.getElementById('chk_plating_item_temp_div').innerHTML = items[i].description;
 }
 
@@ -168,19 +170,32 @@ function goto_active_plating()
 {
 	show_menu_item_components(active_menu_item_id)
 }
+
+function set_plating_M1_temp(temperature) 
+{
+	console.log("set_plating_M1_temp " + plating_item.description + " -> " + 
+			plating_item.items[plating_item.active_item].description);
+	plating_item.items[plating_item.active_item].M1_temp = temperature;
+}
+
 function show_menu_item_components(menu_item_id)
 {
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 	active_menu_item_id = menu_item_id; // global - so we can come back to it
 	// var div = document.getElementById('menu_item_components_div');
-	menu_item = get_menu_item_by_id(menu_item_id);
+	if (plating_item == null) { // 
+		plating_item = Object.create(get_menu_item_by_id(menu_item_id)); // possibly dangerous .....
+
+	}
+	
+	
 	var div = document.getElementById('plating_sched_list');
 	div.innerHTML = '';
 	var tab = document.createElement('table');
 	tab.className = 'item_table';
 	var tr = document.createElement('tr');
 	var th = document.createElement('th');
-	th.innerHTML= menu_item.dish_name + "<br>" + menu_item.code;
+	th.innerHTML= plating_item.dish_name + "<br>" + plating_item.code;
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML='TEMP';
@@ -188,9 +203,9 @@ function show_menu_item_components(menu_item_id)
 	tab.appendChild(tr);
 	var line = 1;
 	
-	if (menu_item != null) {
-		console.log("found menu_item ",menu_item.dish_name,menu_item.items.length);
-		var items = menu_item.items;
+	if (plating_item != null) {
+		console.log("found menu_item ",plating_item.dish_name,plating_item.items.length);
+		var items = plating_item.items;
 		
 		for (var i = 0; i < items.length; i++) {
 			
@@ -203,6 +218,9 @@ function show_menu_item_components(menu_item_id)
 				var td = document.createElement('td');
 				td.id = 'plating_item_temp_';
 				td.innerHTML = '-';
+				if (items[i].M1_temp) {
+					td.innerHTML = items[i].M1_temp;
+				}
 				tr.appendChild(td);
 				tab.appendChild(tr);
 			
@@ -290,6 +308,12 @@ function read_M2temp(callback){
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
 	document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M2');
+}
+
+function read_plating_M1temp(callback){
+	
+	// document.getElementById('m1_temp_div').innerHTML = '';
+	read_temp('M1_plating');
 }
 
 function check_temp(t) // start a new component
@@ -781,7 +805,6 @@ function goto_select_team()
 		option.value = i;
 		option.textContent =  chefs[i]['label'];
 		select.appendChild( option );
-		console.log(i);
 	}
 	s.appendChild(select);
 	
@@ -848,6 +871,7 @@ function select_plating_team()
 		barcode_mode = 'PT';
 		console.log("Team " + active_plating_team);
 		load_chefs(goto_select_team);
+		document.getElementById('plating_comment_div').innerHTML = "Plating Team " + active_plating_team;
 	}
 }
 function load_menu_items()

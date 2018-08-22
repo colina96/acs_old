@@ -138,6 +138,15 @@ select {
 	font-size:x-small;
 	.border:1px solid green;
 }
+#plating_comment_div {
+	position:absolute;
+	top:4.5vh;
+	left:9vw;
+	margin:2vw;
+	display:flex;
+	color:white;
+	font-size:20px;
+}
 .m_top_menu {
 	margin:5px;
 	.width:30vw;

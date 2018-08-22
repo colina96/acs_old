@@ -110,8 +110,12 @@ function temp_callback(s) // works out where to send the temperature reading
 		// component.M2_temp = temp_reading;
 		check_temp_m2(s);
 	} 
+	else if (temp_mode == 'M1_plating') {
+		// component.M2_temp = temp_reading;
+		set_plating_M1_temp(s);
+	} 
 	else {
-		log ("don't know what to do with temperature reading");
+		log ("don't know what to do with temperature reading " + temp_mode);
 	}
 }
 
@@ -457,6 +461,7 @@ function show_dims()
 				
 				<div class='m_top_menu larger' id='plating_home_tab'  onclick="goto_home()">&#8962;</div>
 			</div>
+			<div id='plating_comment_div'></div>
 			<div class='m_modal' id='m_sel_team' >
 				<div class='m_label'><span>Select Plating Team</span></div>
 					<div id='plating_teams_list' class='center'></div>
@@ -488,13 +493,15 @@ function show_dims()
 				
 				<div id='plating_sched_list'></div>
 				<div class='btns'>
-					<button type='button'  class='m_btn' onclick="goto_home();">Return</button>
+					<button type='button'  class='m_btn' onclick="goto_plating_teams();">Return</button>
 				</div>
 			</div>
 			
 			<div class='m_modal hidden' id='m_plating_temp'>
+				<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
 				<div id='chk_plating_item_temp_div'></div>
 				<div class='btns'>
+					<button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
 					<button type='button'  class='m_btn' onclick="goto_active_plating();">Return</button>
 				</div>
 			</div>
