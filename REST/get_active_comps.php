@@ -4,6 +4,7 @@ session_start();
 include '../db.php';
 // error_log("running get_active_components",0);
 $userID = $_SESSION['userID'];
+
 // echo "userID ".$userID."\n";
 if ($userID > 0) {
 	$fieldnames = array();
@@ -22,7 +23,12 @@ if ($userID > 0) {
 		error_log("could not read columns",0);
 	}
 	
+	
 	$sql = "select * from COMPONENT  where finished is null";
+	if (!empty(get_url_token('finished'))) {
+		$sql = "select * from COMPONENT  where finished is not null and expiry_date > now()";
+	}
+	
 	$result = mysql_query($sql);
 	$comps = array();
 	if ($result) {

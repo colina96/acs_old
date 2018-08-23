@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+<!-- ###FIELDS:7 -->
+<Job>
+<!-- Small Freshness 1.2" x 1.1" formerly Format 1-->
+    <Energy>Normal</Energy>
+    <UseDieCut>1</UseDieCut>
+    <Quantity>1</Quantity>
+    <LabelSize units="Inches" length="4.00" width="2.20" />
+    <Command>Print</Command>
+    <Image id="FMX_01" version="2.1">
+        <ImageSize units="Inches" x="0.05" y="0.00" height="3.90" width="2.20" origin="BottomLeft" />
+        <Presentation>0</Presentation>
+        <Fields count="10">
+            <TextField id="DESC_01">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="0.00" y="0.915" height="0.00" width="2" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <Data max="15" min="0">##DESC_01##</Data> 
+            </TextField>
+            <TextField id="DESC_02">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="0.00" y="0.80" height="0.00" width="3" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                 <Data max="15" min="0">##DESC_02##</Data> 
+            </TextField>
+            <TextField id="DESC_03">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="0.00" y="0.685" height="0.00" width="2.2" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                 <Data max="15" min="0">##DESC_03##</Data> 
+            </TextField>
+            <TextField id="PREP">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="0.00" y="0.605" height="0.00" width="1.00" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="6.0" pointsizewidth="0.0" weight="700">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <HorizontalJustification>Center</HorizontalJustification>
+                <Data max="20"  min="0">PREP</Data> 
+            </TextField>
+             <TextField id="EMPLOYEE">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="1.109" y="0.605" height="0.00" width="0.00" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="5.0" pointsizewidth="0.0" weight="700">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <HorizontalJustification>Right</HorizontalJustification>
+                <Data max="10" min="0">EMP</Data> 
+            </TextField>
+            <TextField id="PREP_DATE">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="0.00" y="0.505" height="0.00" width="0.00" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <Data max="8" min="0">##PREP_DATE##</Data> 
+             </TextField>
+             <TextField id="PREP_TIME">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="1.12" y="0.505" height="0.00" width="0.00" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <HorizontalJustification>Right</HorizontalJustification>
+                <Data max="8" min="0">##PREP_TIME##</Data> 
+            </TextField>
+            <TextField id="USEBY">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="0.00" y="0.36" height="0.00" width="1.10" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="10.0" pointsizewidth="0.0" weight="700">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <HorizontalJustification>Center</HorizontalJustification>
+                <Data max="20"  min="0">MUST USE BY</Data> 
+             </TextField>                
+             <TextField id="USEBY_TIME">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="0.00" y="0.215" height="0.00" width="1.10" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="11.0" pointsizewidth="0.0" weight="700">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <HorizontalJustification>Center</HorizontalJustification>
+                <Data max="8" min="0">##USEBY_TIME##</Data> 
+            </TextField>
+             <TextField id="USEBY_DATE">
+                <Volatile>1</Volatile>
+                <BoundingBox units="Inches" x="0.00" y="0.03" height="0.00" width="1.10" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="11.0" pointsizewidth="0.0" weight="700">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <HorizontalJustification>Center</HorizontalJustification>
+                <Data max="11" min="0">##USEBY_DATE##</Data> 
+            </TextField>
+         </Fields>
+    </Image>
+</Job>

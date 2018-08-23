@@ -1,0 +1,24 @@
+Jobname:test 1
+Printer:192.168.1.147
+Port:9100
+Label:FMX_01.LNT
+Endheader
+# start of individual labels
+Copies:1
+DESC_01:Yummy
+DESC_02:Chocolate
+DESC_03:Fish
+PREP_DATE:21/08/18
+PREP_TIME:13:00
+USEBY_TIME:13:01
+USEBY_DATE:22/08/18
+Endlabel
+Copies:1
+DESC_01:Yukky
+DESC_02:Dog
+DESC_03:Milkshake
+PREP_DATE:21/08/15
+PREP_TIME:02:00
+USEBY_TIME:04:01
+USEBY_DATE:22/05/19
+Endlabel

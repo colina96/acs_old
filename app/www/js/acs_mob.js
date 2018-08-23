@@ -1,5 +1,6 @@
 var default_tab='m_current_tracking_tab';
 var comps = null;
+var plating_comps = null; // components in cool room
 var preptypes = null;
 var menu_items = null;
 var plating_teams = null;
@@ -178,7 +179,26 @@ function set_plating_M1_temp(temperature)
 	plating_item.items[plating_item.active_item].M1_temp = temperature;
 }
 
-function show_menu_item_components(menu_item_id)
+function show_menu_item_components(menu_item_id) {
+	get_comps_for_plating(menu_item_id);
+}
+
+function show_plating_comps(description)
+{
+	console.log("show_plating_comps " + description);
+	if (plating_comps == null || plating_comps.length == 0) {
+		return ("ERROR none available");
+	}
+	var ret = '';
+	for (var i = 0; i < plating_comps.length; i++) {
+		if (plating_comps[i].description === description) {
+			ret += "<br>" + plating_comps[i].expiry_date;
+		}
+	}
+	if (ret == '') return ("none available");
+	return (ret);
+}
+function do_show_menu_item_components(menu_item_id)
 {
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 	active_menu_item_id = menu_item_id; // global - so we can come back to it
@@ -211,7 +231,8 @@ function show_menu_item_components(menu_item_id)
 				console.log("found ",items[i].description);
 				var tr = document.createElement('tr');
 				// tr.appendChild(new_td(line++,'item'));
-				var clickdiv = "<div onclick='plating_comp_selected(" + i + ");'>" + items[i].description + "</div>"
+				var clickdiv = "<div onclick='plating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
+				clickdiv += show_plating_comps(items[i].description);
 				// tr.appendChild(new_td(items[i].description,'item'));
 				tr.appendChild(new_td(clickdiv,'item'));
 				var td = document.createElement('td');
@@ -264,6 +285,7 @@ function component_selected(id)
 	
 	var M1_temp = get_preptype_val(prep_type_id,'M1_temp');
 	var prep_type_sign = get_preptype_val(prep_type_id,'M1_temp_above');
+	new_comp.shelf_life_days = get_preptype_val(prep_type_id,'shelf_life_days');
 	var sign = ' > ';
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
 	if (prep_type_sign == 0) {
@@ -363,7 +385,7 @@ function add_chef_select(target_div,input_name)
 	// console.log('found plating teams ',plating_teams.length);
 	for (i = 0; i < chefs.length; i++) {
 		option = document.createElement( 'option' );
-		option.value = i;
+		option.value = chefs[i]['id'];
 		option.textContent =  chefs[i]['label'];
 		select.appendChild( option );
 		// console.log(i);
@@ -376,8 +398,10 @@ function start_component()
 {
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
 	var component = new Object();
-	component.description = new_comp['description'];
+	component.description = new_comp['description']; // simplifies display
+	component.comp_id = new_comp['id'];
 	component.prep_type = new_comp['prep_type'];
+	component.shelf_life_days = new_comp.shelf_life_days;
 	prep_type_id = component.prep_type;
 	console.log("start compontent " + component.description + " prep_type" + component.prep_type);
 	// component.M1_temp = document.getElementsByName('m1_temp')[0].value;
@@ -392,6 +416,7 @@ function start_component()
 	}
 	
 	component.M1_chef_id = document.getElementsByName('m1_chef_id')[0].value;
+	document.getElementsByName('m1_label_qty')[0].value = 1;
 	if (component.M1_chef_id < 1) component.M1_chef_id = 1;
 	var data =  {data: JSON.stringify(component)};
     console.log("Sent Off: %j", data);
@@ -612,6 +637,30 @@ function m_tracking()
 	    });
 }
 
+function get_comps_for_plating(item)
+{
+	console.log('get_comps_for_plating');
+	 $.ajax({
+	        url: RESTHOME + "get_active_comps.php?finished=true",
+	        type: "POST",
+	        dataType: 'json',
+	        // contentType: "application/json",
+	        success: function(result) {
+	            plating_comps = result;
+	           // document.getElementById('active_comps').innerHTML = result;
+	            console.log("got " + result.length + " comps for plating");
+	            // m_show_active_components(result);
+	            do_show_menu_item_components(item);
+	        },
+	        done: function(result) {
+	            console.log("done get_comps_for_plating");
+	        },
+	        fail: (function (result) {
+	            console.log("fail get_comps_for_plating",result);
+	        })
+	    });
+}
+
 function get_chef_by_id(id)
 {
 
@@ -635,24 +684,25 @@ function load_plating_teams()
 		        	for (var i = 0; i < plating_teams.length; i++ ) {
 		        		if (plating_teams[i] != null) plating_teams[i] = [];
 		        	}
+	        	
+		            console.log("got " + result.length + " plating_teams");
+		            for (var i = 0; i < result.length;i++) {
+		            	console.log("pt",result[i].user_id,result[i].team_id);
+		            	var chef = get_chef_by_id(result[i].user_id);
+		            	if (chef) {
+		            		console.log("found chef ",chef['label']);
+		            		if (plating_teams[result[i].team_id] == null) {
+		            			plating_teams[result[i].team_id] = [];
+		            		}
+		            		plating_teams[result[i].team_id].push(chef);
+		            	}
+		            	else {
+		            		console.log("could not find chef");
+		            	}
+		            	//plating_teams[result[i].team_id].push(get_chef_by_id(result[i].user_id));
+		            	// plating_teams[active_plating_team].push(chefs[idx]);
+		            }
 	        	}
-	            console.log("got " + result.length + " plating_teams");
-	            for (var i = 0; i < result.length;i++) {
-	            	console.log("pt",result[i].user_id,result[i].team_id);
-	            	var chef = get_chef_by_id(result[i].user_id);
-	            	if (chef) {
-	            		console.log("found chef ",chef['label']);
-	            		if (plating_teams[result[i].team_id] == null) {
-	            			plating_teams[result[i].team_id] = [];
-	            		}
-	            		plating_teams[result[i].team_id].push(chef);
-	            	}
-	            	else {
-	            		console.log("could not find chef");
-	            	}
-	            	//plating_teams[result[i].team_id].push(get_chef_by_id(result[i].user_id));
-	            	// plating_teams[active_plating_team].push(chefs[idx]);
-	            }
 	       
 	            
 	        },

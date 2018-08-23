@@ -1,0 +1,15 @@
+Jobname:prep 1
+Printer:192.168.1.147
+Port:9100
+Label:Prep1.LNT
+Endheader
+# start of individual labels
+Copies:1
+DAYOFWEEK:WED
+NAME:Crumbed Rat with smelly aadvark cheese
+COOK:Doug Dynsdale
+PREP_DATE:22/08/18 - 11:00
+USEBY_DATE:24/08/18 - 11:00
+#barcode should be no more than 7 digits
+BARCODE:1357248
+Endlabel

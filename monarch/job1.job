@@ -1,0 +1,15 @@
+Jobname:test 1
+Printer:10.0.0.100
+Port:9100
+Label:FMX_01.LNT
+Endheader
+# start of individual labels
+Copies:1
+DESC_01:Yummy
+DESC_02:Chocolate
+DESC_03:Fish
+PREP_DATE:21/08/18
+PREP_TIME:13:00
+USEBY_TIME:13:01
+USEBY_DATE:22/08/18
+Endlabel
