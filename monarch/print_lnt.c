@@ -360,7 +360,7 @@ int parse_job_file(char *jobfile, char *labeldir)
 
 		while(fgets(sdbuf, 1000, fp) != NULL)
 		{
-			//if (DEBUG > 1) printf(">%s",sdbuf);
+			printf(">%s",sdbuf);
 			// skip comments
 			if (sdbuf[0] != '#') {
 				if (!strncmp(sdbuf,"Copies:",7))

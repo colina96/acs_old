@@ -48,6 +48,7 @@ function show_users()
 			echo "<td>".$row['last_login']."</td>";
 			echo "<td><a href='acs_users.php?edit=".$row['id']."'>edit</a></td>";
 			echo "<td><A href='acs_users.php?delete=".$row['id']."'>del</a></td>";
+			echo "<td onclick='user_label(".$row['id'].",\"".$row['firstname']."\",\"".$row['lastname']."\");'>Label</td>";
 			echo "</tr>";
 		}
 		echo "</table>";
@@ -141,16 +142,13 @@ function update_user()
 
 function email_new_user()
 {
-	$link = "http://$_SERVER[HTTP_HOST]/custom-flashing/index.php?login=1&username=".$_POST['username']."&password=".$_POST['password'];
 	$bodytext = "Hi ".$_POST['firstname']." ".$_POST['familyname']."\n\n";
-	$bodytext .= "Welcome to the Roofit online flashing designer\n\n";
-	$bodytext .= "You can access the system by clicking <a href='".$link."'>here</a>\n";
-	$bodytext .= "or by using this link\n\n".$link."\n\n";
+	
 	$bodytext .= "Kind Regards.....";
 	$email = new PHPMailer();
-	$email->From      = 'admin@roofit.online';
-	$email->FromName  = 'roofit';
-	$email->Subject   = 'Roofit flashing design';
+	$email->From      = 'xxx';
+	$email->FromName  = 'xxx';
+	$email->Subject   = 'xxxx';
 	
 	$email->AddAddress( $_POST['email']);
 	$email->Body      = $bodytext;

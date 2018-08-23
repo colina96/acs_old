@@ -25,7 +25,7 @@ function process_barcode(s)
 	if (barcode_mode == null) {
 		return;
 	}
-	if (s.substring(0,1) == 'u') { // user barcode scanned
+	if (s.indexOf('u') >= 0) { // user barcode scanned
 		var uid = parseInt(s.substring(4));
 		if (barcode_mode == 'login') {
 			login(uid);

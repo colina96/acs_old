@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!-- ###FIELDS:2 -->
+<Job>
+<!-- Prep 1 label -->
+    <Energy>Normal</Energy>
+    <UseDieCut>1</UseDieCut>
+    <Quantity>1</Quantity>
+    <LabelSize units="Inches" length="4.00" width="2.20" />
+    <Command>Print</Command>
+    <Image id="Prep1" version="2.1">
+        <ImageSize units="Inches" x="0.05" y="0.00" height="3.90" width="2.20" origin="BottomLeft" />
+        <Presentation>0</Presentation>
+        <Fields count="2">
+            <TextField id="NAME">
+                <Volatile>1</Volatile>
+					 <Rotation>90</Rotation>
+                <BoundingBox units="MM" x="20" y="20" height="0.00" width="80" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="20.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+                <VerticalJustification>Top</VerticalJustification>
+                <HorizontalJustification>Left</HorizontalJustification>
+                <Data max="30" min="0">##NAME##</Data> 
+            </TextField>
+          <BarcodeField id="EAN8BARCODE">
+            <Volatile>1</Volatile>
+				<Orientation>90</Orientation>
+            <Origin units="MM" x="50" y="50" justification="Center" />
+            <BarHeight units="MM">20</BarHeight>
+            <Options density="7" humanreadable="1"/>
+            <Type>code39</Type>
+            <Data min="0" max="8">##BARCODE##</Data>
+          </BarcodeField>
+         </Fields>
+    </Image>
+</Job>

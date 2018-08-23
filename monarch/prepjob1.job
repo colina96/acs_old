@@ -1,5 +1,5 @@
 Jobname:prep 1
-Printer:192.168.1.147
+Printer:10.0.0.100
 Port:9100
 Label:Prep1.LNT
 Endheader

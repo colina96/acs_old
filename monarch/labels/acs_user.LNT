@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<!-- ###FIELDS:6 -->
+<Job>
+<!-- Prep 1 label -->
+    <Energy>Normal</Energy>
+    <UseDieCut>1</UseDieCut>
+    <Quantity>1</Quantity>
+    <LabelSize units="Inches" length="4.00" width="2.20" />
+    <Command>Print</Command>
+    <Image id="Prep1" version="2.1">
+        <ImageSize units="Inches" x="0.05" y="0.00" height="3.90" width="2.20" origin="BottomLeft" />
+        <Presentation>0</Presentation>
+        <Fields count="8">
+            <TextField id="DAYOFWEEK">
+                <Volatile>1</Volatile>
+                <BoundingBox units="MM" x="0.00" y="90" height="0.00" width="55" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="24.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <HorizontalJustification>Center</HorizontalJustification>
+                <Data max="10" min="0">##DAYOFWEEK##</Data> 
+            </TextField>
+            <TextField id="NAME">
+					 <Rotation>90</Rotation>
+                <Volatile>1</Volatile>
+                <BoundingBox units="MM" x="2" y="80" height="0.00" width="50" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="12.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+                <VerticalJustification>Top</VerticalJustification>
+                <HorizontalJustification>Left</HorizontalJustification>
+                <Data max="30" min="0">##NAME##</Data> 
+            </TextField>
+            <TextField id="COOK">
+                <Volatile>1</Volatile>
+                <BoundingBox units="MM" x="2" y="70" height="0.00" width="50" />
+                <DrawMode>Transparent</DrawMode>
+                <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+                <VerticalJustification>Bottom</VerticalJustification>
+                <HorizontalJustification>Left</HorizontalJustification>
+                <Data max="30" min="0">##COOK##</Data> 
+            </TextField>
+          <TextField id="Prepstr">
+            <Volatile>1</Volatile>
+            <BoundingBox units="MM" x="5" y="62" height="0.00" width="20" />
+            <DrawMode>Transparent</DrawMode>
+            <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+            <VerticalJustification>Bottom</VerticalJustification>
+            <HorizontalJustification>Left</HorizontalJustification>
+            <Data max="8" min="0">PREPPED:</Data>
+          </TextField>
+          <TextField id="PREP_DATE">
+            <Volatile>1</Volatile>
+            <BoundingBox units="MM" x="22" y="62" height="0.00" width="30" />
+            <DrawMode>Transparent</DrawMode>
+            <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+            <VerticalJustification>Bottom</VerticalJustification>
+            <HorizontalJustification>Left</HorizontalJustification>
+            <Data max="30" min="0">##PREP_DATE##</Data>
+          </TextField>
+          <TextField id="Usebystr">
+            <Volatile>1</Volatile>
+            <BoundingBox units="MM" x="5" y="58" height="0.00" width="20" />
+            <DrawMode>Transparent</DrawMode>
+            <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+            <VerticalJustification>Bottom</VerticalJustification>
+            <HorizontalJustification>Left</HorizontalJustification>
+            <Data max="8" min="0">USE BY:</Data>
+          </TextField>
+          <TextField id="USEBY_DATE">
+            <Volatile>1</Volatile>
+            <BoundingBox units="MM" x="22" y="58" height="0.00" width="30" />
+            <DrawMode>Transparent</DrawMode>
+            <Font pointsizeheight="8.0" pointsizewidth="0.0" weight="700" wordwrap="1">Arial Bold</Font>
+            <VerticalJustification>Bottom</VerticalJustification>
+            <HorizontalJustification>Left</HorizontalJustification>
+            <Data max="30" min="0">##USEBY_DATE##</Data>
+          </TextField>
+          <BarcodeField id="EAN8BARCODE">
+            <Volatile>1</Volatile>
+            <Origin units="MM" x="25" y="45" justification="Center" />
+            <BarHeight units="MM">10</BarHeight>
+            <Type>ean8</Type>
+            <Options density="4" humanreadable="1"/>
+            <Data min="0" max="8">##BARCODE##</Data>
+          </BarcodeField>
+         </Fields>
+    </Image>
+</Job>

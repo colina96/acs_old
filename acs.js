@@ -100,8 +100,6 @@ console.log("loading prep types");
     $.ajax({
         url: "REST/get_preptypes.php",
         type: "POST",
-       // data: data,
-       //  data: {points: JSON.stringify(points)},
         dataType: 'json',
         // contentType: "application/json",
         success: function(result) {
@@ -126,8 +124,6 @@ function load_menu_items(menu_id)
     $.ajax({
         url: "REST/get_menu_items.php",
         type: "POST",
-       // data: data,
-       //  data: {points: JSON.stringify(points)},
         dataType: 'json',
         // contentType: "application/json",
         success: function(result) {
@@ -159,14 +155,44 @@ function load_menu_items(menu_id)
     });
 }
 
+/*
+ * need to rewrite user interface using REST - quick hack for now
+ */
+
+function user_label(uid,firstname,lastname)
+{
+	var user = new Object();
+	user.id = uid;
+	user.firstname = firstname;
+	user.lastname = lastname;
+	var data =  {data: JSON.stringify(user)};
+    console.log("Sent Off: %j", data);
+    
+    $.ajax({
+        url: 'REST/user_label.php',
+        type: "POST",
+        data: data,
+
+        success: function(result) {
+            console.log("user_label result ",result);
+            
+        },
+        done: function(result) {
+            console.log("user_label result ",result);
+        },
+        fail: (function (result) {
+            console.log("user_label fail ",result);
+        })
+    });
+    
+}
+
 function load_comps()
 {
 console.log("loading menu item components");
     $.ajax({
         url: "REST/get_comps.php",
         type: "POST",
-       // data: data,
-       //  data: {points: JSON.stringify(points)},
         dataType: 'json',
         // contentType: "application/json",
         success: function(result) {

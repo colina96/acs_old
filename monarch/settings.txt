@@ -1,4 +1,4 @@
-JobDir:jobs
+JobDir:../REST/tmp
 LabelDir:labels
 # set to 1 for sending jobs to printer. defaults to 1 if not present
 Print:1
