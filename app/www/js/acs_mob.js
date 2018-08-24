@@ -41,7 +41,12 @@ function process_barcode(s)
 		else if (barcode_mode == 'PT') { // plating team member
 			add_team_member(uid);
 		}
-		
+	}
+	if (s.indexOf('c') >= 0) { // component barcode scanned
+		var cid = parseInt(s.substring(5));
+		if (barcode_mode = 'PT_item') {
+			plating_comp_barcode_scanned(cid);
+		}
 	}
 }
 function load_preptypes()
@@ -167,6 +172,26 @@ function plating_comp_selected(i)
 	document.getElementById('chk_plating_item_temp_div').innerHTML = items[i].description;
 }
 
+function plating_comp_barcode_scanned(barcode_id) {
+	console.log('plating_comp_barcode_scanned '  + barcode_id);
+	// find item in active components
+	var description = null;
+	for (var i = 0; i < plating_comps.length; i++) {
+		if (plating_comps[i].id == barcode_id) {
+			console.log("plating_comp_barcode_scanned found " + plating_comps[i].description);
+			description = plating_comps[i].description;
+		}
+	}
+	var items = plating_item.items;
+	console.log("now checking plating item " + items.length);
+	for (var i = 0; i < items.length; i++) {
+		if (items[i].description == description) {
+			console.log("found item");
+			plating_comp_selected(i);
+		}
+		
+	}
+}
 function goto_active_plating()
 {
 	show_menu_item_components(active_menu_item_id)
@@ -192,7 +217,7 @@ function show_plating_comps(description)
 	var ret = '';
 	for (var i = 0; i < plating_comps.length; i++) {
 		if (plating_comps[i].description === description) {
-			ret += "<br>" + plating_comps[i].expiry_date;
+			ret += "<br>" + plating_comps[i].expiry_date + ' (' + plating_comps[i].id + ')';
 		}
 	}
 	if (ret == '') return ("none available");
@@ -200,6 +225,7 @@ function show_plating_comps(description)
 }
 function do_show_menu_item_components(menu_item_id)
 {
+	barcode_mode = "PT_comp";
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 	active_menu_item_id = menu_item_id; // global - so we can come back to it
 	// var div = document.getElementById('menu_item_components_div');
@@ -236,7 +262,7 @@ function do_show_menu_item_components(menu_item_id)
 				// tr.appendChild(new_td(items[i].description,'item'));
 				tr.appendChild(new_td(clickdiv,'item'));
 				var td = document.createElement('td');
-				td.id = 'plating_item_temp_';
+				td.id = 'plating_item_temp_' + i;
 				td.innerHTML = '-';
 				if (items[i].M1_temp) {
 					td.innerHTML = items[i].M1_temp;
@@ -399,6 +425,7 @@ function start_component()
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
 	var component = new Object();
 	component.description = new_comp['description']; // simplifies display
+	active_comp = Object.assign({}, new_comp);
 	component.comp_id = new_comp['id'];
 	component.prep_type = new_comp['prep_type'];
 	component.shelf_life_days = new_comp.shelf_life_days;
@@ -416,7 +443,7 @@ function start_component()
 	}
 	
 	component.M1_chef_id = document.getElementsByName('m1_chef_id')[0].value;
-	document.getElementsByName('m1_label_qty')[0].value = 1;
+	
 	if (component.M1_chef_id < 1) component.M1_chef_id = 1;
 	var data =  {data: JSON.stringify(component)};
     console.log("Sent Off: %j", data);
@@ -427,8 +454,14 @@ function start_component()
         type: "POST",
         data: data,
 
-        success: function(result) {
+        success: function(result) { // need to get the id of the new component back to print labels
             console.log("start_component result ",result);
+            var comp = JSON.parse(result);
+            console.log("start_component id =  ",comp.id);
+            var qty = document.getElementsByName('m1_label_qty')[0].value;
+            active_comp.id = comp.id;
+            print_component_labels(qty);
+            document.getElementsByName('m1_label_qty')[0].value = 1;
             goto_m_main();
         },
         done: function(result) {
@@ -610,7 +643,31 @@ function active_comp_selected(id)
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
 
-
+function reprint_comp_labels()
+{
+	console.log('reprint_comp_labels');
+	openPage('m_reprint_labels', this, 'red','m_modal','tabclass');
+	document.getElementById('m_current_tracking').innerHTML = "loading....";
+	 $.ajax({
+	        url: RESTHOME + "get_active_comps.php",
+	        type: "POST",
+	        dataType: 'json',
+	        // contentType: "application/json",
+	        success: function(result) {
+	            active_comps = result;
+	           // document.getElementById('active_comps').innerHTML = result;
+	            console.log("got " + result.length + " comps");
+	            m_show_active_components(result,true);
+	            
+	        },
+	        done: function(result) {
+	            console.log("done load_comps ");
+	        },
+	        fail: (function (result) {
+	            console.log("fail load_comps",result);
+	        })
+	    });
+}
 function m_tracking()
 {
 	console.log('goto_active_components');
@@ -625,7 +682,7 @@ function m_tracking()
 	            active_comps = result;
 	           // document.getElementById('active_comps').innerHTML = result;
 	            console.log("got " + result.length + " comps");
-	            m_show_active_components(result);
+	            m_show_active_components(result,false);
 	            
 	        },
 	        done: function(result) {
@@ -722,14 +779,72 @@ function format_minutes (min)
 	 return hours+':'+minutes;
 }
 
-function m_show_active_components(data)
+function clear_comp_fields ()
+{
+	document.getElementById('ms_1').innerHTML = '';
+	document.getElementById('ms_1_text').innerHTML = '';
+	document.getElementById('ms_2').innerHTML = '';
+	document.getElementById('ms_2_text').innerHTML = '';
+	document.getElementById('ms_2_target').innerHTML = '';
+}
+
+function reprint_labels()
+{
+	var qty = document.getElementsByName('m1_repeat_label_qty')[0].value;
+	if (qty && qty > 0) print_component_labels(qty);
+}
+function print_component_labels(qty)
+{
+	console.log(" print_component_labels ",qty);
+
+	var comp = Object.assign({}, active_comp);
+	comp.copies = qty;
+	
+	var data =  {data: JSON.stringify(comp)};
+    console.log("Sent Off: %j", data);
+    
+    $.ajax({
+        url: RESTHOME + "comp_label.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) {
+            console.log("comp_label result ",result);
+            
+        },
+        
+        fail: (function (result) {
+            console.log("comp_label fail ",result);
+        })
+    });
+	goto_m_main();
+}
+
+function reprint_active_comp_labels(id)
+{
+	active_comp = active_comps[id];
+	clear_comp_fields();
+	document.getElementById('chk_temp_item_div').innerHTML = active_comp['description'];
+	openPage('m_reprint_modal4', this, 'red','m_modal2','tabclass');
+	openPage('m_temp', this, 'red','mobile_main','tabclass');
+	
+	
+}
+
+function m_show_active_components(data,reprint)
 {
 	var div = document.getElementById('m_current_tracking');
+	if (reprint) div = document.getElementById('m_reprint_labels');
 	if (data.length < 1) {
 		div.innerHTML = "<h1>No Active Components</h1>";
 		return;
 	}
-	div.innerHTML = "<h1>Active Components</h1>";
+	if (reprint) {
+		div.innerHTML = "<h1>Reprint Labels</h1>";
+	}
+	else {
+		div.innerHTML = "<h1>Active Components</h1>";
+	}
 	var tab = document.createElement('table');
 	tab.className = 'component_table';
 	var tr = document.createElement('tr');
@@ -743,7 +858,8 @@ function m_show_active_components(data)
    	for (i=0; i<data.length; ++i) {
    		var tr = document.createElement('tr');
    		
-   		var clickdiv = "<div onclick='active_comp_selected(" + i + ");'>" + data[i]['description'] + "</div>"
+   		var clickdiv = "<div onclick='active_comp_selected(" + i + ");'>" + data[i]['description'] + "</div>";
+   		if (reprint) clickdiv = "<div onclick='reprint_active_comp_labels(" + i + ");'>" + data[i]['description'] + "</div>";
    		// tr.appendChild(new_td(data[i]['description'],'comp'));
    		tr.appendChild(new_td(clickdiv,'comp'));
    		

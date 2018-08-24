@@ -1,0 +1,8 @@
+Jobname:user 1
+Printer:10.0.0.100
+Port:9101
+Label:USER.LNT
+Endheader
+NAME:Colin Atkinson
+BARCODE:u01000001
+Endlabel

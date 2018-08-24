@@ -1,0 +1,9 @@
+Jobname:user 30
+Printer:10.0.0.100
+Port:9101
+Label:USER.LNT
+Endheader
+Copies:1
+NAME:RICH TOMATO SAUCE
+BARCODE:c01000030
+Endlabel

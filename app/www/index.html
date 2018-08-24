@@ -342,7 +342,7 @@ function show_dims()
 		<div class='m_main'>
 		<div class='m_top_menu_container'>
 			<div class='m_top_menu' id='m_current_tracking_tab'  onclick="m_tracking()">CURRENT TRACKING</div>
-			<div class='m_top_menu' id='m_reprint_labels_tab'  onclick="openPage('m_reprint_labels', this, 'red','m_modal','tabclass');">RE-PRINT LABELS</div>
+			<div class='m_top_menu' id='m_reprint_labels_tab'  onclick="reprint_comp_labels();">RE-PRINT LABELS</div>
 			<div class='m_top_menu larger' id='m_search_tab'  onclick="goto_comp_search()">&#x1F50E</div>
 			<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div>
 		</div>
@@ -414,6 +414,14 @@ function show_dims()
 			<div class='center grey'>LABEL QUANTITY<input type='number' name='m1_label_qty' size=4></div>
 			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="start_component();">Print Labels</button>
+			</div>
+		</div>
+		<div class='m_modal2' id='m_reprint_modal4'>
+			<div class='center modal_head'><span>Reprint Labels</span></div>
+			
+			<div class='center grey'>LABEL QUANTITY<input type='number' name='m1_repeat_label_qty' size=4></div>
+			<div class='btns'>
+			<button type='button'  class='m_btn' onclick="reprint_labels();">Print Labels</button>
 			</div>
 		</div>
 <!--  next pages are for recording M2 and M3 -->

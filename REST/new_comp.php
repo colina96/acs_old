@@ -3,11 +3,11 @@ session_start();
 
 include '../db.php';
 $con = $GLOBALS['con'];
-echo "new_comp.php";
+// echo "new_comp.php";
 $comp = json_decode($_POST["data"],true);
-echo "||||".$_POST["data"]."XXXX\n\n";
-var_dump($_POST);
-print("php got comp: " . sizeof($comp));
+// echo "||||".$_POST["data"]."XXXX\n\n";
+// var_dump($_POST);
+// print("php got comp: " . sizeof($comp));
  
 $description = mysql_escape_string($comp['description']);
 $prep_type = $comp['prep_type'];
@@ -33,7 +33,14 @@ else if (!empty($comp['finished'])) {
 	$sql .= "values (null,'".$description."',".$prep_type.",".$userID.",now(),".$M1_chef_id.",now(),".$shelf_life_days;
 	$sql .= ",DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY))";
 }
-echo $sql."\n\n";
 test_mysql_query($sql);
+$comp = array();
+$comp['id'] = mysql_insert_id();
+$comp['description'] = $description;
+	
+$json = json_encode($comp);
+echo $json;
+// echo $sql."\n\n";
+// 
  
 ?>
