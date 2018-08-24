@@ -28,7 +28,9 @@ if ($userID > 0) {
 	if (!empty(get_url_token('finished'))) {
 		$sql = "select * from COMPONENT  where finished is not null and expiry_date > now()";
 	}
-	
+	if (!empty(get_url_token('all'))) {
+		$sql = "select * from COMPONENT  where expiry_date > now()";
+	}
 	$result = mysql_query($sql);
 	$comps = array();
 	if ($result) {

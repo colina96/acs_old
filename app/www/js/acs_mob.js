@@ -186,6 +186,7 @@ function plating_comp_barcode_scanned(barcode_id) {
 	console.log("now checking plating item " + items.length);
 	for (var i = 0; i < items.length; i++) {
 		if (items[i].description == description) {
+			items[i].checked = true;
 			console.log("found item");
 			plating_comp_selected(i);
 		}
@@ -258,9 +259,17 @@ function do_show_menu_item_components(menu_item_id)
 				var tr = document.createElement('tr');
 				// tr.appendChild(new_td(line++,'item'));
 				var clickdiv = "<div onclick='plating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
-				clickdiv += show_plating_comps(items[i].description);
+				// show items in coolroom ready to be plated
+			// 	clickdiv += show_plating_comps(items[i].description);
 				// tr.appendChild(new_td(items[i].description,'item'));
 				tr.appendChild(new_td(clickdiv,'item'));
+				var td = document.createElement('td');
+				td.id = 'plating_item_checked_' + i;
+				td.innerHTML = '-';
+				if (items[i].checked) {
+					td.innerHTML = 'OK';
+				}
+				tr.appendChild(td);
 				var td = document.createElement('td');
 				td.id = 'plating_item_temp_' + i;
 				td.innerHTML = '-';
@@ -649,7 +658,7 @@ function reprint_comp_labels()
 	openPage('m_reprint_labels', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
 	 $.ajax({
-	        url: RESTHOME + "get_active_comps.php",
+	        url: RESTHOME + "get_active_comps.php?all=true",
 	        type: "POST",
 	        dataType: 'json',
 	        // contentType: "application/json",
@@ -872,27 +881,32 @@ function m_show_active_components(data,reprint)
 		var now_ms = now.getTime();
 		var M1_ms = M1_time.getTime(); // time in millisecs
 		console.log("prep_type_id",prep_type_id);
-   		if (data[i]['M2_time'] == '') {
-   			var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
-   			var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
-   			remaining = (M2_due_ms - now_ms) / (60 * 1000);
-   			console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
-   			tr.appendChild(new_td('<div class="m_bluedot">2</div>','comp'));
+		if (reprint) {
+   			
    		}
    		else {
-   			var M3_due_min = get_preptype_val(prep_type_id,'M3_time_minutes');  			
-   			var M3_due_ms = M1_ms + M3_due_min * 60 * 1000; 			
-   			remaining = (M3_due_ms - now_ms) / (60 * 1000);
-   			tr.appendChild(new_td('<div class="m_bluedot">3</div>','comp'));
-   		}
+	   		if (data[i]['M2_time'] == '') {
+	   			var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
+	   			var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
+	   			remaining = (M2_due_ms - now_ms) / (60 * 1000);
+	   			console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
+	   			tr.appendChild(new_td('<div class="m_bluedot">2</div>','comp'));
+	   		}
+	   		else {
+	   			var M3_due_min = get_preptype_val(prep_type_id,'M3_time_minutes');  			
+	   			var M3_due_ms = M1_ms + M3_due_min * 60 * 1000; 			
+	   			remaining = (M3_due_ms - now_ms) / (60 * 1000);
+	   			tr.appendChild(new_td('<div class="m_bluedot">3</div>','comp'));
+	   		}
    		// var M1_t = M1_time.getHours() + ":" + M1_time.getMinutes();
-   		if (remaining > 0) {
-   			tr.appendChild(new_td(format_minutes(remaining) + " remaining",'comp'));
-   		}
-   		else {
-   			tr.appendChild(new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp'));
-   		}
    		
+	   		if (remaining > 0) {
+	   			tr.appendChild(new_td(format_minutes(remaining) + " remaining",'comp'));
+	   		}
+	   		else {
+	   			tr.appendChild(new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp'));
+	   		}
+   		}
    		// tr.appendChild(new_td(data[i]['M1_time'],'comp'));
    		
    		  		tab.appendChild(tr);

@@ -1,9 +1,0 @@
-Jobname:user 5
-Printer:10.0.0.100
-Port:9101
-Label:USER.LNT
-Endheader
-Copies:1
-NAME:CHEESE CHEDDAR (BOTTEGA ROTOLO)
-BARCODE:c01000005
-Endlabel
