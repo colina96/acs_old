@@ -11,7 +11,7 @@ var active_menu_item_id = null;
 var new_comp = null; // start a new component - M1
 var chefs = null;
 var RESTHOME = "http://10.0.0.32/acs/REST/";
-
+var plating_items = null; // array of menu_items currently plating
 var barcode_mode = null;
 
 function set_barcode_mode(mode)
@@ -224,18 +224,37 @@ function show_plating_comps(description)
 	if (ret == '') return ("none available");
 	return (ret);
 }
+
+function find_plating_item(menu_item_id)
+{
+	console.log('find_plating_item ' + menu_item_id);
+	if (plating_items == null) plating_items = Array();
+	for (var i = 0; i < plating_items.length; i++) {
+		
+		if (plating_items[i].menu_item_id == menu_item_id) {
+			console.log('found plating_item ' + menu_item_id);
+			return plating_items[i];
+		}
+	}
+	plating_item = Object.create(get_menu_item_by_id(menu_item_id)); 
+	plating_item.menu_item_id = menu_item_id;
+	plating_items.push(plating_item);
+	console.log(plating_item);
+	return(plating_item);
+}
 function do_show_menu_item_components(menu_item_id)
 {
 	barcode_mode = "PT_comp";
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 	active_menu_item_id = menu_item_id; // global - so we can come back to it
 	// var div = document.getElementById('menu_item_components_div');
+	plating_item = find_plating_item(menu_item_id);
+	console.log(plating_item);
 	if (plating_item == null) { // 
-		plating_item = Object.create(get_menu_item_by_id(menu_item_id)); // possibly dangerous .....
+		console.log("ERROR do_show_menu_item_components");
+		// plating_item = Object.create(get_menu_item_by_id(menu_item_id)); // possibly dangerous .....
 
 	}
-	
-	
 	var div = document.getElementById('plating_sched_list');
 	div.innerHTML = '';
 	var tab = document.createElement('table');
@@ -249,7 +268,7 @@ function do_show_menu_item_components(menu_item_id)
 	tr.appendChild(th);
 	tab.appendChild(tr);
 	var line = 1;
-	
+	var all_good = true; // check before useby date and temp measured ok
 	if (plating_item != null) {
 		console.log("found menu_item ",plating_item.dish_name,plating_item.items.length);
 		var items = plating_item.items;	
@@ -269,6 +288,9 @@ function do_show_menu_item_components(menu_item_id)
 				if (items[i].checked) {
 					td.innerHTML = 'OK';
 				}
+				else {
+					all_good = false;
+				}
 				tr.appendChild(td);
 				var td = document.createElement('td');
 				td.id = 'plating_item_temp_' + i;
@@ -276,11 +298,17 @@ function do_show_menu_item_components(menu_item_id)
 				if (items[i].M1_temp) {
 					td.innerHTML = items[i].M1_temp;
 				}
+				else {
+					all_good = false;
+				}
 				tr.appendChild(td);
 				tab.appendChild(tr);
 			
 		}
 		div.appendChild(tab);
+		if (all_good) {
+			show('print_plating_labels_btn');
+		}
 	}
 }
 
