@@ -242,6 +242,7 @@ function find_plating_item(menu_item_id)
 	console.log(plating_item);
 	return(plating_item);
 }
+
 function do_show_menu_item_components(menu_item_id)
 {
 	barcode_mode = "PT_comp";
