@@ -14,6 +14,29 @@ var RESTHOME = "http://10.0.0.32/acs/REST/";
 var plating_items = null; // array of menu_items currently plating
 var barcode_mode = null;
 
+(function(){
+    // Convert array to object
+    var convArrToObj = function(array){
+        var thisEleObj = new Object();
+        if(typeof array == "object"){
+            for(var i in array){
+                var thisEle = convArrToObj(array[i]);
+                thisEleObj[i] = thisEle;
+            }
+        }else {
+            thisEleObj = array;
+        }
+        return thisEleObj;
+    };
+    var oldJSONStringify = JSON.stringify;
+    JSON.stringify = function(input){
+        if(oldJSONStringify(input) == '[]')
+            return oldJSONStringify(convArrToObj(input));
+        else
+            return oldJSONStringify(input);
+    };
+})();
+
 function set_barcode_mode(mode)
 {
 	barcode_mode = mode;
@@ -115,6 +138,8 @@ function goto_plating()
 {
 	
 	// ???? load_menu_items();
+	show('plating_return');
+	hide('plating_print_labels');
 	if (active_plating_team == null) {
 		goto_plating_teams();
 	}
@@ -203,6 +228,7 @@ function set_plating_M1_temp(temperature)
 	console.log("set_plating_M1_temp " + plating_item.description + " -> " + 
 			plating_item.items[plating_item.active_item].description);
 	plating_item.items[plating_item.active_item].M1_temp = temperature;
+	goto_active_plating();
 }
 
 function show_menu_item_components(menu_item_id) {
@@ -243,6 +269,35 @@ function find_plating_item(menu_item_id)
 	return(plating_item);
 }
 
+function print_plating_labels(qty)
+{
+	
+	console.log(" print_plating_labels ",qty);
+
+//	var p = Object.assign({}, active_comp);
+//	comp.copies = qty;
+	plating_item.trolley_labels = parseInt(document.getElementById('trolley_labels').innerHTML);
+	plating_item.description_labels = parseInt(document.getElementById('pt_description_labels').innerHTML);
+	var data =  {data: JSON.stringify(plating_item)};
+    console.log("Sent Off: %j", data);
+    
+    $.ajax({
+        url: RESTHOME + "plating_labels.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) {
+            console.log("print_plating_labels result ",result);
+            
+        },
+        
+        fail: (function (result) {
+            console.log("print_plating_labels fail ",result);
+        })
+    });
+	goto_plating_teams();
+	
+}
 function do_show_menu_item_components(menu_item_id)
 {
 	barcode_mode = "PT_comp";
@@ -265,6 +320,9 @@ function do_show_menu_item_components(menu_item_id)
 	th.innerHTML= plating_item.dish_name + "<br>" + plating_item.code;
 	tr.appendChild(th);
 	th = document.createElement('th');
+	th.innerHTML='S/L';
+	tr.appendChild(th);
+	th = document.createElement('th');
 	th.innerHTML='TEMP';
 	tr.appendChild(th);
 	tab.appendChild(tr);
@@ -272,6 +330,8 @@ function do_show_menu_item_components(menu_item_id)
 	var all_good = true; // check before useby date and temp measured ok
 	if (plating_item != null) {
 		console.log("found menu_item ",plating_item.dish_name,plating_item.items.length);
+		console.log(plating_item);
+		console.log(JSON.stringify(plating_item));
 		var items = plating_item.items;	
 		for (var i = 0; i < items.length; i++) {
 			
@@ -287,7 +347,7 @@ function do_show_menu_item_components(menu_item_id)
 				td.id = 'plating_item_checked_' + i;
 				td.innerHTML = '-';
 				if (items[i].checked) {
-					td.innerHTML = 'OK';
+					td.innerHTML = '&#x2713;';
 				}
 				else {
 					all_good = false;
@@ -308,9 +368,25 @@ function do_show_menu_item_components(menu_item_id)
 		}
 		div.appendChild(tab);
 		if (all_good) {
-			show('print_plating_labels_btn');
+			hide('plating_return');
+			show('plating_print_labels');
+		}
+		else {
+			show('plating_return');
+			hide('plating_print_labels');
 		}
 	}
+}
+
+function inc_labels(div_id,inc,min,max)
+{
+	console.log("inc_labels",div_id,inc);
+	var div = document.getElementById(div_id);
+	var val = parseInt(div.innerHTML);
+	val = parseInt(val + inc);
+	if (val < min) val = min;
+	if (val > max) val = max;
+	div.innerHTML = val;
 }
 
 function goto_comp_search()

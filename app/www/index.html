@@ -500,9 +500,23 @@ function show_dims()
 			<div class='m_modal hidden' id='m_plating_sched' >
 				
 				<div id='plating_sched_list'></div>
-				<div class='btns'>
-				    <button type='button'  class='m_btn hidden' id='print_plating_labels_btn' onclick="print_plating_labels();">Print Labels</button>	
-					<button type='button'  class='m_btn' onclick="goto_plating();">Return</button>
+				<div class='btns' id='plating_return'>
+				   <button type='button'  class='m_btn' onclick="goto_plating();">Return</button>
+				</div>
+				<div id='plating_print_labels' class='btns hidden'>
+					<div class='label_qty_cont'>
+						<div class='label_txt'>TROLLEY LABELS</div>
+						<div class='dec_labels' onclick='inc_labels("trolley_labels",-1,0,9);'>-</div>
+						<div class='label_qty' id="trolley_labels">1</div>
+						<div class='inc_labels' onclick='inc_labels("trolley_labels",1,0,9);'>+</div>
+					</div>
+					<div class='label_qty_cont'>
+						<div class='label_txt'>DESCRIPTION LABELS</div>
+						<div class='dec_labels' onclick='inc_labels("pt_description_labels",-1,0,9);'>-</div>
+						<div class='label_qty' id="pt_description_labels">1</div>
+						<div class='inc_labels' onclick='inc_labels("pt_description_labels",1,0,9);'>+</div>
+					</div>
+				    <button type='button'  class='m_btn' id='print_plating_labels_btn' onclick="print_plating_labels();">Print Labels</button>	
 				</div>
 			</div>
 			
