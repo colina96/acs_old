@@ -17,7 +17,7 @@
 			<div id='new_menu' class='menu_details'>
 				
 				<h1>CREATE NEW MENU</h1>
-				<form action="acs_menu.php" method="post" enctype="multipart/form-data">
+				<form method="post" enctype="multipart/form-data">
 				<table><tr><td>OVERALL INFORMATION</td></tr>
 				<tr><td><input name='menu_name'></td>
 					<td><input name='menu_description'></td>
@@ -75,7 +75,7 @@ if ($result) {
 				<div class='close_modal' onclick='close_menu_component_modal("del_menu_component_modal");'>X</div>
 			</div>
 			<div id='menu_item_component_del_div'>
-				<form method='POST' action='acs_menu.php'>
+				<form method='POST'>
 				<input type='hidden' name='cc_menu_item_component_id' >
 				<input type='hidden' name='cc_menu_id' >
 				<div id='menu_item_component_description'>----</div>
@@ -305,7 +305,7 @@ function show_menus()
 			echo "<td>".$row['code']."</td>";
 			// echo "<td>".$row['comment']."</td>";
 			echo "<td><a href='acs_menu.php?menu_id=".$row['id']."'>edit</a></td>";
-			echo "<td><A href='acs_menu.php?delete=".$row['id']."'>del</a></td>";
+			echo "<td><A href='acs_menu.php?delete_menu=".$row['id']."'>del</a></td>";
 			echo "</tr>";
 		}
 		echo "</table>";

@@ -4,7 +4,12 @@ session_start();
 <!DOCTYPE html>
 <?php include 'db.php' ?>
 <?php 
+// this all needs to be moved
 upload_menu();
+if (isset($_POST['delete_menu'])) {
+	$sql = "delete MENUS where id=".$_POST['delete_menu'];
+	test_mysql_query($sql);
+}
 function upload_menu()
 {
 	if (!isset($_FILES["fileToUpload"]) || 
