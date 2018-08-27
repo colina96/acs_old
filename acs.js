@@ -243,7 +243,14 @@ function show_date(d)
 		day: 'numeric', month: 'numeric',year: 'numeric',
 
 	};
-	return (new Intl.DateTimeFormat('en-AU', options).format(d));
+	try {
+		var date_str = new Intl.DateTimeFormat('en-AU', options).format(d);
+		return (date_str);
+	}
+	catch (e) {
+		console.log(e);
+	}
+	return('invalid date');
 }
 
 function get_component_by_id(id)

@@ -4,6 +4,7 @@ session_start();
 include '../db.php';
 /*
 
+Print user nametag label thing.
 Format...
 
 Jobname:prep 1
@@ -27,12 +28,17 @@ $job_dir = "/tmp/monarch/jobs/";
 $job_dir = "tmp/";
 
 if (!empty($_POST['data'])) {
+	echo $_POST['data'];
+
 	$comp = json_decode($_POST["data"],true);
-	$id = $comp['id'];
-	$copies = $comp['copies'];
+	$id = $comp['plating_item_id'];
+	$d_copies = $comp['description_labels'];
+	$t_copies = $comp['trolley_labels'];
 	$dish_name = $comp['dish_name'];
-	$tmp_file = $job_dir.'comp'.$id.".tmp";
-	$job_file = $job_dir.'comp'.$id.".job";
+	$code = $comp['code'];
+	
+	$tmp_file = $job_dir.'plate'.$id.".tmp";
+	$job_file = $job_dir.'plate'.$id.".job";
 	echo "openning ".$tmp_file;
 	$handle = fopen($tmp_file, 'w') or die('Cannot open file:  '.$tmp_file);
 
@@ -40,17 +46,22 @@ if (!empty($_POST['data'])) {
 	fwrite($handle,"Jobname:user ".$id."\n");
 	fwrite($handle,"Printer:10.0.0.100"."\n");
 	fwrite($handle,"Port:9101"."\n");
-	fwrite($handle,"Label:USER.LNT"."\n");
+	fwrite($handle,"Label:PLATING.LNT"."\n");
 	fwrite($handle,"Endheader"."\n");
 	fwrite($handle,"Copies:1"."\n");
 	fwrite($handle,"NAME:".$dish_name."\n");
+	fwrite($handle,"CODE:".$code."\n");
+	
 	$facility = 1; // not used yet.... maybe one day
-	$barcode = sprintf("BARCODE:p%02d%06d",$facility,$id);
+	$barcode = sprintf("p%02d%06d",$facility,$id);
 	// fwrite($handle,"BARCODE:U01000002"."\n");
-	fwrite($handle,$barcode."\n");
+
+	fwrite($handle,"ID:".$barcode."\n");
+	fwrite($handle,'BARCODE:'.$barcode."\n");
 	fwrite($handle,"Endlabel"."\n");
 	fclose($handle);
 	chmod ($tmp_file,0666);
 	rename($tmp_file,$job_file);
+
 }
 ?>

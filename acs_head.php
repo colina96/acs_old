@@ -7,7 +7,13 @@ session_start();
 upload_menu();
 function upload_menu()
 {
-	if(isset($_POST["submit_menu"])) {
+	if (!isset($_FILES["fileToUpload"]) || 
+			!isset($_POST['menu_name']) ||
+			!isset($_POST['menu_description'])) {
+		return;
+	}
+	$file = $_FILES["fileToUpload"]["tmp_name"];
+	if(isset($_POST["submit_menu"]) && strlen($file) > 3) {
 		//	echo "menu name ".$_POST['menu_description']."<br>\n";
 		//	echo "comment ".$_POST['menu_comment']."<br>\n";
 		//	echo "uploaded ".$_FILES["fileToUpload"]["name"]."\n";
@@ -16,7 +22,7 @@ function upload_menu()
 		//	echo "end ".$_POST['menu_end']."<br>\n";
 		// $file = 'menu.csv';
 		$file = $_FILES["fileToUpload"]["tmp_name"];
-
+		echo "file |".$file.'|';
 		$csv = array_map('str_getcsv', file($file));
 		//	echo "read ".sizeof($csv)." rows\n";
 

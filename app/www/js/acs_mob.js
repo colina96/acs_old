@@ -275,10 +275,10 @@ function find_plating_item(menu_item_id)
 	return(plating_item);
 }
 
-function print_plating_labels(qty)
+function print_plating_labels()
 {
 	
-	console.log(" print_plating_labels ",qty);
+	console.log(" print_plating_labels ");
 
 //	var p = Object.assign({}, active_comp);
 //	comp.copies = qty;
@@ -312,6 +312,7 @@ function start_plating_item()
 	
 	if (plating_item['plating_item_id']) {
 		console.log('already started');
+		print_plating_labels();
 		// reprint labels
 		return;
 	}
@@ -332,9 +333,11 @@ function start_plating_item()
             console.log("new_plating_item result ",result);
             var p = JSON.parse(result);
             plating_item['plating_item_id'] = p['id'];
-   
+            
+            
             // prob should store plating_item_component ids but not needed at this point
             // print labels
+            print_plating_labels();
         },
         
         fail: (function (result) {
@@ -980,6 +983,8 @@ function print_component_labels(qty)
     });
 	goto_m_main();
 }
+
+
 
 function reprint_active_comp_labels(id)
 {
