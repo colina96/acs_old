@@ -308,7 +308,13 @@ function print_plating_labels(qty)
 function start_plating_item()
 {
 	
+	console.log('start_plating_item',plating_item['plating_item_id']);
 	
+	if (plating_item['plating_item_id']) {
+		console.log('already started');
+		// reprint labels
+		return;
+	}
 
 //	var p = Object.assign({}, active_comp);
 //	comp.copies = qty;
@@ -324,6 +330,10 @@ function start_plating_item()
 
         success: function(result) {
             console.log("new_plating_item result ",result);
+            var p = JSON.parse(result);
+            plating_item['plating_item_id'] = p['id'];
+   
+            // prob should store plating_item_component ids but not needed at this point
             // print labels
         },
         
