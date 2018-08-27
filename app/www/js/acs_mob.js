@@ -14,6 +14,11 @@ var RESTHOME = "http://10.0.0.32/acs/REST/";
 var plating_items = null; // array of menu_items currently plating
 var barcode_mode = null;
 
+function copy_object(o)
+{
+	return(JSON.parse(JSON.stringify(o)));
+}
+
 (function(){
     // Convert array to object
     var convArrToObj = function(array){
@@ -212,6 +217,7 @@ function plating_comp_barcode_scanned(barcode_id) {
 	for (var i = 0; i < items.length; i++) {
 		if (items[i].description == description) {
 			items[i].checked = true;
+			items[i].component_id = barcode_id;
 			console.log("found item");
 			plating_comp_selected(i);
 		}
@@ -262,7 +268,7 @@ function find_plating_item(menu_item_id)
 			return plating_items[i];
 		}
 	}
-	plating_item = Object.create(get_menu_item_by_id(menu_item_id)); 
+	plating_item = copy_object(get_menu_item_by_id(menu_item_id)); 
 	plating_item.menu_item_id = menu_item_id;
 	plating_items.push(plating_item);
 	console.log(plating_item);
@@ -296,6 +302,36 @@ function print_plating_labels(qty)
         })
     });
 	goto_plating_teams();
+	
+}
+
+function start_plating_item()
+{
+	
+	
+
+//	var p = Object.assign({}, active_comp);
+//	comp.copies = qty;
+	plating_item.trolley_labels = parseInt(document.getElementById('trolley_labels').innerHTML);
+	plating_item.description_labels = parseInt(document.getElementById('pt_description_labels').innerHTML);
+	var data =  {data: JSON.stringify(plating_item)};
+    console.log("Sent Off: %j", data);
+    
+    $.ajax({
+        url: RESTHOME + "new_plating_item.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) {
+            console.log("new_plating_item result ",result);
+            // print labels
+        },
+        
+        fail: (function (result) {
+            console.log("new_plating_item fail ",result);
+        })
+    });
+	// goto_plating_teams();
 	
 }
 function do_show_menu_item_components(menu_item_id)
@@ -536,10 +572,11 @@ function add_chef_select(target_div,input_name)
 
 function start_component()
 {
+	// object copy is messy - TODO
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
 	var component = new Object();
 	component.description = new_comp['description']; // simplifies display
-	active_comp = Object.assign({}, new_comp);
+	active_comp = copy_object(new_comp);
 	component.comp_id = new_comp['id'];
 	component.prep_type = new_comp['prep_type'];
 	component.shelf_life_days = new_comp.shelf_life_days;
