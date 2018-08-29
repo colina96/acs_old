@@ -16,6 +16,7 @@ if ($userID > 0) {
 		$fieldnames[] = $fieldname;
 		$types[$fieldname] = $row['Type'];
 	}
+	
 	$sql = "select * from plating_team_member where DATE(time_added) = CURDATE()";
 	$result = mysql_query($sql);
 	$comps = array();
@@ -32,6 +33,7 @@ if ($userID > 0) {
 			$comps[] = $comp;
 	
 		}
+		
 		$json = json_encode($comps);
 		if ($json) {
 			echo $json;

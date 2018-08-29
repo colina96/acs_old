@@ -81,7 +81,7 @@ function log(s)
 		logline = 0;
 	}
 	document.getElementById('log_div').innerHTML += s + "<br>";
-	// document.getElementById('log_div').style.display = 'block';
+	document.getElementById('log_div').style.display = 'block';
 }
 
 function hide_log()
@@ -127,6 +127,7 @@ function manual_temp_submit()
 }
 
 var ioio_started = false;
+var temp_readings = 0;
 function ioio_start()
 {
 
@@ -147,12 +148,15 @@ function ioio_start()
       },
       delay: 200 // Optionally set minimum delay between receiving data from IOIO
       }, function() {
+    	  alert("IOIO OK");
     	  ioio_started = true;
          log("IOIO OK");
          log('adding listener');
          window.ioio.addPinListener(37, function(value) { // parameter value is boolean for digital ports and float for other ports in range from 0.00000 to 1.00000
             // show('p37',value);
          	p36 = value;
+         	if (temp_readings < 3) alert('got temp '+ value);
+         	temp_readings ++;
          	document.getElementsByName('manual_temp')[0].value = parseInt(value * 100);
          });
          // success
@@ -179,6 +183,7 @@ function ioio_start()
        });
     }
     catch (e) {
+    	alert("No IOIO");
        log("error");
 
        log(e);
@@ -188,7 +193,9 @@ function ioio_start()
  
 function popup_manual_temp()
 {
+	
 	document.getElementsByName('manual_temp')[0].value = '';
+	temp_readings = 0;
 	document.getElementById('manual_entry').style.display = 'block';
 }
 
@@ -526,6 +533,15 @@ function show_dims()
 				<div class='btns'>
 					<button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
 					<button type='button'  class='m_btn' onclick="goto_active_plating();">Return</button>
+				</div>
+			</div>
+			<div class='m_modal hidden' id='m_plating_options'>
+				<div class='center modal_head'><span>PLATING OPTIONS</span></div>
+				<div id='plating_options_item_div'></div>
+				<div class='btns'>
+					<button type='button' class='m_submit' onclick="plating_batch_change();">Batch Change</button>
+					<button type='button' class='m_submit' onclick="reprint_plating_labels();">Re-Print Labels</button>
+					<button type='button'  class='m_btn' onclick="finish_plating();">Finish Plating</button>
 				</div>
 			</div>
 	</div>

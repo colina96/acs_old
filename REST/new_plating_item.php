@@ -30,9 +30,10 @@ $userID = $_SESSION['userID'];
 	foreach ($d['items'] as $item) {
 		$component_id = $item['component_id'];
 		$M1_temp = $item['M1_temp'];
+		$menu_item_component_id = $item['id'];
 		$sql = "insert into PLATING_ITEM_COMPONENT ";
-		$sql .= "(id, user_id, plating_item_id, component_id,M1_time,M1_temp) ";
-		$sql .= "values (null,".$userID.",".$plating_item_id.",".$component_id.",now(),".$M1_temp.")";
+		$sql .= "(id, user_id, plating_item_id, menu_item_component_id, component_id,M1_time,M1_temp) ";
+		$sql .= "values (null,".$userID.",".$plating_item_id.",".$menu_item_component_id.",".$component_id.",now(),".$M1_temp.")";
 		test_mysql_query($sql);
 		$comp = Array();
 		$comp['id'] = mysql_insert_id();

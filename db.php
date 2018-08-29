@@ -39,11 +39,22 @@ function get_url_token($tok)
 
 function mysql_query($sql) { return(mysqli_query($GLOBALS['con'],$sql)); }
 function mysql_errno() { return(mysqli_errno($GLOBALS['con'])); }
+function mysql_error() { return(mysqli_error($GLOBALS['con'])); }
 function mysql_insert_id() { return(mysqli_insert_id ( $GLOBALS['con'] )); }
 
 function mysql_escape_string($s) { return (mysqli_escape_string($GLOBALS['con'],$s)); }
 function mysql_fetch_array($s) { return (mysqli_fetch_array($s)); }
 
+function get_fieldnames($table_name)
+{
+	$fieldnames = array();
+	$result = mysql_query("show columns from ".$table_name);
+	while ($row = mysql_fetch_array($result)) {
+		$fieldname = $row['Field'];
+		$fieldnames[] = $fieldname;
+	}
+	return($fieldnames);
+}
 
 function test_mysql_query($sql)
 {

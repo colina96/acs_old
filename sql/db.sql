@@ -150,7 +150,7 @@ create table COMPONENT (
 	M3_action_code int,
 	finished datetime,
 	shelf_life_days int,
-	expirt_date datetime,
+	expiry_date datetime,
 	constraint pk_example primary key (id) 
 );
 create table plating_team_member

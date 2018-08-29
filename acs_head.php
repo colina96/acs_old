@@ -6,8 +6,8 @@ session_start();
 <?php 
 // this all needs to be moved
 upload_menu();
-if (isset($_POST['delete_menu'])) {
-	$sql = "delete MENUS where id=".$_POST['delete_menu'];
+if (isset($_GET['delete_menu'])) {
+	$sql = "delete from MENUS where id=".$_GET['delete_menu'];
 	test_mysql_query($sql);
 }
 function upload_menu()

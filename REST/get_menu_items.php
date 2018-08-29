@@ -49,16 +49,6 @@ if ($userID > 0) {
 	}
 }
 
-function get_fieldnames($table_name)
-{
-	$fieldnames = array();
-	$result = mysql_query("show columns from ".$table_name);
-	while ($row = mysql_fetch_array($result)) {
-		$fieldname = $row['Field'];
-		$fieldnames[] = $fieldname;
-	}
-	return($fieldnames);
-}
 
 function load_menu_item_links($menu_id)
 {
