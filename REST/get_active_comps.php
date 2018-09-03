@@ -23,13 +23,13 @@ if ($userID > 0) {
 		error_log("could not read columns",0);
 	}
 	
-	
-	$sql = "select * from COMPONENT  where finished is null";
+	$fieldnames[] = 'expired';
+	$sql = "select *,(expiry_date < now()) as expired from COMPONENT  where finished is null";
 	if (!empty(get_url_token('finished'))) {
-		$sql = "select * from COMPONENT  where finished is not null and expiry_date > now()";
+		$sql = "select *,(expiry_date < now()) as expired from COMPONENT  where finished is not null";
 	}
 	if (!empty(get_url_token('all'))) {
-		$sql = "select * from COMPONENT  where expiry_date > now()";
+		$sql = "select *,(expiry_date < now()) as expired,  from COMPONENT";
 	}
 	$result = mysql_query($sql);
 	$comps = array();

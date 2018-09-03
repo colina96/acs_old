@@ -41,6 +41,12 @@ $userID = $_SESSION['userID'];
 		$items[] = $comp;
 	}
 	$response['items'] = $items;
+	$result = mysql_query("select now() as M1_time");
+	if ($result) {
+		while($row = mysql_fetch_array($result)) {
+			$response['M1_time'] = $row['M1_time'];
+		}
+	}
 
 	
 $json = json_encode($response);

@@ -27,8 +27,8 @@ select {
 	
 	position:relative;
 	left:10%;
-	.background: #23DD9F;
 	background: var(--acs_background);
+	color:white;
 	border-radius: 15px;
 	padding: 10px;
     spacing: 5px;
@@ -36,6 +36,7 @@ select {
     font-size:larger;
     margin:10px auto;
 }
+
 .btn_top {
 	position:absolute;
 	bottom:40vh;
@@ -73,12 +74,15 @@ select {
 	left:0;
 	display:table;
 	margin:0 auto;
-	background: #eeeeee;
+	.background: #eeeeee;
 	border-radius: 15px;
+	
 }
 .m_submit {
 	.bottom:30px;
-	background: #23DD9F;
+	background: white;
+	color: var(--acs_background);
+	border:2px var(--acs_background) solid;
 	border-radius: 15px;
 }
 @media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
@@ -137,6 +141,15 @@ select {
 	.color:white;
 	font-size:x-small;
 	.border:1px solid green;
+	width:84vw;
+}
+#plating_home_tab {
+	position:absolute;
+	right:10px;
+}
+#plating_options_item_div {
+	margin-top:10vw;
+	font-size:20px;
 }
 #plating_comment_div {
 	position:absolute;

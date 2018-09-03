@@ -52,6 +52,7 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
      <script type="text/javascript" src="js/acs_mob.js"></script>
+     
        <link rel="stylesheet" type="text/css" href="css/acs_mob.css" />
     <title>ACS</title>
 </head>
@@ -64,9 +65,11 @@ position:absolute;
 top:0;
 left:0;
 border:2px solid green;
+background: darkgrey;
 color:white;
 overflow:auto;
 z-index:2000;
+overflow:auto;
 }
 </style>
 <script>
@@ -75,7 +78,7 @@ var logline = 0;
 
 function log(s)
 {
-	console.log(s);
+	// console.log(s);
 	if (logline++ > 10) {
 		document.getElementById('log_div').innerHTML = '';
 		logline = 0;
@@ -114,6 +117,10 @@ function temp_callback(s) // works out where to send the temperature reading
 		// component.M2_temp = temp_reading;
 		set_plating_M1_temp(s);
 	} 
+	else if (temp_mode == 'M2_plating') {
+		// component.M2_temp = temp_reading;
+		set_plating_M2_temp(s);
+	} 
 	else {
 		log ("don't know what to do with temperature reading " + temp_mode);
 	}
@@ -130,9 +137,14 @@ var ioio_started = false;
 var temp_readings = 0;
 function ioio_start()
 {
+	
+	qpack_start();
+}
+function old_ioio_start()
+{
 
    try {
-   log("starting ioio");
+   log("OLD starting ioio");
   
    window.ioio.open({ // start ioio and open ports we need
       inputs: {
@@ -335,9 +347,9 @@ function show_dims()
 		
 		<div class='m_main'>
 			<div id='m_login'></div>
-			<div id='log_div' class='serial hidden' onclick='XXstart_serial();'></div>
+			<div id='log_div' class='serial' onclick='qpack_init();'>start scan</div>
 			<div class='btns'>
-			<button type='button' class='m_btn' onclick="goto_m_main();">Kitchen</button>
+			<button type='button' class='m_btn' onclick="goto_m_main('kitchen');">Kitchen</button>
 			<button type='button'  class='m_btn' onclick="goto_plating_teams();">Plating</button>
 			<button type='button'  class='m_btn' onclick="logout();">Logout</button>
 			<!--  button type='button'  class='m_btn' onclick="show_dims();">Dims</button -->
@@ -465,10 +477,27 @@ function show_dims()
 			<button type='button'  class='m_btn' onclick="goto_m_main();">Scan Authorised Chef ID</button>
 			</div>
 		</div>
+		<!--  plating pages -->
+		<div class='m_modal2' id='m2_sl_plating'> <!-- plating 3.2 & 3.3 -->
+			<div class='center modal_head'><span>SHELF LIFE</span></div>
+			<div id='m2_pt_sl_div' class='red'>FAIL</div>
+			<div id='m2_pt_sl_div2' class='red'>expiry date</div>
+			<div class='btns'>
+			<button type='button' class='m_submit' onclick="openPage('m_plating', this, 'red','mobile_main','tabclass');">Re-Check</button>
+			</div>
+		</div>
+		<div class='m_modal2' id='m2_temp_plating'> <!-- plating 3.6 & 3.7 -->
+			<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
+			<div id='m2_pt_temp_div'><!--  input type='number' name='m2_temp' size=4 --></div>
+			<div class='btns'>
+			<button type='button' class='m_submit' onclick="read_pt_M2temp();">Check Now</button>
+			<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
+			</div>
+		</div>
 	</div>
 	<!-- end of kitchen temp pages -->
 		<!--  plating -->
-	<div class='mobile_main hidden' id='plating_div'>
+	<div class='mobile_main hidden' id='plating_div'> 
 		<div class='m_main'>
 			<div class='m_top_menu_container'>
 				<div class='m_top_menu' id='m_plating__team_tab'  onclick="goto_plating_teams();">TEAMS</div>
@@ -537,7 +566,7 @@ function show_dims()
 			</div>
 			<div class='m_modal hidden' id='m_plating_options'>
 				<div class='center modal_head'><span>PLATING OPTIONS</span></div>
-				<div id='plating_options_item_div'></div>
+				<div id='plating_options_item_div' class='center orange'></div>
 				<div class='btns'>
 					<button type='button' class='m_submit' onclick="plating_batch_change();">Batch Change</button>
 					<button type='button' class='m_submit' onclick="reprint_plating_labels();">Re-Print Labels</button>
@@ -585,7 +614,7 @@ function show_dims()
 
     <script type="text/javascript">
    console.log("initialising serial type",typeof(serial));
-    app.initialize();
+   // app.initialize();
     $(document).ready(function(){
     	RESTHOME = "../../REST/";
     	check_login();
@@ -593,7 +622,7 @@ function show_dims()
     	load_preptypes();
     });
     </script>
-
+<script type="text/javascript" src="js/qpack.js"></script>
 </body>
 
 </html>

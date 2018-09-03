@@ -13,6 +13,8 @@ var chefs = null;
 var RESTHOME = "http://10.0.0.32/acs/REST/";
 var plating_items = null; // array of menu_items currently plating
 var barcode_mode = null;
+var mode = null; // kitchen or plating
+var plating_prep_type = 5; // AHR
 
 function copy_object(o)
 {
@@ -112,6 +114,7 @@ function goto_plating_teams()
 	
 	load_menu_items();
 	load_plating_items();
+	mode = 'plating';
 	openPage('plating_div', this, 'red','mobile_main','tabclass');
 	openPage('m_sel_team', this, 'red','m_modal','tabclass');
 	document.getElementById('plating_comment_div').innerHTML = '';
@@ -199,7 +202,46 @@ function show_plating_options(id)
 	openPage('m_plating_options', this, 'red','m_modal','tabclass');
 }
 
+function calc_time_remaining(item)
+{
+	
+	var event_time = new Date(item['time_started']);
+	console.log("calc_time_remaining -" + event_time + " - " + item['time_started']);
+	console.log(item);
+	var remaining = 0;
+	var now = new Date();
+	var now_ms = now.getTime();
+	var event_ms = event_time.getTime(); // time in millisecs
+	
+	var due_min = get_preptype_val(plating_prep_type,'M2_time_minutes');
+	var due_ms = event_ms + due_min * 60 * 1000;  			
+	remaining = (due_ms - now_ms) / (60 * 1000);
+	console.log("M2_due_min M1_ms",due_min,event_ms,due_ms,format_minutes(remaining));
+	return(format_minutes(remaining));
+}
+
 function finish_plating()
+{ // switch to modal to record M2 temperature
+	
+	// calculate time remaining
+	document.getElementById('ms_2').innerHTML = 'M2';
+	document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
+	var sign = ' < ';
+	document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(plating_prep_type,'M2_temp') + "&#176";
+	document.getElementById('chk_temp_item_div').innerHTML = '' ; // new_comp['description'];
+
+	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
+	// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
+	document.getElementById('ms_1').innerHTML = 'M2';
+	document.getElementById('ms_1_text').innerHTML = calc_time_remaining(plating_item);
+	
+
+	document.getElementById('chk_temp_pt_div').innerHTML = plating_item.code;
+	openPage('m_temp', this, 'red','mobile_main','tabclass');
+	openPage('m2_temp_plating', this, 'red','m_modal2','tabclass');
+	
+}
+function record_finish_plating()
 {
 	console.log("finish_plating");
 	console.log(plating_item);
@@ -249,20 +291,27 @@ function plating_comp_barcode_scanned(barcode_id) {
 	var description = null;
 	for (var i = 0; i < plating_comps.length; i++) {
 		if (plating_comps[i].id == barcode_id) {
-			console.log("plating_comp_barcode_scanned found " + plating_comps[i].description);
+			console.log("plating_comp_barcode_scanned found " + plating_comps[i].description + ' ' + plating_comps[i].expired);
+			if (plating_comps[i].expired == 1) {
+				console.log('item expired');
+				document.getElementById('m2_pt_sl_div2').innerHTML = 'expired ' + plating_comps[i].expiry_date;
+				openPage('m_temp', this, 'red','mobile_main','tabclass');
+				openPage('m2_sl_plating', this, 'red','m_modal2','tabclass');
+				
+				return; // jump to expired page
+			}
 			description = plating_comps[i].description;
 		}
 	}
 	var items = plating_item.items;
 	console.log("now checking plating item " + items.length);
 	for (var i = 0; i < items.length; i++) {
-		if (items[i].description == description) {
+		if (items[i].description == description && !items[i].M1_temp) {
 			items[i].checked = true;
 			items[i].component_id = barcode_id;
 			console.log("found item");
 			plating_comp_selected(i);
-		}
-		
+		}		
 	}
 }
 function goto_active_plating()
@@ -270,12 +319,34 @@ function goto_active_plating()
 	show_menu_item_components(active_menu_item_id)
 }
 
+
 function set_plating_M1_temp(temperature) 
 {
 	console.log("set_plating_M1_temp " + plating_item.description + " -> " + 
 			plating_item.items[plating_item.active_item].description);
-	plating_item.items[plating_item.active_item].M1_temp = temperature;
-	goto_active_plating();
+	// check temp is below M1_temp
+	
+	var temp_target = get_preptype_val(plating_prep_type,'M1_temp');
+	if (temperature < temp_target) {
+		plating_item.items[plating_item.active_item].M1_temp = temperature;
+		goto_active_plating();
+	}
+	
+}
+
+function set_plating_M2_temp(temperature) 
+{
+	console.log("set_plating_M2_temp " );
+	console.log(plating_item);
+	plating_item.M2_temp = temperature;
+	var temp_target = get_preptype_val(plating_prep_type,'M2_temp');
+	if (parseInt(temperature) <= temp_target) {
+		console.log('record_finish_plating()');
+		record_finish_plating();
+	}
+	else {
+		console.log("plating m2 too high");
+	}
 }
 
 function show_menu_item_components(menu_item_id) {
@@ -350,9 +421,9 @@ function print_plating_labels()
 function start_plating_item()
 {
 	
-	console.log('start_plating_item',plating_item['id']);
+	console.log('start_plating_item',plating_item['plating_item_id']);
 	
-	if (plating_item['id']) {
+	if (plating_item['plating_item_id']) {
 		console.log('already started');
 		print_plating_labels();
 		// reprint labels
@@ -375,6 +446,7 @@ function start_plating_item()
             console.log("new_plating_item result ",result);
             var p = JSON.parse(result);
             plating_item['plating_item_id'] = p['id'];
+            plating_item['M1_time'] = p['M1_time'];
             
             
             // prob should store plating_item_component ids but not needed at this point
@@ -443,8 +515,8 @@ function do_show_menu_item_components(menu_item_id)
 				var clickdiv = "<div onclick='plating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
 				// show items in coolroom ready to be plated
 			 	//clickdiv += show_plating_comps(items[i].description);
-				tr.appendChild(new_td(items[i].description,'item'));
-			//	tr.appendChild(new_td(clickdiv,'item'));
+			//	tr.appendChild(new_td(items[i].description,'item'));
+				tr.appendChild(new_td(clickdiv,'item'));
 				var td = document.createElement('td');
 				td.id = 'plating_item_checked_' + i;
 				td.innerHTML = '-';
@@ -499,10 +571,16 @@ function goto_comp_search()
 	$('#search').val('');
 	openPage('m_search', this, 'red','m_modal','tabclass');
 }
-function goto_m_main()
+function goto_m_main(new_mode)
 {
-	openPage('mm2', this, 'red','mobile_main','tabclass');
-	m_tracking();
+	if (new_mode) mode = new_mode;
+	if (mode == 'kitchen') {
+		openPage('mm2', this, 'red','mobile_main','tabclass');
+		m_tracking();
+	}
+	else {
+		goto_plating();
+	}
 }
 
 function get_preptype_val(id,fld)
@@ -574,7 +652,11 @@ function read_M2temp(callback){
 	document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M2');
 }
-
+function read_pt_M2temp(callback){
+	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
+	document.getElementById('m1_temp_div').innerHTML = '';
+	read_temp('M2_plating');
+}
 function read_plating_M1temp(callback){
 	
 	// document.getElementById('m1_temp_div').innerHTML = '';
@@ -995,6 +1077,7 @@ function format_minutes (min)
 	 var minutes = Math.floor(min - (hours * 60));
 	 if (hours   < 10) {hours   = "0"+hours;}
 	 if (minutes < 10) {minutes = "0"+minutes;}
+	 if (parseInt(hours) == 0) return(minutes + " minutes");
 	 return hours+':'+minutes;
 }
 

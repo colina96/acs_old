@@ -59,7 +59,7 @@ var app = {
     	RESTHOME = "http://10.0.0.32/acs/REST/";
     	check_login();
     	// start_serial(); // arduino
-    	ioio_start();
+    	// ioio_start();
         app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
@@ -231,8 +231,16 @@ function logout()
     });
 }
 
-function openPage(pageName, elmnt, color,content_class,tab_class) {
+function openPage(pageName, elmnt, color,content_class,tab_class) 
+{
+
+	var popups = document.getElementsByClassName('popup');
+    for (i = 0; i < popups.length; i++) {
+    		popups[i].style.display = "none";
+    }
+	var parent = document.getElementById(pageName).parentElement;
 	console.log("opening page ",pageName,content_class);
+	console.log('parent ',parent.id,parent.className);
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName(content_class);
