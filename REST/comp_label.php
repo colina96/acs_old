@@ -32,6 +32,7 @@ if (!empty($_POST['data'])) {
 	$id = $comp['id'];
 	$copies = $comp['copies'];
 	$description = $comp['description'];
+	$expiry_date = $comp['expiry_date'];
 	$tmp_file = $job_dir.'comp'.$id.".tmp";
 	$job_file = $job_dir.'comp'.$id.".job";
 	echo "openning ".$tmp_file;
@@ -41,14 +42,17 @@ if (!empty($_POST['data'])) {
 	fwrite($handle,"Jobname:user ".$id."\n");
 	fwrite($handle,"Printer:10.0.0.100"."\n");
 	fwrite($handle,"Port:9101"."\n");
-	fwrite($handle,"Label:USER.LNT"."\n");
+	fwrite($handle,"Label:COMP.LNT"."\n");
 	fwrite($handle,"Endheader"."\n");
 	fwrite($handle,"Copies:1"."\n");
 	fwrite($handle,"NAME:".$description."\n");
 	$facility = 1; // not used yet.... maybe one day
 	$barcode = sprintf("BARCODE:c%02d%06d",$facility,$id);
-	// fwrite($handle,"BARCODE:U01000002"."\n");
 	fwrite($handle,$barcode."\n");
+	$barcodeTxt = sprintf("BARCODETXT:c%02d%06d",$facility,$id);
+	fwrite($handle,$barcodeTxt."\n");
+	$barcodeTxt = "EXPIRYDATE:Expiry: ".$expiry_date;
+	fwrite($handle,$barcodeTxt."\n");
 	fwrite($handle,"Endlabel"."\n");
 	fclose($handle);
 	chmod ($tmp_file,0666);

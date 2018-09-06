@@ -52,6 +52,7 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
      <script type="text/javascript" src="js/acs_mob.js"></script>
+      <script type="text/javascript" src="js/qpack.js"></script>
      
        <link rel="stylesheet" type="text/css" href="css/acs_mob.css" />
     <title>ACS</title>
@@ -71,12 +72,19 @@ overflow:auto;
 z-index:2000;
 overflow:auto;
 }
+#status {
+height:20vh;
+width:100vw;
+background:black;
+color:white;
+overflow:auto;
+}
 </style>
 <script>
 var serial_started = false;
 var logline = 0;
 
-function log(s)
+function Xlog(s)
 {
 	// console.log(s);
 	if (logline++ > 10) {
@@ -98,6 +106,10 @@ function errorCallback(e)
 }
 var str;
 var temp_mode = null;
+function set_temp_mode(new_mode)
+{
+	temp_mode = new_mode;
+}
 // var temp_callback = null;
 function temp_callback(s) // works out where to send the temperature reading
 {
@@ -140,69 +152,7 @@ function ioio_start()
 	
 	qpack_start();
 }
-function old_ioio_start()
-{
 
-   try {
-   log("OLD starting ioio");
-  
-   window.ioio.open({ // start ioio and open ports we need
-      inputs: {
-         analogue: [37,39,40,41],
-         digital:[38]
-      },
-      outputs: {
-         digital:[33],
-         pwm: [
-            {pin: 10, freq: 2}, // set default frequency for the pin 10
-            {pin: 12, freq: 1}
-         ]
-      },
-      delay: 200 // Optionally set minimum delay between receiving data from IOIO
-      }, function() {
-    	  alert("IOIO OK");
-    	  ioio_started = true;
-         log("IOIO OK");
-         log('adding listener');
-         window.ioio.addPinListener(37, function(value) { // parameter value is boolean for digital ports and float for other ports in range from 0.00000 to 1.00000
-            // show('p37',value);
-         	p36 = value;
-         	if (temp_readings < 3) alert('got temp '+ value);
-         	temp_readings ++;
-         	document.getElementsByName('manual_temp')[0].value = parseInt(value * 100);
-         });
-         // success
-      }, function() {
-         log("fail");
-         //fail
-      }, function(vals) {
-          // global all open pin listener
-    	  
-          for(var i=0;i<vals.length;i++){
-             var pin = vals[i];
-             //for(var key in pin){console.log(key + ":" + pin[key]);}
-             switch(pin.class){
-                case window.ioio.PIN_INPUT_DIGITAL:
-                case window.ioio.PIN_OUTPUT_DIGITAL:
-                case window.ioio.PIN_INPUT_ANALOG:
-                //pin.pin pin.value
-                break;
-                case window.ioio.PIN_OUTPUT_PWM:
-                //pin.pin pin.freq
-                break;
-             }
-          }
-       });
-    }
-    catch (e) {
-    	alert("No IOIO");
-       log("error");
-
-       log(e);
-    }
-    
- }
- 
 function popup_manual_temp()
 {
 	
@@ -347,7 +297,7 @@ function show_dims()
 		
 		<div class='m_main'>
 			<div id='m_login'></div>
-			<div id='log_div' class='serial' onclick='qpack_init();'>start scan</div>
+			<div id='log_div' class='serial hidden' onclick='qpack_init();'>start scan</div>
 			<div class='btns'>
 			<button type='button' class='m_btn' onclick="goto_m_main('kitchen');">Kitchen</button>
 			<button type='button'  class='m_btn' onclick="goto_plating_teams();">Plating</button>
@@ -592,14 +542,21 @@ function show_dims()
 	-->
 	<!--  end of plating -->
 	<div class='mobile_main' id='login_div'>
+	<div id='status' class='hidden' onclick='qpack_start();'>status</div>
+		
 		<div class='m_modal2'>
 			<input name='email' placeholder='email' type='text' class='input'>
 			<input name='password' placeholder='password' type='text' class='input'>
+			<div id='log' class='hidden'>log</div>
 			<div class='btns'>
+			<!--  
+			<button type='button' class='m_submit' onclick="clear_logs();">reset pins</button>
+			<button type='button' class='m_submit' onclick="reset_pins();">reset pins</button> -->
 				<div id='login_btn' class='btn' onclick='login(0)'>Login</div>
 				<div id='login_fail' class='hidden'></div>
 			</div>
 		</div>
+		
 	</div> 
 	
 </div>
@@ -614,7 +571,7 @@ function show_dims()
 
     <script type="text/javascript">
    console.log("initialising serial type",typeof(serial));
-   // app.initialize();
+    app.initialize();
     $(document).ready(function(){
     	RESTHOME = "../../REST/";
     	check_login();
@@ -622,7 +579,7 @@ function show_dims()
     	load_preptypes();
     });
     </script>
-<script type="text/javascript" src="js/qpack.js"></script>
+
 </body>
 
 </html>

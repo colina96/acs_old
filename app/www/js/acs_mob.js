@@ -20,7 +20,7 @@ function copy_object(o)
 {
 	return(JSON.parse(JSON.stringify(o)));
 }
-
+/* -- this broke the ioio link
 (function(){
     // Convert array to object
     var convArrToObj = function(array){
@@ -42,7 +42,7 @@ function copy_object(o)
         else
             return oldJSONStringify(input);
     };
-})();
+})(); */
 
 function set_barcode_mode(mode)
 {
@@ -421,9 +421,9 @@ function print_plating_labels()
 function start_plating_item()
 {
 	
-	console.log('start_plating_item',plating_item['plating_item_id']);
+	console.log('start_plating_item',plating_item['M1_time'],plating_item['id']);
 	
-	if (plating_item['plating_item_id']) {
+	if (plating_item['id']) {
 		console.log('already started');
 		print_plating_labels();
 		// reprint labels
@@ -625,6 +625,7 @@ function component_selected(id)
 	}
 	else {
 		set_barcode_mode("M1");
+		set_temp_mode("M1");
 		openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
 		document.getElementById('ms_2').innerHTML = 'M1';
 		document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';

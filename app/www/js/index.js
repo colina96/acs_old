@@ -56,12 +56,15 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
     	console.log("onDeviceReady");
+    	log("starting");
     	RESTHOME = "http://10.0.0.32/acs/REST/";
     	check_login();
     	// start_serial(); // arduino
     	// ioio_start();
+    	qpack_init();
         app.receivedEvent('deviceready');
     },
+ 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
@@ -151,6 +154,7 @@ function login(barcode_uid)
 {
     //var email= "colin.p.atkinson@gmail.com";
     //var password= "acs";
+	
 	var loginString = null;
 	if (barcode_uid > 0) {
 		loginString="uid="+barcode_uid+"&login=login";
@@ -166,7 +170,9 @@ function login(barcode_uid)
 			return;
 		}
 	}
+	qpack_start();
     console.log(loginString);
+    
     $.ajax({
         type: "POST",crossDomain: true, cache: false,
         url:  RESTHOME + "login.php",

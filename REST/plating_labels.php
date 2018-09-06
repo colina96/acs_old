@@ -56,8 +56,12 @@ if (!empty($_POST['data'])) {
 	$barcode = sprintf("p%02d%06d",$facility,$id);
 	// fwrite($handle,"BARCODE:U01000002"."\n");
 
-	fwrite($handle,"ID:".$barcode."\n");
+	//fwrite($handle,"ID:".$barcode."\n");
 	fwrite($handle,'BARCODE:'.$barcode."\n");
+	$barcodeTxt = sprintf("BARCODETXT:p%02d%06d",$facility,$id);
+	fwrite($handle,$barcodeTxt."\n");
+	$barcodeTxt = "EXPIRYDATE:Expiry: ".$expiry_date;
+	fwrite($handle,$barcodeTxt."\n");
 	fwrite($handle,"Endlabel"."\n");
 	fclose($handle);
 	chmod ($tmp_file,0666);

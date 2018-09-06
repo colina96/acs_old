@@ -29,7 +29,7 @@ if ($userID > 0) {
 		$sql = "select *,(expiry_date < now()) as expired from COMPONENT  where finished is not null";
 	}
 	if (!empty(get_url_token('all'))) {
-		$sql = "select *,(expiry_date < now()) as expired,  from COMPONENT";
+		$sql = "select *,(expiry_date < now()) as expired  from COMPONENT";
 	}
 	$result = mysql_query($sql);
 	$comps = array();
