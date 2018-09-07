@@ -142,7 +142,44 @@ function save_plating_team()
     
 }
 
+function show_plating_items(team_id,tab)
+{
+	var item_count = 0;
+	for (var i = 0; i < menu_items.length; i++) {
+		if (menu_items[i]['plating_team'] == team_id) {
+			if (item_count == 0 && team_id != active_plating_team) {
+				var tr = document.createElement('tr');
+				tr.className = 'plating_tab';
+				var td = document.createElement('th');
+				td.innerHTML = 'TEAM';
+				tr.appendChild(td);
+				td = document.createElement('th');
+				td.innerHTML = team_id;
+				tr.appendChild(td);
+				tab.appendChild(tr);
+			}
+			item_count ++;
+			
+			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
+			tr = document.createElement('tr');
+			var td = document.createElement('td');
+			td.innerHTML = menu_items[i]['code'];
+			tr.appendChild(td);
+			td = document.createElement('td');
+			var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>" + menu_items[i]['dish_name']; + "</div>"
+			if (plating_item) {
+				div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>" + menu_items[i]['dish_name']; + "</div>";
+				if (plating_item.time_completed) {
+					div = "<div class='red'>" + menu_items[i]['dish_name']; + "</div>";
+				}
+			}
 
+			td.innerHTML = div;
+			tr.appendChild(td);
+			tab.appendChild(tr);
+		}
+	}
+}
 function goto_plating()
 {
 	
@@ -169,6 +206,8 @@ function goto_plating()
 	th.innerHTML = 'PRODUCT NAME';
 	tr.appendChild(th);
 	tab.appendChild(tr);
+	show_plating_items(active_plating_team,tab);
+	/*
 	for (var i = 0; i < menu_items.length; i++) {
 		if (menu_items[i]['plating_team'] == active_plating_team) {
 			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
@@ -184,12 +223,17 @@ function goto_plating()
 					div = "<div class='red'>" + menu_items[i]['dish_name']; + "</div>";
 				}
 			}
-			
-			// td.innerHTML = menu_items[i]['dish_name'];
+
 			td.innerHTML = div;
 			tr.appendChild(td);
 			tab.appendChild(tr);
 		}
+	} */
+	// now list all items for other plating teams
+	for (var pti = 1; pti < plating_teams.length; pti++ ) {
+		if (pti != active_plating_team)
+			show_plating_items(pti,tab);
+		
 	}
 	t.appendChild(tab);
 }

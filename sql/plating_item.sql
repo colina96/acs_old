@@ -9,6 +9,7 @@ create table PLATING_ITEM
 	time_completed datetime,
 	M1_temp float,
 	M2_temp float,
+	corrective_item smallint,
 	constraint pk_example primary key (id) 
 );
 

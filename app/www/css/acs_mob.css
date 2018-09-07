@@ -397,6 +397,8 @@ select {
 	position:absolute;
 	top:5px;
 	width:95%;
+	height:75vh;
+	overflow:auto;
 }
 .item_table {
 	width:100%;
