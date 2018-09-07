@@ -37,6 +37,13 @@ test_mysql_query($sql);
 $comp = array();
 $comp['id'] = mysql_insert_id();
 $comp['description'] = $description;
+$result = mysql_query("select now() as now,DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY) as expiry_date");
+if ($result) {
+	while($row = mysql_fetch_array($result)) {
+		$comp['now'] = $row['now'];
+		$comp['expiry_date'] = $row['expiry_date'];
+	}
+}
 	
 $json = json_encode($comp);
 echo $json;

@@ -762,6 +762,7 @@ function start_component()
             console.log("start_component id =  ",comp.id);
             var qty = document.getElementsByName('m1_label_qty')[0].value;
             active_comp.id = comp.id;
+            active_comp.expiry_date = comp.expiry_date;
             print_component_labels(qty);
             document.getElementsByName('m1_label_qty')[0].value = 1;
             goto_m_main();
