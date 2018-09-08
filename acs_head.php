@@ -192,14 +192,14 @@ function upload_menu()
 </div>
 </div>
 <div id="REPORTS" class="tabcontent">
-coming soon.....
+<?php include 'acs_reports.php' ?>
   
 </div>
 <div id="KITCHEN" class="tabcontent">
-  <?php include 'kitchen.php' ?>
+  <!--  ?php include 'kitchen.php' ? -->
 </div>
 <div id="ASSEMBLY" class="tabcontent">
-  <?php include 'assembly.php' ?>
+  <!--  ?php include 'assembly.php' ? -->
 </div>
 </div>
 <?php } else { ?>

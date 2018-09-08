@@ -204,3 +204,25 @@ background-color: #EEEEEE;
 .component_table {
 	width:100%;
 }
+
+.top_menu_container {
+	.position:absolute;
+	.top:0;
+	.left:8vw;
+	margin-left:2vw;
+	display:flex;
+	.color:white;
+	.font-size:x-small;
+	.border:1px solid green;
+	width:84vw;
+}
+.top_menu {
+	margin:15px;
+	.width:30vw;
+	color:black;
+	font-size:larger;
+}
+#report_container {
+	height:100%;
+	overflow:auto;
+}

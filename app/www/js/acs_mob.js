@@ -79,6 +79,7 @@ function process_barcode(s)
 		}
 	}
 }
+
 function load_preptypes()
 {
 console.log("loading prep types");
