@@ -11,7 +11,7 @@ if ($userID > 0) {
 	$fieldnames = get_fieldnames($table_name);
 	$plating_item_component_flds = get_fieldnames('PLATING_ITEM_COMPONENT');
 	$sql = "select * from ".$table_name." where user_id = ".$userID;
-	$sql.= " and DATE(time_started) = CURDATE()";
+//	$sql.= " and DATE(time_started) = CURDATE()";
 	// echo $sql;
 	$result = mysql_query($sql);
 	$items = array();

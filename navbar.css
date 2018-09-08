@@ -203,6 +203,12 @@ background-color: #EEEEEE;
 }
 .component_table {
 	width:100%;
+	font-size:10px;
+}
+.component_table th {
+	
+	font-size:12px;
+	background:lightblue;
 }
 
 .top_menu_container {

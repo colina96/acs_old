@@ -1,4 +1,4 @@
-
+var RESTHOME = 'REST/';
 function openPage(pageName, elmnt, color,content_class,tab_class) {
 	// console.log("opening page ",pageName,content_class);
     // Hide all elements with class="tabcontent" by default */

@@ -236,3 +236,4 @@ function upload_menu()
 <script src="app.js"></script>
 <?php } ?>
 <script src="acs.js"></script>
+<script src="app/www/js/acs_common.js"></script>

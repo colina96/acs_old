@@ -2,7 +2,7 @@ var default_tab='m_current_tracking_tab';
 var comps = null;
 var plating_comps = null; // components in cool room
 var preptypes = null;
-var menu_items = null;
+
 var plating_teams = null;
 var plating_item = null;
 var active_plating_team = 0;
@@ -11,7 +11,7 @@ var active_menu_item_id = null;
 var new_comp = null; // start a new component - M1
 var chefs = null;
 var RESTHOME = "http://10.0.0.32/acs/REST/";
-var plating_items = null; // array of menu_items currently plating
+
 var barcode_mode = null;
 var mode = null; // kitchen or plating
 var plating_prep_type = 5; // AHR
@@ -310,13 +310,7 @@ function record_finish_plating()
     });
 }
 
-function get_menu_item_by_id(menu_item_id) {
-	// menu_items not a hashed array because the search fn needs it that way
-	for (var i = 0; i < menu_items.length; i++) {
-		if (menu_items[i].id == menu_item_id) return(menu_items[i]);
-	}
-	return(null);
-}
+
 
 function plating_comp_selected(i)
 {
@@ -1418,33 +1412,7 @@ function get_plating_item_by_id(id)
 	return(null);
 }
 
-function load_plating_items() // load menu_items currently being plated
-{
-   $.ajax({
-    	url: RESTHOME + "get_plating.php",
-        type: "POST",
-        dataType: 'json',
-        success: function(result) {
-            plating_items = result; // need to populate with descritions
-            for (var i = 0; i < plating_items.length; i++) {
-            	
-            	var menu_item = get_menu_item_by_id(plating_items[i].menu_item_id);
-            	plating_items[i].dish_name = menu_item.dish_name;
-            	plating_items[i].code = menu_item.code;
-            	console.log('loading plating item ' + menu_item.dish_name);
-            	for (var j = 0; j < plating_items[i].items.length; j++) {
-            		console.log('loading plating item ' + j, plating_items[i].items[j].menu_item_component_id);
-            		var comp = get_component_by_id(plating_items[i].items[j].menu_item_component_id);
-            		plating_items[i].items[j].description = comp.description;
-            	}
-            }
-            console.log("got " + result.length + " plating items");           
-        },
-        fail: (function (result) {
-            console.log("fail load_plating_items",result);
-        })
-    });
-}
+
 function load_menu_items()
 {	
 	console.log("loading menu items" + RESTHOME + "get_menu_items.php");
@@ -1535,27 +1503,4 @@ function new_td(content,classname) {
 	return(td);
 }
 
-function show_time(d)
-{
-	options = {
-		hour: 'numeric', minute: 'numeric',
 
-	};
-	return (new Intl.DateTimeFormat('en-AU', options).format(d));
-}
-function show_date(d)
-{
-	options = {
-		day: 'numeric', month: 'numeric',year: 'numeric',
-
-	};
-	return (new Intl.DateTimeFormat('en-AU', options).format(d));
-}
-
-function get_component_by_id(id)
-{
-	for(var i= 0; i < comps.length; i++) {
-		if (comps[i].id == id) return (comps[i]);
-	}
-	return null;
-}
