@@ -152,7 +152,7 @@ function show_plating_items(team_id,tab)
 				var tr = document.createElement('tr');
 				tr.className = 'plating_tab';
 				var td = document.createElement('th');
-				td.innerHTML = 'TEAM';
+				td.innerHTML = margin('TEAM');
 				tr.appendChild(td);
 				td = document.createElement('th');
 				td.innerHTML = team_id;
@@ -164,7 +164,7 @@ function show_plating_items(team_id,tab)
 			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
 			tr = document.createElement('tr');
 			var td = document.createElement('td');
-			td.innerHTML = menu_items[i]['code'];
+			td.innerHTML = margin(menu_items[i]['code']);
 			tr.appendChild(td);
 			td = document.createElement('td');
 			var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>" + menu_items[i]['dish_name']; + "</div>"
@@ -175,7 +175,7 @@ function show_plating_items(team_id,tab)
 				}
 			}
 
-			td.innerHTML = div;
+			td.innerHTML = margin(div);
 			tr.appendChild(td);
 			tab.appendChild(tr);
 		}
@@ -201,7 +201,7 @@ function goto_plating()
 	var tr = document.createElement('tr');
 	tr.className = 'plating_tab';
 	var th = document.createElement('th');
-	th.innerHTML = 'CODE';
+	th.innerHTML = margin('CODE');
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML = 'PRODUCT NAME';
@@ -530,13 +530,13 @@ function do_show_menu_item_components(menu_item_id)
 	tab.className = 'item_table';
 	var tr = document.createElement('tr');
 	var th = document.createElement('th');
-	th.innerHTML= plating_item.dish_name + "<br>" + plating_item.code;
+	th.innerHTML= margin(plating_item.dish_name + "<br>" + plating_item.code);
 	tr.appendChild(th);
 	th = document.createElement('th');
-	th.innerHTML='S/L';
+	th.innerHTML=margin('S/L');
 	tr.appendChild(th);
 	th = document.createElement('th');
-	th.innerHTML='TEMP';
+	th.innerHTML=margin('TEMP');
 	tr.appendChild(th);
 	tab.appendChild(tr);
 	var line = 1;
@@ -1499,7 +1499,7 @@ console.log("loading menu item components");
 function new_td(content,classname) {
 	var td = document.createElement('td');
 	td.className = classname;
-	td.innerHTML = content;
+	td.innerHTML = "<div class='margin10'>" + content + "</div>";
 	return(td);
 }
 

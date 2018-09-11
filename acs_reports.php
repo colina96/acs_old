@@ -112,6 +112,7 @@ function load_plating_data()
 	load_plating_items(plating_reports);
 }
 
+
 function plating_reports()
 {
 	var div = document.getElementById('report_container');
@@ -122,7 +123,7 @@ function plating_reports()
 	// headings
 	for (var i in plating_report_fmt) {
 		var th = document.createElement('th');
-		th.innerHTML = i;
+		th.innerHTML = margin(i);
 		tr.appendChild(th);   
 		
 	}
