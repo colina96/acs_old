@@ -1,3 +1,11 @@
+:root {
+	--acs_green:#51DD9F;
+	--acs_background:#23DD9F;
+	--acs_grey:#969696;
+	--acs_blue_text: #82A0FD;
+	--acs_blue_background: #3D64E7;
+	--acs_blue: #7F9FFD;
+}
 body {
   padding-bottom: 20px;
 }
@@ -210,7 +218,8 @@ background-color: #EEEEEE;
 .component_table th {
 	
 	font-size:12px;
-	background:lightblue;
+	background:var(--acs_blue_background);
+	color:white;
 }
 
 .top_menu_container {

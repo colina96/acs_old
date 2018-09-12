@@ -159,7 +159,7 @@ function upload_menu()
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="#">MENU</a></li>
             <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')" href="#">SETTINGS</a></li>
             <li class='tabclass' onclick="openPage('APP', this, 'red','tabcontent','tabclass')"><a href="#">APP</a></li>
-            <li class='tabclass' onclick="openPage('REPORTS', this, 'red','tabcontent','tabclass')"><a href="#">REPORTS</a></li>
+            <li class='tabclass' onclick="reports()"><a href="#">REPORTS</a></li>
             <!--  li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="#">KITCHEN</a></li>
             <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="#">ASSEMBLY</a></li -->
             

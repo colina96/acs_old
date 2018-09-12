@@ -9,7 +9,7 @@ var active_plating_team = 0;
 var active_comp = null; // the component currently being worked on
 var active_menu_item_id = null;
 var new_comp = null; // start a new component - M1
-var chefs = null;
+
 var RESTHOME = "http://10.0.0.32/acs/REST/";
 
 var barcode_mode = null;
@@ -1060,14 +1060,7 @@ function get_comps_for_plating(item)
 	    });
 }
 
-function get_chef_by_id(id)
-{
 
-	for (var i = 0; i < chefs.length;i++) {
-		if (chefs[i].id == id) return chefs[i];
-	}
-	return(null);
-}
 function load_plating_teams()
 {
 	
@@ -1282,30 +1275,7 @@ function find_plating_teams(menu_items)
 	load_chefs(null);
 }
 
-function load_chefs(fn)
-{
-	console.log("loading chefs");
-    $.ajax({
-    	url: RESTHOME + "get_chefs.php",
-        type: "POST",
-        dataType: 'json',
-        success: function(result) {
-            chefs = result;
-            
-            if (fn) {
-            	console.log("calling fn");
-            	fn();
-            }
-            load_plating_teams();
-            add_chef_select('m1_temp_div_chef','m1_chef_id');
-            console.log("got " + result.length + " chefs");   
-            
-        },
-        fail: (function (result) {
-            console.log("fail load_chefss",result);
-        })
-    });
-}
+
 
 function goto_select_team()
 {

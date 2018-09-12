@@ -8,7 +8,9 @@ var kitchen_report_fmt = {
 		'M2 TIME':'M2_time',
 		'M2 TEMP':'M2_temp',
 		'M3 TIME':'M3_time',
-		'M3 TEMP':'M3_temp'
+		'M3 TEMP':'M3_temp',
+		'C/A':'ca',
+		'CHEF':'chef'
 }
 
 var plating_report_fmt = {
@@ -35,8 +37,15 @@ var plating_item_report_fmt = {
 		'CORRECTIVE ACTION':'ca'
 		
 }
+
+function reports()
+{
+	load_chefs();
+	openPage('REPORTS', this, 'red','tabcontent','tabclass');
+}
 function report_components(data)
 {
+	// console.log(data);
 	var div = document.getElementById('report_container');
 	
 	if (data.length < 1) {
@@ -50,14 +59,14 @@ function report_components(data)
 		var tr = document.createElement('tr');
 		var th = document.createElement('th');
 		th.rowspan = 5;
-		th.innerHTML = preptypes[preptype_idx]['code'];
+		th.innerHTML = margin(preptypes[preptype_idx]['code']);
 		tr.appendChild(th);   
 		tab.appendChild(tr);
 		var tr = document.createElement('tr');
 		// headings
 		for (var i in kitchen_report_fmt) {
 			var th = document.createElement('th');
-			th.innerHTML = i;
+			th.innerHTML = margin(i);
 			tr.appendChild(th);   
 			
 		}
@@ -65,6 +74,8 @@ function report_components(data)
 	   	for (var i=0; i<data.length; i++) {
 		//   	console.log('item ' + data[i]['description'] + ' prep ' + data[i]['prep_type_id']);
 		   	if (data[i]['prep_type_id'] == preptypes[preptype_idx]['id']) {
+			   	var chef = get_chef_by_id(data[i]['M1_chef_id']);
+			   	if (chef) data[i]['chef'] = chef['label'];
 		   		var tr = document.createElement('tr');
 		   		for (var j in kitchen_report_fmt) {
 		   			var td = document.createElement('td');
@@ -74,7 +85,7 @@ function report_components(data)
 		   	   			td.innerHTML = s.substring(11,16);
 		   			}
 		   			else {
-		   				td.innerHTML = data[i][e];
+		   				td.innerHTML = data[i][e]?data[i][e]:'-';
 		   			}
 		   			tr.appendChild(td);   
 		   		}
