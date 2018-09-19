@@ -143,6 +143,13 @@ select {
 	.border:1px solid green;
 	width:84vw;
 }
+#current_time_kitchen {
+	position:absolute;
+	top:39px;
+	margin:0 auto;
+	color:white;
+	font-size:20px;
+}
 #plating_home_tab {
 	position:absolute;
 	right:10px;

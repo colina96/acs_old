@@ -20,29 +20,7 @@ function copy_object(o)
 {
 	return(JSON.parse(JSON.stringify(o)));
 }
-/* -- this broke the ioio link
-(function(){
-    // Convert array to object
-    var convArrToObj = function(array){
-        var thisEleObj = new Object();
-        if(typeof array == "object"){
-            for(var i in array){
-                var thisEle = convArrToObj(array[i]);
-                thisEleObj[i] = thisEle;
-            }
-        }else {
-            thisEleObj = array;
-        }
-        return thisEleObj;
-    };
-    var oldJSONStringify = JSON.stringify;
-    JSON.stringify = function(input){
-        if(oldJSONStringify(input) == '[]')
-            return oldJSONStringify(convArrToObj(input));
-        else
-            return oldJSONStringify(input);
-    };
-})(); */
+
 
 function set_barcode_mode(mode)
 {
@@ -985,11 +963,17 @@ function active_comp_selected(id)
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
 
+
 function reprint_comp_labels()
 {
 	console.log('reprint_comp_labels');
 	openPage('m_reprint_labels', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
+	load_reprint_data();
+}
+function load_reprint_data()
+{
+	
 	 $.ajax({
 	        url: RESTHOME + "get_active_comps.php?all=true",
 	        type: "POST",
@@ -1010,11 +994,18 @@ function reprint_comp_labels()
 	        })
 	    });
 }
+
+
 function m_tracking()
 {
 	console.log('goto_active_components');
 	openPage('m_current_tracking', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
+	load_tracking_data();
+}
+
+function load_tracking_data()
+{
 	 $.ajax({
 	        url: RESTHOME + "get_active_comps.php",
 	        type: "POST",
@@ -1169,8 +1160,28 @@ function reprint_active_comp_labels(id)
 	
 }
 
+function checkTime(i) {
+	if (i < 10) {
+		i = "0" + i;
+	}
+	return i;
+}
+
+function display_real_time()
+{
+	//var div = document.getElementById('');
+	var today = new Date();
+	  var h = today.getHours();
+	  var m = today.getMinutes();
+	  
+	  // add a zero in front of numbers<10
+	  m = checkTime(m);
+	  h = checkTime(h);
+	  document.getElementById('current_time_kitchen').innerHTML = h + ":" + m;
+}
 function m_show_active_components(data,reprint)
 {
+	display_real_time();
 	var div = document.getElementById('m_current_tracking');
 	if (reprint) div = document.getElementById('m_reprint_labels');
 	if (data.length < 1) {
@@ -1204,12 +1215,12 @@ function m_show_active_components(data,reprint)
    		var M1_time = new Date(data[i]['M1_time']);
    		var M2_time = new Date(data[i]['M2_time']);
    		var prep_type_id = data[i]['prep_type_id'];
-   		console.log("M2 time -",data[i]['M2_time'],"-");
+   	//	console.log("M2 time -",data[i]['M2_time'],"-");
    		var remaining = 0;
    		var now = new Date();
 		var now_ms = now.getTime();
 		var M1_ms = M1_time.getTime(); // time in millisecs
-		console.log("prep_type_id",prep_type_id);
+	//	console.log("prep_type_id",prep_type_id);
 		if (reprint) {
    			
    		}
@@ -1218,7 +1229,7 @@ function m_show_active_components(data,reprint)
 	   			var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
 	   			var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
 	   			remaining = (M2_due_ms - now_ms) / (60 * 1000);
-	   			console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
+	//   			console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
 	   			tr.appendChild(new_td('<div class="m_bluedot">2</div>','comp'));
 	   		}
 	   		else {
@@ -1233,7 +1244,9 @@ function m_show_active_components(data,reprint)
 	   			tr.appendChild(new_td(format_minutes(remaining) + " remaining",'comp'));
 	   		}
 	   		else {
-	   			tr.appendChild(new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp'));
+	   			var td = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
+	   			
+	   			tr.appendChild(td);
 	   		}
    		}
    		// tr.appendChild(new_td(data[i]['M1_time'],'comp'));
@@ -1465,7 +1478,6 @@ console.log("loading menu item components");
     });
 }
 
-
 function new_td(content,classname) {
 	var td = document.createElement('td');
 	td.className = classname;
@@ -1473,4 +1485,10 @@ function new_td(content,classname) {
 	return(td);
 }
 
+function refresh_times()
+{
+	console.log("time!");
+	load_tracking_data();
+	setTimeout(refresh_times,60 * 1000);
+}
 

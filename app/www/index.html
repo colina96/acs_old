@@ -316,6 +316,7 @@ function show_dims()
 			<div class='m_top_menu larger' id='m_search_tab'  onclick="goto_comp_search()">&#x1F50E</div>
 			<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div>
 		</div>
+		<div id='current_time_kitchen'>TIME</div>
 		<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
 		<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
 		
@@ -576,10 +577,13 @@ function show_dims()
    console.log("initialising serial type",typeof(serial));
     app.initialize();
     $(document).ready(function(){
+    	
     	RESTHOME = "../../REST/";
     	check_login();
     	load_comps();
     	load_preptypes();
+    	setTimeout(refresh_times,60 * 1000); // once a minute
+    	console.log("STARTED timer");
     });
     </script>
 
