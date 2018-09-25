@@ -165,7 +165,7 @@ int send_form (char *ip, int port, char *f_name, char *data, int form_size, int 
 char *get_input_LNT(char *f_name, int *input_LNT_len, int *fields)
 {
 	char sdbuf[LENGTH]; // Send buffer
-    FILE *fp = f(f_name, "r");
+    FILE *fp = fopen(f_name, "r");
 	*input_LNT_len = 0;
 
     if(fp == NULL)
@@ -267,7 +267,7 @@ int parse_job_file(char *jobfile, char *labeldir)
 
 	jstr = &job_setup;
 
-    FILE *fp = f(jobfile, "r");
+    FILE *fp = fopen(jobfile, "r");
 
 	jstr->status = 0; // state flags covering all the found bits
 
@@ -360,7 +360,7 @@ int parse_job_file(char *jobfile, char *labeldir)
 
 		while(fgets(sdbuf, 1000, fp) != NULL)
 		{
-			printf(">%s",sdbuf);
+			if (DEBUG > 1) printf(">%s",sdbuf);
 			// skip comments
 			if (sdbuf[0] != '#') {
 				if (!strncmp(sdbuf,"Copies:",7))
@@ -444,7 +444,7 @@ int check_jobs_exists(char *prn_dir, char *labeldir)
 	struct dirent *ent;
 	int found = 0;
 
-	if ((dir = dir (prn_dir)) != NULL)
+	if ((dir = opendir (prn_dir)) != NULL)
 	{
 		// print all the files and directories within directory
 		while ((ent = readdir (dir)) != NULL)
@@ -466,7 +466,7 @@ int check_jobs_exists(char *prn_dir, char *labeldir)
 	}
 	else
 	{
-		printf("Cannot  job dir\n");
+		printf("Cannot open job dir\n");
 		return 0;
 	}
 	return 1;
@@ -477,7 +477,7 @@ int check_jobs_exists(char *prn_dir, char *labeldir)
  */
 int parse_settings_file(char *settingsfile, char *jobdir, char *labeldir, int *print)
 {
-	FILE *fp = f(settingsfile, "r");
+	FILE *fp = fopen(settingsfile, "r");
 	char sdbuf[1000]; // line buffer
 	labeldir[0] = jobdir[0] = '\0';
 
@@ -531,8 +531,8 @@ int main (int argc, char *argv[])
 
 	while (1)
 	{
-		if (!check_jobs_exists(jobdir,labeldir)) return 0;
-		sleep(5);
+		if (!check_jobs_exists(jobdir,labeldir)) sleep(10);
+		sleep(2);
 	}
 
 	return 1;

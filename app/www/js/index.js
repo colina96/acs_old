@@ -243,7 +243,7 @@ function openPage(pageName, elmnt, color,content_class,tab_class)
 	var popups = document.getElementsByClassName('popup');
     for (i = 0; i < popups.length; i++) {
     		popups[i].style.display = "none";
-    }
+    } 
 	var parent = document.getElementById(pageName).parentElement;
 	console.log("opening page ",pageName,content_class);
 	console.log('parent ',parent.id,parent.className);

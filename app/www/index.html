@@ -73,7 +73,7 @@ overflow:auto;
 z-index:2000;
 overflow:auto;
 }
-#status {
+#status,#log {
 height:20vh;
 width:100vw;
 background:black;
@@ -144,6 +144,13 @@ function manual_temp_submit()
 	var t = document.getElementsByName('manual_temp')[0].value;
 	document.getElementById('manual_entry').style.display = 'none';
 	temp_callback(t);
+}
+
+function manual_barcode_submit()
+{
+	var s = document.getElementsByName('manual_barcode')[0].value;
+	
+	process_barcode(s)
 }
 
 var ioio_started = false;
@@ -322,6 +329,9 @@ function show_dims()
 		
 			<div class='m_modal hidden' id='m_search'><div class='margin10'>SEARCH</div>
 			<div class='margin10'><input type="text" id="search" name='new_comp_desc'>
+			<div class='btns hidden' id='new_comp_btns'>
+				<button type='button' class='m_submit' onclick="new_component();">Add New</button>
+			</div>
 			</div>
 		</div>
 		
@@ -464,6 +474,7 @@ function show_dims()
 				<div class='m_label'><span>Select Plating Team</span></div>
 					<div id='plating_teams_list' class='center'></div>
 					<div class='btns'>
+					
 					<button type='button'  class='m_btn' onclick="select_plating_team();">Continue</button>
 					</div>
 			</div>
@@ -564,12 +575,20 @@ function show_dims()
 	</div> 
 	
 </div>
-</div></div>
-<div class='popup' id='manual_entry'>
-		<div class='center'>
-			<h2>Enter Temperature</h2></div>
-			<div class='enter_temp center'><input name='manual_temp' id='manual_temp' length='3' size='3' type='number'>
-			<button type='button'  class='m_btn' onclick='manual_temp_submit()'>Submit</button></div>
+
+	<div class='popup' id='manual_entry'>
+		<div class='center'><h2>Enter Temperature</h2></div>
+		<div class='enter_temp center'>
+			<input name='manual_temp' id='manual_temp' length='3' size='3' type='number'>
+			<button type='button'  class='m_btn' onclick='manual_temp_submit()'>Submit</button>
+		</div>
+	</div>
+
+	<div class='popup' id='barcode_entry_div'>
+		<div class='center'><h2>Enter Barcode</h2></div>
+		<div class='enter_temp center'>
+			<input name='manual_barcode' id='manual_code'>
+			<button type='button'  class='m_btn' onclick='manual_barcode_submit()'>Submit</button>
 		</div>
 	</div>
 

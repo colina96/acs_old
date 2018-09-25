@@ -24,12 +24,16 @@ function copy_object(o)
 
 function set_barcode_mode(mode)
 {
+	console.log('set_barcode_mode',mode);
 	barcode_mode = mode;
 	keyboard_str = '';
+	document.getElementById('barcode_entry_div').style.display = 'block';
+	console.log('set_barcode_mode',mode);
 }
+
 function process_barcode(s)
 { 
-	console.log("process_barcode " + s + " mode " + barcode_mode);
+	log("process_barcode " + s + " mode " + barcode_mode);
 	if (barcode_mode == null) {
 		return;
 	}
@@ -103,7 +107,7 @@ function save_plating_team()
 {
 	var data =  {data: JSON.stringify(plating_teams)};
 	console.log("Sent Off: %j", data);
-	barcode_mode = null;
+	set_barcode_mode (null);
 	goto_plating();
     $.ajax({
         url: RESTHOME + "save_plating_teams.php",
@@ -491,7 +495,7 @@ function reprint_plating_labels()
 }
 function do_show_menu_item_components(menu_item_id)
 {
-	barcode_mode = "PT_comp";
+	set_barcode_mode("PT_comp");
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 	active_menu_item_id = menu_item_id; // global - so we can come back to it
 	// var div = document.getElementById('menu_item_components_div');
@@ -586,8 +590,34 @@ function goto_comp_search()
 {
 	load_comps();
 	$('#search').val('');
+	document.getElementById('new_comp_btns').style.display = 'none';
 	openPage('m_search', this, 'red','m_modal','tabclass');
 }
+
+function new_component() {
+	console.log('adding ' + $('#search').val());
+	var component = new Object();
+	component.description = $('#search').val();
+	
+	// component.prep_type = new_comp['prep_type'];
+	
+	var data =  {data: JSON.stringify(component)};
+    console.log("Sent Off: %j", data);
+    $.ajax({
+        url: RESTHOME + "new_component.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { 
+        	load_comps(component_selected);
+        	// component_selected();
+        },
+        fail: (function (result) {
+            console.log("new _component fail ",result);
+        })
+    });
+}
+
 function goto_m_main(new_mode)
 {
 	if (new_mode) mode = new_mode;
@@ -615,7 +645,15 @@ function component_selected(id)
 {
 	console.log("component selected - loading chefs");
 	load_chefs(null);
-	new_comp = get_component_by_id(id);
+	new_comp == null;
+	if (id) {
+		new_comp = get_component_by_id(id);
+	}
+	
+	if (!new_comp) {
+		console.log("can't find component - search for " + $('#search').val());
+		new_comp = get_component_by_description($('#search').val());
+	}
 	if (new_comp['prep_type'] < 1) new_comp['prep_type'] = 1;
 	console.log(new_comp);
 	var prep_type_id = new_comp['prep_type'];
@@ -1126,6 +1164,14 @@ function print_component_labels(qty)
 
 	var comp = Object.assign({}, active_comp);
 	comp.copies = qty;
+	if (!comp.preparedBy) {
+		console.log(comp);
+		var chef = get_chef_by_id(comp['M1_chef_id']);
+		if (chef) {
+		    console.log("found chef ",chef['label']); 
+		    comp.preparedBy = chef['label'];
+		}
+	}
 	
 	var data =  {data: JSON.stringify(comp)};
     console.log("Sent Off: %j", data);
@@ -1366,7 +1412,7 @@ function select_plating_team()
 {
 	active_plating_team = document.getElementsByName('sel_pt')[0].value;
 	if (active_plating_team >= 0) {
-		barcode_mode = 'PT';
+		set_barcode_mode('PT');
 		console.log("Team " + active_plating_team);
 		load_chefs(goto_select_team);
 		document.getElementById('plating_comment_div').innerHTML = "Plating Team " + active_plating_team;
@@ -1439,7 +1485,7 @@ function load_menu_items()
 }
 
 
-function load_comps()
+function load_comps(fn)
 {
 console.log("loading menu item components");
     $.ajax({
@@ -1455,6 +1501,15 @@ console.log("loading menu item components");
                 // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
                 minLength: 2,
         		source: comps,
+        		response: function( event, ui ) { 
+        			// console.log("search response found " + ui.content.length); console.log(ui);
+        			if (ui.content.length == 0) {
+        				document.getElementById('new_comp_btns').style.display = 'block';
+        			}
+        			else {
+        				document.getElementById('new_comp_btns').style.display = 'none';
+        			}
+        		},
         		select: function(event, ui) {
                     // place the person.given_name value into the textfield called 'select_origin'...
                     $('#search').val(ui.item.label);
@@ -1467,7 +1522,7 @@ console.log("loading menu item components");
                 }  
             })
             console.log("got " + result.length + " comps");
-            
+            if (typeof(fn) == 'function') fn();
         },
         done: function(result) {
             console.log("done load_comps ");

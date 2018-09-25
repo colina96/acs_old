@@ -24,9 +24,12 @@ if ($userID > 0) {
 	}
 	
 	$fieldnames[] = 'expired';
-	$sql = "select *,(expiry_date < now()) as expired from COMPONENT  where finished is null";
+	$sql = "select *,(expiry_date < now()) as expired from COMPONENT  where finished is null and M1_check_id=".$userID;
 	if (!empty(get_url_token('finished'))) {
 		$sql = "select *,(expiry_date < now()) as expired from COMPONENT  where finished is not null";
+	}
+	else {
+		
 	}
 	if (!empty(get_url_token('all'))) {
 		$sql = "select *,(expiry_date < now()) as expired  from COMPONENT";
