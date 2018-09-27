@@ -27,6 +27,7 @@ function set_barcode_mode(mode)
 	console.log('set_barcode_mode',mode);
 	barcode_mode = mode;
 	keyboard_str = '';
+	document.getElementsByName('kitchen_manual_barcode')[0].value = '';
 }
 
 function process_barcode(s)
@@ -59,11 +60,19 @@ function process_barcode(s)
 			plating_comp_barcode_scanned(cid);
 		}
 		if (barcode_mode == 'active_comp') {
-			
-			console.log('find comp');
+			console.log('loogin for ' + cid);
 			for (var i = 0; i < active_comps.length; i++) {
 				if (active_comps[i].id == cid) {
 					active_comp_selected(i);
+					barcode_mode = null;
+				}
+			}
+		}
+		if (barcode_mode == 'kitchen_reprint') {
+			for (var i = 0; i < active_comps.length; i++) {
+				if (active_comps[i].id == cid) {
+					reprint_active_comp_labels(i);
+					barcode_mode = null;
 				}
 			}
 		}
@@ -1018,6 +1027,7 @@ function reprint_comp_labels()
 	openPage('m_reprint_labels', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
 	show('kitchen_manual_code');
+	set_barcode_mode('kitchen_reprint');
 	load_reprint_data();
 }
 function load_reprint_data()
