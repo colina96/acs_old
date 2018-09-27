@@ -146,10 +146,10 @@ function manual_temp_submit()
 	temp_callback(t);
 }
 
-function manual_barcode_submit()
+function manual_barcode_submit(input_name)
 {
-	var s = document.getElementsByName('manual_barcode')[0].value;
-	
+	var s = document.getElementsByName(input_name)[0].value;
+	console.log('manual_barcode_submit',s,input_name);
 	process_barcode(s)
 }
 
@@ -191,7 +191,7 @@ function read_temp(m)
 function start_serial()
 {
 	// only gets called in app
-    RESTHOME = "http://10.0.0.32/acs/REST/";
+    RESTHOME = "http://10.0.0.34/acs/REST/";
 
 	if (!serial_started) {
 		log("starting serial");
@@ -322,6 +322,9 @@ function show_dims()
 			<div class='m_top_menu' id='m_reprint_labels_tab'  onclick="reprint_comp_labels();">RE-PRINT LABELS</div>
 			<div class='m_top_menu larger' id='m_search_tab'  onclick="goto_comp_search()">&#x1F50E</div>
 			<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div>
+		</div>
+		<div id='kitchen_barcode'>
+			<input name='kitchen_manual_barcode' id='kitchen_manual_code' onchange='manual_barcode_submit("kitchen_manual_barcode")'>
 		</div>
 		<div id='current_time_kitchen'>TIME</div>
 		<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
@@ -523,7 +526,7 @@ function show_dims()
 			
 			<div class='m_modal hidden' id='m_plating_temp'>
 				<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
-				<div id='chk_plating_item_temp_div'></div>
+				<div id='chk_plating_item_temp_div' class='margin10'></div>
 				<div class='btns'>
 					<button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
 					<button type='button'  class='m_btn' onclick="goto_active_plating();">Return</button>
@@ -531,7 +534,7 @@ function show_dims()
 			</div>
 			<div class='m_modal hidden' id='m_plating_options'>
 				<div class='center modal_head'><span>PLATING OPTIONS</span></div>
-				<div id='plating_options_item_div' class='center orange'></div>
+				<div id='plating_options_item_div' class='center orange margin10'></div>
 				<div class='btns'>
 					<button type='button' class='m_submit' onclick="plating_batch_change();">Batch Change</button>
 					<button type='button' class='m_submit' onclick="reprint_plating_labels();">Re-Print Labels</button>
@@ -581,14 +584,6 @@ function show_dims()
 		<div class='enter_temp center'>
 			<input name='manual_temp' id='manual_temp' length='3' size='3' type='number'>
 			<button type='button'  class='m_btn' onclick='manual_temp_submit()'>Submit</button>
-		</div>
-	</div>
-
-	<div class='popup' id='barcode_entry_div'>
-		<div class='center'><h2>Enter Barcode</h2></div>
-		<div class='enter_temp center'>
-			<input name='manual_barcode' id='manual_code'>
-			<button type='button'  class='m_btn' onclick='manual_barcode_submit()'>Submit</button>
 		</div>
 	</div>
 

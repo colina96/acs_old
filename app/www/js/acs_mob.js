@@ -27,13 +27,11 @@ function set_barcode_mode(mode)
 	console.log('set_barcode_mode',mode);
 	barcode_mode = mode;
 	keyboard_str = '';
-	document.getElementById('barcode_entry_div').style.display = 'block';
-	console.log('set_barcode_mode',mode);
 }
 
 function process_barcode(s)
 { 
-	log("process_barcode " + s + " mode " + barcode_mode);
+	console.log("process_barcode " + s + " mode " + barcode_mode);
 	if (barcode_mode == null) {
 		return;
 	}
@@ -42,6 +40,7 @@ function process_barcode(s)
 		if (barcode_mode == 'login') {
 			login(uid);
 		}
+
 		if (barcode_mode == 'M1') {
 			set_user('m1_chef_id','m_temp_modal4',uid);
 			barcode_mode = null;
@@ -58,6 +57,15 @@ function process_barcode(s)
 		var cid = parseInt(s.substring(5));
 		if (barcode_mode == 'PT_comp') {
 			plating_comp_barcode_scanned(cid);
+		}
+		if (barcode_mode == 'active_comp') {
+			
+			console.log('find comp');
+			for (var i = 0; i < active_comps.length; i++) {
+				if (active_comps[i].id == cid) {
+					active_comp_selected(i);
+				}
+			}
 		}
 	}
 }
@@ -225,6 +233,7 @@ function show_plating_options(id)
 {
 	plating_item = get_plating_item_by_id(id);
 	console.log("show_plating_options " + id);
+	console.log(plating_item);
 	document.getElementById('plating_options_item_div').innerHTML = plating_item.dish_name;
 	openPage('m_plating_options', this, 'red','m_modal','tabclass');
 }
@@ -592,6 +601,7 @@ function goto_comp_search()
 	$('#search').val('');
 	document.getElementById('new_comp_btns').style.display = 'none';
 	openPage('m_search', this, 'red','m_modal','tabclass');
+	hide('kitchen_manual_code');
 }
 
 function new_component() {
@@ -1007,6 +1017,7 @@ function reprint_comp_labels()
 	console.log('reprint_comp_labels');
 	openPage('m_reprint_labels', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
+	show('kitchen_manual_code');
 	load_reprint_data();
 }
 function load_reprint_data()
@@ -1039,6 +1050,8 @@ function m_tracking()
 	console.log('goto_active_components');
 	openPage('m_current_tracking', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
+	show('kitchen_manual_code');
+	set_barcode_mode('active_comp');
 	load_tracking_data();
 }
 
@@ -1252,8 +1265,8 @@ function m_show_active_components(data,reprint)
    	tab.appendChild(tr);
    	for (var i=0; i<data.length; ++i) {
    		var tr = document.createElement('tr');
-   		
-   		var clickdiv = "<div onclick='active_comp_selected(" + i + ");'>" + data[i]['description'] + "</div>";
+   		var span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
+   		var clickdiv = "<div class='tooltip' onclick='active_comp_selected(" + i + ");'>" + data[i]['description'] + span_txt + "</div>";
    		if (reprint) clickdiv = "<div onclick='reprint_active_comp_labels(" + i + ");'>" + data[i]['description'] + "</div>";
    		// tr.appendChild(new_td(data[i]['description'],'comp'));
    		tr.appendChild(new_td(clickdiv,'comp'));

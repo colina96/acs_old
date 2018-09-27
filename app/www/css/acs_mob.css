@@ -144,9 +144,23 @@ select {
 	.border:1px solid green;
 	width:84vw;
 }
+#kitchen_barcode {
+	position:absolute;
+	top:30px;
+	left:6vw;
+	margin:0 auto;
+	width:75%;
+	color:white;
+	font-size:20px;
+}
+#kitchen_manual_code {
+	font-size:12px;
+	padding:0;
+}
 #current_time_kitchen {
 	position:absolute;
 	top:39px;
+	right:5px;
 	margin:0 auto;
 	color:white;
 	font-size:20px;

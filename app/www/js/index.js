@@ -57,7 +57,7 @@ var app = {
     onDeviceReady: function() {
     	console.log("onDeviceReady");
     	log("starting");
-    	RESTHOME = "http://10.0.0.32/acs/REST/";
+    	RESTHOME = "http://10.0.0.34/acs/REST/";
     	check_login();
     	// start_serial(); // arduino
     	// ioio_start();
