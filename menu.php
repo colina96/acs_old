@@ -408,6 +408,7 @@ function show_menu($menu_id)
 				select_probe_type($row['probe_type'],$row['component_id']);
 				
        			echo "</td>"; // plating team column
+       			echo "<td><input type='checkbox' name='sub_components_".$row['component_id']."'></td>"; 
 				//echo "<td><div class='acs_btn' onclick='del_menu_component(".$menu_id.",".$row['id'].",\"".$row['description']."\");'><span>Del</span></div></tr>";
 			}
 		}
