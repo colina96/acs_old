@@ -154,7 +154,7 @@ function open_future_menus() // dummy code for now
         var tr = document.createElement('tr');
         var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','PLATING TEAM'];
         for (var i in  header) {
-            console.log(i);
+          //   console.log(i);
         	var th = document.createElement('th');
         	th.innerHTML = header[i];
         	tr.appendChild(th);
@@ -194,16 +194,37 @@ function open_future_menus() // dummy code for now
                 	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid);
                 	tr.appendChild(td);
                 	td = document.createElement('td');
-                	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid)
+                	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
                 	tr.appendChild(td);
+                	if (menu_item_components[mid].subcomponents) {
+                		td = document.createElement('td');
+                    	td.innerHTML = 'X';
+                    	tr.appendChild(td);
+                	}
                 	table.appendChild(tr);
+                	if (menu_item_components[mid].subcomponents) {
+                    	var subs = menu_item_components[mid].subcomponents;
+                    	for (var s in subs) {
+                        	var comp = menu_item_components[subs[s]];
+	                		var tr = document.createElement('tr');
+	                    	var td = document.createElement('td');
+	                    	td.innerHTML = '';
+	                    	tr.appendChild(td);
+	                    	tr.appendChild(td);
+	                		td = document.createElement('td');
+	                    	td.innerHTML = comp.description;
+	                    	tr.appendChild(td);
+	                    	table.appendChild(tr);
+                    	}
+                	}
+                	
                 }
             }
             else {
                 console.log('no components');
             }
             table.appendChild(tr);
-            console.log(k);
+          //   console.log(k);
         }  
         div.appendChild(table);
       //  console.log(result);
