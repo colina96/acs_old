@@ -56,6 +56,29 @@ function get_fieldnames($table_name)
 	return($fieldnames);
 }
 
+function get_table($tablename,$conditions)
+{
+	$fieldnames = get_fieldnames($tablename);
+	$sql = "select * from ".$tablename;
+	if (!empty($conditions)) {
+		$sql .= ' '.$conditions;
+	}
+	$result = mysql_query($sql);
+	$comps = array();
+	if ($result) {
+	
+		while($row = mysql_fetch_array($result))
+		{
+			$comp = array();
+			foreach ($fieldnames as $f) {
+				$comp[$f] = utf8_encode($row[$f]);
+			}
+			$comps[$row['id']] = $comp;
+		}
+	}
+	return($comps);
+}
+
 function test_mysql_query($sql)
 {
 	$result = mysql_query($sql);

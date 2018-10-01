@@ -113,6 +113,7 @@ insert into MENU_ITEMS values (2,1,'F4489315','Vanilla Sauce',null);
 drop table if exists MENU_ITEM_COMPONENTS;
 CREATE TABLE MENU_ITEM_COMPONENTS (
 	id int not null  auto_increment,
+	menu_id int,
 	description varchar(100),
 	prep_type int,
 	probe_type int,
@@ -121,9 +122,10 @@ CREATE TABLE MENU_ITEM_COMPONENTS (
 	constraint pk_example primary key (id)
 );	
 
-insert into MENU_ITEM_COMPONENTS values (1,'Duck Rillettes',1,1,null,null);
-insert into MENU_ITEM_COMPONENTS values (2,'Apple Beetroot Jelly',1,2,null,null);
-insert into MENU_ITEM_COMPONENTS values (3,'Vanilla Sauce',2,0,null,null);
+insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1,null,null);
+insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2,null,null);
+insert into MENU_ITEM_COMPONENTS values (3,1,'Vanilla Sauce',2,0,null,null);
+insert into MENU_ITEM_COMPONENTS values (4,1,'Cream',2,0,null,5);
 
 drop table if exists MENU_ITEM_LINK;
 CREATE TABLE MENU_ITEM_LINK
@@ -138,6 +140,17 @@ CREATE TABLE MENU_ITEM_LINK
 insert into MENU_ITEM_LINK values (null,1,1,1);
 insert into MENU_ITEM_LINK values (null,1,1,2);
 insert into MENU_ITEM_LINK values (null,1,2,3);
+
+/* component link links components with subcompoents that need to be tracked - ie high risk components */;
+drop table if exists COMPONENT_LINK;
+CREATE TABLE COMPONENT_LINK
+(
+	id smallint unsigned not null auto_increment, 
+	menu_id int,
+	component_id smallint unsigned not null,
+	subcomponent_id smallint unsigned not null,
+	constraint pk_example primary key (id) 
+);
 
 drop table if exists COMPONENT;
 CREATE table COMPONENT (
@@ -205,12 +218,4 @@ CREATE table PLATING_ITEM_COMPONENT
 	constraint pk_example primary key (id) 
 );
 
-/* component link links components with subcompoents that need to be tracked - ie high risk components */;
-drop table if exists COMPONENT_LINK;
-CREATE TABLE COMPONENT_LINK
-(
-	id smallint unsigned not null auto_increment, 
-	component_id smallint unsigned not null,
-	subcomponent_id smallint unsigned not null,
-	constraint pk_example primary key (id) 
-);
+

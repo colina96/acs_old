@@ -7,7 +7,7 @@
 		  <button type='button' class='acs_menu_btn' href="#" id="active_menu"  
 		  	onclick="show_active_menus()">ACTIVE</button>
 		  <button type='button' class='acs_menu_btn' href="#" id="future_menu" 
-		  	onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">FUTURE</button>
+		  	onclick="open_future_menus();">FUTURE</button>
 		  <button type='button' class='acs_menu_btn' href="#" id="expired_menu" 
 		  	onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
 		  
@@ -38,7 +38,7 @@
 			<div id='active_menus' class='menu_details menu_details_active'>Active menu details 
 			<?php load_active_menus(); ?></div>
 			<div id='future_menus' class='menu_details'>Future menu details
-			<?php load_future_menus(); ?></div>
+			</div>
 			<div id='expired_menus' class='menu_details'>Expired menu details
 			<?php load_expired_menus(); ?></div>
 			<div id='add_menu_component_modal'>
@@ -87,6 +87,136 @@ if ($result) {
 </div>
 <script>
 var menus = null;
+function select_plating_team(plating_team,menu_item_id)
+{
+	var ret =  "<select name='plating_team_" + menu_item_id + "' onchange='update_plating_team(this," + menu_item_id + ");'>";
+	ret +=  "<option value='0'>-</option>";
+	for (var i = 1; i < 11; i++) {
+		ret += "<option value='" + i + "'";
+		if (i == plating_team) { ret += " selected"; }
+		ret += ">" + i + "</option>";
+	}
+	ret += "</select>";
+	return(ret);
+}
+function select_prep_type(preptypes,prep_type_id,comp_id)
+{
+//	console.log('select_prep_type');
+//	console.log(preptypes);
+	var ret =  "<select name='pt_" + comp_id + "' onchange='update_prep_type(this," + comp_id +");'>";
+	var idx = 1;
+	for (var i in preptypes) {
+		// console.log(i);
+		ret += "<option value='" + i + "'";
+		if (preptypes[i].id == prep_type_id) { ret += " selected"; }
+		ret +=  ">"+ preptypes[i].code + "</option>";
+	}
+	ret += "</select>";
+	return (ret);
+}
+
+function select_probe_type(probe_type_id,comp_id)
+{
+	var ret =  "<select name='probe_" + comp_id + "' onchange='update_probe_type(this," + comp_id + ");'>";
+	var idx = 1;
+	var probetypes = ['IR','Probe','N/A'];
+	for (var i in probetypes) {
+		ret += "<option value='" + i + "'";
+		if (idx++ == probe_type_id) { ret += " selected"; }
+		ret += ">" + probetypes[i] + "</option>";
+	}
+	ret +=  "</select>";
+	return (ret);
+}
+function open_future_menus() // dummy code for now
+{
+	openPage('future_menus', this, 'red','menu_details','acs_menu_btn');
+	var div = document.getElementById('future_menus');
+	console.log("loading menu " + RESTHOME + "get_menu.php");
+	 $.ajax({
+    url: RESTHOME + "get_menu.php",
+    type: "POST",
+   // data: data,
+   //  data: {points: JSON.stringify(points)},
+    dataType: 'json',
+    // contentType: "application/json",
+    success: function(result) {     
+     //   console.log("success got " + result + " ");
+        var menu = result['menu'];
+        var menu_items = result.menu_items;
+        var menu_item_components = result.menu_item_components;
+        var preptypes = result.preptypes;
+        
+        console.log(menu);
+        console.log(preptypes);
+        var table = document.createElement('table');
+        table.width='100%';
+        var tr = document.createElement('tr');
+        var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','PLATING TEAM'];
+        for (var i in  header) {
+            console.log(i);
+        	var th = document.createElement('th');
+        	th.innerHTML = header[i];
+        	tr.appendChild(th);
+        } 
+        table.appendChild(tr);
+        
+        var menu_fields = ['code','dish_name','',''];
+        for (var k in menu_items) {
+        	var tr = document.createElement('tr');
+        	tr.className = 'menu_item_row';
+            var item = menu_items[k];
+            for (var f in menu_fields) {
+            	var th = document.createElement('td');
+            	var fld = item[menu_fields[f]];
+            	if (!fld) fld = '';
+            	th.innerHTML = fld;
+            	tr.appendChild(th);
+            }
+            td = document.createElement('td');
+        	td.innerHTML = select_plating_team(item.plating_team,item.id);
+        	tr.appendChild(td);
+            table.appendChild(tr);
+            if (item['components']) {
+             //   console.log(item['components']);
+                var components = item['components'];
+                for (var c in components) {
+                	var tr = document.createElement('tr');
+                	var td = document.createElement('td');
+                	td.innerHTML = '';
+                	tr.appendChild(td);
+                	var td = document.createElement('td');
+                	var mid = components[c];
+                	td.innerHTML = menu_item_components[mid].description;
+                	
+                	tr.appendChild(td);
+                	td = document.createElement('td');
+                	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid);
+                	tr.appendChild(td);
+                	td = document.createElement('td');
+                	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid)
+                	tr.appendChild(td);
+                	table.appendChild(tr);
+                }
+            }
+            else {
+                console.log('no components');
+            }
+            table.appendChild(tr);
+            console.log(k);
+        }  
+        div.appendChild(table);
+      //  console.log(result);
+        
+    },
+    done: function(result) {
+        console.log("done preptypes ");
+    },
+    fail: (function (result) {
+        console.log("fail preptypes",result);
+    })
+});
+}
 function update_plating_team(s,id)
 {
 	
@@ -257,8 +387,32 @@ function load_active_menus()
 }
 function load_future_menus()
 {
-	echo "active menus";
+ //	var RESTHOME = 'REST/';
+	console.log("loading menu" + RESTHOME + "get_menu.php");
+/*	$.ajax({
+		url: RESTHOME + "get_menu.php",
+		type: "POST",
+		// data: data,
+		//  data: {points: JSON.stringify(points)},
+		dataType: 'json',
+		// contentType: "application/json",
+		success: function(result) {
+			
+			console.log("got menu" + result.menu_items.length);
+			
+	
+		},
+		done: function(result) {
+			console.log("load_menu_items");
+		},
+		fail: (function (result) {
+			console.log("fail load_menu_items",result);
+		}
+	}); */
+	
+	
 }
+
 function load_expired_menus()
 {
 	echo "active menus";
@@ -325,6 +479,20 @@ function show_menu($menu_id)
 		$types[$fieldname] = $row['Type'];
 	}
 	
+	// get component links 
+	$sql = "select * from COMPONENT_LINK where menu_id=".$menu_id;
+	// echo $sql;
+	$result = mysql_query($sql);
+	$component_links = array();
+	while ($row = mysql_fetch_array($result)) {
+		
+		$id = $row['component_id'];
+		if (empty($component_links[$id])) {
+			$component_links[$id] = array();
+		}
+		$component_links[$id][] = $row['subcomponent_id'];
+		echo "<!-- adding subcomponent ".$row['subcomponent_id']." to ".$id." -->";
+	}
 	$sql = "select * from MENUS where ID=".$menu_id;
 	// echo $sql;
 	$result = mysql_query($sql);
@@ -408,7 +576,15 @@ function show_menu($menu_id)
 				select_probe_type($row['probe_type'],$row['component_id']);
 				
        			echo "</td>"; // plating team column
-       			echo "<td><input type='checkbox' name='sub_components_".$row['component_id']."'></td>"; 
+       			echo "<td><input type='checkbox' name='sub_components_".$row['component_id']."'";
+       			if (!empty($component_links[$row['component_id']])) {
+       				echo " checked";
+       			}
+       			echo ">";
+       			if (!empty($component_links[$row['component_id']])) {
+       				echo count($component_links[$row['component_id']]);
+       			}
+       			echo "</td>"; 
 				//echo "<td><div class='acs_btn' onclick='del_menu_component(".$menu_id.",".$row['id'].",\"".$row['description']."\");'><span>Del</span></div></tr>";
 			}
 		}
