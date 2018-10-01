@@ -221,7 +221,26 @@ background-color: #EEEEEE;
 	background:var(--acs_blue_background);
 	color:white;
 }
-
+.btns {
+	display: flex;
+}
+#add_sub_popup {
+	position:absolute;
+	top:10px;
+	width:80%;
+	border:1px solid black;
+	border-radius: 15px;
+	zindex:1000;
+	display:none;
+	background:white;
+	padding:10px;
+}
+.add_subcompdiv, ingredient{
+	font-size:70%;
+	border:1px solid black;
+	text-align:center;
+	border-radius: 5px;
+}
 .top_menu_container {
 	.position:absolute;
 	.top:0;

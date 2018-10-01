@@ -14,6 +14,15 @@
 		</div>
 	
 		<div class="acs_right_content">
+			<!--  popup -->
+			<div id='add_sub_popup'>
+				<div class='h1'>Add subcomponent</div>
+				<input name'add_sub_in' id='add_sub_in'>
+				<div class='btns'>
+					<div class='btn' onclick='done_add_sub();'>Done</div>
+					<div class='btn' onclick='cancel_add_sub();'>Cancel</div>
+				</div>
+			</div>
 			<div id='new_menu' class='menu_details'>
 				
 				<h1>CREATE NEW MENU</h1>
@@ -128,10 +137,150 @@ function select_probe_type(probe_type_id,comp_id)
 	ret +=  "</select>";
 	return (ret);
 }
+
+function show_menu()
+{
+	var div = document.getElementById('future_menus');
+	div.innerHTML = '';
+    var table = document.createElement('table');
+    table.width='100%';
+    var tr = document.createElement('tr');
+    var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','PLATING TEAM'];
+    for (var i in  header) {
+      //   console.log(i);
+    	var th = document.createElement('th');
+    	th.innerHTML = header[i];
+    	tr.appendChild(th);
+    } 
+    table.appendChild(tr);
+    
+    var menu_fields = ['code','dish_name','',''];
+    for (var k in menu_items) {
+    	var tr = document.createElement('tr');
+    	tr.className = 'menu_item_row';
+        var item = menu_items[k];
+        for (var f in menu_fields) {
+        	var th = document.createElement('td');
+        	var fld = item[menu_fields[f]];
+        	if (!fld) fld = '';
+        	th.innerHTML = fld;
+        	tr.appendChild(th);
+        }
+        td = document.createElement('td');
+    	td.innerHTML = select_plating_team(item.plating_team,item.id);
+    	tr.appendChild(td);
+        table.appendChild(tr);
+        if (item['components']) {
+         //   console.log(item['components']);
+            var components = item['components'];
+            for (var c in components) {
+            	var tr = document.createElement('tr');
+            	var td = document.createElement('td');
+            	td.innerHTML = '';
+            	tr.appendChild(td);
+            	var td = document.createElement('td');
+            	var mid = components[c];
+            	td.innerHTML = menu_item_components[mid].description;
+            	
+            	tr.appendChild(td);
+            	td = document.createElement('td');
+            	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid);
+            	tr.appendChild(td);
+            	td = document.createElement('td');
+            	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
+            	tr.appendChild(td);
+            	td = document.createElement('td');
+            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>Add ingredient</div>";
+            	if (menu_item_components[mid].subcomponents) {
+                	// td.innerHTML += 'checked';
+            	}
+            	tr.appendChild(td);
+            	table.appendChild(tr);
+            	if (menu_item_components[mid].subcomponents) {
+                	var subs = menu_item_components[mid].subcomponents;
+                	for (var s in subs) {
+                    	var comp = menu_item_components[subs[s]];
+                		var tr = document.createElement('tr');
+                    	var td = document.createElement('td');
+                    	td.innerHTML = '';
+                    	tr.appendChild(td);
+                    	tr.appendChild(td);
+                		td = document.createElement('td');
+                    	td.innerHTML = "<span class='ingredient small'>Ingredient</span>" + comp.description;
+                    	tr.appendChild(td);
+                    	table.appendChild(tr);
+                	}
+            	}
+            	
+            }
+        }
+        else {
+            console.log('no components');
+        }
+        table.appendChild(tr);
+      //   console.log(k);
+    }  
+    div.appendChild(table);
+}
+
+var menu = null;
+var menu_items = null;
+var menu_item_components = null;
+var preptypes = null;
+
+function add_subcomponent(menu_item_component_id)
+{
+	show('add_sub_popup');
+	console.log('add_subcomponent ' + menu_item_component_id);
+	$('#add_sub_in').val('');
+	var data = Array();
+	for (var c in menu_item_components) {
+		var d = Array();
+		d.label = menu_item_components[c].description;
+		d.value = menu_item_components[c].id;
+		data.push(d);
+	}
+	$('#add_sub_in').autocomplete({
+        // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+        minLength: 2,
+		source: data,
+		// Once a value in the drop down list is selected, do the following:
+        select: function(event, ui) {
+        	
+            // place the person.given_name value into the textfield called 'select_origin'...
+            $('#add_sub_in').val(ui.item.label);
+            // and place the person.id into the hidden textfield called 'link_origin_id'. 
+         	console.log('selected ',ui.item.value);
+         	if (menu_item_components[menu_item_component_id].subcomponents) {
+             	console.log('adding to components');
+              	menu_item_components[menu_item_component_id]['subcomponents'].push(ui.item.value);
+             	show_menu();
+             	hide('add_sub_popup');
+         	}
+         // 	show_menu_item_components(ui.item.value);
+            return false;
+        }
+	
+    })
+}
+
+function done_add_sub()
+{
+	hide('add_sub_popup');
+}
+
+function cancel_add_sub()
+{
+	hide('add_sub_popup');
+}
+var menu = null;
+var menu_items = null;
+var menu_item_components = null;
+var preptypes = null;
 function open_future_menus() // dummy code for now
 {
 	openPage('future_menus', this, 'red','menu_details','acs_menu_btn');
-	var div = document.getElementById('future_menus');
+
 	console.log("loading menu " + RESTHOME + "get_menu.php");
 	 $.ajax({
     url: RESTHOME + "get_menu.php",
@@ -142,91 +291,14 @@ function open_future_menus() // dummy code for now
     // contentType: "application/json",
     success: function(result) {     
      //   console.log("success got " + result + " ");
-        var menu = result['menu'];
-        var menu_items = result.menu_items;
-        var menu_item_components = result.menu_item_components;
-        var preptypes = result.preptypes;
-        
-        console.log(menu);
-        console.log(preptypes);
-        var table = document.createElement('table');
-        table.width='100%';
-        var tr = document.createElement('tr');
-        var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','PLATING TEAM'];
-        for (var i in  header) {
-          //   console.log(i);
-        	var th = document.createElement('th');
-        	th.innerHTML = header[i];
-        	tr.appendChild(th);
-        } 
-        table.appendChild(tr);
-        
-        var menu_fields = ['code','dish_name','',''];
-        for (var k in menu_items) {
-        	var tr = document.createElement('tr');
-        	tr.className = 'menu_item_row';
-            var item = menu_items[k];
-            for (var f in menu_fields) {
-            	var th = document.createElement('td');
-            	var fld = item[menu_fields[f]];
-            	if (!fld) fld = '';
-            	th.innerHTML = fld;
-            	tr.appendChild(th);
-            }
-            td = document.createElement('td');
-        	td.innerHTML = select_plating_team(item.plating_team,item.id);
-        	tr.appendChild(td);
-            table.appendChild(tr);
-            if (item['components']) {
-             //   console.log(item['components']);
-                var components = item['components'];
-                for (var c in components) {
-                	var tr = document.createElement('tr');
-                	var td = document.createElement('td');
-                	td.innerHTML = '';
-                	tr.appendChild(td);
-                	var td = document.createElement('td');
-                	var mid = components[c];
-                	td.innerHTML = menu_item_components[mid].description;
-                	
-                	tr.appendChild(td);
-                	td = document.createElement('td');
-                	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid);
-                	tr.appendChild(td);
-                	td = document.createElement('td');
-                	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
-                	tr.appendChild(td);
-                	if (menu_item_components[mid].subcomponents) {
-                		td = document.createElement('td');
-                    	td.innerHTML = 'X';
-                    	tr.appendChild(td);
-                	}
-                	table.appendChild(tr);
-                	if (menu_item_components[mid].subcomponents) {
-                    	var subs = menu_item_components[mid].subcomponents;
-                    	for (var s in subs) {
-                        	var comp = menu_item_components[subs[s]];
-	                		var tr = document.createElement('tr');
-	                    	var td = document.createElement('td');
-	                    	td.innerHTML = '';
-	                    	tr.appendChild(td);
-	                    	tr.appendChild(td);
-	                		td = document.createElement('td');
-	                    	td.innerHTML = comp.description;
-	                    	tr.appendChild(td);
-	                    	table.appendChild(tr);
-                    	}
-                	}
-                	
-                }
-            }
-            else {
-                console.log('no components');
-            }
-            table.appendChild(tr);
-          //   console.log(k);
-        }  
-        div.appendChild(table);
+        menu = result['menu'];
+        menu_items = result.menu_items;
+        menu_item_components = result.menu_item_components;
+        preptypes = result.preptypes;
+        show_menu();
+ //       console.log(menu);
+ //       console.log(preptypes);
+ 
       //  console.log(result);
         
     },

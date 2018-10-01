@@ -139,15 +139,6 @@ function set_admin()
 	goto_home();
 }
 
-function show(div_id) 
-{
-	document.getElementById(div_id).style.display='block';
-}
-
-function hide(div_id) 
-{
-	document.getElementById(div_id).style.display='none';
-}
 
 
 function login(barcode_uid)
