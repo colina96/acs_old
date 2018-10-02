@@ -206,7 +206,10 @@ function show_menu()
                     	tr.appendChild(td);
                     	tr.appendChild(td);
                 		td = document.createElement('td');
-                    	td.innerHTML = "<span class='ingredient small'>Ingredient</span>" + comp.description;
+                    	td.innerHTML = "<span class='ingredient small'>Ingredient  - </span>" + comp.description;
+                    	tr.appendChild(td);
+                    	td = document.createElement('td');
+                    	td.innerHTML += "<div class='add_subcompdiv' onclick='remove_subcomponent(" + mid + "," + comp.id + ");'>Remove</div>";
                     	tr.appendChild(td);
                     	table.appendChild(tr);
                 	}
@@ -228,6 +231,73 @@ var menu_items = null;
 var menu_item_components = null;
 var preptypes = null;
 
+function remove_subcomponent(menu_item_component_id,ingredient_id) 
+{
+	// console.log('remove_subcomponent ',menu_item_component_id,ingredient_id) ;
+	if (!menu_item_components[menu_item_component_id].subcomponents) {
+ 		console.log('ERROR - no subcomponents');
+ 		return;
+ 	}
+
+ 	for ( var i = 0; i < menu_item_components[menu_item_component_id].subcomponents.length; i++) {
+ 		if ( menu_item_components[menu_item_component_id].subcomponents[i] == ingredient_id) {
+ 			menu_item_components[menu_item_component_id].subcomponents.splice(i,1);
+ 			show_menu();
+ 			remove_ingredient(active_menu_id,menu_item_component_id,ingredient_id)
+ 			return;
+ 		}	
+ 	}
+ 	console.log('ERROR - subcomponent not found',ingredient_id);
+	
+}
+function insert_ingredient(menu_id,component_id,subcomponent_id)
+{
+	
+	var component = new Object();
+	component['menu_id'] = menu_id;
+	component['component_id'] = component_id;
+	component['subcomponent_id'] = subcomponent_id;
+	var data =  {data: JSON.stringify(component)};
+    console.log("Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "link_ingredient.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { // need to get the id of the new component back to print labels
+            console.log("insert_ingredient result ",result);
+ 
+        },
+        fail: (function (result) {
+            console.log("start_componentfail ",result);
+        })
+    });
+}
+function remove_ingredient(menu_id,component_id,subcomponent_id)
+{
+	
+	var component = new Object();
+	component['menu_id'] = menu_id;
+	component['component_id'] = component_id;
+	component['subcomponent_id'] = subcomponent_id;
+	var data =  {data: JSON.stringify(component)};
+    console.log("Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "unlink_ingredient.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { // need to get the id of the new component back to print labels
+            console.log("insert_ingredient result ",result);
+ 
+        },
+        fail: (function (result) {
+            console.log("start_componentfail ",result);
+        })
+    });
+}
 function add_subcomponent(menu_item_component_id)
 {
 	show('add_sub_popup');
@@ -251,12 +321,15 @@ function add_subcomponent(menu_item_component_id)
             $('#add_sub_in').val(ui.item.label);
             // and place the person.id into the hidden textfield called 'link_origin_id'. 
          	console.log('selected ',ui.item.value);
-         	if (menu_item_components[menu_item_component_id].subcomponents) {
-             	console.log('adding to components');
-              	menu_item_components[menu_item_component_id]['subcomponents'].push(ui.item.value);
-             	show_menu();
-             	hide('add_sub_popup');
+         	if (!menu_item_components[menu_item_component_id].subcomponents) {
+         		menu_item_components[menu_item_component_id].subcomponents = Array();
          	}
+            console.log('adding to components');
+            menu_item_components[menu_item_component_id]['subcomponents'].push(ui.item.value);
+            insert_ingredient(active_menu_id,menu_item_component_id,ui.item.value);
+            show_menu();
+            hide('add_sub_popup');
+         	
          // 	show_menu_item_components(ui.item.value);
             return false;
         }
@@ -280,10 +353,16 @@ var preptypes = null;
 function open_future_menus() // dummy code for now
 {
 	openPage('future_menus', this, 'red','menu_details','acs_menu_btn');
+}
+var active_menu_id = null;
 
-	console.log("loading menu " + RESTHOME + "get_menu.php");
+function load_menu(menu_id)
+{
+	active_menu_id = menu_id;
+	openPage('future_menus', this, 'red','menu_details','acs_menu_btn');
+	console.log("loading menu " + RESTHOME + "get_menu.php?menu_id=" + menu_id);
 	 $.ajax({
-    url: RESTHOME + "get_menu.php",
+    url: RESTHOME + "get_menu.php?menu_id=" + menu_id,
     type: "POST",
    // data: data,
    //  data: {points: JSON.stringify(points)},
@@ -439,7 +518,9 @@ function show_menus(active,data)
    		tr.appendChild(new_td(show_date(start_date),'comp'));
    		var end_date = new Date(data[i]['end_date']);
    		tr.appendChild(new_td(show_date(end_date),'comp'));
-   		tr.appendChild(new_td("<a href='acs_menu.php?menu_id=" + data[i]['id'] + "'>edit</a>",'comp'));
+   		// tr.appendChild(new_td("<a href='acs_menu.php?menu_id=" + data[i]['id'] + "'>edit</a>",'comp'));
+   		var btn = "<div class='btn' onclick='load_menu(" + data[i]['id'] + ");'>Edit</div>";
+   		tr.appendChild(new_td(btn,'comp'));
    		// tr.appendChild(new_td("<button type='button' class='acs_comp_btn' onclick='act_component(" + i + ");'>Action</button>",'comp'));
    		tab.appendChild(tr);
     }
