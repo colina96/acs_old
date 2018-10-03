@@ -119,13 +119,18 @@ CREATE TABLE MENU_ITEM_COMPONENTS (
 	probe_type int,
 	location varchar(10),
 	shelf_life_days int,
+	high_risk BOOLEAN,
+	supplier varchar(100),
+	product varchar(20),
+	spec varchar(50),
+	PT_id int,
 	constraint pk_example primary key (id)
 );	
 
-insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1,null,null);
-insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2,null,null);
-insert into MENU_ITEM_COMPONENTS values (3,1,'Vanilla Sauce',2,0,null,null);
-insert into MENU_ITEM_COMPONENTS values (4,1,'Cream',2,0,null,5);
+insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1,null,null,FALSE,null,null,null,null);
+insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2,null,null,FALSE,null,null,null,null);
+insert into MENU_ITEM_COMPONENTS values (3,1,'Vanilla Sauce',2,0,null,null,FALSE,null,null,null,null);
+insert into MENU_ITEM_COMPONENTS values (4,1,'Cream',2,0,null,5,FALSE,null,null,null,null);
 
 drop table if exists MENU_ITEM_LINK;
 CREATE TABLE MENU_ITEM_LINK
@@ -136,10 +141,22 @@ CREATE TABLE MENU_ITEM_LINK
 	component_id int,
 	constraint pk_example primary key (id) 
 );
-
 insert into MENU_ITEM_LINK values (null,1,1,1);
 insert into MENU_ITEM_LINK values (null,1,1,2);
 insert into MENU_ITEM_LINK values (null,1,2,3);
+
+drop table if exists PRODUCT_TYPE;
+CREATE TABLE PRODUCT_TYPE
+(
+	id smallint unsigned not null auto_increment, 
+	description varchar(10),
+	constraint pk_example primary key (id) 
+);
+
+insert into PRODUCT_TYPE values (null,'FRESH');
+insert into PRODUCT_TYPE values (null,'FROZEN');
+insert into PRODUCT_TYPE values (null,'DRY');
+
 
 /* component link links components with subcompoents that need to be tracked - ie high risk components */;
 drop table if exists COMPONENT_LINK;

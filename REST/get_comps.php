@@ -8,6 +8,9 @@ $userID = $_SESSION['userID'];
 if ($userID > 0) {
 	$fieldnames = array();
 	$types = array();
+	$component_links = get_table("COMPONENT_LINK",null);
+	// add components to menu_item_components
+	
 	$result = mysql_query("show columns from MENU_ITEM_COMPONENTS");
 	
 	while ($row = mysql_fetch_array($result)) {
@@ -33,8 +36,10 @@ if ($userID > 0) {
 			}
 			$comp['label'] = utf8_encode($row['description']);
 			$comp['value'] = $row['id'];
+			$subs = find_ingredients($component_links,$row['id']);
+			if ($subs != null) $comp['subcomponents'] = $subs;
 			$comps[] = $comp;
-	
+			
 		}
 		$json = json_encode($comps);
 		if ($json) {
@@ -51,6 +56,21 @@ if ($userID > 0) {
 	
 }
 
+function find_ingredients($component_links,$menu_item_component_id)
+{
+	$ret = null;
+	foreach ($component_links as $link) {
+		$component_id = $link['component_id'];
+		$subcomponent_id = $link['subcomponent_id'];
+		if ($component_id == $menu_item_component_id) {
+			if (empty($ret)) {
+				$ret = array();
+			}
+			$ret[] = $subcomponent_id;
+		}
+	}
+	return ($ret);
+}
 
 
 

@@ -19,7 +19,7 @@
 				<div class='h1'>Add subcomponent</div>
 				<input name'add_sub_in' id='add_sub_in'>
 				<div class='btns'>
-					<div class='btn' onclick='done_add_sub();'>Done</div>
+					<div class='btn' onclick='new_subcomponent();'>Done</div>
 					<div class='btn' onclick='cancel_add_sub();'>Cancel</div>
 				</div>
 			</div>
@@ -145,7 +145,7 @@ function show_menu()
     var table = document.createElement('table');
     table.width='100%';
     var tr = document.createElement('tr');
-    var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','PLATING TEAM'];
+    var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','HIGH RISK','PLATING TEAM'];
     for (var i in  header) {
       //   console.log(i);
     	var th = document.createElement('th');
@@ -154,7 +154,7 @@ function show_menu()
     } 
     table.appendChild(tr);
     
-    var menu_fields = ['code','dish_name','',''];
+    var menu_fields = ['code','dish_name','','',''];
     for (var k in menu_items) {
     	var tr = document.createElement('tr');
     	tr.className = 'menu_item_row';
@@ -188,6 +188,14 @@ function show_menu()
             	tr.appendChild(td);
             	td = document.createElement('td');
             	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
+            	tr.appendChild(td);
+            	td = document.createElement('td');
+            	var innerHTML = "<input type='checkbox' name='high_risk_" + mid + "' onclick='set_high_risk(this," + mid + ");'";
+            	if (menu_item_components[mid].high_risk == 1) {
+                	innerHTML += ' checked';
+            	}
+            	innerHTML += '>';
+            	td.innerHTML = innerHTML;
             	tr.appendChild(td);
             	td = document.createElement('td');
             	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>Add ingredient</div>";
@@ -298,9 +306,66 @@ function remove_ingredient(menu_id,component_id,subcomponent_id)
         })
     });
 }
+
+function set_high_risk(checkbox,menu_item_component_id) 
+{
+	var component = new Object();
+	component.menu_id = active_menu_id;
+	component.menu_item_component_id = menu_item_component_id;
+	component.high_risk = checkbox.checked;
+	
+	// component.prep_type = new_comp['prep_type'];
+	
+	var data =  {data: JSON.stringify(component)};
+    console.log("Sent Off: %j", data);
+    $.ajax({
+        url: RESTHOME + "set_high_risk.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { 
+        	console.log(result);
+        	load_menu(active_menu_id)
+        	// component_selected();
+        },
+        fail: (function (result) {
+            console.log("new _component fail ",result);
+        })
+    });
+}
+
+function new_subcomponent() {
+	hide('add_sub_popup');
+	console.log('adding ' + $('#add_sub_in').val());
+	var component = new Object();
+	component.description = $('#add_sub_in').val();
+	component.menu_id = active_menu_id;
+	component.menu_item_component_id = active_menu_item_component_id;
+	// component.prep_type = new_comp['prep_type'];
+	
+	var data =  {data: JSON.stringify(component)};
+    console.log("Sent Off: %j", data);
+    $.ajax({
+        url: RESTHOME + "new_subcomponent.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { 
+        	console.log(result);
+        	load_menu(active_menu_id)
+        	// component_selected();
+        },
+        fail: (function (result) {
+            console.log("new _component fail ",result);
+        })
+    });
+}
+
+var active_menu_item_component_id = null;
 function add_subcomponent(menu_item_component_id)
 {
 	show('add_sub_popup');
+	active_menu_item_component_id = menu_item_component_id;
 	console.log('add_subcomponent ' + menu_item_component_id);
 	$('#add_sub_in').val('');
 	var data = Array();
@@ -315,6 +380,15 @@ function add_subcomponent(menu_item_component_id)
         minLength: 2,
 		source: data,
 		// Once a value in the drop down list is selected, do the following:
+		response: function( event, ui ) { 
+        			console.log("search response found " + ui.content.length); console.log(ui);
+        			if (ui.content.length == 0) {
+        				// document.getElementById('new_comp_btns').style.display = 'block';
+        			}
+        			else {
+        				// document.getElementById('new_comp_btns').style.display = 'none';
+        			}
+        		},
         select: function(event, ui) {
         	
             // place the person.given_name value into the textfield called 'select_origin'...

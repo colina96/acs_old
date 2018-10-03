@@ -668,7 +668,7 @@ function component_selected(id)
 	if (id) {
 		new_comp = get_component_by_id(id);
 	}
-	
+	console.log(new_comp);
 	if (!new_comp) {
 		console.log("can't find component - search for " + $('#search').val());
 		new_comp = get_component_by_description($('#search').val());
@@ -687,7 +687,23 @@ function component_selected(id)
 	if (prep_type_sign == 0) {
 		sign = ' < ';
 	}
-	if (M1_temp == null) { // low risk. No temp required
+	console.log(new_comp);
+	console.log(new_comp['subcomponents']);
+	if (new_comp['subcomponents']) {
+		console.log('ingredients');
+		openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
+		div = document.getElementById('m1_temp_div_1');
+		var d = "<div class='margin10'><table width='100%'>";
+		for (var i = 0; i < new_comp['subcomponents'].length; i++) {
+			var sub = get_component_by_id(new_comp['subcomponents'][i]);
+			d += "<tr><td>" + sub['description'] + '</td>';
+			d += "<td>-</td>";
+			d += "<td>-</td></tr>";
+		}
+		d += '</table></div>';
+		div.innerHTML = d;
+	}
+	else if (M1_temp == null) { // low risk. No temp required
 		console.log("LOW RISK");
 		set_barcode_mode("M1_LR");
 		openPage('m_temp_modal_LR', this, 'red','m_modal2','tabclass');
