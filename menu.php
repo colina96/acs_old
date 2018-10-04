@@ -16,17 +16,21 @@
 		<div class="acs_right_content">
 			<!--  popup -->
 			<div id='add_sub_popup'>
-				<div class='h1'>Add subcomponent</div>
-				<input name'add_sub_in' id='add_sub_in'>
+				<div class='h2'>Add subcomponent</div>
+				<table>
+				<tr><td>Description</td><td><input name'add_sub_in' id='add_sub_in'></td></tr>
+				<tr><td>
 				<div class='btns'>
 					<div class='btn' onclick='new_subcomponent();'>Done</div>
 					<div class='btn' onclick='cancel_add_sub();'>Cancel</div>
 				</div>
+				</table>
+				
 			</div>
 			<div id='new_menu' class='menu_details'>
 				
 				<h1>CREATE NEW MENU</h1>
-				<form method="post" enctype="multipart/form-data">
+				<form id='menuform' method="post" enctype="multipart/form-data">
 				<table><tr><td>OVERALL INFORMATION</td></tr>
 				<tr><td><input name='menu_name'></td>
 					<td><input name='menu_description'></td>
@@ -38,10 +42,9 @@
     			Select file to upload:
    				 <input type="file" name="fileToUpload" id="fileToUpload">
    				 <!--   div class='drop-files-container' id='drop-files-container'></div -->
-   				 <input type='submit' name='submit_menu' value='Submit' class='submit'>
+   				 <input type='submit' name='submit_menu' value='Submit Menu' class='submit' onclick='upload_menu();'>
    				 </td></tr></table></form>
-	
-	
+
 		
 			</div>
 			<div id='active_menus' class='menu_details menu_details_active'>Active menu details 
@@ -96,6 +99,26 @@ if ($result) {
 </div>
 <script>
 var menus = null;
+
+function upload_menu()
+{
+	console.log('uploading menu');
+	var form = document.getElementById('menuform');
+	var formData = new FormData(form);
+	$.ajax({
+        url: "REST/upload_menu.php",
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+            console.log(data)
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    }); 
+	return(true);
+}
+
 function select_plating_team(plating_team,menu_item_id)
 {
 	var ret =  "<select name='plating_team_" + menu_item_id + "' onchange='update_plating_team(this," + menu_item_id + ");'>";
@@ -180,8 +203,13 @@ function show_menu()
             	tr.appendChild(td);
             	var td = document.createElement('td');
             	var mid = components[c];
-            	td.innerHTML = menu_item_components[mid].description;
-            	
+            	var innerHTML = "<div";
+            	if (menu_item_components[mid].high_risk == 1) {
+            		innerHTML += " onclick='edit_high_risk_component(" + mid + ");'";
+            		
+            	}
+            	innerHTML += ">" + menu_item_components[mid].description + "</div>";
+            	td.innerHTML = innerHTML;
             	tr.appendChild(td);
             	td = document.createElement('td');
             	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid);
@@ -359,6 +387,12 @@ function new_subcomponent() {
             console.log("new _component fail ",result);
         })
     });
+}
+
+function edit_high_risk_component(menu_item_component_id)
+{
+	// show('edit_high_risk_popup');
+	console.log(menu_item_components[menu_item_component_id]);
 }
 
 var active_menu_item_component_id = null;
@@ -579,11 +613,15 @@ function show_menus(active,data)
 	div.innerHTML = "<h1>Active Menus</h1>";
 	var tab = document.createElement('table');
 	tab.className = 'menu_table';
+	tab.width = '100%';
+	tab.border = '1';
 	var tr = document.createElement('tr');
 	tr.appendChild(new_td('Description','comp'));
 	tr.appendChild(new_td('Start','comp'));
     tr.appendChild(new_td('End','comp'));   
-    
+    tr.appendChild(new_td('Code','comp'));   
+    tr.appendChild(new_td('Edit','comp'));   
+    tr.appendChild(new_td('Delete','comp'));   
    	tab.appendChild(tr);
    	for (i=0; i<data.length; ++i) {
    		var tr = document.createElement('tr');
@@ -592,9 +630,12 @@ function show_menus(active,data)
    		tr.appendChild(new_td(show_date(start_date),'comp'));
    		var end_date = new Date(data[i]['end_date']);
    		tr.appendChild(new_td(show_date(end_date),'comp'));
+   		tr.appendChild(new_td(data[i]['code'],'comp'));
    		// tr.appendChild(new_td("<a href='acs_menu.php?menu_id=" + data[i]['id'] + "'>edit</a>",'comp'));
    		var btn = "<div class='btn' onclick='load_menu(" + data[i]['id'] + ");'>Edit</div>";
    		tr.appendChild(new_td(btn,'comp'));
+   		var del = "<a href=acs_menu?delete_menu=" + data[i]['id'] + ">&#x274c</a>";
+   		tr.appendChild(new_td(del,'comp'));
    		// tr.appendChild(new_td("<button type='button' class='acs_comp_btn' onclick='act_component(" + i + ");'>Action</button>",'comp'));
    		tab.appendChild(tr);
     }
@@ -674,6 +715,7 @@ function load_menus()
 		if (!empty($_POST['new_menu_item'])) { new_menu_item(); }
 		if (!empty($_POST['add_menu_component'])) { add_menu_component(); }
 		if (!empty($_POST['del_menu_component'])) { del_menu_component(); }
+		/*
 		$menu_id = get_url_token('menu_id'); //  || get_url_token('cc_menu_id');
 		// echo "menu id $menu_id   ";
 		if (!empty($menu_id)) {		
@@ -681,10 +723,10 @@ function load_menus()
 			show_menu($menu_id);
 			//echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
 		}
-		else {
+		else { */
 			show_menus();
 			
-		}
+		/* } */
 	}
 }
 
@@ -696,7 +738,7 @@ function show_menus()
 
 		echo "<table class='menus_table' width='100%' border='1'>";
 		echo "<tr><td>Description</td><td>Start Date</td><td>End Date</td><td>Code</td>";
-		
+		echo "<td>Edit</td><td>Delete</td></tr>";
 		while($row = mysql_fetch_array($result))
 		{
 //			echo "<tr class='users'><td><a href='?edit=".$row['id']."'>".$row['id']."</a></td>";
@@ -706,7 +748,8 @@ function show_menus()
 			echo "<td>".$row['end_date']."</td>";
 			echo "<td>".$row['code']."</td>";
 			// echo "<td>".$row['comment']."</td>";
-			echo "<td><a href='acs_menu.php?menu_id=".$row['id']."'>edit</a></td>";
+			//echo "<td><a href='acs_menu.php?menu_id=".$row['id']."'>edit</a></td>";
+			echo "<td><div class='btn' onclick='load_menu(".$row['id'].");'>Edit</div></td>";
 			echo "<td><A href='acs_menu.php?delete_menu=".$row['id']."'>del</a></td>";
 			echo "</tr>";
 		}
