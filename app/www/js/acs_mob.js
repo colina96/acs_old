@@ -1057,7 +1057,7 @@ function load_reprint_data()
 	        success: function(result) {
 	            active_comps = result;
 	           // document.getElementById('active_comps').innerHTML = result;
-	            console.log("got " + result.length + " comps");
+	     //        console.log("got " + result.length + " comps");
 	            m_show_active_components(result,true);
 	            
 	        },
@@ -1581,7 +1581,7 @@ function new_td(content,classname) {
 
 function refresh_times()
 {
-	console.log("time!");
+	// console.log("time!");
 	load_tracking_data();
 	setTimeout(refresh_times,60 * 1000);
 }

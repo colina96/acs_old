@@ -201,6 +201,7 @@ function show_menu()
 	var div = document.getElementById('future_menus');
 	div.innerHTML = show_menu_details(div);
     var table = document.createElement('table');
+    table.className = 'menu_table';
     table.width='100%';
     var tr = document.createElement('tr');
     var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','HIGH RISK','PLATING TEAM'];
@@ -400,6 +401,8 @@ function set_high_risk(checkbox,menu_item_component_id)
 function inval(input_name)
 {
 	try {
+		var ele = document.getElementsByName(input_name)[0];
+		console.log(ele);
 		return(document.getElementsByName(input_name)[0].value);
 	}
 	catch (e) {
@@ -417,6 +420,7 @@ function new_subcomponent() {
 	component.high_risk = inval('comp_high_risk');
 	component.supplier = inval('comp_supplier');
 	component.product = inval('comp_product');
+	component.spec = inval('comp_spec');
 	component.PT_id = inval('comp_PT_id');
 	component.prep_type = inval('comp_prep_type');
 	component.product = inval('comp_product');
