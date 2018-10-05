@@ -15,6 +15,7 @@ $(document).ready(function(){
 	  
 	//Get the element with id="defaultOpen" and click on it
 	console.log("doc ready open page ",default_tab);
+	show_active_menus();
 	openPage(default_tab, this, 'red','tabcontent','tabclass');
 	});
 $( function() { $( "#menu_start" ).datepicker({ dateFormat: 'yy-mm-dd' });} );

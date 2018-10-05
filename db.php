@@ -86,6 +86,7 @@ function test_mysql_query($sql)
 	//	echo(mysql_error());
 		echo("<br>ERROR with ".$sql."<br><hr>");
 		// var_dump(debug_backtrace());
+		return(null);
 	}
 	return($result);
 }

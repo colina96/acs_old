@@ -20,7 +20,8 @@ $userID = $_SESSION['userID'];
 	$sql .= "(id, menu_id,description,prep_type) ";
 	$sql .= "values (null,".$menu_id.",'".$description."',".$prep_type.")";
 
-test_mysql_query($sql);
+$ret = test_mysql_query($sql);
+if ($ret != null) {
 $comp = array();
 $comp['id'] = mysql_insert_id();
 $comp['description'] = $description;
@@ -29,6 +30,7 @@ $sql .= $menu_id.",".$menu_item_component_id.",".$comp['id'].")";
 test_mysql_query($sql);
 $json = json_encode($comp);
 echo $json;
+}
 // echo $sql."\n\n";
 // 
  

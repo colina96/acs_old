@@ -17,15 +17,31 @@
 			<!--  popup -->
 			<div id='add_sub_popup'>
 				<div class='h2'>Add subcomponent</div>
+				<form id='menu_item_component_form'>
 				<table>
-				<tr><td>Description</td><td><input name'add_sub_in' id='add_sub_in'></td></tr>
+				<tr><td>Description</td><td><input name='description' id='add_sub_in'></td></tr>
+				<tr><td>Supplier</td><td><input name='comp_supplier'></td></tr>
+				<tr><td>Product</td><td><input name='comp_product'></td></tr>
+				<tr><td>Spec</td><td><input name='comp_spec'></td></tr>
+				<tr><td>PT</td><td>
+					<select name='comp_PT_id'>
+						<option value='1'>Fresh</option>
+						<option value='2'>Frozen</option>
+						<option value='3'>Dry</option>
+
+						
+					</select>
+					</td></tr>
+				<tr><td>Shelf life (days)</td><td><input type='number' name='comp_shelf_life_days'></td></tr>
+				<tr><td>High Risk</td><td><input type='checkbox' name='comp_high_risk' value='1'></td></tr>
+				<tr><td>Prep type</td><td><?php select_prep_type(null,'comp_prep_type'); ?></td></tr>
 				<tr><td>
 				<div class='btns'>
 					<div class='btn' onclick='new_subcomponent();'>Done</div>
 					<div class='btn' onclick='cancel_add_sub();'>Cancel</div>
 				</div>
 				</table>
-				
+				</form>
 			</div>
 			<div id='new_menu' class='menu_details'>
 				
@@ -161,10 +177,29 @@ function select_probe_type(probe_type_id,comp_id)
 	return (ret);
 }
 
+function show_menu_details (div)
+{
+	console.log(menu[active_menu_id]);
+	
+	var ret = "<table width=100%><tr><td>OVERALL INFORMATION</td></tr>"
+	ret += "<tr><td>Description</td>";
+	ret += "<td>Code</td>";
+	ret += "<td>Comment</td></tr>";
+	ret += "<tr><td>" + menu[active_menu_id]['description'] + "</td>";
+	ret += "<td>" + menu[active_menu_id]['code'] + "</td>";
+	ret += "<td>" + menu[active_menu_id]['comment'] + "</td>";
+	
+	ret += "<tr><td>DATE RANGE</td></tr>";
+	ret += "<tr><td>From: " + menu[active_menu_id]['start_date'];
+	ret += "<td>To: " + menu[active_menu_id]['end_date'];
+	ret += "</table><hr>";
+	return ret;
+}
+
 function show_menu()
 {
 	var div = document.getElementById('future_menus');
-	div.innerHTML = '';
+	div.innerHTML = show_menu_details(div);
     var table = document.createElement('table');
     table.width='100%';
     var tr = document.createElement('tr');
@@ -362,15 +397,32 @@ function set_high_risk(checkbox,menu_item_component_id)
     });
 }
 
+function inval(input_name)
+{
+	try {
+		return(document.getElementsByName(input_name)[0].value);
+	}
+	catch (e) {
+		console.log(e);
+		console.log('cannot read ' + input_name);
+	}
+}
 function new_subcomponent() {
 	hide('add_sub_popup');
 	console.log('adding ' + $('#add_sub_in').val());
 	var component = new Object();
 	component.description = $('#add_sub_in').val();
 	component.menu_id = active_menu_id;
-	component.menu_item_component_id = active_menu_item_component_id;
-	// component.prep_type = new_comp['prep_type'];
-	
+	component.menu_item_component_id = active_menu_item_component_id; 
+	component.high_risk = inval('comp_high_risk');
+	component.supplier = inval('comp_supplier');
+	component.product = inval('comp_product');
+	component.PT_id = inval('comp_PT_id');
+	component.prep_type = inval('comp_prep_type');
+	component.product = inval('comp_product');
+	component.shelf_life_days = inval('comp_shelf_life_days');
+
+	console.log(component);
 	var data =  {data: JSON.stringify(component)};
     console.log("Sent Off: %j", data);
     $.ajax({
@@ -724,7 +776,8 @@ function load_menus()
 			//echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
 		}
 		else { */
-			show_menus();
+
+			//  show_menus();
 			
 		/* } */
 	}
@@ -862,7 +915,7 @@ function show_menu($menu_id)
 				}
 				echo "<td>".$prep_type."</td>"; */
 				echo "<td>";
-				select_prep_type($prep_types,$row['prep_type'],$row['component_id']);
+				select_prep_type($row['prep_type'],$row['component_id']);
 				echo "</td><td>";
 				select_probe_type($row['probe_type'],$row['component_id']);
 				
@@ -901,13 +954,25 @@ function select_plating_team($plating_team,$menu_item_id)
 	}
 	echo "</select>";
 }
-function select_prep_type($preptypes,$prep_type_id,$comp_id)
+function select_prep_type($prep_type_id,$comp_id)
 {
-	echo "<select name='pt_".$comp_id."' onchange='update_prep_type(this,".$comp_id.");'>";
-	$idx = 1;
-	foreach ($preptypes as $p) {
-		echo "<option value='".$p."'";
-		if ($idx++ == $prep_type_id) { echo " selected"; }
+	$sql = "select * from PREP_TYPES order by ID";
+	$result = mysql_query($sql);
+	$preptypes = array();
+	if ($result) {
+		while($row = mysql_fetch_array($result)) {
+			$preptypes[$row['id']] = $row['code'];
+		}
+	}
+	if (is_int($comp_id)) {
+		echo "<select name='pt_".$comp_id."' onchange='update_prep_type(this,".$comp_id.");'>";
+	}
+	else {
+		echo "<select name='".$comp_id."'>";
+	}
+	foreach ($preptypes as $key => $p) {
+		echo "<option value='".$key."'";
+		if ($key == $prep_type_id) { echo " selected"; }
 		echo ">".$p."</option>";
 	}
 	echo "</select>";
