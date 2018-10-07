@@ -144,20 +144,20 @@ select {
 	.border:1px solid green;
 	width:84vw;
 }
-#kitchen_barcode {
+#kitchen_barcode, #dock_barcode {
 	position:absolute;
 	top:30px;
 	left:6vw;
 	margin:0 auto;
-	width:75%;
+	width:65%;
 	color:white;
 	font-size:20px;
 }
-#kitchen_manual_code {
+#kitchen_manual_code, #dock_manual_code {
 	font-size:12px;
 	padding:0;
 }
-#current_time_kitchen {
+#current_time_kitchen, #current_time_dock {
 	position:absolute;
 	top:39px;
 	right:5px;
@@ -497,4 +497,9 @@ th.plating_tab {
 	background:lightblue;
 }
 
+}
+.small {
+	font-size: 120%;
+	padding: 5px 10px;
+	
 }

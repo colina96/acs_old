@@ -16,10 +16,10 @@
 		<div class="acs_right_content">
 			<!--  popup -->
 			<div id='add_sub_popup'>
-				<div class='h2'>Add subcomponent</div>
+				<div id='component_title' class='h2'>Add subcomponent</div>
 				<form id='menu_item_component_form'>
-				<table>
-				<tr><td>Description</td><td><input name='description' id='add_sub_in'></td></tr>
+				<table><input name='comp_id' type='hidden'>
+				<tr><td>Description</td><td><input name='description' id='comp_description'></td></tr>
 				<tr><td>Supplier</td><td><input name='comp_supplier'></td></tr>
 				<tr><td>Product</td><td><input name='comp_product'></td></tr>
 				<tr><td>Spec</td><td><input name='comp_spec'></td></tr>
@@ -228,6 +228,9 @@ function show_menu()
         td = document.createElement('td');
     	td.innerHTML = select_plating_team(item.plating_team,item.id);
     	tr.appendChild(td);
+    	td = document.createElement('td');
+    	td.innerHTML = "<div class='btn' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
+    	tr.appendChild(td);
         table.appendChild(tr);
         if (item['components']) {
          //   console.log(item['components']);
@@ -246,6 +249,7 @@ function show_menu()
             	}
             	innerHTML += ">" + menu_item_components[mid].description + "</div>";
             	td.innerHTML = innerHTML;
+            	td.width='50%';
             	tr.appendChild(td);
             	td = document.createElement('td');
             	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid);
@@ -263,6 +267,7 @@ function show_menu()
             	tr.appendChild(td);
             	td = document.createElement('td');
             	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>Add ingredient</div>";
+            	td.colSpan = 2;
             	if (menu_item_components[mid].subcomponents) {
                 	// td.innerHTML += 'checked';
             	}
@@ -278,7 +283,9 @@ function show_menu()
                     	tr.appendChild(td);
                     	tr.appendChild(td);
                 		td = document.createElement('td');
-                    	td.innerHTML = "<span class='ingredient small'>Ingredient  - </span>" + comp.description;
+                    	var innerHTML = "<span class='ingredient small'>Ingredient  - </span>";
+                    	innerHTML += "<div onclick='edit_high_risk_component(" + comp.id + ");'>" + comp.description + "</div>";
+                    	td.innerHTML= innerHTML;
                     	tr.appendChild(td);
                     	td = document.createElement('td');
                     	td.innerHTML += "<div class='add_subcompdiv' onclick='remove_subcomponent(" + mid + "," + comp.id + ");'>Remove</div>";
@@ -412,11 +419,12 @@ function inval(input_name)
 }
 function new_subcomponent() {
 	hide('add_sub_popup');
-	console.log('adding ' + $('#add_sub_in').val());
+	console.log('adding ' + $('#comp_description').val());
 	var component = new Object();
-	component.description = $('#add_sub_in').val();
+	component.description = $('#comp_description').val();
 	component.menu_id = active_menu_id;
 	component.menu_item_component_id = active_menu_item_component_id; 
+	component.id = inval('comp_id');
 	component.high_risk = inval('comp_high_risk');
 	component.supplier = inval('comp_supplier');
 	component.product = inval('comp_product');
@@ -449,6 +457,23 @@ function edit_high_risk_component(menu_item_component_id)
 {
 	// show('edit_high_risk_popup');
 	console.log(menu_item_components[menu_item_component_id]);
+	var comp = menu_item_components[menu_item_component_id];
+	for (var c in comp) {
+		console.log(c + " => " + comp[c]);
+		if (!comp[c] || comp[c] == null || comp[c] == 'null') {
+			comp[c] = '';
+		}
+		if (document.getElementById("comp_" + c)) {
+			document.getElementById("comp_" + c).value = comp[c];
+		}
+		else if (document.getElementsByName("comp_" + c) && document.getElementsByName("comp_" + c)[0]) {
+			document.getElementsByName("comp_" + c)[0].value = comp[c];
+		} else 
+		{
+			console.log('error ' + "comp_" + c);
+		}
+	}	
+	show('add_sub_popup');
 }
 
 var active_menu_item_component_id = null;
@@ -457,7 +482,7 @@ function add_subcomponent(menu_item_component_id)
 	show('add_sub_popup');
 	active_menu_item_component_id = menu_item_component_id;
 	console.log('add_subcomponent ' + menu_item_component_id);
-	$('#add_sub_in').val('');
+	$('#comp_description').val('');
 	var data = Array();
 	for (var c in menu_item_components) {
 		var d = Array();
@@ -465,7 +490,7 @@ function add_subcomponent(menu_item_component_id)
 		d.value = menu_item_components[c].id;
 		data.push(d);
 	}
-	$('#add_sub_in').autocomplete({
+	$('#comp_description').autocomplete({
         // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
         minLength: 2,
 		source: data,
@@ -482,7 +507,7 @@ function add_subcomponent(menu_item_component_id)
         select: function(event, ui) {
         	
             // place the person.given_name value into the textfield called 'select_origin'...
-            $('#add_sub_in').val(ui.item.label);
+            $('#comp_description').val(ui.item.label);
             // and place the person.id into the hidden textfield called 'link_origin_id'. 
          	console.log('selected ',ui.item.value);
          	if (!menu_item_components[menu_item_component_id].subcomponents) {

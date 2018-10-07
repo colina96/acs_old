@@ -10,6 +10,7 @@ $comp = json_decode($_POST["data"],true);
 // print("php got comp: " . sizeof($comp));
  
 $description = mysql_escape_string($comp['description']);
+$id = !empty($comp['id'])?$comp['id']:null;
 $menu_id = $comp['menu_id'];
 $menu_item_component_id = $comp['menu_item_component_id'];
 $prep_type = !empty($comp['prep_type'])?$comp['prep_type']:'5';
@@ -23,7 +24,19 @@ $spec = !empty($comp['spec'])?mysql_escape_string($comp['spec']):'null';
 $PT_id = !empty($comp['PT_id'])?$comp['PT_id']:'null';
 
 $userID = $_SESSION['userID'];
-
+$sql = '';
+if (!empty($id) && $id > 0) {
+	echo "component already exists";
+	$sql = "REPLACE into MENU_ITEM_COMPONENTS ";
+	$sql .= "(id, menu_id,description,prep_type,probe_type,location,shelf_life_days,high_risk,supplier,product,spec,PT_id) ";
+	$sql .= "values (".$id.",".$menu_id.",'".$description."',".$prep_type.",".$probe_type;
+	$sql .= ",'".$location."',".$shelf_life_days.",".$high_risk;
+	$sql .= ",'".$supplier."','".$product."','".$spec."',".$PT_id;
+	$sql .= ")";
+	echo $sql;
+	$ret = test_mysql_query($sql);
+}
+else {
 	$sql = "insert into MENU_ITEM_COMPONENTS ";
 	$sql .= "(id, menu_id,description,prep_type,probe_type,location,shelf_life_days,high_risk,supplier,product,spec,PT_id) ";
 	$sql .= "values (null,".$menu_id.",'".$description."',".$prep_type.",".$probe_type;
@@ -31,16 +44,17 @@ $userID = $_SESSION['userID'];
 	$sql .= ",'".$supplier."','".$product."','".$spec."',".$PT_id;
 	$sql .= ")";
 
-$ret = test_mysql_query($sql);
-if ($ret != null) {
-$comp = array();
-$comp['id'] = mysql_insert_id();
-$comp['description'] = $description;
-$sql = "insert into COMPONENT_LINK (id,menu_id,component_id,subcomponent_id) values (null,";
-$sql .= $menu_id.",".$menu_item_component_id.",".$comp['id'].")";
-test_mysql_query($sql);
-$json = json_encode($comp);
-echo $json;
+	$ret = test_mysql_query($sql);
+	if ($ret != null && $menu_item_component_id) {
+		$comp = array();
+		$comp['id'] = mysql_insert_id();
+		$comp['description'] = $description;
+		$sql = "insert into COMPONENT_LINK (id,menu_id,component_id,subcomponent_id) values (null,";
+		$sql .= $menu_id.",".$menu_item_component_id.",".$comp['id'].")";
+		test_mysql_query($sql);
+		$json = json_encode($comp);
+		echo $json;
+	}
 }
 // echo $sql."\n\n";
 // 

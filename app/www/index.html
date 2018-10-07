@@ -307,11 +307,44 @@ function show_dims()
 			<div id='m_login'></div>
 			<div id='log_div' class='serial hidden' onclick='qpack_init();'>start scan</div>
 			<div class='btns'>
+			<button type='button' class='m_btn' onclick="goto_dock();">Dock</button>
 			<button type='button' class='m_btn' onclick="goto_m_main('kitchen');">Kitchen</button>
 			<button type='button'  class='m_btn' onclick="goto_plating_teams();">Plating</button>
 			<button type='button'  class='m_btn' onclick="logout();">Logout</button>
 			<!--  button type='button'  class='m_btn' onclick="show_dims();">Dims</button -->
 			</div>
+		</div>
+	</div>
+	<!--  dock pages -->
+	<div class='mobile_main hidden' id='dock_main'>
+		<div class='m_main'>
+			<div class='m_top_menu_container'>
+				
+				<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div>
+				
+				<div id='dock_barcode'><input name='dock_manual_code' id='dock_manual_code' onchange='manual_barcode_submit("dock_manual_barcode")'>
+				</div>
+				<div id='current_time_dock'>TIME</div>
+			</div>
+			<div class='m_modal' id='m_dock'>
+					
+				
+
+				
+					<div class='margin10'>SEARCH</div>
+					<div class='margin10'><input type="text" id="dock_search">
+					<div id='dock_display_comp_div'>
+						<div id='dock_display_comp_div1'></div>
+						<div class='btns hidden' id='dock_comp_selected_btns'>
+							<button type='button' class='m_submit' onclick="read_M1temp();">Check Now</button>
+							<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
+						</div>
+					</div>
+					
+					</div>
+				
+			</div>
+
 		</div>
 	</div>
 	<!--  kitchen temp pages -->
@@ -330,15 +363,14 @@ function show_dims()
 		<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
 		<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
 		
-			<div class='m_modal hidden' id='m_search'><div class='margin10'>SEARCH</div>
-			<div class='margin10'><input type="text" id="search" name='new_comp_desc'>
-			<div class='btns hidden' id='new_comp_btns'>
-				<button type='button' class='m_submit' onclick="new_component();">Add New</button>
+			<div class='m_modal hidden' id='m_search'>
+				<div class='margin10'>SEARCH</div>
+				<div class='margin10'><input type="text" id="search" name='new_comp_desc'>
+				<div class='btns hidden' id='new_comp_btns'>
+					<button type='button' class='m_submit' onclick="new_component();">Add New</button>
+				</div>
+				</div>
 			</div>
-			</div>
-		</div>
-		
-		
 		</div>
 	</div>
 	

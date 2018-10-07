@@ -637,12 +637,81 @@ function new_component() {
     });
 }
 
+function show_dock_component(cid)
+{
+	show('dock_display_comp_div');
+	var div = document.getElementById('dock_display_comp_div');
+	var comp = get_component_by_id(cid);
+	if (!comp) {
+		alert("ERROR");
+		return;
+	}
+	console.log(comp);
+	var flds = ['description','supplier','product','spec'];
+	for (var i =0; i < flds.length; i++) {
+		var d = document.createElement('div');
+		d.className = 'smaller';
+		d.innerHTML = flds[i];
+		div.appendChild(d);
+		var d = document.createElement('div');
+		d.className = 'small';
+		d.innerHTML = comp[flds[i]];
+		div.appendChild(d);
+	}
+	show('dock_comp_selected_btns');
+}
+
+function show_dock()
+{
+	openPage('dock_main', this, 'red','mobile_main','tabclass');
+	openPage('m_dock', this, 'red','m_modal','tabclass');
+	var dock_items = new Array();
+	for (var i = 0; i < comps.length;i++) {
+		if (comps[i].high_risk == 1) {
+			console.log(comps[i]);
+			dock_items.push(comps[i]);
+		}
+	}
+	 $('#dock_search').autocomplete({
+         // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+         minLength: 2,
+ 		source: dock_items,
+ 		response: function( event, ui ) { 
+ 			// console.log("search response found " + ui.content.length); console.log(ui);
+ 			/*
+ 			if (ui.content.length == 0) {
+ 				document.getElementById('new_comp_btns').style.display = 'block';
+ 			}
+ 			else {
+ 				document.getElementById('new_comp_btns').style.display = 'none';
+ 			} */
+ 		},
+ 		select: function(event, ui) {
+             // place the person.given_name value into the textfield called 'select_origin'...
+             $('#dock_search').val(ui.item.label);
+             // and place the person.id into the hidden textfield called 'link_origin_id'. 
+          	console.log('selected ',ui.item.value);
+          	show_dock_component(ui.item.value);
+          	// cordova.plugins.Keyboard.close();
+             return false;
+         }  
+     })
+}
+
+function goto_dock()
+{
+	load_comps(show_dock);
+}
 function goto_m_main(new_mode)
 {
 	if (new_mode) mode = new_mode;
 	if (mode == 'kitchen') {
 		openPage('mm2', this, 'red','mobile_main','tabclass');
 		m_tracking();
+	}
+	else if (mode == 'dock') {
+		openPage('dock_main', this, 'red','mobile_main','tabclass');
+		
 	}
 	else {
 		goto_plating();
@@ -1091,7 +1160,7 @@ function load_tracking_data()
 	        success: function(result) {
 	            active_comps = result;
 	           // document.getElementById('active_comps').innerHTML = result;
-	            console.log("got " + result.length + " comps");
+	            // console.log("got " + result.length + " comps");
 	            m_show_active_components(result,false);
 	            
 	        },
@@ -1263,6 +1332,7 @@ function display_real_time()
 	  m = checkTime(m);
 	  h = checkTime(h);
 	  document.getElementById('current_time_kitchen').innerHTML = h + ":" + m;
+	  document.getElementById('current_time_dock').innerHTML = h + ":" + m;
 }
 function m_show_active_components(data,reprint)
 {
