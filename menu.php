@@ -383,7 +383,7 @@ function set_high_risk(checkbox,menu_item_component_id)
 	var component = new Object();
 	component.menu_id = active_menu_id;
 	component.menu_item_component_id = menu_item_component_id;
-	component.high_risk = checkbox.checked;
+	component.high_risk = checkbox.checked?1:0;
 	
 	// component.prep_type = new_comp['prep_type'];
 	
@@ -490,12 +490,21 @@ function edit_high_risk_component(menu_item_component_id)
 }
 
 var active_menu_item_component_id = null;
+function clear_flds(flds)
+{
+	for (var i = 0; i < flds.length; i++ ) {
+		if (document.getElementsByName(flds[i])) {
+			document.getElementsByName(flds[i])[0].value = '';
+		}
+	}
+}
 function add_subcomponent(menu_item_component_id)
 {
 	show('add_sub_popup');
 	document.getElementById('component_title').innerHTML = 'Add ingredient';
 	active_menu_item_component_id = menu_item_component_id;
 	console.log('add_subcomponent ' + menu_item_component_id);
+	clear_flds(['comp_id','comp_supplier','comp_product','comp_spec']);
 	$('#comp_description').val('');
 	var data = Array();
 	for (var c in menu_item_components) {

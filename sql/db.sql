@@ -10,7 +10,11 @@ password varchar(50) not null,
 firstname varchar(20) not null, 
 lastname varchar(20) not null, 
 function varchar(20) , 
-admin int,
+admin BOOLEAN,
+dock BOOLEAN,
+kitchen BOOLEAN,
+plating BOOLEAN,
+supervisor BOOLEAN,
 last_login datetime,
 constraint pk_example primary key (id) );
 INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)

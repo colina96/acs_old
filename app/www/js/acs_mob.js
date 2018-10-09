@@ -41,7 +41,9 @@ function process_barcode(s)
 		if (barcode_mode == 'login') {
 			login(uid);
 		}
-
+		if (barcode_mode == 'dock_QA') {
+			dock_QA_scan(uid);
+		}
 		if (barcode_mode == 'M1') {
 			set_user('m1_chef_id','m_temp_modal4',uid);
 			barcode_mode = null;
@@ -687,6 +689,10 @@ function show_dock()
 		}
 	}
 	div.appendChild(table);
+	setup_dock_search(dock_items);
+}
+function setup_dock_search(dock_items)
+{
 	 $('#dock_search').autocomplete({
          // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
          minLength: 2,
@@ -882,8 +888,16 @@ function check_temp_m1_dock(t)
 	
 }
 
+function dock_QA_scan(uid)
+{
+	new_comp.M1_action_code = 99; // TODO must fix
+	new_comp.M1_chef_id = uid;
+	openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
+}
+
 function dock_qa_override()
 {
+	set_barcode_mode('dock_QA');
 	openPage('dock_m_temp_modal_qa', this, 'red','m_modal','tabclass');
 }
 
@@ -958,6 +972,7 @@ function start_component(dock)
 	active_comp = copy_object(new_comp);
 	component.comp_id = new_comp['id'];
 	component.prep_type = new_comp['prep_type'];
+	component.M1_action_code = new_comp['M1_action_code'];
 	component.shelf_life_days = new_comp.shelf_life_days;
 	component.dock = dock;
 	prep_type_id = component.prep_type;

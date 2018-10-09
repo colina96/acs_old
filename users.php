@@ -90,6 +90,16 @@ function show_user($edit_id)
 					echo "<tr><td>".$fieldname."</td><td class='length_inputs'>";
 					echo "<input name='".$fieldname."' value=\"".$row[$fieldname]."\" width='100%'></td></tr>";
 				}
+				else if ($types[$fieldname] == "tinyint(1)") {
+					echo "<tr><td>".$fieldname."</td><td class='length_inputs'>";
+					echo "<input name='".$fieldname."' type='checkbox' value='1'";
+					if ($row[$fieldname] == 1) echo " checked";
+					echo "></td></tr>"; 
+				}/*
+				else {
+					echo "<tr><td>".$fieldname."</td><td class='length_inputs'>";
+					echo $types[$fieldname]."</td></tr>";
+				} */
 			}
 		}
 		echo "</table>";
@@ -133,6 +143,17 @@ function update_user()
 		{
 			if ($n++ > 0) $sql .= ", ";
 			$sql .= $fieldname."='".mysql_escape_string( $_POST[$fieldname])."'";
+		}
+		else if ($types[$fieldname] == "tinyint(1)") {
+			if ($n++ > 0) $sql .= ", ";
+			if (empty($_POST[$fieldname]) || $_POST[$fieldname] != 1) {
+				$sql .= $fieldname."=false";
+			}
+			else {
+				$sql .= $fieldname."=true";
+			}
+			
+		
 		}
 	}
 
