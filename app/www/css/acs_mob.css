@@ -443,6 +443,12 @@ table.plating_tab td , table.item_table td {
 	color:black;
 	height:45px;
 }
+
+.small {
+	font-size: 120%;
+	padding: 5px 10px;
+	
+}
 .ui-menu .ui-menu-item-wrapper {
     position: relative;
     height: 25px;
@@ -498,8 +504,4 @@ th.plating_tab {
 }
 
 }
-.small {
-	font-size: 120%;
-	padding: 5px 10px;
-	
-}
+

@@ -121,6 +121,9 @@ function temp_callback(s) // works out where to send the temperature reading
 	}
 	if (temp_mode == 'M1') {
 		check_temp(s);
+	}else if (temp_mode == 'M1_dock') {
+		// component.M2_temp = temp_reading;
+		check_temp_m1_dock(s);
 	}
 	else if (temp_mode == 'M2') {
 		// component.M2_temp = temp_reading;
@@ -316,33 +319,71 @@ function show_dims()
 		</div>
 	</div>
 	<!--  dock pages -->
+	<!--  there is some duplication of kitchen pages and functionality but safer to have copies -->
 	<div class='mobile_main hidden' id='dock_main'>
 		<div class='m_main'>
 			<div class='m_top_menu_container'>
 				
 				<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div>
-				
-				<div id='dock_barcode'><input name='dock_manual_code' id='dock_manual_code' onchange='manual_barcode_submit("dock_manual_barcode")'>
-				</div>
-				<div id='current_time_dock'>TIME</div>
 			</div>
+			<div id='dock_barcode'><input name='dock_manual_code' id='dock_manual_code' onchange='manual_barcode_submit("dock_manual_barcode")'>
+			</div>
+			<div id='current_time_dock'>TIME</div>
+			
 			<div class='m_modal' id='m_dock'>
-					
-				
-
-				
 					<div class='margin10'>SEARCH</div>
 					<div class='margin10'><input type="text" id="dock_search">
-					<div id='dock_display_comp_div'>
-						<div id='dock_display_comp_div1'></div>
-						<div class='btns hidden' id='dock_comp_selected_btns'>
-							<button type='button' class='m_submit' onclick="read_M1temp();">Check Now</button>
-							<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
+						<div id='dock_display_comp_div'>
+							<div id='dock_display_comp_div1'></div>
+							<div class='btns hidden' id='dock_comp_selected_btns'>
+								<button type='button' class='m_submit' onclick="dock_read_M1temp();">Check it Now</button>
+								<button type='button'  class='m_btn' onclick="goto_dock();">RETURN</button>
+							</div>
 						</div>
-					</div>
 					
 					</div>
 				
+			</div>
+			<div class='m_modal' id='dock_m_temp_modal'>
+				<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
+				<div id='dock_m1_temp_div'><!--  input type='number' name='m1_temp' size=4 --></div>
+				<div class='btns'>
+			  		<button type='button' class='m_submit' onclick="dock_read_M1temp();">Check Now</button> 
+					<button type='button'  class='m_btn' onclick="goto_dock();">RETURN</button>
+				</div>
+			</div> 
+			<div class='m_modal' id='dock_m_temp_modal'>
+				<div class='m_label'><span>TEMPERATURE</span></div>
+				<div id='dock_m1_temp_div_2' class='temp_reading red'></div>
+				<div class='btns'>
+					<button type='button' class='m_submit' onclick='goto_m_main();'>Accept</button>
+					<button type='button'  class='m_btn' onclick="openPage('m_temp_modal', this, 'red','m_modal2','tabclass');">Re-Check</button>
+				</div>
+			</div>
+			<div class='m_modal' id='dock_m_temp_modal_labels'>
+				<div class='center modal_head'><span>TEMPERATURE</span></div>
+				<div id='dock_m1_temp_div_4' class='temp_reading'></div>
+				<div id='dock_m1_temp_div_5' class='center modal_head'></div>
+				<div class='center grey'>LABEL QUANTITY<input type='number' name='dock_m1_label_qty' size=4></div>
+				<div class='btns'>
+					<button type='button'  class='m_btn' onclick="dock_start_component();">Print Labels</button>
+				</div>
+			</div>
+			<div class='m_modal' id='dock_m_temp_modal_high'>
+				<div class='center modal_head'><span>TEMPERATURE</span></div>
+				<div id='dock_m1_temp_div_6' class='temp_reading red'></div>
+				<div class='btns'>
+					<button type='button'  class='m_btn' onclick="goto_dock();">Reject</button>
+					<button type='button'  class='m_btn' onclick="dock_read_M1temp();">Re-check</button>
+					<button type='button'  class='m_btn' onclick="dock_qa_override();">QA Override</button>
+				</div>
+			</div>
+			<div class='m_modal' id='dock_m_temp_modal_qa'>
+				<div class='center modal_head'><span>Scan Head Chef</span></div>
+				<div id='dock_m1_temp_div_7' class='temp_reading'></div>
+				<div class='btns'>
+					<button type='button'  class='m_btn' onclick="goto_dock();">Return</button>
+				</div>
 			</div>
 
 		</div>

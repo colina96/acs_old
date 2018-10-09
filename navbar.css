@@ -235,16 +235,19 @@ background-color: #EEEEEE;
 	padding:2px 10px;
 	margin:2px 10px;
 }
+.datepicker {
+	width: 120px;
+}
 #add_sub_popup {
 	position:absolute;
 	top:10px;
-	width:80%;
+	.width:80%;
 	border:1px solid black;
 	border-radius: 15px;
 	zindex:1000;
 	display:none;
 	background:white;
-	padding:10px;
+	padding:20px;
 }
 .add_subcompdiv, ingredient{
 	font-size:70%;
@@ -260,15 +263,22 @@ background-color: #EEEEEE;
 	display:flex;
 	.color:white;
 	.font-size:x-small;
-	.border:1px solid green;
+	
 	width:84vw;
+	
 }
-.top_menu {
+.top_menu, .top_menu_highlighted {
 	margin:15px;
 	.width:30vw;
 	color:black;
 	font-size:larger;
+	border:1px solid white;
 }
+
+.top_menu_highlighted {
+	border-bottom-color:black;
+}
+
 #report_container {
 	height:100%;
 	overflow:auto;

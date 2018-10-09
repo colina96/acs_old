@@ -640,13 +640,14 @@ function new_component() {
 function show_dock_component(cid)
 {
 	show('dock_display_comp_div');
-	var div = document.getElementById('dock_display_comp_div');
-	var comp = get_component_by_id(cid);
-	if (!comp) {
+	var div = document.getElementById('dock_display_comp_div1');
+	div.innerHTML = '';
+	new_comp = get_component_by_id(cid);
+	if (!new_comp) {
 		alert("ERROR");
 		return;
 	}
-	console.log(comp);
+	console.log(new_comp);
 	var flds = ['description','supplier','product','spec'];
 	for (var i =0; i < flds.length; i++) {
 		var d = document.createElement('div');
@@ -655,7 +656,7 @@ function show_dock_component(cid)
 		div.appendChild(d);
 		var d = document.createElement('div');
 		d.className = 'small';
-		d.innerHTML = comp[flds[i]];
+		d.innerHTML = new_comp[flds[i]];
 		div.appendChild(d);
 	}
 	show('dock_comp_selected_btns');
@@ -666,12 +667,26 @@ function show_dock()
 	openPage('dock_main', this, 'red','mobile_main','tabclass');
 	openPage('m_dock', this, 'red','m_modal','tabclass');
 	var dock_items = new Array();
+	var div = document.getElementById('dock_display_comp_div1');
+	div.innerHTML = '';
+	var table = document.createElement('table');
+	table.width = '100%';
 	for (var i = 0; i < comps.length;i++) {
 		if (comps[i].high_risk == 1) {
+			var tr = document.createElement('tr');
+			var td = document.createElement('td');
+			var innerHTML = "<div onclick='show_dock_component(" + comps[i]['id'] + ");'>" + comps[i]['description'] + "</div>";
+			td.innerHTML = innerHTML;
+			tr.appendChild(td);
+			var td = document.createElement('td');
+			td.innerHTML = comps[i]['supplier'];
+			tr.appendChild(td);
+			table.appendChild(tr);
 			console.log(comps[i]);
 			dock_items.push(comps[i]);
 		}
 	}
+	div.appendChild(table);
 	 $('#dock_search').autocomplete({
          // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
          minLength: 2,
@@ -800,6 +815,16 @@ function component_selected(id)
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
 
+function dock_read_M1temp(callback)
+{
+	console.log('dock_read_M1temp');
+	load_chefs(null);
+	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
+	document.getElementById('dock_m1_temp_div').innerHTML = '';
+	show('dock_m_temp_modal');
+	read_temp('M1_dock');
+}
+
 function read_M1temp(callback){
 	load_chefs(null);
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
@@ -821,6 +846,45 @@ function read_plating_M1temp(callback){
 	
 	// document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M1_plating');
+}
+
+function check_temp_m1_dock(t)
+{
+	console.log("check temp dock",t);
+	new_comp.M1_temp = t; // 
+	
+	console.log(new_comp);
+	
+	// var t = document.getElementsByName('m1_temp')[0].value;
+	var prep_type_id = 6; // new_comp['prep_type']; // should always be 6 (DOCK)
+	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
+	var M1_temp_sign = get_preptype_val(prep_type_id,'M1_temp_above');
+	document.getElementById('dock_m1_temp_div').innerHTML = '';
+// 	document.getElementById('dock_m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
+	//document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
+	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C"
+	document.getElementById('dock_m1_temp_div_6').innerHTML= parseInt(t * 10) / 10 + "&#176C"
+	console.log("check temp",t,M1_temp_target);
+	if (t.length > 0) {
+		if (M1_temp_sign == 1) {// should never happen
+			alert("incorrect prep type");
+		}
+		else { 
+			if (parseInt(t) > parseInt(M1_temp_target)) {
+				console.log("DOCK M1 temp too high");
+				openPage('dock_m_temp_modal_high', this, 'red','m_modal','tabclass');
+			}
+			else {
+				openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
+			}
+		}
+	}
+	
+}
+
+function dock_qa_override()
+{
+	openPage('dock_m_temp_modal_qa', this, 'red','m_modal','tabclass');
 }
 
 function check_temp(t) // start a new component
@@ -880,7 +944,12 @@ function add_chef_select(target_div,input_name)
 	
 }
 
-function start_component()
+function dock_start_component()
+{
+	start_component(true);
+}
+
+function start_component(dock)
 {
 	// object copy is messy - TODO
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
@@ -890,25 +959,33 @@ function start_component()
 	component.comp_id = new_comp['id'];
 	component.prep_type = new_comp['prep_type'];
 	component.shelf_life_days = new_comp.shelf_life_days;
+	component.dock = dock;
 	prep_type_id = component.prep_type;
 	console.log("start compontent " + component.description + " prep_type" + component.prep_type);
 	// component.M1_temp = document.getElementsByName('m1_temp')[0].value;
 	var M2_time = get_preptype_val(prep_type_id,'M2_time_minutes');
 	console.log("At M1, M2 time = " + M2_time);
 	console.log("At M1, M3 time = " + get_preptype_val(prep_type_id,'M3_time_minutes'));
+	if (new_comp['M1_temp']) component.M1_temp = new_comp['M1_temp'];
 	if (M2_time == null) {
 		component.finished = 'true';
+		
 	}
 	else {
 		component.M1_temp = new_comp['M1_temp'];
 	}
+	if (!dock) {
+		component.M1_chef_id = document.getElementsByName('m1_chef_id')[0].value;
 	
-	component.M1_chef_id = document.getElementsByName('m1_chef_id')[0].value;
-	
-	if (component.M1_chef_id < 1) component.M1_chef_id = 1;
+		if (component.M1_chef_id < 1) component.M1_chef_id = 1;
+		 document.getElementsByName('m1_chef_id')[0].value = '';
+	}
+	else {
+		component.M1_chef_id = 0;
+	}
 	var data =  {data: JSON.stringify(component)};
-    console.log("Sent Off: %j", data);
-    document.getElementsByName('m1_chef_id')[0].value = '';
+    console.log("start_component Sent Off: ", data);
+    var qty_input = (dock)?'dock_m1_label_qty':'m1_label_qty';
    //  document.getElementsByName('m1_temp')[0].value = '';
     $.ajax({
         url: RESTHOME + "new_comp.php",
@@ -919,18 +996,20 @@ function start_component()
             console.log("start_component result ",result);
             var comp = JSON.parse(result);
             console.log("start_component id =  ",comp.id);
-            var qty = document.getElementsByName('m1_label_qty')[0].value;
+            var qty = document.getElementsByName(qty_input)[0].value;
             active_comp.id = comp.id;
             active_comp.expiry_date = comp.expiry_date;
             print_component_labels(qty);
-            document.getElementsByName('m1_label_qty')[0].value = 1;
-            goto_m_main();
+            document.getElementsByName(qty_input)[0].value = 1;
+            console.log('comp.dock = ',comp.dock);
+            if (comp.dock == true) goto_dock()
+            else goto_m_main();
         },
         done: function(result) {
             console.log("done start_component result ",result);
         },
         fail: (function (result) {
-            console.log("start_componentfail ",result);
+            console.log("start_component fail ",result);
         })
     });
     
@@ -1279,6 +1358,9 @@ function print_component_labels(qty)
 		    console.log("found chef ",chef['label']); 
 		    comp.preparedBy = chef['label'];
 		}
+		else {
+			comp.preparedBy = 'DOCK';
+		}
 	}
 	
 	var data =  {data: JSON.stringify(comp)};
@@ -1298,7 +1380,7 @@ function print_component_labels(qty)
             console.log("comp_label fail ",result);
         })
     });
-	goto_m_main();
+	// goto_m_main();
 }
 
 

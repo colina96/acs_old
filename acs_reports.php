@@ -56,24 +56,31 @@ function report_components(data)
 	tab.className = 'component_table';
 	for (var preptype_idx = 0; preptype_idx < preptypes.length; preptype_idx++) {
 		console.log(preptypes[preptype_idx]['code']);
-		var tr = document.createElement('tr');
+		var preptype_id = preptypes[preptype_idx]['id'];
+		var tr1 = document.createElement('tr');
 		var th = document.createElement('th');
 		th.rowspan = 5;
 		th.innerHTML = margin(preptypes[preptype_idx]['code']);
-		tr.appendChild(th);   
-		tab.appendChild(tr);
-		var tr = document.createElement('tr');
+		tr1.appendChild(th);   
+	//	tab.appendChild(tr);
+		var tr2 = document.createElement('tr');
 		// headings
 		for (var i in kitchen_report_fmt) {
 			var th = document.createElement('th');
 			th.innerHTML = margin(i);
-			tr.appendChild(th);   
+			tr2.appendChild(th);   
 			
 		}
-		tab.appendChild(tr);
+	//	tab.appendChild(tr);
+		var data_count = new Object();
 	   	for (var i=0; i<data.length; i++) {
 		//   	console.log('item ' + data[i]['description'] + ' prep ' + data[i]['prep_type_id']);
-		   	if (data[i]['prep_type_id'] == preptypes[preptype_idx]['id']) {
+		   	if (data[i]['prep_type_id'] == preptype_id) {
+			   	if (!data_count[preptype_id]) {
+			   		tab.appendChild(tr1);
+			   		tab.appendChild(tr2);
+			   		data_count[preptype_id] = 1;
+			   	}
 			   	var chef = get_chef_by_id(data[i]['M1_chef_id']);
 			   	if (chef) data[i]['chef'] = chef['label'];
 		   		var tr = document.createElement('tr');
@@ -100,6 +107,9 @@ function kitchen_reports(t)
 {
 	load_preptypes();
 	if (t) t.color = 'red';// test
+	// really lazy .... must fix
+	document.getElementById('kitchen_report_tab').className = 'top_menu_highlighted'
+	document.getElementById('plating_report_tab').className = 'top_menu';
 	var div = document.getElementById('report_container');
 	div.innerHTML = '';
 	 $.ajax({
@@ -127,6 +137,10 @@ function load_plating_data()
 function plating_reports()
 {
 	var div = document.getElementById('report_container');
+	// really lazy .... must fix
+	console.log('plating_reports');
+	document.getElementById('kitchen_report_tab').className = 'top_menu'
+	document.getElementById('plating_report_tab').className = 'top_menu_highlighted';
 	div.innerHTML = '';
 	var tab = document.createElement('table');
 	tab.className = 'component_table';
@@ -178,6 +192,7 @@ function plating_reports()
 			<div class='top_menu' id='report_range_tab'">
 				<input type="text" id="report_start" name="report_start" placeholder='start date' class='datepicker' readonly="readonly"></td>
 				<input type="text" id="report_end" name="report_end" placeholder='end date' class='datepicker' readonly="readonly">
+				<input type="text" id="report_search" name="report_search" placeholder="search" onclick='search_report();'>
 				<button>go</button>
 			</div>
 			

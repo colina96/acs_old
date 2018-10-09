@@ -42,7 +42,7 @@ select * from USERS;
 drop table if exists PREP_TYPES;
 CREATE table PREP_TYPES (
 	id smallint unsigned not null,
-	code varchar(4) not null,
+	code varchar(5) not null,
 	days_offset int,
 	M1_temp int,
 	M1_temp_above tinyint,
@@ -63,6 +63,7 @@ insert into PREP_TYPES values (2,'HF',	3 * 7,	80,  1,	120, 20, 21,0, 6 * 60,60, 
 insert into PREP_TYPES values (3,'ESL',	3 * 7,	75,	 1,	120, 20, 21,0, 6 * 60,60,  5   ,0,90,0);
 insert into PREP_TYPES values (4,'LR',	3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0);
 insert into PREP_TYPES values (5,'AHR',	3,		5,   0,	45,  20, 15,0, null  ,null,null,0,6,0);
+insert into PREP_TYPES values (6,'DOCK',3,		5,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
 
 drop table if exists CORRECTIVE_ACTIONS;
 CREATE table CORRECTIVE_ACTIONS
@@ -172,20 +173,21 @@ CREATE TABLE COMPONENT_LINK
 drop table if exists COMPONENT;
 CREATE table COMPONENT (
 	id smallint unsigned not null auto_increment, 
+	comp_id int,
 	description varchar(50),
 	prep_type_id int,
 	M1_check_id int,
-	M1_temp int,
+	M1_temp float,
 	M1_time datetime,
 	M1_chef_id int,
 	M1_action_code int,
 	M2_check_id int,
-	M2_temp int,
+	M2_temp float,
 	M2_time datetime,
 	M2_chef_id int,
 	M2_action_code int,
 	M3_check_id int,
-	M3_temp int,
+	M3_temp float,
 	M3_time datetime,
 	M3_chef_id int,
 	M3_action_code int,

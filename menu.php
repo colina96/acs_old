@@ -409,7 +409,10 @@ function inval(input_name)
 {
 	try {
 		var ele = document.getElementsByName(input_name)[0];
-		console.log(ele);
+		console.log(ele.type);
+		if (ele.type == 'checkbox') {
+			return(ele.checked?1:0);
+		}
 		return(document.getElementsByName(input_name)[0].value);
 	}
 	catch (e) {
@@ -457,6 +460,7 @@ function edit_high_risk_component(menu_item_component_id)
 {
 	// show('edit_high_risk_popup');
 	console.log(menu_item_components[menu_item_component_id]);
+	document.getElementById('component_title').innerHTML = 'Edit component';
 	var comp = menu_item_components[menu_item_component_id];
 	for (var c in comp) {
 		console.log(c + " => " + comp[c]);
@@ -464,10 +468,19 @@ function edit_high_risk_component(menu_item_component_id)
 			comp[c] = '';
 		}
 		if (document.getElementById("comp_" + c)) {
+			var ele = document.getElementById("comp_" + c);
+			console.log('element ' + ele.id + " type:" + ele.type);
 			document.getElementById("comp_" + c).value = comp[c];
 		}
 		else if (document.getElementsByName("comp_" + c) && document.getElementsByName("comp_" + c)[0]) {
-			document.getElementsByName("comp_" + c)[0].value = comp[c];
+			var ele = document.getElementsByName("comp_" + c)[0];
+			console.log('element ' + ele.name + " type:" + ele.type);
+			if (ele.type == 'checkbox') {
+				ele.checked = comp[c] == 1?true:false;
+			}
+			else {
+				document.getElementsByName("comp_" + c)[0].value = comp[c];
+			}
 		} else 
 		{
 			console.log('error ' + "comp_" + c);
@@ -480,6 +493,7 @@ var active_menu_item_component_id = null;
 function add_subcomponent(menu_item_component_id)
 {
 	show('add_sub_popup');
+	document.getElementById('component_title').innerHTML = 'Add ingredient';
 	active_menu_item_component_id = menu_item_component_id;
 	console.log('add_subcomponent ' + menu_item_component_id);
 	$('#comp_description').val('');
