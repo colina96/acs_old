@@ -204,7 +204,7 @@ function show_menu()
     table.className = 'menu_table';
     table.width='100%';
     var tr = document.createElement('tr');
-    var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','HIGH RISK','PLATING TEAM'];
+    var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','TRACK FROM DOCK','PLATING TEAM'];
     for (var i in  header) {
       //   console.log(i);
     	var th = document.createElement('th');
@@ -242,6 +242,9 @@ function show_menu()
             	tr.appendChild(td);
             	var td = document.createElement('td');
             	var mid = components[c];
+            	if (!menu_item_components[mid])  {
+                	alert("cannot find component "  + mid + " " + item['dish_name']);
+            	}
             	var innerHTML = "<div";
             	if (menu_item_components[mid].high_risk == 1) {
             		innerHTML += " onclick='edit_high_risk_component(" + mid + ");'";
