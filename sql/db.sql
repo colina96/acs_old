@@ -87,6 +87,7 @@ insert into CORRECTIVE_ACTIONS values (null,5,'Refrigerate Product');
 insert into CORRECTIVE_ACTIONS values (null,5,'Discard Product');
 insert into CORRECTIVE_ACTIONS values (null,5,'Retrain Staff');
 insert into CORRECTIVE_ACTIONS values (null,5,'Low Risk Item, QA Sign-Off');
+insert into CORRECTIVE_ACTIONS values (null,6,'QA Sign-Off');
 
 drop table if exists MENUS;
 CREATE TABLE MENUS (
@@ -185,16 +186,19 @@ CREATE table COMPONENT (
 	M1_time datetime,
 	M1_chef_id int,
 	M1_action_code int,
+	M1_action_id int,
 	M2_check_id int,
 	M2_temp float,
 	M2_time datetime,
 	M2_chef_id int,
 	M2_action_code int,
+	M2_action_id int,
 	M3_check_id int,
 	M3_temp float,
 	M3_time datetime,
 	M3_chef_id int,
 	M3_action_code int,
+	M3_action_id int,
 	finished datetime,
 	shelf_life_days int,
 	expiry_date datetime,

@@ -152,6 +152,7 @@ function manual_temp_submit()
 function manual_barcode_submit(input_name)
 {
 	var s = document.getElementsByName(input_name)[0].value;
+	document.getElementsByName(input_name)[0].value = '';
 	console.log('manual_barcode_submit',s,input_name);
 	process_barcode(s)
 }

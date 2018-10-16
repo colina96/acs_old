@@ -28,6 +28,7 @@ function set_barcode_mode(mode)
 	barcode_mode = mode;
 	keyboard_str = '';
 	document.getElementsByName('kitchen_manual_barcode')[0].value = '';
+	
 }
 
 function process_barcode(s)
@@ -650,15 +651,21 @@ function show_dock_component(cid)
 		return;
 	}
 	console.log(new_comp);
-	var flds = ['description','supplier','product','spec'];
+	var flds = ['description','supplier','product','spec','shelf_life_days'];
 	for (var i =0; i < flds.length; i++) {
 		var d = document.createElement('div');
 		d.className = 'smaller';
-		d.innerHTML = flds[i];
+		d.innerHTML = flds[i] + ":";
 		div.appendChild(d);
 		var d = document.createElement('div');
 		d.className = 'small';
-		d.innerHTML = new_comp[flds[i]];
+		if (new_comp[flds[i]] == null) {
+			d.innerHTML = "NOT SET";
+		}
+		else {
+			d.innerHTML = new_comp[flds[i]];
+		}
+		
 		div.appendChild(d);
 	}
 	show('dock_comp_selected_btns');
@@ -890,8 +897,9 @@ function check_temp_m1_dock(t)
 
 function dock_QA_scan(uid)
 {
-	new_comp.M1_action_code = 99; // TODO must fix
-	new_comp.M1_chef_id = uid;
+	console.log('dock_QA_scan(uid) ' + uid);
+	new_comp.M1_action_code = 10; // TODO must fix
+	new_comp.M1_action_id = uid;
 	openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
 }
 
@@ -973,6 +981,7 @@ function start_component(dock)
 	component.comp_id = new_comp['id'];
 	component.prep_type = new_comp['prep_type'];
 	component.M1_action_code = new_comp['M1_action_code'];
+	component.M1_action_id = new_comp['M1_action_id'];
 	component.shelf_life_days = new_comp.shelf_life_days;
 	component.dock = dock;
 	prep_type_id = component.prep_type;
