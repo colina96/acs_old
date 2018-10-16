@@ -90,7 +90,10 @@ function set_ingredient_temp(s)
 {
 	var i = new_comp['read_temp'];
 	new_comp['selected_ingredients'][i]['temp'] = s;
-	draw_ingredients();
+	if (draw_ingredients()) {
+		// save ingredient - new_comp.php
+		start_component();
+	}
 }
 
 function check_ingredient(cid)
@@ -812,8 +815,9 @@ function get_preptype_val(id,fld)
 }
 
 
-function draw_ingredients()
+function draw_ingredients() // returns true if all ingredients are selected and have a temperature
 {
+	var finished = true;
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
 	div = document.getElementById('m1_temp_div_1');
 	var d = "<div class='margin10'><table width='100%'>";
@@ -825,6 +829,7 @@ function draw_ingredients()
 			d += "<td>" + new_comp['selected_ingredients'][i]['cid'] + "</td>";
 		}
 		else {
+			finished = false;
 			d += "<td>-</td>";
 		}
 		if (new_comp['selected_ingredients'][i]['temp']) {
@@ -832,12 +837,14 @@ function draw_ingredients()
 		}
 		else {
 			d += "<td>-</td>";
+			finished = false;
 		}
 		
 		d += "</tr>";
 	}
 	d += '</table></div>';
 	div.innerHTML = d;
+	return(finished);
 }
 // called when user searchs for and selects a component - M1 only 
 
@@ -1061,6 +1068,13 @@ function start_component(dock)
 {
 	// object copy is messy - TODO
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
+	// check if component at M0 - has ingredients
+	if (!new_comp || active_comp['ingredients']) {
+		console.log('component start - need to print labels');
+		comp_milestone(active_comp['M1_temp']);
+        goto_m_main();
+		return;
+	}
 	var component = new Object();
 	component.description = new_comp['description']; // simplifies display
 	active_comp = copy_object(new_comp);
@@ -1114,6 +1128,7 @@ function start_component(dock)
             console.log('comp.dock = ',comp.dock);
             if (comp.dock == true) goto_dock()
             else goto_m_main();
+            new_comp = null;
         },
         done: function(result) {
             console.log("done start_component result ",result);
@@ -1158,9 +1173,17 @@ function comp_milestone(temp_reading)
 	var component = new Object();
 	component.id = active_comp['id'];
 	var url = '';
-	if (active_comp['M2_time'] == '') { // M2
+	if (active_comp['M1_time'] == '') { // M1
+		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
+		component.M1_temp = temp_reading;
+		component.M1_chef_id = 0; // TODO
+		
+		url = RESTHOME + 'M1_comp.php';
+	}
+	else if (active_comp['M2_time'] == '') { // M2
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M2_temp = temp_reading;
+		active_comp['M2_time'] = 'now';
 		component.M2_chef_id = 0;
 		var M3_time_minutes = get_preptype_val(prep_type_id,'M3_time_minutes');
 		console.log("At M2, M3 time = " + M3_time_minutes + " ->" + typeof(M3_time_minutes));
@@ -1173,24 +1196,38 @@ function comp_milestone(temp_reading)
 	else {
 		//component.M3_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M3_temp = temp_reading;
+		active_comp['M3_time'] = 'now';
 		component.M3_chef_id = 0;
 		url = RESTHOME + 'M3_comp.php';
 	}
 	var data =  {data: JSON.stringify(component)};
     console.log("Sent Off: %j", data);
-    
+    console.log('to ' + url);
     $.ajax({
         url: url,
         type: "POST",
         data: data,
 
         success: function(result) {
-            console.log("start_component result ",result);
+            console.log("comp_milestone result ",result);
+            console.log(active_comp);
             if (active_comp['M2_time'] == '') { 
-            	// goto_m_main();
+            	// at M1 - component has tracked ingredients
+            	// get chef id and print labels
+            	console.log("At M1");
+            	var qty = document.getElementsByName('m1_label_qty')[0].value;
+                print_component_labels(qty);
+                document.getElementsByName('m1_label_qty')[0].value = 1;
+          //  	openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
             }
             else {
-            	openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
+            	if (active_comp['M3_time'] != '') {
+            		console.log('finished');
+            		openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
+            	}
+            	else {
+            		console.log('at M2');
+            	}
             }
         },
         done: function(result) {
@@ -1202,8 +1239,9 @@ function comp_milestone(temp_reading)
     });
 }
 
-function check_temp_m2(t) // M2 or M3
+function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 {
+	// if M1 then need to print labels and log temperature to existing record TODO
 	console.log("check temp M2/3");
 	console.log(active_comp);
 	
@@ -1213,8 +1251,12 @@ function check_temp_m2(t) // M2 or M3
 		openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
 		var prep_type_id = active_comp['prep_type_id'];
 		
-		var temp_target = get_preptype_val(prep_type_id,'M2_temp');
-		var milestone = 'M2';
+		var temp_target = get_preptype_val(prep_type_id,'M1_temp');
+		var milestone = 'M1';
+		if (active_comp['M1_time'].length > 1) {
+			temp_target = get_preptype_val(prep_type_id,'M2_temp');
+			milestone = 'M2';
+		} 
 		if (active_comp['M2_time'].length > 1) {
 			temp_target = get_preptype_val(prep_type_id,'M3_temp');
 			milestone = 'M3';
@@ -1223,11 +1265,18 @@ function check_temp_m2(t) // M2 or M3
 		
 		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 		document.getElementById('m2_temp_div_3').innerHTML=parseInt(t) + "&#176C"
+		if (milestone == 'M1' && parseInt(t) > parseInt(temp_target)) {
+			document.getElementById('m2_temp_div_2a').innerHTML= milestone + " achieved";
+			document.getElementById('m2_temp_div_3a').innerHTML= milestone + " achieved";
+			active_comp['M1_temp'] = t;
+			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
+			return;
+			// comp_milestone(t);
+		}
 		if (parseInt(t) < parseInt(temp_target)) {
 			document.getElementById('m2_temp_div_2a').innerHTML= milestone + " achieved";
 			document.getElementById('m2_temp_div_3a').innerHTML= milestone + " achieved";
 			comp_milestone(t);
-			
 		}
 		else {
 			// document.getElementById('m2_temp_div_2a').innerHTML= milestone + "";
@@ -1264,7 +1313,11 @@ function active_comp_selected(id)
 	var now = new Date();
 	var now_ms = now.getTime();
 	var M1_ms = M1_time.getTime(); // time in millisecs
-	if (active_comp['M2_time'] == '') {
+	if (active_comp['M1_time'] == '') {
+		milestone_due = 'M1';
+		target_temp = " > " + get_preptype_val(prep_type_id,'M1_temp');
+	}
+	else if (active_comp['M2_time'] == '') {
 		milestone_due = 'M2';
 		var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
 		var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
@@ -1281,11 +1334,16 @@ function active_comp_selected(id)
 		target_temp = " < " + get_preptype_val(prep_type_id,'M3_temp');
 	}
 	document.getElementById('ms_1').innerHTML = milestone_due;
-	if (remaining >= 0) {
-		document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + " REMAINING";
+	if (milestone_due != 'M1') {
+		if (remaining >= 0) {
+			document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + " REMAINING";
+		}
+		else {
+			document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + " OVERDUE";
+		}
 	}
 	else {
-		document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + " OVERDUE";
+		document.getElementById('ms_1_text').innerHTML = "";
 	}
 	document.getElementById('ms_2').innerHTML = milestone_due;
 	document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
@@ -1571,6 +1629,10 @@ function m_show_active_components(data,reprint)
 		if (reprint) {
    			
    		}
+		else if (data[i]['M1_time'] == '') { // M0 - ingredients have been selected
+			tr.appendChild(new_td('.','comp'));
+			tr.appendChild(new_td('Cooking','comp'));
+		}
    		else {
 	   		if (data[i]['M2_time'] == '') {
 	   			var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');

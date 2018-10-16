@@ -40,6 +40,11 @@ else if (!empty($comp['finished'])) {
 	$sql .= "values (null,".$comp_id.",'".$description."',".$prep_type.",".$userID.",now(),".$M1_chef_id.",".$M1_action_code.",".$M1_action_id.",now(),".$shelf_life_days;
 	$sql .= ",DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY))";
 }
+else { // can only be M0 - 
+	$sql = "insert into COMPONENT ";
+	$sql .= "(id, comp_id,description, prep_type_id,M1_check_id) ";
+	$sql .= "values (null,".$comp_id.",'".$description."',".$prep_type.",".$userID.")";
+}
 test_mysql_query($sql);
 $comp = array();
 $comp['id'] = mysql_insert_id();
