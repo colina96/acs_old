@@ -86,6 +86,13 @@ function process_barcode(s)
 	}
 }
 
+function set_ingredient_temp(s)
+{
+	var i = new_comp['read_temp'];
+	new_comp['selected_ingredients'][i]['temp'] = s;
+	draw_ingredients();
+}
+
 function check_ingredient(cid)
 {
 	
@@ -105,12 +112,17 @@ function check_ingredient(cid)
             var scanned_ingredient = JSON.parse(result);
             console.log("got component " + scanned_ingredient[0].description);
             var valid_ingredient = false;
-            for (var i = 0; i < new_comp['subcomponents'].length; i++) {
-    			var sub = get_component_by_id(new_comp['subcomponents'][i]);
+            for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
+    			var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
     			if (sub['description'] == scanned_ingredient[0].description) {
     				console.log("found ingredient");
     				valid_ingredient = true;
+    				new_comp['selected_ingredients'][i]['cid'] = scanned_ingredient[0].id;
     				// attach to new_comp and record temperature
+    				draw_ingredients();
+    				new_comp['read_temp'] = i;
+    				read_temp('M0');
+    				
     			}
     			
     		}
@@ -799,7 +811,37 @@ function get_preptype_val(id,fld)
 	return("not found");
 }
 
+
+function draw_ingredients()
+{
+	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
+	div = document.getElementById('m1_temp_div_1');
+	var d = "<div class='margin10'><table width='100%'>";
+	d += "<tr><td>Description</td><td>ID</td><td>Temperature</td></tr>";
+	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
+		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+		d += "<tr><td>" + sub['description'] + '</td>';
+		if (new_comp['selected_ingredients'][i]['cid']) {
+			d += "<td>" + new_comp['selected_ingredients'][i]['cid'] + "</td>";
+		}
+		else {
+			d += "<td>-</td>";
+		}
+		if (new_comp['selected_ingredients'][i]['temp']) {
+			d += "<td>" + new_comp['selected_ingredients'][i]['temp'] + "</td>";
+		}
+		else {
+			d += "<td>-</td>";
+		}
+		
+		d += "</tr>";
+	}
+	d += '</table></div>';
+	div.innerHTML = d;
+}
 // called when user searchs for and selects a component - M1 only 
+
+
 function component_selected(id)
 {
 	console.log("component selected - loading chefs");
@@ -829,20 +871,20 @@ function component_selected(id)
 	}
 	console.log(new_comp);
 	console.log(new_comp['subcomponents']);
+	// subcomponents is an array of ids - needs to become an array of objects to store temperature and used id
+	
 	if (new_comp['subcomponents']) {
+		if (!new_comp['selected_ingredients']) {
+			new_comp['selected_ingredients'] = new Array();
+			for (var i = 0; i < new_comp['subcomponents'].length; i++) {
+				new_comp['selected_ingredients'][i] = new Object();
+				new_comp['selected_ingredients'][i]['id'] = new_comp['subcomponents'][i];
+			}
+		}
 		console.log('ingredients');
 		set_barcode_mode('scan_ingredients');
-		openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
-		div = document.getElementById('m1_temp_div_1');
-		var d = "<div class='margin10'><table width='100%'>";
-		for (var i = 0; i < new_comp['subcomponents'].length; i++) {
-			var sub = get_component_by_id(new_comp['subcomponents'][i]);
-			d += "<tr><td>" + sub['description'] + '</td>';
-			d += "<td>-</td>";
-			d += "<td>-</td></tr>";
-		}
-		d += '</table></div>';
-		div.innerHTML = d;
+		draw_ingredients();
+		
 	}
 	else if (M1_temp == null) { // low risk. No temp required
 		console.log("LOW RISK");

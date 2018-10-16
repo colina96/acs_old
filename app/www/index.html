@@ -119,6 +119,9 @@ function temp_callback(s) // works out where to send the temperature reading
 		log ('temp_mode not set');
 		return;
 	}
+	if (temp_mode == 'M0') {
+		set_ingredient_temp(s);
+	}
 	if (temp_mode == 'M1') {
 		check_temp(s);
 	}else if (temp_mode == 'M1_dock') {
