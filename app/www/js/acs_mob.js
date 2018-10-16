@@ -79,7 +79,50 @@ function process_barcode(s)
 				}
 			}
 		}
+		if (barcode_mode == 'scan_ingredients') {
+			console.log('read ingredient ' + cid);
+			check_ingredient(cid);
+		}
 	}
+}
+
+function check_ingredient(cid)
+{
+	
+	console.log('check ingredient'  + cid);
+	document.getElementById('m1_temp_div_1_error').innerHTML = '';
+	$.ajax({
+        url: RESTHOME + "get_active_comps.php?cid=" + cid,
+        type: "POST",
+       // data: data,
+       //  data: {points: JSON.stringify(points)},
+        // dataType: 'json',
+        // contentType: "application/json",
+        success: function(result) {
+        	console.log(result);
+            // preptypes = result;
+        	
+            var scanned_ingredient = JSON.parse(result);
+            console.log("got component " + scanned_ingredient[0].description);
+            var valid_ingredient = false;
+            for (var i = 0; i < new_comp['subcomponents'].length; i++) {
+    			var sub = get_component_by_id(new_comp['subcomponents'][i]);
+    			if (sub['description'] == scanned_ingredient[0].description) {
+    				console.log("found ingredient");
+    				valid_ingredient = true;
+    				// attach to new_comp and record temperature
+    			}
+    			
+    		}
+            if (!valid_ingredient) {
+				document.getElementById('m1_temp_div_1_error').innerHTML = 'invalid component';
+			}
+            
+        },
+        fail: (function (result) {
+            console.log("fail check_ingredient ",result);
+        })
+    });
 }
 
 function load_preptypes()
@@ -788,6 +831,7 @@ function component_selected(id)
 	console.log(new_comp['subcomponents']);
 	if (new_comp['subcomponents']) {
 		console.log('ingredients');
+		set_barcode_mode('scan_ingredients');
 		openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
 		div = document.getElementById('m1_temp_div_1');
 		var d = "<div class='margin10'><table width='100%'>";

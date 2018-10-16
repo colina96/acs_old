@@ -1,6 +1,7 @@
 <script>
 
 var kitchen_report_fmt = {
+	'CC': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
 		'M1 TIME':'M1_time',
@@ -9,8 +10,52 @@ var kitchen_report_fmt = {
 		'M2 TEMP':'M2_temp',
 		'M3 TIME':'M3_time',
 		'M3 TEMP':'M3_temp',
-		'C/A':'ca',
-		'CHEF':'chef'
+		'Q/A':'M1_action_code',
+		'CHEF':'M1_action_id'},
+	'HF': {
+		'COMPONENT NAME':'description',
+		'BATCH CODE':'id',
+		'M1 TIME':'M1_time',
+		'M1 TEMP':'M1_temp',
+		'M2 TIME':'M2_time',
+		'M2 TEMP':'M2_temp',
+		'M3 TIME':'M3_time',
+		'M3 TEMP':'M3_temp',
+		'Q/A':'M1_action_code',
+		'CHEF':'M1_action_id'},
+	'ESL': {
+		'COMPONENT NAME':'description',
+		'BATCH CODE':'id',
+		'M1 TIME':'M1_time',
+		'M1 TEMP':'M1_temp',
+		'M2 TIME':'M2_time',
+		'M2 TEMP':'M2_temp',
+		'M3 TIME':'M3_time',
+		'M3 TEMP':'M3_temp',
+		'Q/A':'M1_action_code',
+		'CHEF':'M1_action_id'},
+
+	'LR': {
+		'COMPONENT NAME':'description',
+		'BATCH CODE':'id',
+		'M1 TIME':'M1_time',
+		},
+	'AHR': {
+		'COMPONENT NAME':'description',
+		'BATCH CODE':'id',
+		'M1 TIME':'M1_time',
+		'M1 TEMP':'M1_temp',
+		'M2 TIME':'M2_time',
+		'M2 TEMP':'M2_temp',
+		'Q/A':'M1_action_code',
+		'CHEF':'M1_action_id'},
+	'DOCK': {
+		'COMPONENT NAME':'description',
+		'BATCH CODE':'id',
+		'M1 TIME':'M1_time',
+		'M1 TEMP':'M1_temp',
+		'Q/A':'M1_action_code',
+		'CHEF':'M1_action_id'}
 }
 
 var plating_report_fmt = {
@@ -56,6 +101,7 @@ function report_components(data)
 	tab.className = 'component_table';
 	for (var preptype_idx = 0; preptype_idx < preptypes.length; preptype_idx++) {
 		console.log(preptypes[preptype_idx]['code']);
+		var preptype = preptypes[preptype_idx]['code'];
 		var preptype_id = preptypes[preptype_idx]['id'];
 		var tr1 = document.createElement('tr');
 		var th = document.createElement('th');
@@ -65,7 +111,7 @@ function report_components(data)
 	//	tab.appendChild(tr);
 		var tr2 = document.createElement('tr');
 		// headings
-		for (var i in kitchen_report_fmt) {
+		for (var i in kitchen_report_fmt[preptype]) {
 			var th = document.createElement('th');
 			th.innerHTML = margin(i);
 			tr2.appendChild(th);   
@@ -84,9 +130,9 @@ function report_components(data)
 			   	var chef = get_chef_by_id(data[i]['M1_chef_id']);
 			   	if (chef) data[i]['chef'] = chef['label'];
 		   		var tr = document.createElement('tr');
-		   		for (var j in kitchen_report_fmt) {
+		   		for (var j in kitchen_report_fmt[preptype]) {
 		   			var td = document.createElement('td');
-		   			var e = kitchen_report_fmt[j];
+		   			var e = kitchen_report_fmt[preptype][j];
 		   			if (e.indexOf('time') > 0) {
 		   	   			var s= data[i][e];
 		   	   			td.innerHTML = s.substring(11,16);

@@ -34,6 +34,11 @@ if ($userID > 0) {
 	if (!empty(get_url_token('all'))) {
 		$sql = "select *,(expiry_date < now()) as expired  from COMPONENT";
 	}
+	if (!empty(get_url_token('cid'))) {
+		$sql = "select *,(expiry_date < now()) as expired  from COMPONENT";
+		$sql .= " where id=".get_url_token('cid');
+
+	}
 	$result = mysql_query($sql);
 	$comps = array();
 	if ($result) {

@@ -11,7 +11,7 @@ $comp = json_decode($_POST["data"],true);
  
 $description = mysql_escape_string($comp['description']);
 $prep_type = $comp['prep_type'];
-$dock = $comp['dock'];
+$dock = empty($comp['dock']) ? null:$comp['dock'];
 if ($prep_type == '') {
 	$prep_type = 1;
 }

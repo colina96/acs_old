@@ -353,7 +353,7 @@ function show_dims()
 					<button type='button'  class='m_btn' onclick="goto_dock();">RETURN</button>
 				</div>
 			</div> 
-			<div class='m_modal' id='dock_m_temp_modal'>
+			<div class='m_modal' id='dock_m_temp_modala'>
 				<div class='m_label'><span>TEMPERATURE</span></div>
 				<div id='dock_m1_temp_div_2' class='temp_reading red'></div>
 				<div class='btns'>
@@ -443,7 +443,17 @@ function show_dims()
 		<!--  scan components -->
 		<div class='m_modal2' id='m_temp_modal1'>
 			<div class='m_label'><span>SCAN INGREDIENTS</span></div>
+			<div class='center'><input name='ingredient_barcode' id='ingredient_barcode' onchange='manual_barcode_submit("ingredient_barcode")'></div>
 			<div id='m1_temp_div_1'></div>
+			<div id='m1_temp_div_1_error'> </div>
+			<div class='btns'>
+				<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
+			</div>
+		</div>
+		<div class='m_modal2' id='m_temp_modal1a'>
+			<div class='m_label'><span>INGREDIENT TEMP</span></div>
+			<div class='center'>
+			<div id='m1_temp_div_1a'></div>
 			<div class='btns'>
 				<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
 			</div>
