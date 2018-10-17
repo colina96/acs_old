@@ -7,21 +7,7 @@ $userID = $_SESSION['userID'];
 
 // echo "userID ".$userID."\n";
 if ($userID > 0) {
-	$fieldnames = array();
-	$types = array();
-	$result = mysql_query("show columns from COMPONENT");
-	if ($result) {
-	//	error_log("read columns",0);
-		while ($row = mysql_fetch_array($result)) {
-			$fieldname = $row['Field'];
-			$fieldnames[] = $fieldname;
-			$types[$fieldname] = $row['Type'];
-			error_log($fieldname,0);
-		}
-	}
-	else {
-		error_log("could not read columns",0);
-	}
+	$fieldnames = get_fieldnames("COMPONENT");
 	
 	$fieldnames[] = 'expired';
 	$sql = "select *,(expiry_date < now()) as expired from COMPONENT  where finished is null and M1_check_id=".$userID;

@@ -6,16 +6,9 @@ include '../db.php';
 $userID = $_SESSION['userID'];
 // echo "userID ".$userID."\n";
 if ($userID > 0) {
-	$fieldnames = array();
-	$types = array();
-	$result = mysql_query("show columns from MENUS");
 	
-	while ($row = mysql_fetch_array($result)) {
-	
-		$fieldname = $row['Field'];
-		$fieldnames[] = $fieldname;
-		$types[$fieldname] = $row['Type'];
-	}
+	$fieldnames = get_fieldnames("MENUS");
+
 	$sql = "select * from MENUS";
 	$result = mysql_query($sql);
 	$comps = array();

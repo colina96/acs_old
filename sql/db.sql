@@ -46,7 +46,8 @@ select * from USERS;
 drop table if exists PREP_TYPES;
 CREATE table PREP_TYPES (
 	id smallint unsigned not null,
-	code varchar(5) not null,
+	code varchar(10) not null,
+	dock tinyint,
 	days_offset int,
 	M1_temp int,
 	M1_temp_above tinyint,
@@ -62,12 +63,14 @@ CREATE table PREP_TYPES (
 	probe_type int,
 	constraint pk_example primary key (id) 
 );
-insert into PREP_TYPES values (1,'CC',	3	,	75,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,6,0);
-insert into PREP_TYPES values (2,'HF',	3 * 7,	80,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,28,0);
-insert into PREP_TYPES values (3,'ESL',	3 * 7,	75,	 1,	120, 20, 21,0, 6 * 60,60,  5   ,0,90,0);
-insert into PREP_TYPES values (4,'LR',	3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0);
-insert into PREP_TYPES values (5,'AHR',	3,		5,   0,	45,  20, 15,0, null  ,null,null,0,6,0);
-insert into PREP_TYPES values (6,'DOCK',3,		5,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
+insert into PREP_TYPES values (1,'CC',	0, 3	,	75,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,6,0);
+insert into PREP_TYPES values (2,'HF',	0, 3 * 7,	80,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,28,0);
+insert into PREP_TYPES values (3,'ESL',	0, 3 * 7,	75,	 1,	120, 20, 21,0, 6 * 60,60,  5   ,0,90,0);
+insert into PREP_TYPES values (4,'LR',	0, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0);
+insert into PREP_TYPES values (5,'AHR' ,	0, 3,		5,   0,	45,  20, 15,0, null  ,null,null,0,6,0);
+insert into PREP_TYPES values (6,'FRESH' ,1, 3,		5,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
+insert into PREP_TYPES values (7,'FROZEN',1, 3,		-5,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
+insert into PREP_TYPES values (8,'DRY'   ,1, 3,		15,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
 
 drop table if exists CORRECTIVE_ACTIONS;
 CREATE table CORRECTIVE_ACTIONS

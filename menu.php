@@ -23,7 +23,7 @@
 				<tr><td>Supplier</td><td><input name='comp_supplier'></td></tr>
 				<tr><td>Product</td><td><input name='comp_product'></td></tr>
 				<tr><td>Spec</td><td><input name='comp_spec'></td></tr>
-				<tr><td>PT</td><td>
+			<!-- 	<tr><td>PT</td><td>
 					<select name='comp_PT_id'>
 						<option value='1'>Fresh</option>
 						<option value='2'>Frozen</option>
@@ -31,11 +31,11 @@
 
 						
 					</select>
-					</td></tr>
+					</td></tr>  -->
 				<tr><td>Shelf life (days)</td><td><input type='number' name='comp_shelf_life_days'></td></tr>
-				<tr><td>High Risk</td><td><input type='checkbox' name='comp_high_risk' value='1'></td></tr>
-				<tr><td>Prep type</td><td><?php select_prep_type(null,'comp_prep_type'); ?></td></tr>
-				<tr><td>
+				<tr><td>Track from dock</td><td><input type='checkbox' name='comp_high_risk' value='1'></td></tr>
+				<tr><td>Prep type</td><td><div id='prep_type_div'><?php select_prep_type(null,'comp_prep_type'); ?></div></td></tr>
+				<tr><td colspan='2'>
 				<div class='btns'>
 					<div class='btn' onclick='new_subcomponent();'>Done</div>
 					<div class='btn' onclick='cancel_add_sub();'>Cancel</div>
@@ -147,17 +147,20 @@ function select_plating_team(plating_team,menu_item_id)
 	ret += "</select>";
 	return(ret);
 }
-function select_prep_type(preptypes,prep_type_id,comp_id)
+function select_prep_type(preptypes,prep_type_id,comp_id,dock)
 {
 //	console.log('select_prep_type');
 //	console.log(preptypes);
+	
 	var ret =  "<select name='pt_" + comp_id + "' onchange='update_prep_type(this," + comp_id +");'>";
 	var idx = 1;
 	for (var i in preptypes) {
 		// console.log(i);
-		ret += "<option value='" + i + "'";
-		if (preptypes[i].id == prep_type_id) { ret += " selected"; }
-		ret +=  ">"+ preptypes[i].code + "</option>";
+		if ((!dock && preptypes[i].dock != 1) || (dock && preptypes[i].dock == 1)) { 
+			ret += "<option value='" + i + "'";
+			if (preptypes[i].id == prep_type_id) { ret += " selected"; }
+			ret +=  ">"+ preptypes[i].code + "</option>";
+		}
 	}
 	ret += "</select>";
 	return (ret);
@@ -255,7 +258,7 @@ function show_menu()
             	td.width='50%';
             	tr.appendChild(td);
             	td = document.createElement('td');
-            	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid);
+            	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,false);
             	tr.appendChild(td);
             	td = document.createElement('td');
             	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
@@ -571,6 +574,24 @@ function open_future_menus() // dummy code for now
 }
 var active_menu_id = null;
 
+function delete_menu(menu_id)
+{
+	console.log("deleting menu " + RESTHOME + "delete_menu.php?menu_id=" + menu_id);
+	$.ajax({
+	   url: RESTHOME + "delete_menu.php?menu_id=" + menu_id,
+   		type: "POST",
+   		dataType: 'json',
+   		success: function(result) {     
+    //   console.log("success got " + result + " ");
+       		show_menus();
+   		},
+	   fail: (function (result) {
+	       console.log("fail delete_menu",result);
+	   })
+	});
+}
+
+
 function load_menu(menu_id)
 {
 	active_menu_id = menu_id;
@@ -741,8 +762,10 @@ function show_menus(active,data)
    		// tr.appendChild(new_td("<a href='acs_menu.php?menu_id=" + data[i]['id'] + "'>edit</a>",'comp'));
    		var btn = "<div class='btn' onclick='load_menu(" + data[i]['id'] + ");'>Edit</div>";
    		tr.appendChild(new_td(btn,'comp'));
-   		var del = "<a href=acs_menu?delete_menu=" + data[i]['id'] + ">&#x274c</a>";
-   		tr.appendChild(new_td(del,'comp'));
+   		var btn = "<div class='btn' onclick='delete_menu(" + data[i]['id'] + ");'>&#x274c</div>";
+   		tr.appendChild(new_td(btn,'comp'));
+   		//var del = "<a href=acs_menu?delete_menu=" + data[i]['id'] + ">&#x274c</a>";
+   		//tr.appendChild(new_td(del,'comp'));
    		// tr.appendChild(new_td("<button type='button' class='acs_comp_btn' onclick='act_component(" + i + ");'>Action</button>",'comp'));
    		tab.appendChild(tr);
     }
@@ -865,139 +888,7 @@ function show_menus()
 	}
 }
 
-function show_menu($menu_id)
-{
-	$fieldnames = array();
-	$types = array();
-	$result = mysql_query("show columns from MENUS");
 
-	while ($row = mysql_fetch_array($result)) {
-		
-		$fieldname = $row['Field'];
-		$fieldnames[] = $fieldname;
-		$types[$fieldname] = $row['Type'];
-	}
-	
-	// get component links 
-	$sql = "select * from COMPONENT_LINK where menu_id=".$menu_id;
-	// echo $sql;
-	$result = mysql_query($sql);
-	$component_links = array();
-	while ($row = mysql_fetch_array($result)) {
-		
-		$id = $row['component_id'];
-		if (empty($component_links[$id])) {
-			$component_links[$id] = array();
-		}
-		$component_links[$id][] = $row['subcomponent_id'];
-		echo "<!-- adding subcomponent ".$row['subcomponent_id']." to ".$id." -->";
-	}
-	$sql = "select * from MENUS where ID=".$menu_id;
-	// echo $sql;
-	$result = mysql_query($sql);
-	$row = mysql_fetch_array($result);
-
-	if ($result) {
-
-		// echo "<form id='uploadMenuForm' method='POST' action='acs_menu.php'><table class='users'>";
-		
-		echo "<table><tr><td>OVERALL INFORMATION</td></tr>";
-		echo "<tr><td>".$row['description']."</td>";
-		echo "<td>".$row['code']."</td>";
-		echo "<td>".$row['comment']."</td>";
-		
-		echo "<tr><td>DATE RANGE</td></tr>";
-		echo "<tr><td>".date('F j Y',strtotime($row['start_date']));
-		echo "<td>".date('F j Y',strtotime($row['end_date']));
-		echo "</table>";
-		/*
-	//	while ($row = mysql_fetch_array($result) )
-		{
-			// echo "<tr><td>".$row['id']."</td>";
-			foreach ($fieldnames as $i => $fieldname) {
-				if ($fieldname == "id") {
-					
-				} 
-				else if (substr($types[$fieldname],0,7) == "varchar" )
-				{
-					echo "<tr><td>".$fieldname."</td><td class='length_inputs'>";
-					echo "<input name='".$fieldname."' value=\"".$row[$fieldname]."\"></td></tr>";
-				}
-				else {
-					echo "<tr><td>".$fieldname."</td><td class='length_inputs'>";
-					echo "<input name='".$fieldname."' value=\"".$row[$fieldname]."\"></td></tr>";
-				}
-			}
-		}
-		echo "</table>";
-		echo "<input type='submit' name='update_menu' value='update_menu' class='draw_screen_btn users_submit'></form>";
-		*/
-		echo "<hr><h3>Menu items</h3>";
-		echo "<form method='POST' action='acs_menu.php'><table width=100%>";
-		echo "<tr><th>ITEM CODE</th><th>ITEM DESCRIPTION</th><th>PREP TYPE</th><th>SENSOR TYPE</th><th>PLATING TEAM</th><th></th></tr>";
-		// can't use a join here because some menu_items don't have any components - they are a single item
-		$sql = "select * from MENU_ITEMS where MENU_ID=".$menu_id;
-		
-		$menu_items = array();
-		$result = mysql_query($sql);
-		while ($row = mysql_fetch_array($result) ) {
-			
-			$menu_items[] = $row;
-		}
-		$sql = "select * from PREP_TYPES order by ID";
-		$result = mysql_query($sql);
-		$prep_types = array();
-		if ($result) {
-			while($row = mysql_fetch_array($result)) {
-				$prep_types[$row['id']] = $row['code'];
-			}
-		}
-		foreach ($menu_items as $i => $row) {
-		
-			echo "<tr class='menu_item_row'><td>".$row['code']."</td>";
-			echo "<td >".$row['dish_name']."</td><td></td><td></td><td>";
-			select_plating_team($row['plating_team'],$row['id']);
-			echo "</td></tr>";
-		//	echo "<td><div class='acs_btn' onclick='add_menu_component(".$menu_id.",".$row['id'].",\"".$row['dish_name']."\");'><span>Add</span></div></tr>";
-			$sql = "select * from MENU_ITEM_COMPONENTS where MENU_ITEM_ID=".$row['id'];
-			$sql = "select * from MENU_ITEM_COMPONENTS, MENU_ITEM_LINK where MENU_ITEM_LINK.component_id = MENU_ITEM_COMPONENTS.id and MENU_ITEM_ID=".$row['id'];
-			$result = mysql_query($sql);
-			while ($row = mysql_fetch_array($result) ) {
-				echo "<tr><td></td><td>".$row['description']."</td>";
-				$prep_type = $row['prep_type'];
-				/* if (!empty($prep_type) && !empty($prep_types[$prep_type])) {
-					$prep_type = $prep_types[$prep_type];
-				}
-				echo "<td>".$prep_type."</td>"; */
-				echo "<td>";
-				select_prep_type($row['prep_type'],$row['component_id']);
-				echo "</td><td>";
-				select_probe_type($row['probe_type'],$row['component_id']);
-				
-       			echo "</td>"; // plating team column
-       			echo "<td><input type='checkbox' name='sub_components_".$row['component_id']."'";
-       			if (!empty($component_links[$row['component_id']])) {
-       				echo " checked";
-       			}
-       			echo ">";
-       			if (!empty($component_links[$row['component_id']])) {
-       				echo count($component_links[$row['component_id']]);
-       			}
-       			echo "</td>"; 
-				//echo "<td><div class='acs_btn' onclick='del_menu_component(".$menu_id.",".$row['id'].",\"".$row['description']."\");'><span>Del</span></div></tr>";
-			}
-		}
-		echo "<tr><td><input name='menu_item_code' size='10'></td>";
-		echo "<td><input name='menu_item_dish_name' size='30'></td>";
-		echo "</tr>";
-		echo "</table>";
-		echo "<input type=hidden name='menu_id' value='".$menu_id."'>";
-		echo "<input type='submit' name='new_menu_item' value='New menu item' class='draw_screen_btn users_submit'></form>";
-		//echo "<div id='add_menu_component_modal'><div class='modal_header'>Add menu item component</div>";
-		//echo "<div id='menu_item_component_div'></div></div>";
-		
-	}
-}
 function select_plating_team($plating_team,$menu_item_id)
 {
 	echo "<select name='plating_team_".$menu_item_id."' onchange='update_plating_team(this,".$menu_item_id.");'>";

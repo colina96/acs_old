@@ -34,6 +34,9 @@ function set_barcode_mode(mode)
 function process_barcode(s)
 { 
 	console.log("process_barcode " + s + " mode " + barcode_mode);
+	if (barcode == 'setup1') {
+		console.log('setup');
+	}
 	if (barcode_mode == null) {
 		return;
 	}
@@ -92,7 +95,7 @@ function set_ingredient_temp(s)
 	new_comp['selected_ingredients'][i]['temp'] = s;
 	if (draw_ingredients()) {
 		// save ingredient - new_comp.php
-		start_component();
+		start_component(false,true);
 	}
 }
 
@@ -726,6 +729,18 @@ function show_dock_component(cid)
 		
 		div.appendChild(d);
 	}
+	// show preptype details
+	var ptid = new_comp['prep_type'];
+
+	var d = document.createElement('div');
+	d.className = 'smaller';
+	d.innerHTML = "Prep Type:";
+	div.appendChild(d);
+	var d = document.createElement('div');
+	d.className = 'small';
+	d.innerHTML = get_preptype_val(ptid,'code');
+	
+	div.appendChild(d);
 	show('dock_comp_selected_btns');
 }
 
@@ -925,6 +940,7 @@ function component_selected(id)
 function dock_read_M1temp(callback)
 {
 	console.log('dock_read_M1temp');
+	console.log(active_comp);
 	load_chefs(null);
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
 	document.getElementById('dock_m1_temp_div').innerHTML = '';
@@ -963,7 +979,7 @@ function check_temp_m1_dock(t)
 	console.log(new_comp);
 	
 	// var t = document.getElementsByName('m1_temp')[0].value;
-	var prep_type_id = 6; // new_comp['prep_type']; // should always be 6 (DOCK)
+	var prep_type_id = new_comp['prep_type']; // should always be 6,7 or 8 (DOCK)
 	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
 	var M1_temp_sign = get_preptype_val(prep_type_id,'M1_temp_above');
 	document.getElementById('dock_m1_temp_div').innerHTML = '';
@@ -1171,8 +1187,10 @@ function set_user(input_name,next_page,uid) {
 function comp_milestone(temp_reading)
 {
 	// send data to REST interface
+	console.log('comp_milestone');
+	console.log(active_comp);
 	var prep_type_id = active_comp['prep_type_id'];
-	
+	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(temp_reading * 10) / 10 + "&#176C"
 	var temp_target = get_preptype_val(prep_type_id,'M2_temp');
 		
 	var component = new Object();
@@ -1267,9 +1285,12 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			milestone = 'M3';
 		} 
 		console.log('check_temp_m2 target temp',temp_target,t);
-		
+		document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
+		document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
 		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 		document.getElementById('m2_temp_div_3').innerHTML=parseInt(t) + "&#176C"
+	//	document.getElementById('dock_m1_temp_div_3').innerHTML= parseInt(t * 10) / 10 + "&#176C";
+		document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C";
 		if (milestone == 'M1' && parseInt(t) > parseInt(temp_target)) {
 			document.getElementById('m2_temp_div_2a').innerHTML= milestone + " achieved";
 			document.getElementById('m2_temp_div_3a').innerHTML= milestone + " achieved";
