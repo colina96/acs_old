@@ -854,6 +854,7 @@ function component_selected(id)
 	console.log("component selected - loading chefs");
 	load_chefs(null);
 	new_comp == null;
+	active_comp = null;
 	if (id) {
 		new_comp = get_component_by_id(id);
 	}
@@ -1068,8 +1069,11 @@ function start_component(dock)
 {
 	// object copy is messy - TODO
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
+	console.log('start component');
+	console.log(active_comp);
+	console.log(new_comp);
 	// check if component at M0 - has ingredients
-	if (!new_comp || active_comp['ingredients']) {
+	if (!new_comp || (active_comp && active_comp['selected_ingredients'])) {
 		console.log('component start - need to print labels');
 		comp_milestone(active_comp['M1_temp']);
         goto_m_main();
@@ -1083,6 +1087,7 @@ function start_component(dock)
 	component.M1_action_code = new_comp['M1_action_code'];
 	component.M1_action_id = new_comp['M1_action_id'];
 	component.shelf_life_days = new_comp.shelf_life_days;
+	component.items = new_comp.selected_ingredients;
 	component.dock = dock;
 	prep_type_id = component.prep_type;
 	console.log("start compontent " + component.description + " prep_type" + component.prep_type);

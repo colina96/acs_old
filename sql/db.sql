@@ -245,4 +245,15 @@ CREATE table PLATING_ITEM_COMPONENT
 	constraint pk_example primary key (id) 
 );
 
-
+drop table if exists INGREDIENTS;
+create table INGREDIENTS
+(
+	id smallint unsigned not null auto_increment, 
+	user_id smallint unsigned not null,
+	menu_item_component_id smallint unsigned not null,
+	component_id int,
+	subcomponent_id int,
+	M0_time datetime,
+	M0_temp float,
+	constraint pk_example primary key (id) 
+);
