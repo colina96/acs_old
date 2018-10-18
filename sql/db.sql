@@ -91,6 +91,8 @@ insert into CORRECTIVE_ACTIONS values (null,5,'Discard Product');
 insert into CORRECTIVE_ACTIONS values (null,5,'Retrain Staff');
 insert into CORRECTIVE_ACTIONS values (null,5,'Low Risk Item, QA Sign-Off');
 insert into CORRECTIVE_ACTIONS values (null,6,'QA Sign-Off');
+insert into CORRECTIVE_ACTIONS values (null,7,'QA Sign-Off');
+insert into CORRECTIVE_ACTIONS values (null,8,'QA Sign-Off');
 
 drop table if exists MENUS;
 CREATE TABLE MENUS (
@@ -154,19 +156,6 @@ insert into MENU_ITEM_LINK values (null,1,1,1);
 insert into MENU_ITEM_LINK values (null,1,1,2);
 insert into MENU_ITEM_LINK values (null,1,2,3);
 
-drop table if exists PRODUCT_TYPE;
-CREATE TABLE PRODUCT_TYPE
-(
-	id smallint unsigned not null auto_increment, 
-	description varchar(10),
-	constraint pk_example primary key (id) 
-);
-
-insert into PRODUCT_TYPE values (null,'FRESH');
-insert into PRODUCT_TYPE values (null,'FROZEN');
-insert into PRODUCT_TYPE values (null,'DRY');
-
-
 /* component link links components with subcompoents that need to be tracked - ie high risk components */;
 drop table if exists COMPONENT_LINK;
 CREATE TABLE COMPONENT_LINK
@@ -177,6 +166,7 @@ CREATE TABLE COMPONENT_LINK
 	subcomponent_id smallint unsigned not null,
 	constraint pk_example primary key (id) 
 );
+insert into COMPONENT_LINK values (null,1,3,4);
 
 drop table if exists COMPONENT;
 CREATE table COMPONENT (

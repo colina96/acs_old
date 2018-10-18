@@ -136,7 +136,7 @@ function Xcheck_login()
 function set_admin()
 {
 	document.getElementById('log_div').style.display = 'block';
-	goto_home();
+	// goto_home();
 }
 
 
