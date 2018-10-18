@@ -3,16 +3,7 @@ session_start();
 ?>
 <!DOCTYPE html>
 <?php include 'db.php' ?>
-<?php 
-// this all needs to be moved
-// upload_menu();
-if (isset($_GET['delete_menu'])) {
-	$sql = "delete from MENUS where id=".$_GET['delete_menu'];
-	test_mysql_query($sql);
-}
 
-
-?>
 <html lang="en">
   <head>
     <meta charset="utf-8">

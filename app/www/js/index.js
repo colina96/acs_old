@@ -83,11 +83,17 @@ function setup_front_page()
 	if (!USER) return;
 	console.log('setup_front_page');
 	console.log(USER);
-/* changing display breaks style ... TODO
- * 	document.getElementById('dock_btn').style.display = (USER.dock && USER.dock == 1)?'block':'none';
-	document.getElementById('kit_btn').style.display = (USER.kitchen && USER.kitchen == 1)?'block':'none';
-	document.getElementById('plat_btn').style.display = (USER.plating && USER.plating == 1)?'block':'none';
-*/
+	// this is really ugle but bootstrap breaks everything else..... TODO fix
+	var div = document.getElementById('front_page_btns');
+	var innerHTML = '';
+	if (USER.dock && USER.dock == 1)
+		innerHTML += "<button type='button' class='m_btn' onclick='goto_dock();'>Dock</button>";
+	if (USER.kitchen && USER.kitchen == 1)
+		innerHTML += "<button id='kit_btn' type='button' class='m_btn' onclick=\"goto_m_main('kitchen');\">Kitchen</button>";
+	if (USER.plating && USER.plating == 1)
+		innerHTML += "<button id='plat_btn' type='button'  class='m_btn' onclick=\"goto_plating_teams();\">Plating</button>";
+	innerHTML += "<button id='out_btn' type='button'  class='m_btn' onclick=\"logout();\">Logout</button>";
+	div.innerHTML = innerHTML;
 }
 
 function check_login()
@@ -192,11 +198,13 @@ function login(barcode_uid)
            	document.getElementById("login_fail").innerHTML = "2 Login ID" + data['user_id'];
             	user_id = data['user_id'];
             	user_name = data['user'];
+            	USER = data['USER'];
             	if (user_id > 0) {
                		load_comps();
                 	load_preptypes();
             		user_name = data['user'];
             		document.getElementById('m_login').innerHTML = user_name;
+            		setup_front_page();
             		goto_home();
             	}
             	else {

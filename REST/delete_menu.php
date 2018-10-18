@@ -21,6 +21,9 @@ if ($userID > 0 && $menu_id > 0) {
 	$sql = "delete from MENU_ITEM_LINK ";
 	$sql .= ' where menu_id='.$menu_id;
 	test_mysql_query($sql);echo $sql;
+	$sql = "delete from COMPONENT_LINK ";
+	$sql .= ' where menu_id='.$menu_id;
+	test_mysql_query($sql);echo $sql;
 }
  
 ?>
