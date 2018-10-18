@@ -122,7 +122,7 @@ select {
     position: absolute;
     top: 0;
     width: 356px;
-    height: 616px;
+    height: 610px;
     color:red;
     margin:auto;
     display: flex;
@@ -291,7 +291,7 @@ select {
 	top:10vh;
 	left:6vw;
 	.margin:2vw;
-	width:80vw;
+	width:87vw;
 	height:80vh;
 	background:white;
 	border-radius: 15px;

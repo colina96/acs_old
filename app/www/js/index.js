@@ -18,7 +18,7 @@
  */
 var user_id = -1;
 var user_name = "";
-
+var USER = null;
 
 var app = {
     // Application Constructor
@@ -78,6 +78,18 @@ var app = {
     }
 };
 
+function setup_front_page()
+{
+	if (!USER) return;
+	console.log('setup_front_page');
+	console.log(USER);
+/* changing display breaks style ... TODO
+ * 	document.getElementById('dock_btn').style.display = (USER.dock && USER.dock == 1)?'block':'none';
+	document.getElementById('kit_btn').style.display = (USER.kitchen && USER.kitchen == 1)?'block':'none';
+	document.getElementById('plat_btn').style.display = (USER.plating && USER.plating == 1)?'block':'none';
+*/
+}
+
 function check_login()
 {
 var loginString ="";
@@ -90,11 +102,14 @@ $.ajax({
     dataType: 'json',
     success: function(data){
     	console.log("got login");
+    	console.log(data);
     	//document.getElementById("res").innerHTML = "Logout Success..!" + data;
     	if(data['user_id']) {
         	//document.getElementById("res").innerHTML = "Login ID" + data['user_id'];
         	user_id = data['user_id'];
         	user_name = data['user'];
+        	USER = data['USER'];
+        	
         	if (user_id <= 0) {
         		// load_comps();
             	// load_preptypes();
@@ -103,6 +118,7 @@ $.ajax({
         		$("#login_fail").text("Not logged in ..!");
         	}
         	else {
+        		setup_front_page();
             $("#login_fail").text("Login OK..!");
             	console.log("Login OK");
         		load_comps();

@@ -17,30 +17,21 @@ plating BOOLEAN,
 supervisor BOOLEAN,
 last_login datetime,
 constraint pk_example primary key (id) );
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'col','acs','Colin','Atkinson','admin',1);
- INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'david@qamc.co','acs','David','Cox','admin',1);
- INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef1@gmail.com','acs','Chef','One','chef',0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef2@gmail.com','acs','Chef','Two','chef',0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef3@gmail.com','acs','Bob the','Chef','chef',0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef4@gmail.com','acs','Chef','Four','chef',0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef5@gmail.com','acs','Chef','Five','chef',0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef6@gmail.com','acs','Chef','Six','chef',0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef7@gmail.com','acs','Chef','Seven','chef',0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef8@gmail.com','acs','Chef','Eight','chef',0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef9@gmail.com','acs','Chef','Nine','chef',0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin)
- VALUES ( null, 'chef10@gmail.com','acs','Chef','10','chef',0);
+INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+ VALUES ( null, 'col','acs','Colin','Atkinson','admin',1,1,1,1,1);
+INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+ VALUES ( null, 'david@qamc.co','acs','David','Cox','admin',1,1,1,1,1);
+INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+ VALUES ( null, 'dock','acs','Dock','One','Dock',0,1,0,0,0);
+INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+ VALUES ( null, 'ds','acs','Dock','Super','super',0,1,0,0,1);
+INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+ VALUES ( null, 'bob','acs','Bob the','Chef','chef',0,0,1,0,1);
+INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+ VALUES ( null, 'plating','acs','Plating','Person','chef',0,0,0,1,0);
+INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+ VALUES ( null, 'PS','acs','Plating','Super','chef',0,0,0,1,1);
+
 select * from USERS;
 
 drop table if exists PREP_TYPES;

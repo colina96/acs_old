@@ -58,7 +58,8 @@
     			Select file to upload:
    				 <input type="file" name="fileToUpload" id="fileToUpload">
    				 <!--   div class='drop-files-container' id='drop-files-container'></div -->
-   				 <input type='submit' name='submit_menu' value='Submit Menu' class='submit' onclick='upload_menu();'>
+   				 <input type='button' name='submit_menu' value='Submit Menu' class='submit' onclick='upload_menu();'>
+   				
    				 </td></tr></table></form>
 
 		
@@ -130,9 +131,16 @@ function upload_menu()
         },
         cache: false,
         contentType: false,
-        processData: false
+        processData: false,
+        success: function(result) { // need to get the id of the new component back to print labels
+            console.log("upload_menu result ",result);
+            show_active_menus();
+        },
+        fail: (function (result) {
+            console.log("upload_menu fail ",result);
+        })
     }); 
-	return(true);
+	return(false);
 }
 
 function select_plating_team(plating_team,menu_item_id)
@@ -583,7 +591,7 @@ function delete_menu(menu_id)
    		dataType: 'json',
    		success: function(result) {     
     //   console.log("success got " + result + " ");
-       		show_menus();
+   			show_active_menus();
    		},
 	   fail: (function (result) {
 	       console.log("fail delete_menu",result);

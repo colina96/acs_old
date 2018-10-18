@@ -99,6 +99,7 @@ function check_login()
 	$uid = get_url_token("uid");
 	$login = get_url_token("login");
 	$logout = get_url_token("logout");
+	$USER = null;
 	$found = 0;
 	if (!empty($logout) && empty($login)) {
 		$_SESSION['user'] = NULL;
@@ -111,7 +112,7 @@ function check_login()
 		$_SESSION['orderID'] = NULL;
 	}
 	else if (!empty($login)) {
-		
+		$fieldnames = get_fieldnames('USERS');
 		$sql = NULL;
 		if (!empty($email) && !empty($password)) {
 			$sql="SELECT * FROM USERS where email='" . $email."' and password = '".$password."'" ;
@@ -133,6 +134,11 @@ function check_login()
 					$_SESSION['email'] = $row['email'];
 					$_SESSION['lastname'] = $row['lastname'];
 					$_SESSION['firstname'] = $row['firstname'];
+					$USER = array();
+					foreach ($fieldnames as $f) {
+						$USER[$f] = utf8_encode($row[$f]);
+					}
+					$_SESSION['USER'] = $USER;
 				}
 			}
 			else {

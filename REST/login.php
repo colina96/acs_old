@@ -12,6 +12,7 @@ if (!empty($_SESSION['userID'])) {
 	$ret = array();
 	$ret['user_id'] = $userID;
 	$ret['user'] = $_SESSION['user'];
+	$ret['USER'] = $_SESSION['USER'];
 	$json = json_encode($ret);
 	echo $json;
 }
