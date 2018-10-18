@@ -157,10 +157,19 @@ function Xcheck_login()
 
 function set_admin()
 {
-	document.getElementById('log_div').style.display = 'block';
+	// document.getElementById('log_div').style.display = 'block';
 	// goto_home();
+	openPage('setup', this, 'red','mobile_main','tabclass');
+	document.getElementsByName('resthome')[0].value = RESTHOME;
 }
 
+function save_resthome()
+{
+	RESTHOME=document.getElementsByName('resthome')[0].value;
+	var storage = window.localStorage;
+	
+    storage.setItem('RESTHOME',RESTHOME);
+}
 
 
 function login(barcode_uid)
