@@ -34,7 +34,7 @@ function set_barcode_mode(mode)
 function process_barcode(s)
 { 
 	console.log("process_barcode " + s + " mode " + barcode_mode);
-	if (barcode == 'setup1') {
+	if (s == 'setup1') {
 		console.log('setup');
 	}
 	if (barcode_mode == null) {

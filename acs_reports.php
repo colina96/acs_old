@@ -49,7 +49,21 @@ var kitchen_report_fmt = {
 		'M2 TEMP':'M2_temp',
 		'Q/A':'M1_action_code',
 		'CHEF':'M1_action_id'},
-	'DOCK': {
+	'FRESH': {
+		'COMPONENT NAME':'description',
+		'BATCH CODE':'id',
+		'M1 TIME':'M1_time',
+		'M1 TEMP':'M1_temp',
+		'Q/A':'M1_action_code',
+		'CHEF':'M1_action_id'},
+	'FROZEN': {
+		'COMPONENT NAME':'description',
+		'BATCH CODE':'id',
+		'M1 TIME':'M1_time',
+		'M1 TEMP':'M1_temp',
+		'Q/A':'M1_action_code',
+		'CHEF':'M1_action_id'},
+	'DRY': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
 		'M1 TIME':'M1_time',
@@ -120,7 +134,8 @@ function report_components(data)
 	//	tab.appendChild(tr);
 		var data_count = new Object();
 	   	for (var i=0; i<data.length; i++) {
-		//   	console.log('item ' + data[i]['description'] + ' prep ' + data[i]['prep_type_id']);
+		   	console.log('item ' + data[i]['description'] + ' prep ' + data[i]['prep_type_id'] + 
+				  " : " + preptype_id);
 		   	if (data[i]['prep_type_id'] == preptype_id) {
 			   	if (!data_count[preptype_id]) {
 			   		tab.appendChild(tr1);
