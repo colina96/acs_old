@@ -146,9 +146,13 @@ function report_components(data)
 			   	if (chef) data[i]['chef'] = chef['label'];
 		   		var tr = document.createElement('tr');
 		   		for (var j in kitchen_report_fmt[preptype]) {
+			   		
 		   			var td = document.createElement('td');
 		   			var e = kitchen_report_fmt[preptype][j];
-		   			if (e.indexOf('time') > 0) {
+		   			if (j === 'BATCH CODE') {
+		   				td.innerHTML = 'c01' + zeropad(data[i][e],6);
+		   			}
+		   			else if (e.indexOf('time') > 0) {
 		   	   			var s= data[i][e];
 		   	   			td.innerHTML = s.substring(11,16);
 		   			}

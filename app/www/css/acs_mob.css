@@ -144,7 +144,7 @@ select {
 	.border:1px solid green;
 	width:84vw;
 }
-#kitchen_barcode, #dock_barcode {
+#kitchen_barcode, #dock_barcode, .manual_barcode {
 	position:absolute;
 	top:30px;
 	left:6vw;
@@ -257,7 +257,8 @@ select {
 	display:flex;
 }
 #manual_temp {
-	font-size:50px;
+	width:100px;
+	font-size:45px;
 }
 #chk_temp_item_time_div2 {
 	position:absolute;
@@ -393,7 +394,7 @@ select {
     width:100%;
 }
 .label_txt {
-	width:60%;
+	width:50%;
 	margin:10px;
 }
 .dec_labels, .inc_labels {
@@ -411,8 +412,8 @@ select {
 }
 #active_plating_team_head {
 	position:absolute;
-	top:6vh;
-	left:6vw;
+	top:2vh;
+	left:16vw;
 	font-size:18px;
 	color:white;
 }

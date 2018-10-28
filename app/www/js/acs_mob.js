@@ -209,6 +209,7 @@ function save_plating_team()
 function show_plating_items(team_id,tab)
 {
 	var item_count = 0;
+	console.log('show_plating_items');
 	for (var i = 0; i < menu_items.length; i++) {
 		if (menu_items[i]['plating_team'] == team_id) {
 			if (item_count == 0 && team_id != active_plating_team) {
@@ -225,13 +226,14 @@ function show_plating_items(team_id,tab)
 			item_count ++;
 			
 			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
+			console.log(plating_item);
 			tr = document.createElement('tr');
 			var td = document.createElement('td');
 			td.innerHTML = margin(menu_items[i]['code']);
 			tr.appendChild(td);
 			td = document.createElement('td');
 			var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>" + menu_items[i]['dish_name']; + "</div>"
-			if (plating_item) {
+			if (plating_item && plating_item.time_started) {  // check plating_item.checked
 				div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>" + menu_items[i]['dish_name']; + "</div>";
 				if (plating_item.time_completed) {
 					div = "<div class='red'>" + menu_items[i]['dish_name']; + "</div>";
@@ -484,7 +486,10 @@ function find_plating_item(menu_item_id)
 			return plating_items[i];
 		}
 	}
-	plating_item = copy_object(get_menu_item_by_id(menu_item_id)); 
+	var mi = get_menu_item_by_id(menu_item_id);
+	console.log(mi);
+	plating_item = copy_object(mi); 
+	plating_item.id = null; // get this when inserted into db
 	plating_item.menu_item_id = menu_item_id;
 	plating_items.push(plating_item);
 	console.log(plating_item);
@@ -549,6 +554,7 @@ function start_plating_item()
             console.log("new_plating_item result ",result);
             var p = JSON.parse(result);
             plating_item['plating_item_id'] = p['id'];
+            plating_item['id'] = p['id'];
             plating_item['M1_time'] = p['M1_time'];
             
             
@@ -615,7 +621,7 @@ function do_show_menu_item_components(menu_item_id)
 				console.log("found ",items[i].description);
 				var tr = document.createElement('tr');
 				// tr.appendChild(new_td(line++,'item'));
-				var clickdiv = "<div onclick='plating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
+				var clickdiv = "<div onclick='XXplating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
 				// show items in coolroom ready to be plated
 			 	//clickdiv += show_plating_comps(items[i].description);
 			//	tr.appendChild(new_td(items[i].description,'item'));
@@ -647,12 +653,12 @@ function do_show_menu_item_components(menu_item_id)
 		if (all_good) {
 			hide('plating_return');
 			show('plating_print_labels');
-			//plating_item.checked = true;
+			plating_item.checked = true;
 		}
 		else {
 			show('plating_return');
 			hide('plating_print_labels');
-		//	plating_item.checked = false;
+			plating_item.checked = false;
 		}
 	}
 }

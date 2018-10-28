@@ -73,7 +73,7 @@ function load_menu_item_links($menu_id)
 				$menu_item_links[$menu_item_id] = [];
 			}
 			$component_id = $row['component_id'];
-			$d = $row[5]; // because php isn't good at joins
+			$d = $row[6]; // because php isn't good at joins
 			//echo $d;
 			$comp = [];
 			$comp['id'] = $component_id;

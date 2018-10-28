@@ -234,6 +234,7 @@ create table INGREDIENTS
 (
 	id smallint unsigned not null auto_increment, 
 	user_id smallint unsigned not null,
+	menu_id int,
 	menu_item_component_id smallint unsigned not null,
 	component_id int,
 	subcomponent_id int,

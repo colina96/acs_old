@@ -75,6 +75,13 @@ function margin(t)
 	return("<div class='margin10'>" + t + "</div");
 }
 
+function zeropad(s,n) // return string length n padded with zeroes
+{
+	var ret = s;
+	while (ret.length < n) ret = '0' + ret;
+	return(ret);
+}
+
 function get_chef_by_id(id)
 {
 
