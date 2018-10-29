@@ -53,9 +53,10 @@ session_start();
           <ul class="nav navbar-nav">
             <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('USERS', this, 'red')" href="#">USERS</a></li>
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="#">MENU</a></li>
-            <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')" href="#">SETTINGS</a></li>
+            <li class='tabclass' onclick="daily_orders();"><a href="#">DAILY ORDERS</a></li>
+            <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')" href="#">PT SETTINGS</a></li>
             <li class='tabclass' onclick="openPage('APP', this, 'red','tabcontent','tabclass')"><a href="#">APP</a></li>
-            <li class='tabclass' onclick="reports()"><a href="#">REPORTS</a></li>
+            <li class='tabclass' onclick="reports();"><a href="#">REPORTS</a></li>
             <!--  li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="#">KITCHEN</a></li>
             <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="#">ASSEMBLY</a></li -->
             
@@ -77,20 +78,16 @@ session_start();
   <?php include 'menu.php' ?>
 </div>
 
-<div id="SETTINGS" class="tabcontent">
-  <h3>Settings</h3>
-  <?php include 'acs_settings.php' ?>
-</div>
+<div id="SETTINGS" class="tabcontent"><?php include 'acs_settings.php' ?></div>
+
+<div id="ORDERS" class="tabcontent"><?php include 'acs_orders.php' ?></div>
 
 <div id="APP" class="tabcontent">
 <div class='phone'>
   <iframe width='360px' height='616px' src='app/www/index.html' class='app_frame'></iframe>
 </div>
 </div>
-<div id="REPORTS" class="tabcontent">
-<?php include 'acs_reports.php' ?>
-  
-</div>
+<div id="REPORTS" class="tabcontent"><?php include 'acs_reports.php' ?></div>
 <div id="KITCHEN" class="tabcontent">
   <!--  ?php include 'kitchen.php' ? -->
 </div>
@@ -133,3 +130,4 @@ session_start();
 <?php } ?>
 <script src="acs.js"></script>
 <script src="app/www/js/acs_common.js"></script>
+<script src="app/www/js/sprintf.js"></script>

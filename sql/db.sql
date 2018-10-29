@@ -242,3 +242,30 @@ create table INGREDIENTS
 	M0_temp float,
 	constraint pk_example primary key (id) 
 );
+
+drop table if exists SHIFTS;
+create table SHIFTS
+(
+	id smallint unsigned not null auto_increment, 
+	title varchar(10),
+	start time,
+	end time,
+	constraint pk_example primary key (id) 
+);
+
+insert into SHIFTS values (null,'09:30 AM','5:00','9:30');
+insert into SHIFTS values (null,'11:00 AM','9:30','11:00');
+insert into SHIFTS values (null,'05:00 AM','11:00','5:40');
+
+drop table if exists SHIFT_ORDERS;
+create table SHIFT_ORDERS
+(
+	id smallint unsigned not null auto_increment, 
+	menu_id int,
+	menu_item_id int,
+	s1 int,
+	s2 int,
+	s3 int,
+	sdate datetime,
+	constraint pk_example primary key (id) 
+);

@@ -150,7 +150,8 @@ function report_components(data)
 		   			var td = document.createElement('td');
 		   			var e = kitchen_report_fmt[preptype][j];
 		   			if (j === 'BATCH CODE') {
-		   				td.innerHTML = 'c01' + zeropad(data[i][e],6);
+		   				// td.innerHTML = 'c01' + zeropad(data[i][e],6);
+		   				td.innerHTML = sprintf('C01%06d',data[i][e]);
 		   			}
 		   			else if (e.indexOf('time') > 0) {
 		   	   			var s= data[i][e];

@@ -40,7 +40,7 @@ function process_barcode(s)
 	if (barcode_mode == null) {
 		return;
 	}
-	if (s.indexOf('u') >= 0) { // user barcode scanned
+	if ((s.indexOf('u') >= 0) || (s.indexOf('U') >= 0)) { // user barcode scanned
 		var uid = parseInt(s.substring(4));
 		if (barcode_mode == 'login') {
 			login(uid);
@@ -60,8 +60,8 @@ function process_barcode(s)
 			add_team_member(uid);
 		}
 	}
-	if (s.indexOf('c') >= 0) { // component barcode scanned
-		var cid = parseInt(s.substring(5));
+	if ((s.indexOf('c') >= 0) || (s.indexOf('C') >= 0)) { // component barcode scanned
+		var cid = parseInt(s.substring(3));
 		if (barcode_mode == 'PT_comp') {
 			plating_comp_barcode_scanned(cid);
 		}
