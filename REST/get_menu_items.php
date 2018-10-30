@@ -10,6 +10,7 @@ if ($userID > 0) {
 	$menu_id = get_url_token('menu_id');
 	$fieldnames = get_fieldnames($table_name);
 	$menu_item_links = load_menu_item_links($menu_id);
+	$shift_data = load_shift_data($menu_id);
 	$sql = "select * from MENU_ITEMS";
 	
 	if (!empty($menu_id) && $menu_id > 0) { 
@@ -31,6 +32,15 @@ if ($userID > 0) {
 			
 			if (isset($menu_item_links[$menu_item_id])) {
 				$item['items'] = $menu_item_links[$menu_item_id];
+			}
+			if (!empty($shift_data[$item['id']])) {
+				// var_dump($shift_data[$item['id']]);
+				// $item['shift_data'] = $shift_data[$item['id']];
+				$sd = $shift_data[$item['id']];
+				$item['s1'] = $sd[0]['s1'];
+				$item['s2'] = $sd[0]['s2'];
+				$item['s3'] = $sd[0]['s3'];
+			
 			}
 			$items[] = $item;
 

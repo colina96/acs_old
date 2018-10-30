@@ -242,6 +242,9 @@ function show_plating_items(team_id,tab)
 
 			td.innerHTML = margin(div);
 			tr.appendChild(td);
+			td = document.createElement('td');
+			td.innerHTML = margin(menu_items[i]['s1']);
+			tr.appendChild(td);
 			tab.appendChild(tr);
 		}
 	}
@@ -270,6 +273,9 @@ function goto_plating()
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML = 'PRODUCT NAME';
+	tr.appendChild(th);
+	th = document.createElement('th');
+	th.innerHTML = 'QTY';
 	tr.appendChild(th);
 	tab.appendChild(tr);
 	show_plating_items(active_plating_team,tab);

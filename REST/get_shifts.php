@@ -56,31 +56,3 @@ if ($userID > 0) {
 	}		
 }
 
-function load_shift_data($menu_id)
-{
-	$fieldnames = get_fieldnames("SHIFT_ORDERS");
-	$shift_data = Array();
-	$sql = "select * from SHIFT_ORDERS";
-	if (!empty($menu_id) && $menu_id > 0) {
-		$sql .= " where menu_id=".$menu_id;
-	}
-
-	//echo $sql;
-	$result = mysql_query($sql);
-	if ($result) {
-		while($row = mysql_fetch_array($result))
-		{
-			$menu_item_id = $row['menu_item_id'];
-			if (!isset($shift_data[$menu_item_id])) {
-				$shift_data[$menu_item_id] = [];
-			}
-			$shift = [];
-			foreach ($fieldnames as $f) {
-				$shift[$f] = utf8_encode($row[$f]);
-			}
-			
-			$shift_data[$menu_item_id][] = $shift; 
-		}
-	}
-	return($shift_data);
-}
