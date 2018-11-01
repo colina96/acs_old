@@ -1296,7 +1296,7 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			temp_target = get_preptype_val(prep_type_id,'M3_temp');
 			milestone = 'M3';
 		} 
-		console.log('check_temp_m2 target temp',temp_target,t);
+		console.log('check_temp_m2 target temp',temp_target,t,milestone);
 		document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 		document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
 		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
@@ -1317,7 +1317,11 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			comp_milestone(t);
 		}
 		else {
+			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			// document.getElementById('m2_temp_div_2a').innerHTML= milestone + "";
+			document.getElementById('m2_temp_div_2a').innerHTML= milestone + " not achieved";
+			document.getElementById('m2_temp_div_3a').innerHTML= milestone + " not achieved";
+			document.getElementById('m2_temp_div_2').innerHTML= "<div class='red'>" + parseInt(t) + "&#176C</div>"
 		}
 		openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
 	}

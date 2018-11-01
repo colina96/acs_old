@@ -81,6 +81,11 @@ td { padding: 5px; }
   overflow:auto;
 }
 
+#daily_orders_div {
+	height: 100%;
+	overflow:auto;
+}
+
 .menu_details_active {
 	color: black;
   display: block;
