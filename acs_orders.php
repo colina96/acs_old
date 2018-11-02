@@ -81,7 +81,6 @@ function set_shift_qty(menu_item_id,shift_id)
 <div class='acs_main'>
 <div class="acs_sidebar"></div>
 <div class="acs_right_content">
-
 <div id='daily_orders_div' class='overflow'></div>
 </div>
 </div>
