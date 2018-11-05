@@ -336,7 +336,10 @@ function show_dims()
 		<div class='m_main'>
 			<div class='m_top_menu_container'>
 				
-				<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div>
+				<div class='m_top_menu larger left' id='m_home_tab'  onclick="goto_home()">X</div>
+				<div class='m_top_menu' id='supplier_list_tab'  onclick="openPage('m_dock', this, 'red','m_modal','m_top_menu',reprint_supplier_labels);">SUPPLIER LIST</div>
+				<div class='m_top_menu' id='s_reprint_labels_tab'  
+					onclick="openPage('m_dock_reprint', this, 'red','m_modal','m_top_menu',reprint_supplier_labels);">RE-PRINT LABELS</div>
 			</div>
 			<div id='dock_barcode'><input placeholder='Enter existing barcode' name='dock_manual_code' id='dock_manual_code' onchange='manual_barcode_submit("dock_manual_code")'>
 			</div>
@@ -355,6 +358,15 @@ function show_dims()
 					
 					</div>
 				
+			</div>
+			<div class='m_modal' id='m_dock_reprint'>
+				<div class='margin10'>REPRINT</div>
+				<div class='margin10' id='dock_reprint_div'>Scan barcode
+				</div>
+				<div class='center grey'>LABEL QUANTITY<input type='number' name='dock_reprint_label_qty' size=4></div>
+				<div class='btns'>
+					<button type='button'  class='m_btn' onclick="dock_reprint();">Print Labels</button>
+				</div>
 			</div>
 			<div class='m_modal' id='dock_m_temp_modal'>
 				<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
@@ -403,25 +415,29 @@ function show_dims()
 	<!--  kitchen temp pages -->
 	<div class='mobile_main hidden' id='mm2'>
 		<div class='m_main'>
-		<div class='m_top_menu_container'>
-			<div class='m_top_menu' id='m_current_tracking_tab'  onclick="m_tracking()">CURRENT TRACKING</div>
-			<div class='m_top_menu' id='m_reprint_labels_tab'  onclick="reprint_comp_labels();">RE-PRINT LABELS</div>
-			<div class='m_top_menu larger' id='m_search_tab'  onclick="goto_comp_search()">&#x1F50E</div>
-			<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div>
-		</div>
-		<div id='kitchen_barcode' class='manual_barcode'>
-			<input placeholder='Enter existing barcode' name='kitchen_manual_barcode' id='kitchen_manual_code' onchange='manual_barcode_submit("kitchen_manual_barcode")'>
-		</div>
-		<div id='current_time_kitchen'>TIME</div>
-		<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
-		<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
-		
+			<div class='m_top_menu_container'>
+				<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">X</div>
+				<div class='m_top_menu' id='m_current_tracking_tab'  
+					onclick="openPage('m_current_tracking', this, 'red','m_modal','m_top_menu',m_tracking);">CURRENT TRACKING</div>
+				<div class='m_top_menu' id='m_reprint_labels_tab'  
+					onclick="openPage('m_reprint_labels', this, 'red','m_modal','m_top_menu',reprint_comp_labels);">RE-PRINT LABELS</div>
+				<div class='m_top_menu larger' id='m_search_tab'  
+					onclick="openPage('m_search', this, 'red','m_modal','m_top_menu',goto_comp_search);">&#x1F50E</div>
+				<!--  div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div -->
+			</div>
+			<div id='kitchen_barcode' class='manual_barcode'>
+				<input placeholder='Enter existing barcode' name='kitchen_manual_barcode' id='kitchen_manual_code' onchange='manual_barcode_submit("kitchen_manual_barcode")'>
+			</div>
+			<div id='current_time_kitchen'>TIME</div>
+			<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
+			<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
+			
 			<div class='m_modal hidden' id='m_search'>
 				<div class='margin10'>SEARCH</div>
 				<div class='margin10'><input type="text" id="search" name='new_comp_desc'>
-				<div class='btns hidden' id='new_comp_btns'>
-					<button type='button' class='m_submit' onclick="new_component();">Add New</button>
-				</div>
+					<div class='btns hidden' id='new_comp_btns'>
+						<button type='button' class='m_submit' onclick="new_component();">Add New</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -571,10 +587,11 @@ function show_dims()
 	<div class='mobile_main hidden' id='plating_div'> 
 		<div class='m_main'>
 			<div class='m_top_menu_container'>
+			<div class='m_top_menu larger' id='plating_home_tab'  onclick="goto_home()">X</div>
 				<div class='m_top_menu' id='m_plating__team_tab'  onclick="goto_plating_teams();">TEAMS</div>
 				<div class='m_top_menu' id='m_plating_tab'  onclick="goto_plating()">PLATING SCHEDULE</div>
 				
-				<div class='m_top_menu larger' id='plating_home_tab'  onclick="goto_home()">&#8962;</div>
+				
 			</div>
 			<div id='plating_comment_div'></div>
 			<div class='m_modal' id='m_sel_team' >

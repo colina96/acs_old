@@ -261,7 +261,7 @@ function logout()
     });
 }
 
-function openPage(pageName, elmnt, color,content_class,tab_class) 
+function openPage(pageName, elmnt, color,content_class,tab_class,callback) 
 {
 
 	var popups = document.getElementsByClassName('popup');
@@ -271,6 +271,7 @@ function openPage(pageName, elmnt, color,content_class,tab_class)
 	var parent = document.getElementById(pageName).parentElement;
 	console.log("opening page ",pageName,content_class);
 	console.log('parent ',parent.id,parent.className);
+	console.log(elmnt.id);
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName(content_class);
@@ -285,15 +286,19 @@ function openPage(pageName, elmnt, color,content_class,tab_class)
     }
 
     // Remove the background color of all tablinks/buttons
-/*    tablinks = document.getElementsByClassName(tab_class);
+    tablinks = document.getElementsByClassName(tab_class);
     // console.log("found tablinks ",tablinks.length);
     for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].style.backgroundColor = "";
-    } */
+        tablinks[i].style.borderBottom ="";
+    } 
 
     // Show the specific tab content
     document.getElementById(pageName).style.display = "block";
-
+    if (elmnt && elmnt.style) {
+    	// document.getElementById(elmnt.id).style.borderBottom = '1px solid white';
+    	elmnt.style.borderBottom = '1px solid white';
+    }
     // Add the specific color to the button used to open the tab content
     // elmnt.style.backgroundColor = color;
+    if (typeof(callback) == 'function' ) callback();
 }

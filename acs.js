@@ -1,6 +1,7 @@
 var RESTHOME = 'REST/';
 function openPage(pageName, elmnt, color,content_class,tab_class) {
-	// console.log("opening page ",pageName,content_class);
+//	console.log("opening page ",pageName,content_class);
+
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName(content_class);
@@ -15,7 +16,7 @@ function openPage(pageName, elmnt, color,content_class,tab_class) {
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].style.backgroundColor = "";
     }
-
+  //  elmnt.style.border-bottom = '1px solid black';
     // Show the specific tab content
     document.getElementById(pageName).style.display = "block";
 

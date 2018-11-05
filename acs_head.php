@@ -55,6 +55,7 @@ session_start();
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="#">MENU</a></li>
             <li class='tabclass' onclick="daily_orders();"><a href="#">DAILY ORDERS</a></li>
             <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')" href="#">PT SETTINGS</a></li>
+            <li class='tabclass' onclick="openPage('SUPPLIERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SUPPLIERS', this, 'red')" href="#">SUPPLIER LIST</a></li>
             <li class='tabclass' onclick="openPage('APP', this, 'red','tabcontent','tabclass')"><a href="#">APP</a></li>
             <li class='tabclass' onclick="reports();"><a href="#">REPORTS</a></li>
             <!--  li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="#">KITCHEN</a></li>
@@ -79,7 +80,7 @@ session_start();
 </div>
 
 <div id="SETTINGS" class="tabcontent"><?php include 'acs_settings.php' ?></div>
-
+<div id="SUPPLIERS" class="tabcontent">suppliers</div>
 <div id="ORDERS" class="tabcontent"><?php include 'acs_orders.php' ?></div>
 
 <div id="APP" class="tabcontent">

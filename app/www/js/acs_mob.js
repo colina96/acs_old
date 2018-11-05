@@ -1952,3 +1952,11 @@ function refresh_times()
 	setTimeout(refresh_times,60 * 1000);
 }
 
+function search_suppliers()
+{
+	console.log('search_suppliers');
+}
+function reprint_supplier_labels()
+{
+	console.log('reprint_supplier_labels');
+}

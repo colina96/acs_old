@@ -136,17 +136,17 @@ select {
 .m_top_menu_container {
 	position:absolute;
 	top:0;
-	left:8vw;
-	margin:2vw;
+	left:1vw;
+	margin:0vw;
 	display:flex;
 	.color:white;
 	font-size:x-small;
 	.border:1px solid green;
-	width:84vw;
+	width:94vw;
 }
 #kitchen_barcode, #dock_barcode, .manual_barcode {
 	position:absolute;
-	top:30px;
+	top:35px;
 	left:6vw;
 	margin:0 auto;
 	width:65%;
@@ -159,16 +159,13 @@ select {
 }
 #current_time_kitchen, #current_time_dock {
 	position:absolute;
-	top:39px;
-	right:5px;
+	top:35px;
+	right:25px;
 	margin:0 auto;
 	color:white;
-	font-size:20px;
+	font-size:17px;
 }
-#plating_home_tab {
-	position:absolute;
-	right:10px;
-}
+
 #plating_options_item_div {
 	margin-top:10vw;
 	font-size:20px;
@@ -183,10 +180,14 @@ select {
 	font-size:20px;
 }
 .m_top_menu {
-	margin:5px;
+	margin:auto;
 	.width:30vw;
 	color:white;
 	font-size:larger;
+}
+
+.left {
+	margin :1px;
 }
 
 .larger {
