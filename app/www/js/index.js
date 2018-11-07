@@ -271,7 +271,7 @@ function openPage(pageName, elmnt, color,content_class,tab_class,callback)
 	var parent = document.getElementById(pageName).parentElement;
 	console.log("opening page ",pageName,content_class);
 	console.log('parent ',parent.id,parent.className);
-	console.log(elmnt.id);
+	// console.log(elmnt.id);
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName(content_class);

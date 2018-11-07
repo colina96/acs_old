@@ -82,6 +82,10 @@ function process_barcode(s)
 				}
 			}
 		}
+		if (barcode_mode == 'dock_reprint') {
+			reprint_dock_labels(cid);
+			barcode_mode = null;
+		}
 		if (barcode_mode == 'scan_ingredients') {
 			console.log('read ingredient ' + cid);
 			check_ingredient(cid);
@@ -259,7 +263,7 @@ function goto_plating()
 		goto_plating_teams();
 	}
 	openPage('m_plating', this, 'red','mobile_main','tabclass');
-	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
+	openPage('m_plating_sched', document.getElementById('m_plating_team_tab'), 'red','m_modal','tabclass');
 	var hd = document.getElementById('active_plating_team_head');
 	hd.innerHTML = "Plating Team " + active_plating_team;
 	var t = document.getElementById('plating_sched_list');
@@ -279,28 +283,7 @@ function goto_plating()
 	tr.appendChild(th);
 	tab.appendChild(tr);
 	show_plating_items(active_plating_team,tab);
-	/*
-	for (var i = 0; i < menu_items.length; i++) {
-		if (menu_items[i]['plating_team'] == active_plating_team) {
-			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
-			tr = document.createElement('tr');
-			var td = document.createElement('td');
-			td.innerHTML = menu_items[i]['code'];
-			tr.appendChild(td);
-			td = document.createElement('td');
-			var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>" + menu_items[i]['dish_name']; + "</div>"
-			if (plating_item) {
-				div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>" + menu_items[i]['dish_name']; + "</div>";
-				if (plating_item.time_completed) {
-					div = "<div class='red'>" + menu_items[i]['dish_name']; + "</div>";
-				}
-			}
-
-			td.innerHTML = div;
-			tr.appendChild(td);
-			tab.appendChild(tr);
-		}
-	} */
+	
 	// now list all items for other plating teams
 	for (var pti = 1; pti < plating_teams.length; pti++ ) {
 		if (pti != active_plating_team)
@@ -758,8 +741,8 @@ function show_dock_component(cid)
 
 function show_dock()
 {
-	openPage('dock_main', this, 'red','mobile_main','tabclass');
-	openPage('m_dock', this, 'red','m_modal','tabclass');
+	openPage('dock_main', null, 'red','mobile_main','tabclass');
+	openPage('m_dock',document.getElementById('supplier_list_tab'), 'red','m_modal','tabclass');
 	var dock_items = new Array();
 	var div = document.getElementById('dock_display_comp_div1');
 	div.innerHTML = '';
@@ -819,11 +802,11 @@ function goto_m_main(new_mode)
 {
 	if (new_mode) mode = new_mode;
 	if (mode == 'kitchen') {
-		openPage('mm2', this, 'red','mobile_main','tabclass');
+		openPage('mm2', document.getElementById('m_current_tracking_tab'), 'red','mobile_main','tabclass');
 		m_tracking();
 	}
 	else if (mode == 'dock') {
-		openPage('dock_main', this, 'red','mobile_main','tabclass');
+		openPage('dock_main', document.getElementById('m_plating_team_tab'), 'red','mobile_main','tabclass');
 		
 	}
 	else {
@@ -1593,7 +1576,12 @@ function print_component_labels(qty)
 	// goto_m_main();
 }
 
-
+function reprint_dock_labels(cid)
+{
+	console.log('reprint_dock_labels',cid);
+	set_barcode_mode('dock_reprint');
+	// dock_start_component
+}
 
 function reprint_active_comp_labels(id)
 {
@@ -1602,8 +1590,6 @@ function reprint_active_comp_labels(id)
 	document.getElementById('chk_temp_item_div').innerHTML = active_comp['description'];
 	openPage('m_reprint_modal4', this, 'red','m_modal2','tabclass');
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
-	
-	
 }
 
 function checkTime(i) {
@@ -1959,4 +1945,5 @@ function search_suppliers()
 function reprint_supplier_labels()
 {
 	console.log('reprint_supplier_labels');
+	set_barcode_mode('dock_reprint');
 }

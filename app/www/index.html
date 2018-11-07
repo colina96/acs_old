@@ -363,7 +363,8 @@ function show_dims()
 				<div class='margin10'>REPRINT</div>
 				<div class='margin10' id='dock_reprint_div'>Scan barcode
 				</div>
-				<div class='center grey'>LABEL QUANTITY<input type='number' name='dock_reprint_label_qty' size=4></div>
+				<div class='center margin10 grey'>LABEL QUANTITY</div>
+				<div class='center margin10 large'><input type='number' name='dock_reprint_label_qty'  size=3 max=200 min=1></div>
 				<div class='btns'>
 					<button type='button'  class='m_btn' onclick="dock_reprint();">Print Labels</button>
 				</div>
@@ -388,7 +389,7 @@ function show_dims()
 				<div class='center modal_head'><span>TEMPERATURE</span></div>
 				<div id='dock_m1_temp_div_4' class='temp_reading'></div>
 				<div id='dock_m1_temp_div_5' class='center modal_head'></div>
-				<div class='center grey'>LABEL QUANTITY<input type='number' name='dock_m1_label_qty' size=4></div>
+				<div class='center grey'>LABEL QUANTITY<input type='number' name='dock_m1_label_qty' length='3'></div>
 				<div class='btns'>
 					<button type='button'  class='m_btn' onclick="dock_start_component();">Print Labels</button>
 				</div>
@@ -516,15 +517,16 @@ function show_dims()
 			<div class='center modal_head'><span>TEMPERATURE</span></div>
 			<div id='m1_temp_div_4' class='temp_reading'></div>
 			<div id='m1_temp_div_5' class='center modal_head'></div>
-			<div class='center grey'>LABEL QUANTITY<input type='number' name='m1_label_qty' size=4></div>
+			<div class='center grey'>LABEL QUANTITY<input type='number' name='m1_label_qty' maxlength='3'></div>
 			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="start_component();">Print Labels</button>
 			</div>
 		</div>
 		<div class='m_modal2' id='m_reprint_modal4'>
 			<div class='center modal_head'><span>Reprint Labels</span></div>
-			
-			<div class='center grey'>LABEL QUANTITY<input type='number' name='m1_repeat_label_qty' size=4></div>
+			<div class='center' id='dock_reprint_qty_div'>
+				<div class='center grey'>LABEL QUANTITY<input type='number' name='dock_repprint_label_qty' maxlength='4'></div>
+			</div>
 			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="reprint_labels();">Print Labels</button>
 			</div>
@@ -588,7 +590,7 @@ function show_dims()
 		<div class='m_main'>
 			<div class='m_top_menu_container'>
 			<div class='m_top_menu larger' id='plating_home_tab'  onclick="goto_home()">X</div>
-				<div class='m_top_menu' id='m_plating__team_tab'  onclick="goto_plating_teams();">TEAMS</div>
+				<div class='m_top_menu' id='m_plating_team_tab'  onclick="goto_plating_teams();">TEAMS</div>
 				<div class='m_top_menu' id='m_plating_tab'  onclick="goto_plating()">PLATING SCHEDULE</div>
 				
 				
