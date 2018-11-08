@@ -588,9 +588,9 @@ function delete_menu(menu_id)
 	$.ajax({
 	   url: RESTHOME + "delete_menu.php?menu_id=" + menu_id,
    		type: "POST",
-   		dataType: 'json',
+   		// dataType: 'json',
    		success: function(result) {     
-    //   console.log("success got " + result + " ");
+       console.log("delete menu success got " + result + " ");
    			show_active_menus();
    		},
 	   fail: (function (result) {
