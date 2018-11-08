@@ -360,11 +360,15 @@ function show_dims()
 				
 			</div>
 			<div class='m_modal' id='m_dock_reprint'>
-				<div class='margin10'>REPRINT</div>
-				<div class='margin10' id='dock_reprint_div'>Scan barcode
+				<div class='center pad10 larger' id='dock_reprint_title'>Scan barcode
 				</div>
-				<div class='center margin10 grey'>LABEL QUANTITY</div>
-				<div class='center margin10 large'><input type='number' name='dock_reprint_label_qty'  size=3 max=200 min=1></div>
+			</div>div>
+			<div class='m_modal' id='m_dock_reprint1'>	
+				<div class='center pad10'>
+					<div class='center pad10' id='drl_details_div'></div>
+					<div class='center pad10 grey'>LABEL QUANTITY</div>
+					<div class='center larger'><input type='number' id='dock_reprint_label_qty'  size=3 max=200 min=1></div>
+				</div>
 				<div class='btns'>
 					<button type='button'  class='m_btn' onclick="dock_reprint();">Print Labels</button>
 				</div>

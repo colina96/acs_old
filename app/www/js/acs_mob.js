@@ -111,14 +111,10 @@ function check_ingredient(cid)
 	$.ajax({
         url: RESTHOME + "get_active_comps.php?cid=" + cid,
         type: "POST",
-       // data: data,
-       //  data: {points: JSON.stringify(points)},
-        // dataType: 'json',
-        // contentType: "application/json",
+
         success: function(result) {
         	console.log(result);
-            // preptypes = result;
-        	
+ 
             var scanned_ingredient = JSON.parse(result);
             console.log("got component " + scanned_ingredient[0].description);
             var valid_ingredient = false;
@@ -1576,11 +1572,61 @@ function print_component_labels(qty)
 	// goto_m_main();
 }
 
+// TODO - come up with a sensible naming system for groups of functions
+function reprint_supplier_labels()
+{
+	console.log('reprint_supplier_labels');
+	set_barcode_mode('dock_reprint'); // callback to reprint_doc_labels
+	
+}
+
 function reprint_dock_labels(cid)
 {
 	console.log('reprint_dock_labels',cid);
-	set_barcode_mode('dock_reprint');
+	load_chefs(null);
+	document.getElementById('drl_details_div').innerHTML = cid;
+	// set_barcode_mode('dock_reprint');
+	$.ajax({
+        url: RESTHOME + "get_active_comps.php?cid=" + cid,
+        type: "POST",
+
+        success: function(result) {
+        	console.log(result);
+        	
+        	var comps = JSON.parse(result);
+            if (comps) {
+            	active_comp = comps[0];
+            	document.getElementById('drl_details_div').innerHTML = active_comp.description;
+            	openPage('m_dock_reprint1', document.getElementById('s_reprint_labels_tab'), 'red','m_modal','m_top_menu',null);
+            	console.log("got component " + active_comp.description);
+            }
+            else {
+            	console.log('could not find incredient')
+            	set_barcode_mode('dock_reprint');
+            }
+            
+        },
+        fail: (function (result) {
+            console.log("fail check_ingredient ",result);
+        })
+    });
 	// dock_start_component
+}
+
+function dock_reprint()
+{
+	if (!active_comp) {
+		console.log('dock_reprint ERROR - no active component');
+		return;
+	}
+	qty = document.getElementById('dock_reprint_label_qty').value;
+	if (qty > 0 && qty < 200) {
+		openPage('m_dock_reprint', document.getElementById('s_reprint_labels_tab'), 'red','m_modal','m_top_menu',null);
+		print_component_labels(qty);
+	}
+	else {
+		console.log('dock_reprint invalid qty')
+	}
 }
 
 function reprint_active_comp_labels(id)
@@ -1942,8 +1988,4 @@ function search_suppliers()
 {
 	console.log('search_suppliers');
 }
-function reprint_supplier_labels()
-{
-	console.log('reprint_supplier_labels');
-	set_barcode_mode('dock_reprint');
-}
+

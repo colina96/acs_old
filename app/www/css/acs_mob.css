@@ -429,6 +429,7 @@ select {
 }
 #sel_team_member { margin-top:10px;}
 .margin10 { margin:10px;}
+.pad10 { padding:10px;}
 .item_table {
 	width:100%;
 	border-spacing: 0;

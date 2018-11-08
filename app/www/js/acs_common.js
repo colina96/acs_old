@@ -84,7 +84,7 @@ function zeropad(s,n) // return string length n padded with zeroes
 
 function get_chef_by_id(id)
 {
-
+	if (!chefs) return(null);
 	for (var i = 0; i < chefs.length;i++) {
 		if (chefs[i].id == id) return chefs[i];
 	}
