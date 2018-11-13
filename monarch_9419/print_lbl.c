@@ -137,10 +137,11 @@ int send_raw (char *ip, int port, char *data, int data_size, int copies)
 
 
 	// data sent, now read any response
+		/*
     bzero(header, 100);
     stat = recv(sockfd, header, 100, 0);
 	printf("Response (%d): %s\n",stat,header);
-
+*/
     printf("connection closed.\n");
     close(sockfd);
 
@@ -330,7 +331,8 @@ int parse_job_file(char *jobfile, char *labeldir)
 	*/
 	// at this point we have all the job data plus a lnt file and the number of fields to match
 	// now scan in the each field from the file and see if we get matches and update the current form
-	while (!feof(fp))
+//	while (!feof(fp))
+	if (!feof(fp))
 	{
 		// make a copy of the data
 		int len = input_LNT_len + 100*LNT_fields;
@@ -426,6 +428,7 @@ int check_jobs_exists(char *prn_dir, char *labeldir)
 
 	if ((dir = opendir (prn_dir)) != NULL)
 	{
+		// printf("opened %d\n",dirfd(dir));
 		// print all the files and directories within directory
 		while ((ent = readdir (dir)) != NULL)
 		{
@@ -442,13 +445,15 @@ int check_jobs_exists(char *prn_dir, char *labeldir)
 				}
 			}
 		}
-		close(dir);
+		// printf("closed\n");
+		closedir(dir);
 	}
 	else
 	{
-		printf("Cannot open job dir\n");
+		printf("Cannot open job dir %d\n",errno);
 		return 0;
 	}
+
 	return 1;
 }
 

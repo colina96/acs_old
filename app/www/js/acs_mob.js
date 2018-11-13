@@ -1400,6 +1400,7 @@ function reprint_comp_labels()
 	show('kitchen_manual_code');
 	set_barcode_mode('kitchen_reprint');
 	load_reprint_data();
+	load_chefs();
 }
 function load_reprint_data()
 {
@@ -1549,9 +1550,14 @@ function clear_comp_fields ()
 
 function reprint_labels()
 {
-	var qty = document.getElementsByName('m1_repeat_label_qty')[0].value;
-	if (qty && qty > 0) print_component_labels(qty);
+	var qty = document.getElementsByName('m1_reprint_label_qty')[0].value;
+	if (qty && qty > 0) {
+		print_component_labels(qty);
+		goto_m_main();
+	}
+	
 }
+
 function print_component_labels(qty)
 {
 	console.log(" print_component_labels ",qty);

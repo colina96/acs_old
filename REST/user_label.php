@@ -46,9 +46,9 @@ if ($username != null && $uid != null) {
 
 	echo "opened ".$tmp_file;
 	fwrite($handle,"Jobname:user ".$uid."\n");
-	fwrite($handle,"Printer:10.0.0.101"."\n");
-	fwrite($handle,"Port:9101"."\n");
-	fwrite($handle,"Label:USER.LNT"."\n");
+	fwrite($handle,"Printer:10.0.0.99"."\n");
+	fwrite($handle,"Port:9100"."\n");
+	fwrite($handle,"Label:ACS_USER.LBL"."\n");
 	fwrite($handle,"Endheader"."\n");
 	fwrite($handle,"Copies:1"."\n");
 	fwrite($handle,"NAME:".$username."\n");

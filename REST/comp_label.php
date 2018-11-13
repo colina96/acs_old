@@ -33,6 +33,7 @@ if (!empty($_POST['data'])) {
 	$copies = $comp['copies'];
 	$description = $comp['description'];
 	$expiry_date = $comp['expiry_date'];
+	$prepped_date = $comp['M1_time'];
 	$preparedBy = $comp['preparedBy'];
 	$tmp_file = $job_dir.'comp'.$id.".tmp";
 	$job_file = $job_dir.'comp'.$id.".job";
@@ -41,19 +42,23 @@ if (!empty($_POST['data'])) {
 
 	echo "opened ".$tmp_file;
 	fwrite($handle,"Jobname:user ".$id."\n");
-	fwrite($handle,"Printer:10.0.0.101"."\n");
-	fwrite($handle,"Port:9101"."\n");
-	fwrite($handle,"Label:COMP.LNT"."\n");
+	fwrite($handle,"Printer:10.0.0.99"."\n");
+	fwrite($handle,"Port:9100"."\n");
+	fwrite($handle,"Label:ACS_COMP.LBL"."\n");
 	fwrite($handle,"Endheader"."\n");
 	fwrite($handle,"Copies:1"."\n");
 	fwrite($handle,"NAME:".$description."\n");
-	fwrite($handle,"PREPAREDBY:Prep ".$preparedBy."\n");
+	fwrite($handle,"PREPAREDBY:".$preparedBy."\n");
 	$facility = 1; // not used yet.... maybe one day
 	$barcode = sprintf("BARCODE:c%02d%06d",$facility,$id);
 	fwrite($handle,$barcode."\n");
-	$barcodeTxt = sprintf("BARCODETXT:c%02d%06d",$facility,$id);
+	//$barcodeTxt = sprintf("BARCODETXT:c%02d%06d",$facility,$id);
+	//fwrite($handle,$barcodeTxt."\n");
+	$d = strtotime($expiry_date);
+	$barcodeTxt = "EXPIRYDATE:".date("d M y H:i",$d);
 	fwrite($handle,$barcodeTxt."\n");
-	$barcodeTxt = "EXPIRYDATE:Expiry: ".$expiry_date;
+	$d = strtotime($prepped_date);
+	$barcodeTxt = "PREPPED:".date("d M y H:i",$d);
 	fwrite($handle,$barcodeTxt."\n");
 	fwrite($handle,"Endlabel"."\n");
 	fclose($handle);
