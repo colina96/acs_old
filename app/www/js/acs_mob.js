@@ -1001,6 +1001,24 @@ function dock_QA_scan(uid)
 	console.log('dock_QA_scan(uid) ' + uid);
 	new_comp.M1_action_code = 10; // TODO must fix
 	new_comp.M1_action_id = uid;
+	var chef = get_chef_by_id(uid);
+	if (chef) {
+		document.getElementById('dock_qa_chef_details').innerHTML = chef.label;
+		openPage('dock_m_temp_modal_qa2', this, 'red','m_modal','tabclass');
+	}
+	
+	// openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
+}
+
+function dock_qa_client_request()
+{
+	new_comp.M1_action_code = 10; // TODO must fix
+	openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
+}
+
+function dock_qa_signof()
+{
+	new_comp.M1_action_code = 11; // TODO must fix
 	openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
 }
 

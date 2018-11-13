@@ -1,0 +1,10 @@
+Jobname:USER 1
+Printer:10.0.0.99
+Port:9100
+Label:ACS_USER.LBL
+Endheader
+# start of individual labels
+Copies:1
+NAME:David Cox
+BARCODE:u01000002
+Endlabel

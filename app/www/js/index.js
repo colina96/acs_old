@@ -58,6 +58,7 @@ var app = {
     	console.log("onDeviceReady");
     	log("starting");
     	RESTHOME = "http://www.evoz.com.au/acs_test/REST/";
+    	document.getElementById('login_btn').innerHTML = 'Login to www.evoz.com.au';
     	check_login();
     	// start_serial(); // arduino
     	// ioio_start();
