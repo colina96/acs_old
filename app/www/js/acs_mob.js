@@ -1012,13 +1012,13 @@ function dock_QA_scan(uid)
 
 function dock_qa_client_request()
 {
-	new_comp.M1_action_code = 10; // TODO must fix
+	new_comp.M1_action_code = 11; // TODO must fix
 	openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
 }
 
 function dock_qa_signof()
 {
-	new_comp.M1_action_code = 11; // TODO must fix
+	new_comp.M1_action_code = 10; // TODO must fix
 	openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
 }
 
@@ -1702,10 +1702,12 @@ function m_show_active_components(data,reprint)
 	var tr = document.createElement('tr');
 	
 	
-    tr.appendChild(new_td('Description','comp'));   
-    tr.appendChild(new_td('M','comp'));
+    tr.appendChild(new_td('Description','comp'));  
+    if (!reprint) {
+    	tr.appendChild(new_td('M','comp'));
     
-    tr.appendChild(new_td('TIME','comp'));
+    	tr.appendChild(new_td('TIME','comp'));
+    }
    	tab.appendChild(tr);
    	for (var i=0; i<data.length; ++i) {
    		var tr = document.createElement('tr');

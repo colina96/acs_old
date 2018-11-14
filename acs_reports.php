@@ -48,7 +48,10 @@ var kitchen_report_fmt = {
 		'M2 TIME':'M2_time',
 		'M2 TEMP':'M2_temp',
 		'Q/A':'M1_action_code',
-		'CHEF':'M1_action_id'},
+		'CHEF':'M1_action_id'
+	}
+}
+var dock_report_fmt = {
 	'FRESH': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
@@ -102,7 +105,7 @@ function reports()
 	load_chefs();
 	openPage('REPORTS', this, 'red','tabcontent','tabclass');
 }
-function report_components(data)
+function report_components(data,format)
 {
 	// console.log(data);
 	var div = document.getElementById('report_container');
@@ -115,67 +118,74 @@ function report_components(data)
 	tab.className = 'component_table';
 	for (var preptype_idx = 0; preptype_idx < preptypes.length; preptype_idx++) {
 		console.log(preptypes[preptype_idx]['code']);
+		
 		var preptype = preptypes[preptype_idx]['code'];
-		var preptype_id = preptypes[preptype_idx]['id'];
-		var tr1 = document.createElement('tr');
-		var th = document.createElement('th');
-		th.rowspan = 5;
-		th.innerHTML = margin(preptypes[preptype_idx]['code']);
-		tr1.appendChild(th);   
-	//	tab.appendChild(tr);
-		var tr2 = document.createElement('tr');
-		// headings
-		for (var i in kitchen_report_fmt[preptype]) {
+		if (format[preptype]) {
+			var preptype_id = preptypes[preptype_idx]['id'];
+			var tr1 = document.createElement('tr');
 			var th = document.createElement('th');
-			th.innerHTML = margin(i);
-			tr2.appendChild(th);   
-			
-		}
-	//	tab.appendChild(tr);
-		var data_count = new Object();
-	   	for (var i=0; i<data.length; i++) {
-		   	console.log('item ' + data[i]['description'] + ' prep ' + data[i]['prep_type_id'] + 
-				  " : " + preptype_id);
-		   	if (data[i]['prep_type_id'] == preptype_id) {
-			   	if (!data_count[preptype_id]) {
-			   		tab.appendChild(tr1);
-			   		tab.appendChild(tr2);
-			   		data_count[preptype_id] = 1;
+			th.rowspan = 5;
+			th.innerHTML = margin(preptypes[preptype_idx]['code']);
+			tr1.appendChild(th);   
+		//	tab.appendChild(tr);
+			var tr2 = document.createElement('tr');
+			// headings
+		//	for (var i in kitchen_report_fmt[preptype]) {
+			for (var i in format[preptype]) {
+				var th = document.createElement('th');
+				th.innerHTML = margin(i);
+				tr2.appendChild(th);   
+				
+			}
+		//	tab.appendChild(tr);
+			var data_count = new Object();
+		   	for (var i=0; i<data.length; i++) {
+			   	console.log('item ' + data[i]['description'] + ' prep ' + data[i]['prep_type_id'] + 
+					  " : " + preptype_id);
+			   	if (data[i]['prep_type_id'] == preptype_id) {
+				   	if (!data_count[preptype_id]) {
+				   		tab.appendChild(tr1);
+				   		tab.appendChild(tr2);
+				   		data_count[preptype_id] = 1;
+				   	}
+				   	var chef = get_chef_by_id(data[i]['M1_chef_id']);
+				   	if (chef) data[i]['chef'] = chef['label'];
+			   		var tr = document.createElement('tr');
+			   		// for (var j in kitchen_report_fmt[preptype]) {
+			   		for (var j in format[preptype]) {
+				   		
+			   			var td = document.createElement('td');
+			   			// var e = kitchen_report_fmt[preptype][j];
+			   			var e = format[preptype][j];
+			   			if (j === 'BATCH CODE') {
+			   				// td.innerHTML = 'c01' + zeropad(data[i][e],6);
+			   				td.innerHTML = sprintf('C01%06d',data[i][e]);
+			   			}
+			   			else if (e.indexOf('time') > 0) {
+			   	   			var s= data[i][e];
+			   	   			td.innerHTML = s.substring(11,16);
+			   			}
+			   			else {
+			   				td.innerHTML = data[i][e]?data[i][e]:'-';
+			   			}
+			   			tr.appendChild(td);   
+			   		}
+			   		tab.appendChild(tr);
 			   	}
-			   	var chef = get_chef_by_id(data[i]['M1_chef_id']);
-			   	if (chef) data[i]['chef'] = chef['label'];
-		   		var tr = document.createElement('tr');
-		   		for (var j in kitchen_report_fmt[preptype]) {
-			   		
-		   			var td = document.createElement('td');
-		   			var e = kitchen_report_fmt[preptype][j];
-		   			if (j === 'BATCH CODE') {
-		   				// td.innerHTML = 'c01' + zeropad(data[i][e],6);
-		   				td.innerHTML = sprintf('C01%06d',data[i][e]);
-		   			}
-		   			else if (e.indexOf('time') > 0) {
-		   	   			var s= data[i][e];
-		   	   			td.innerHTML = s.substring(11,16);
-		   			}
-		   			else {
-		   				td.innerHTML = data[i][e]?data[i][e]:'-';
-		   			}
-		   			tr.appendChild(td);   
-		   		}
-		   		tab.appendChild(tr);
 		   	}
-	   	}
+		}
 	}
    	div.appendChild(tab);
 }
 
-function kitchen_reports(t)
+function kitchen_reports(format,tab)
 {
 	load_preptypes();
-	if (t) t.color = 'red';// test
 	// really lazy .... must fix
-	document.getElementById('kitchen_report_tab').className = 'top_menu_highlighted'
+	document.getElementById('dock_report_tab').className = 'top_menu';
+	document.getElementById('kitchen_report_tab').className = 'top_menu';
 	document.getElementById('plating_report_tab').className = 'top_menu';
+	document.getElementById(tab).className = 'top_menu_highlighted';
 	var div = document.getElementById('report_container');
 	div.innerHTML = '';
 	 $.ajax({
@@ -185,7 +195,7 @@ function kitchen_reports(t)
 	        success: function(result) {
 	            active_comps = result;	          
 	            console.log("got " + result.length + " comps");
-	            report_components(result,true);	            
+	            report_components(result,format);	            
 	        },
 	        fail: (function (result) {
 	            console.log("fail load_comps",result);
@@ -253,7 +263,8 @@ function plating_reports()
 
 </script>
 <div class='top_menu_container'>
-			<div class='top_menu' id='kitchen_report_tab'  onclick="kitchen_reports(this)">KITCHEN</div>
+			<div class='top_menu' id='dock_report_tab'  onclick="kitchen_reports(dock_report_fmt,'dock_report_tab')">DOCK</div>
+			<div class='top_menu' id='kitchen_report_tab'  onclick="kitchen_reports(kitchen_report_fmt,'kitchen_report_tab')">KITCHEN</div>
 			<div class='top_menu' id='plating_report_tab'  onclick="load_plating_data();">PLATING</div>
 			<div class='top_menu' id='report_range_tab'">
 				<input type="text" id="report_start" name="report_start" placeholder='start date' class='datepicker' readonly="readonly"></td>

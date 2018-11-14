@@ -72,18 +72,19 @@ CREATE table CORRECTIVE_ACTIONS
 	constraint pk_example primary key (id)
 );
 
-insert into CORRECTIVE_ACTIONS values (null,1,'Evacuate Blast Chiller, Hard Chill');
-insert into CORRECTIVE_ACTIONS values (null,1,'Decant Product into Shallow Metal - Continue Chilling');
-insert into CORRECTIVE_ACTIONS values (null,2,'Add more ice to ice bath');
-insert into CORRECTIVE_ACTIONS values (null,3,'Evacuate Blast Chiller, Hard Chill');
-insert into CORRECTIVE_ACTIONS values (null,3,'Decant Product into Shallow Metal - Continue Chilling');
-insert into CORRECTIVE_ACTIONS values (null,5,'Refrigerate Product');
-insert into CORRECTIVE_ACTIONS values (null,5,'Discard Product');
-insert into CORRECTIVE_ACTIONS values (null,5,'Retrain Staff');
-insert into CORRECTIVE_ACTIONS values (null,5,'Low Risk Item, QA Sign-Off');
-insert into CORRECTIVE_ACTIONS values (null,6,'QA Sign-Off');
-insert into CORRECTIVE_ACTIONS values (null,7,'QA Sign-Off');
-insert into CORRECTIVE_ACTIONS values (null,8,'QA Sign-Off');
+insert into CORRECTIVE_ACTIONS values (1,1,'Evacuate Blast Chiller, Hard Chill');
+insert into CORRECTIVE_ACTIONS values (2,1,'Decant Product into Shallow Metal - Continue Chilling');
+insert into CORRECTIVE_ACTIONS values (3,2,'Add more ice to ice bath');
+insert into CORRECTIVE_ACTIONS values (4,3,'Evacuate Blast Chiller, Hard Chill');
+insert into CORRECTIVE_ACTIONS values (5,3,'Decant Product into Shallow Metal - Continue Chilling');
+insert into CORRECTIVE_ACTIONS values (6,5,'Refrigerate Product');
+insert into CORRECTIVE_ACTIONS values (7,5,'Discard Product');
+insert into CORRECTIVE_ACTIONS values (8,5,'Retrain Staff');
+insert into CORRECTIVE_ACTIONS values (9,5,'Low Risk Item, QA Sign-Off');
+insert into CORRECTIVE_ACTIONS values (10,6,'QA Sign-Off');
+insert into CORRECTIVE_ACTIONS values (11,6,'Client Request');
+insert into CORRECTIVE_ACTIONS values (12,7,'QA Sign-Off');
+insert into CORRECTIVE_ACTIONS values (13,8,'QA Sign-Off');
 
 drop table if exists MENUS;
 CREATE TABLE MENUS (
