@@ -57,22 +57,22 @@ var dock_report_fmt = {
 		'BATCH CODE':'id',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
-		'Q/A':'M1_action_code',
-		'CHEF':'M1_action_id'},
+		'Q/A':'M1_action_text',
+		'CHEF':'M1_action'},
 	'FROZEN': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
-		'Q/A':'M1_action_code',
-		'CHEF':'M1_action_id'},
+		'Q/A':'M1_action_text',
+		'CHEF':'M1_action'},
 	'DRY': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
-		'Q/A':'M1_action_code',
-		'CHEF':'M1_action_id'}
+		'Q/A':'M1_action_text',
+		'CHEF':'M1_action'}
 }
 
 var plating_report_fmt = {
@@ -103,6 +103,7 @@ var plating_item_report_fmt = {
 function reports()
 {
 	load_chefs();
+	// load_qa();
 	openPage('REPORTS', this, 'red','tabcontent','tabclass');
 }
 function report_components(data,format)
