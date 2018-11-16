@@ -60,8 +60,6 @@ var app = {
     	RESTHOME = "http://www.evoz.com.au/acs_test/REST/";
     	document.getElementById('login_btn').innerHTML = 'Login to www.evoz.com.au';
     	check_login();
-    	// start_serial(); // arduino
-    	// ioio_start();
     	qpack_init();
         app.receivedEvent('deviceready');
     },
@@ -236,6 +234,7 @@ function logout()
     console.log('logging out');
     barcode_mode = 'login';
     openPage('login_div', this, 'red','mobile_main','tabclass');
+    openPage('login_div2', this, 'red','m_modal2','tabclass');
     $.ajax({
         type: "POST",crossDomain: true, cache: false,
         url:  RESTHOME + "login.php",

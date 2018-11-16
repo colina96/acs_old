@@ -157,6 +157,7 @@ char *get_input_LNT(char *f_name, int *input_LNT_len, int *fields)
 {
 	char sdbuf[LENGTH]; // Send buffer
     FILE *fp = fopen(f_name, "r");
+    static char p[2000];
 	*input_LNT_len = 0;
 
     if(fp == NULL)
@@ -186,7 +187,7 @@ char *get_input_LNT(char *f_name, int *input_LNT_len, int *fields)
 		}
 	}
 
-	char *p = malloc(fsize+1);
+	// char *p = malloc(fsize+1);
 	memcpy(p,sdbuf, fsize+1);
 	*input_LNT_len = fsize;
 	return p;
@@ -336,7 +337,7 @@ int parse_job_file(char *jobfile, char *labeldir)
 	{
 		// make a copy of the data
 		int len = input_LNT_len + 100*LNT_fields;
-		char *tlnt = malloc(len);
+		char tlnt[2000];
 		bzero(tlnt, len);
 		memcpy(tlnt,input_LNT,input_LNT_len);
 		int copies = 0;
@@ -372,8 +373,8 @@ int parse_job_file(char *jobfile, char *labeldir)
 					{
 						printf("Cannot find key %s\n",sdbuf);
 						close(fp);
-						free(tlnt);
-						free(input_LNT);
+						// free(tlnt);
+						// free(input_LNT);
 						return 0;
 					}
 					else
@@ -384,8 +385,8 @@ int parse_job_file(char *jobfile, char *labeldir)
 				{
 					printf("Illegal copies entry %d\n",copies);
 					close(fp);
-					free(tlnt);
-					free(input_LNT);
+					// free(tlnt);
+					// free(input_LNT);
 					return 0;
 				}
 			}
@@ -406,12 +407,12 @@ int parse_job_file(char *jobfile, char *labeldir)
 		int tlnt_len = strlen(tlnt);
 		if (_printing_enabled) send_raw(jstr->ip, atoi(jstr->port), tlnt, tlnt_len, copies);
 
-		free(tlnt);
+		// free(tlnt);
 		copies = 0;
 		ffound = 0;
 	}
 
-	free(input_LNT);
+	// free(input_LNT);
 	close(fp);
 
 	return 1;

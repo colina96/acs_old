@@ -82,199 +82,6 @@ overflow:auto;
 }
 </style>
 <script>
-var serial_started = false;
-var logline = 0;
-
-function Xlog(s)
-{
-	// console.log(s);
-	if (logline++ > 10) {
-		document.getElementById('log_div').innerHTML = '';
-		logline = 0;
-	}
-	document.getElementById('log_div').innerHTML += s + "<br>";
-	document.getElementById('log_div').style.display = 'block';
-}
-
-function hide_log()
-{
-	document.getElementById('log_div').style.display = 'none';
-}
-function errorCallback(e)
-{
-	log(e);
-	serial_started = false;
-}
-var str;
-var temp_mode = null;
-function set_temp_mode(new_mode)
-{
-	temp_mode = new_mode;
-}
-// var temp_callback = null;
-function temp_callback(s) // works out where to send the temperature reading
-{
-	console.log('temp_callback',s,temp_mode);
-	if (temp_mode == null) {
-		log ('temp_mode not set');
-		return;
-	}
-	if (temp_mode == 'M0') {
-		set_ingredient_temp(s);
-	}
-	if (temp_mode == 'M1') {
-		check_temp(s);
-	}else if (temp_mode == 'M1_dock') {
-		// component.M2_temp = temp_reading;
-		check_temp_m1_dock(s);
-	}
-	else if (temp_mode == 'M2') {
-		// component.M2_temp = temp_reading;
-		check_temp_m2(s);
-	} 
-	else if (temp_mode == 'M1_plating') {
-		// component.M2_temp = temp_reading;
-		set_plating_M1_temp(s);
-	} 
-	else if (temp_mode == 'M2_plating') {
-		// component.M2_temp = temp_reading;
-		set_plating_M2_temp(s);
-	} 
-	else {
-		log ("don't know what to do with temperature reading " + temp_mode);
-	}
-}
-
-function manual_temp_submit()
-{
-	var t = document.getElementsByName('manual_temp')[0].value;
-	document.getElementById('manual_entry').style.display = 'none';
-	temp_callback(t);
-}
-
-function manual_barcode_submit(input_name)
-{
-	var s = document.getElementsByName(input_name)[0].value;
-	document.getElementsByName(input_name)[0].value = '';
-	console.log('manual_barcode_submit',s,input_name);
-	process_barcode(s)
-}
-
-var ioio_started = false;
-var temp_readings = 0;
-function ioio_start()
-{
-	
-	qpack_start();
-}
-
-function popup_manual_temp()
-{
-	
-	document.getElementsByName('manual_temp')[0].value = '';
-	temp_readings = 0;
-	document.getElementById('manual_entry').style.display = 'block';
-}
-
-var p37 = 0;
-function read_temp(m)
-{
-	temp_mode = m;
-	console.log('read temp mode',m);
-// 	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
-	// if (typeof(serial.write) === 'undefined') {
-//	if (!ioio_started) {
-		console.log('serial undefined');
-		popup_manual_temp();
-/*	}
-	else {
-		// serial.write('R'); arduino
-		var t = parseInt(100.0 * p37);
-		log('read temp ' + t);
-		temp_callback(t);
-	} */
-}
-
-function start_serial()
-{
-	// only gets called in app
-    RESTHOME = "http://10.0.0.34/acs/REST/";
-
-	if (!serial_started) {
-		log("starting serial");
-		serial_started = true;
-		// app.initialize();
-		serial.requestPermission(
-				function(successMessage) {
-					log('got permission');
-			    	serial.open(
-			        	{baudRate: 9600},
-			            function(successMessage) {
-			        		log('openned link');
-			        		hide_log();
-			        		serial.registerReadCallback(
-			        				function success(data){
-			        					var view = new Uint8Array(data);
-			        				// 	log("got reading " + view.length);
-			        					if(view.length >= 1) {
-		                                    for(var i=0; i < view.length; i++) {
-		                                   // 	log("got " + view[i] + " " + String.fromCharCode(view[i]));
-		                                        // if we received a \n, the message is complete, display it
-		                                        if(view[i] == 13) {
-		                                            // check if the read rate correspond to the arduino serial print rate
-		                                            // var now = new Date();
-		                                            //delta.innerText = now - lastRead;
-		                                           // lastRead = now;
-		                                            // display the message
-		                                           // var value = parseInt(str);
-		                                           // pot.innerText = value;
-		                                          // document.getElementById('m1_temp_div').innerHTML += "ZZ" + typeof(temp_callback) + "Z";
-		                                         //  if (typeof(temp_callback) == 'function') {
-		                                        //	   document.getElementById('m1_temp_div').innerHTML = 'callback';
-		                                        	   temp_callback(str);
-		                                        	   // temp_callback = null;
-		                                         //  }
-		                                        //   else {
-		                                        //	   document.getElementById('m1_temp_div').innerHTML += 'X';
-		                                        //   }
-		                                       //    document.getElementById('m1_temp_div').innerHTML += "read" + str;
-		                                           log(str);
-		                                            str = '';
-		                                        }
-		                                        // if not, concatenate with the begening of the message
-		                                        else {
-		                                            var temp_str = String.fromCharCode(view[i]);
-		                                            var str_esc = escape(temp_str);
-		                                            str += unescape(str_esc);
-		                                        }
-		                                    }
-		                                  //   log(str);
-		                                }
-			        				},
-			        				function error(){
-			        					new Error("Failed to register read callback");
-			        				});
-			        		serial.write(
-			                	'1',
-			                    function(successMessage) {
-			                		log(successMessage);
-			                    //	alert(successMessage);
-			                    },
-			                    errorCallback
-			        		);
-			        	},
-			        	errorCallback
-			    	);
-			    },
-			    errorCallback
-			);
-	}
-	else {
-		serial.write('R');
-		// serial.read(function success(buf) { log(JSON.stringify(buf));},errorCallback);
-		// log("<hr>");
-	}
-}
 
 var keyboard_str = '';
 
@@ -512,9 +319,11 @@ function show_dims()
 			<div class='m_label'><span>TEMPERATURE</span></div>
 			
 			<div id='m1_temp_div_3' class='temp_reading'></div>
-			<div id='m1_temp_div_chef'><input name='m1_chef_id' onchange="set_user('m1_chef_id','m_temp_modal4',0);"></div>
+			<div id='m1_temp_div_chef' class='hidden'><!-- input name='m1_chef_id' onchange="set_user('m1_chef_id','m_temp_modal4',0);" --></div> 
 			<div class='btns'>
-			<button type='button'  class='m_btn' onclick="set_user('m1_chef_id','m_temp_modal4',0);", this, 'red','m_modal2','tabclass');">Scan Authorised Chef ID</button>
+			<button type='button'  class='m_btn'>Scan Authorised Chef ID</button>
+			<!--  button type='button'  class='m_btn' <!-- onclick="set_user('m1_chef_id','m_temp_modal4',0);">Scan Authorised Chef ID</button -->
+			
 			</div>
 		</div>
 		<div class='m_modal2' id='m_temp_modal_LR'>
@@ -530,8 +339,9 @@ function show_dims()
 		<div class='m_modal2' id='m_temp_modal4'>
 			<div class='center modal_head'><span>TEMPERATURE</span></div>
 			<div id='m1_temp_div_4' class='temp_reading'></div>
-			<div id='m1_temp_div_5' class='center modal_head'></div>
-			<div class='center grey'>LABEL QUANTITY<input type='number' name='m1_label_qty' maxlength='3'></div>
+			<div id='m1_temp_div_5' class='centerpad modal_head'></div>
+			<div class='centerpad grey'>LABEL QUANTITY</div>
+			<div class='center'><input type='number' name='m1_label_qty' maxlength='3' class='label_num'></div>
 			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="start_component();">Print Labels</button>
 			</div>
@@ -701,10 +511,10 @@ function show_dims()
 	<div class='mobile_main' id='login_div'>
 	<div id='status' class='hidden' onclick='qpack_start();'>status</div>
 		
-		<div class='m_modal2'>
+		<div id='login_div2' class='m_modal2'>
 			<input name='email' placeholder='email' type='text' class='input'>
 			<input name='password' placeholder='password' type='text' class='input'>
-			<div id='log' class='hidden'>log</div>
+			<div id='log'>log</div>
 			<div class='btns'>
 			<!--  
 			<button type='button' class='m_submit' onclick="clear_logs();">reset pins</button>

@@ -10,6 +10,7 @@ if ($userID > 0) {
 	$fieldnames = get_fieldnames("COMPONENT");
 	$qa = get_qa();
 	$users = get_users();
+	$prep_types = get_prep_types();
 	$fieldnames[] = 'expired';
 	$sql = "select *,(expiry_date < now()) as expired from COMPONENT  where finished is null and M1_check_id=".$userID;
 	if (!empty(get_url_token('finished'))) {
@@ -35,8 +36,12 @@ if ($userID > 0) {
 			$comp = array();
 			foreach ($fieldnames as $f) {		
 				$comp[$f] = utf8_encode($row[$f]);
-				
-				if (strpos($f,"_id") > 2) {
+				if ($f == 'prep_type_id') {
+					
+					$id = utf8_encode($row[$f]);
+					$comp['prep_type'] = (!empty($prep_types[$id]))?$prep_types[$id]['code']:'-';
+				}
+				else if (strpos($f,"_id") > 2) {
 					//echo $f.'-';
 					$fname = substr($f,0,strpos($f,"_id"));
 					//echo $fname.', ';
@@ -108,6 +113,22 @@ function get_users()
 			$line['id'] = $row['id'];
 			$line['label'] = utf8_encode($row['firstname'].' '.$row['lastname']);
 			$line['value'] = $row['id'];
+			$ret[$row['id']] = $line;
+		}
+	}
+	return ($ret);
+}
+
+function get_prep_types()
+{
+	$result = mysql_query('select id,code from PREP_TYPES');
+	$ret = array();
+	if ($result) {
+		while($row = mysql_fetch_array($result))
+		{
+			$line = array();
+			$line['id'] = $row['id'];
+			$line['code'] = $row['code'];
 			$ret[$row['id']] = $line;
 		}
 	}

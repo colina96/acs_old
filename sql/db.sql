@@ -31,6 +31,8 @@ INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,k
  VALUES ( null, 'plating','acs','Plating','Person','chef',0,0,0,1,0);
 INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
  VALUES ( null, 'PS','acs','Plating','Super','chef',0,0,0,1,1);
+ INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+ VALUES ( null, 'kean','acs','Kean','Maizels','guru',1,1,1,1,1);
 
 select * from USERS;
 

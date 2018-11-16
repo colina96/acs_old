@@ -133,7 +133,7 @@ function qpack_temp()
 
 function read_barcode()
 {
-        serial.write("S");
+        serial.write("BS");
 }
 function process(text)
 {
@@ -141,13 +141,23 @@ function process(text)
     if (text=="+T") {
         //L turns on laser
         //S starts scan
-        serial.write("LS");
-        qpack_temp();
+    	if (button_mode == 'barcode' || user_id <= 0) {
+    		serial.write("BS");
+    	}
+    	else { // read temperature
+    		if (temp_probe) {
+    			serial.write('T')
+    		}
+    		else {
+    			serial.write('t')
+    		}
+    	}
+       // qpack_temp();
     }
     else if (text=="-T") {
         //l turns off laser
         //s ends scan
-        serial.write("ls");
+        serial.write("lsb");
         if (temp_timer!=null) clearTimeout(temp_timer);
         temp_timer = null;
     }
@@ -170,7 +180,7 @@ function process(text)
 	else if (text.indexOf('[') >= 0 && text.indexOf(']') > 0) {
 		var i = text.indexOf('[');
 		var j = text.indexOf(']');
-		var s = text.substring(i + 2, j - 1);
+		var s = text.substring(i + 1, j);
 		log("barcode " + s);
 		process_barcode(s);
 	}

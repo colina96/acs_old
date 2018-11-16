@@ -54,9 +54,14 @@ select {
 	display:table;
 	margin:0 auto;
 }
+.centerpad {
+	display:table;
+	margin:10px auto;
+}
 .modal_head {
 	color:var(--acs_grey_text);
-	margin-top:35px;
+	margin-top:10px;
+	margin-bottom:10px;
 	font-size:20px;
 }
 .LR_description {
@@ -102,7 +107,7 @@ select {
 	width:60vw;
 	left:20vw;
 	.height:50vh;
-	top:35vh;
+	top:40vh;
 	.border:1px solid blue;
 	background:#dddddd;
 	color:black;
@@ -190,6 +195,15 @@ select {
 	margin :1px;
 }
 
+.label_num {
+	width:40px; 
+	font-size:150%;
+	
+}
+#search {
+	font-size:150%;
+	width:100%;
+}
 .larger {
 	font-size:5vw;
 }

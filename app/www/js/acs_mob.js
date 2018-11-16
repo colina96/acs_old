@@ -21,11 +21,129 @@ function copy_object(o)
 	return(JSON.parse(JSON.stringify(o)));
 }
 
+var serial_started = false;
+var logline = 0;
+
+function Xlog(s)
+{
+	// console.log(s);
+	if (logline++ > 10) {
+		document.getElementById('log_div').innerHTML = '';
+		logline = 0;
+	}
+	document.getElementById('log_div').innerHTML += s + "<br>";
+	document.getElementById('log_div').style.display = 'block';
+}
+
+function hide_log()
+{
+	document.getElementById('log_div').style.display = 'none';
+}
+function errorCallback(e)
+{
+	log(e);
+	serial_started = false;
+}
+var str;
+var temp_mode = null;
+var temp_probe = null;
+var button_mode = null; // determines what happens when the qpac button is pressed
+function set_temp_mode(new_mode)
+{
+	temp_mode = new_mode;
+	button_mode = 'temp';
+}
+// var temp_callback = null;
+function temp_callback(s,probe) // works out where to send the temperature reading
+{
+	console.log('temp_callback',s,temp_mode);
+	temp_probe = probe;
+	if (temp_mode == null) {
+		log ('temp_mode not set');
+		return;
+	}
+	if (temp_mode == 'M0') {
+		set_ingredient_temp(s);
+	}
+	if (temp_mode == 'M1') {
+		check_temp(s);
+	}else if (temp_mode == 'M1_dock') {
+		// component.M2_temp = temp_reading;
+		check_temp_m1_dock(s);
+	}
+	else if (temp_mode == 'M2') {
+		// component.M2_temp = temp_reading;
+		check_temp_m2(s);
+	} 
+	else if (temp_mode == 'M1_plating') {
+		// component.M2_temp = temp_reading;
+		set_plating_M1_temp(s);
+	} 
+	else if (temp_mode == 'M2_plating') {
+		// component.M2_temp = temp_reading;
+		set_plating_M2_temp(s);
+	} 
+	else {
+		log ("don't know what to do with temperature reading " + temp_mode);
+	}
+}
+
+function manual_temp_submit()
+{
+	var t = document.getElementsByName('manual_temp')[0].value;
+	document.getElementById('manual_entry').style.display = 'none';
+	temp_callback(t);
+}
+
+function manual_barcode_submit(input_name)
+{
+	var s = document.getElementsByName(input_name)[0].value;
+	document.getElementsByName(input_name)[0].value = '';
+	console.log('manual_barcode_submit',s,input_name);
+	process_barcode(s)
+}
+
+
+var temp_readings = 0;
+function ioio_start()
+{
+	
+	qpack_start();
+}
+
+function popup_manual_temp()
+{
+	
+	document.getElementsByName('manual_temp')[0].value = '';
+	temp_readings = 0;
+	document.getElementById('manual_entry').style.display = 'block';
+}
+
+var p37 = 0;
+function read_temp(m)
+{
+	temp_mode = m;
+	console.log('read temp mode',m);
+// 	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
+	// if (typeof(serial.write) === 'undefined') {
+//	if (!ioio_started) {
+		console.log('serial undefined');
+		popup_manual_temp();
+/*	}
+	else {
+		// serial.write('R'); arduino
+		var t = parseInt(100.0 * p37);
+		log('read temp ' + t);
+		temp_callback(t);
+	} */
+}
+
 
 function set_barcode_mode(mode)
 {
 	console.log('set_barcode_mode',mode);
 	barcode_mode = mode;
+	button_mode = 'temp';
 	keyboard_str = '';
 	document.getElementsByName('kitchen_manual_barcode')[0].value = '';
 	
@@ -42,7 +160,7 @@ function process_barcode(s)
 	}
 	if ((s.indexOf('u') >= 0) || (s.indexOf('U') >= 0)) { // user barcode scanned
 		var uid = parseInt(s.substring(4));
-		if (barcode_mode == 'login') {
+		if (barcode_mode == 'login' || user_id <= 0) {
 			login(uid);
 		}
 		if (barcode_mode == 'dock_QA') {
@@ -1051,6 +1169,7 @@ function check_temp(t) // start a new component
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 			}
 			else {
+				set_barcode_mode("M1");
 				openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			}
 		}
@@ -1060,6 +1179,7 @@ function check_temp(t) // start a new component
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 			}
 			else {
+				set_barcode_mode("M1");
 				openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			}
 		}
