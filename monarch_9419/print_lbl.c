@@ -189,6 +189,7 @@ char *get_input_LNT(char *f_name, int *input_LNT_len, int *fields)
 
 	// char *p = malloc(fsize+1);
 	memcpy(p,sdbuf, fsize+1);
+	p[fsize] = 0;
 	*input_LNT_len = fsize;
 	return p;
 }
@@ -338,7 +339,7 @@ int parse_job_file(char *jobfile, char *labeldir)
 		// make a copy of the data
 		int len = input_LNT_len + 100*LNT_fields;
 		char tlnt[2000];
-		bzero(tlnt, len);
+		bzero(tlnt, 2000);
 		memcpy(tlnt,input_LNT,input_LNT_len);
 		int copies = 0;
 		int ffound = 0;

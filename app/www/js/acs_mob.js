@@ -52,6 +52,7 @@ function set_temp_mode(new_mode)
 {
 	temp_mode = new_mode;
 	button_mode = 'temp';
+	qpack_resume();
 }
 // var temp_callback = null;
 function temp_callback(s,probe) // works out where to send the temperature reading
@@ -143,9 +144,10 @@ function set_barcode_mode(mode)
 {
 	console.log('set_barcode_mode',mode);
 	barcode_mode = mode;
-	button_mode = 'temp';
+	button_mode = 'barcode';
 	keyboard_str = '';
 	document.getElementsByName('kitchen_manual_barcode')[0].value = '';
+	qpack_resume();
 	
 }
 

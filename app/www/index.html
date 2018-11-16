@@ -76,8 +76,8 @@ overflow:auto;
 #status,#log {
 height:20vh;
 width:100vw;
-background:black;
-color:white;
+background:white;
+color:black;
 overflow:auto;
 }
 </style>
@@ -321,7 +321,7 @@ function show_dims()
 			<div id='m1_temp_div_3' class='temp_reading'></div>
 			<div id='m1_temp_div_chef' class='hidden'><!-- input name='m1_chef_id' onchange="set_user('m1_chef_id','m_temp_modal4',0);" --></div> 
 			<div class='btns'>
-			<button type='button'  class='m_btn'>Scan Authorised Chef ID</button>
+			<button type='button' onclick="set_barcode_mode('M1');" class='m_btn'>Scan Authorised Chef ID</button>
 			<!--  button type='button'  class='m_btn' <!-- onclick="set_user('m1_chef_id','m_temp_modal4',0);">Scan Authorised Chef ID</button -->
 			
 			</div>
@@ -514,12 +514,12 @@ function show_dims()
 		<div id='login_div2' class='m_modal2'>
 			<input name='email' placeholder='email' type='text' class='input'>
 			<input name='password' placeholder='password' type='text' class='input'>
-			<div id='log'>log</div>
+			<div id='log' class='hidden'>log</div>
 			<div class='btns'>
 			<!--  
 			<button type='button' class='m_submit' onclick="clear_logs();">reset pins</button>
 			<button type='button' class='m_submit' onclick="reset_pins();">reset pins</button> -->
-				<div id='login_btn' class='btn' onclick='login(0)'>Login</div>
+				<div id='login_btn' class='btn' onclick='login(0)'><div class='center'>Login</div></div>
 				<div id='login_fail' class='hidden'></div>
 			</div>
 		</div>

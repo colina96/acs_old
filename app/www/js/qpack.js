@@ -52,6 +52,7 @@ function qpack_start()
                 sleepOnPause: true
             }, function success() {
                 log("serial open success");
+                hide('log');
                 serial.registerReadCallback(
                     function success(data2) {
                         var data = new Uint8Array(data2);
@@ -73,12 +74,14 @@ function qpack_start()
                 );
                 qpack_power(true);
             }, function error() {
+            	show('log');
                 log("serial open failed");
                 //fail
                 return;
             });
         }, function error() {
             log("requestPermission failed");
+            show('log');
         });
 
     }
@@ -141,15 +144,15 @@ function process(text)
     if (text=="+T") {
         //L turns on laser
         //S starts scan
-    	if (button_mode == 'barcode' || user_id <= 0) {
+    	if (barcode_mode || user_id <= 0 ) {
     		serial.write("BS");
     	}
-    	else { // read temperature
+    	if(temp_mode) { // read temperature
     		if (temp_probe) {
-    			serial.write('T')
+    			serial.write('LT')
     		}
     		else {
-    			serial.write('t')
+    			serial.write('Lt')
     		}
     	}
        // qpack_temp();

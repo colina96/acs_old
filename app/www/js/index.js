@@ -58,7 +58,7 @@ var app = {
     	console.log("onDeviceReady");
     	log("starting");
     	RESTHOME = "http://www.evoz.com.au/acs_test/REST/";
-    	document.getElementById('login_btn').innerHTML = 'Login to www.evoz.com.au';
+    	// document.getElementById('login_btn').innerHTML = 'Login to www.evoz.com.au';
     	check_login();
     	qpack_init();
         app.receivedEvent('deviceready');
