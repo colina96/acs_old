@@ -304,7 +304,7 @@ select {
 }
 .m_modal {
 	position: absolute;
-	top:10vh;
+	top:12vh;
 	left:6vw;
 	.margin:2vw;
 	width:87vw;

@@ -17,7 +17,7 @@ if ($prep_type == '') {
 	$prep_type = 1;
 }
 
-$M1_chef_id = $comp['M1_chef_id'];
+$M1_chef_id = empty($comp['M1_chef_id']) ? 'null':$comp['M1_chef_id'];
 $comp_id = $comp['comp_id'];
 $shelf_life_days = empty($comp['shelf_life_days']) ? 0 : $comp['shelf_life_days'];
 $M1_action_code = 'null';
