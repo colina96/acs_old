@@ -307,7 +307,7 @@ function goto_plating_teams()
 function save_plating_team()
 {
 	var data =  {data: JSON.stringify(plating_teams)};
-	console.log("Sent Off: %j", data);
+	console.log("Sent Off: ", data);
 	set_barcode_mode (null);
 	goto_plating();
     $.ajax({
@@ -462,7 +462,7 @@ function record_finish_plating()
 	console.log("finish_plating");
 	console.log(plating_item);
 	var data =  {data: JSON.stringify(plating_item)};
-    console.log("Sent Off: %j", data);
+    console.log("Sent Off: ", data);
     
     $.ajax({
         url: RESTHOME + "finish_plating.php",
@@ -611,7 +611,7 @@ function print_plating_labels()
 	plating_item.trolley_labels = parseInt(document.getElementById('trolley_labels').innerHTML);
 	plating_item.description_labels = parseInt(document.getElementById('pt_description_labels').innerHTML);
 	var data =  {data: JSON.stringify(plating_item)};
-    console.log("Sent Off: %j", data);
+    console.log("Sent Off: ", data);
     
     $.ajax({
         url: RESTHOME + "plating_labels.php",
@@ -648,7 +648,8 @@ function start_plating_item()
 	plating_item.trolley_labels = parseInt(document.getElementById('trolley_labels').innerHTML);
 	plating_item.description_labels = parseInt(document.getElementById('pt_description_labels').innerHTML);
 	var data =  {data: JSON.stringify(plating_item)};
-    console.log("Sent Off: %j", data);
+    console.log("Sent Off: ", data);
+    console.log(plating_item);
     
     $.ajax({
         url: RESTHOME + "new_plating_item.php",
@@ -796,7 +797,8 @@ function new_component() {
 	// component.prep_type = new_comp['prep_type'];
 	
 	var data =  {data: JSON.stringify(component)};
-    console.log("Sent Off: %j", data);
+    console.log("Sent Off: ", data);
+    console.log(component);
     $.ajax({
         url: RESTHOME + "new_component.php",
         type: "POST",
@@ -859,6 +861,8 @@ function show_dock()
 {
 	openPage('dock_main', null, 'red','mobile_main','tabclass');
 	openPage('m_dock',document.getElementById('supplier_list_tab'), 'red','m_modal','tabclass');
+	show('dock_search_div');
+	$('#dock_search').val('');
 	var dock_items = new Array();
 	var div = document.getElementById('dock_display_comp_div1');
 	div.innerHTML = '';
@@ -873,6 +877,8 @@ function show_dock()
 			tr.appendChild(td);
 			var td = document.createElement('td');
 			td.innerHTML = comps[i]['supplier'];
+			comps[i].label = comps[i]['supplier'] + ": " + comps[i]['description'];
+			
 			tr.appendChild(td);
 			table.appendChild(tr);
 			console.log(comps[i]);
@@ -1230,6 +1236,7 @@ function start_component(dock)
 	component.description = new_comp['description']; // simplifies display
 	active_comp = copy_object(new_comp);
 	component.comp_id = new_comp['id'];
+	component.M1_chef_id = new_comp['M1_chef_id'];
 	component.prep_type = new_comp['prep_type'];
 	component.M1_action_code = new_comp['M1_action_code'];
 	component.M1_action_id = new_comp['M1_action_id'];
@@ -1250,14 +1257,9 @@ function start_component(dock)
 	else {
 		component.M1_temp = new_comp['M1_temp'];
 	}
-	if (!dock) {
-		component.M1_chef_id = document.getElementsByName('m1_chef_id')[0].value;
-	
-		if (component.M1_chef_id < 1) component.M1_chef_id = 1;
-		 document.getElementsByName('m1_chef_id')[0].value = '';
-	}
-	else {
-		component.M1_chef_id = 0;
+	if (dock) {
+		
+		component.M1_chef_id = user_id;
 	}
 	var data =  {data: JSON.stringify(component)};
     console.log("start_component Sent Off: ", data);
@@ -1311,6 +1313,7 @@ function set_user(input_name,next_page,uid) {
 	    console.log("found chef ",chef['label']); 
 	    document.getElementById('m1_temp_div_5').innerHTML = chef['label'];
 	    openPage(next_page, this, 'red','m_modal2','tabclass');
+	    new_comp['M1_chef_id'] = uid;
 	}
 		
 	
@@ -1355,7 +1358,7 @@ function comp_milestone(temp_reading)
 		url = RESTHOME + 'M3_comp.php';
 	}
 	var data =  {data: JSON.stringify(component)};
-    console.log("Sent Off: %j", data);
+    console.log("Sent Off: ", data);
     console.log('to ' + url);
     $.ajax({
         url: url,
@@ -1699,7 +1702,7 @@ function print_component_labels(qty)
 	}
 	
 	var data =  {data: JSON.stringify(comp)};
-    console.log("Sent Off: %j", data);
+    console.log("Sent Off: ", data);
     
     $.ajax({
         url: RESTHOME + "comp_label.php",
@@ -1723,6 +1726,7 @@ function reprint_supplier_labels()
 {
 	console.log('reprint_supplier_labels');
 	set_barcode_mode('dock_reprint'); // callback to reprint_doc_labels
+	hide('dock_search_div');
 	
 }
 

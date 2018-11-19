@@ -4,6 +4,7 @@ var kitchen_report_fmt = {
 	'CC': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
+		'CHEF':'M1_chef',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
 		'M2 TIME':'M2_time',
@@ -15,6 +16,7 @@ var kitchen_report_fmt = {
 	'HF': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
+		'CHEF':'M1_chef',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
 		'M2 TIME':'M2_time',
@@ -26,6 +28,7 @@ var kitchen_report_fmt = {
 	'ESL': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
+		'CHEF':'M1_chef',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
 		'M2 TIME':'M2_time',

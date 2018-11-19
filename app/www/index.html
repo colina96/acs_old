@@ -148,13 +148,14 @@ function show_dims()
 				<div class='m_top_menu' id='s_reprint_labels_tab'  
 					onclick="openPage('m_dock_reprint', this, 'red','m_modal','m_top_menu',reprint_supplier_labels);">RE-PRINT LABELS</div>
 			</div>
+			<div class='search' id='dock_search_div'><input placeholder='SEARCH' type="text" id="dock_search"></div>
 			<div class='hidden' id='dock_barcode'><input placeholder='Enter existing barcode' name='dock_manual_code' id='dock_manual_code' onchange='manual_barcode_submit("dock_manual_code")'>
 			</div>
 			<div class='hidden' id='current_time_dock'></div>
 			
 			<div class='m_modal' id='m_dock'>
-					<div class='margin10'>SEARCH</div>
-					<div class='margin10'><input type="text" id="dock_search">
+					
+					<div class='margin10'>
 						<div id='dock_display_comp_div'>
 							<div id='dock_display_comp_div1'></div>
 							<div class='btns hidden' id='dock_comp_selected_btns'>
@@ -247,7 +248,7 @@ function show_dims()
 					onclick="openPage('m_search', this, 'red','m_modal','m_top_menu',goto_comp_search);">&#x1F50E</div>
 				<!--  div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div -->
 			</div>
-			<div id='kitchen_barcode' class='manual_barcode'>
+			<div id='kitchen_barcode' class='manual_barcode hidden'>
 				<input placeholder='Enter existing barcode' name='kitchen_manual_barcode' id='kitchen_manual_code' onchange='manual_barcode_submit("kitchen_manual_barcode")'>
 			</div>
 			<div id='current_time_kitchen'>TIME</div>

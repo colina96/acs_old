@@ -149,12 +149,12 @@ select {
 	.border:1px solid green;
 	width:94vw;
 }
-#kitchen_barcode, #dock_barcode, .manual_barcode {
+#kitchen_barcode, #dock_barcode, .manual_barcode,#dock_search_div {
 	position:absolute;
-	top:35px;
+	top:30px;
 	left:6vw;
 	margin:0 auto;
-	width:65%;
+	width:86%;
 	color:white;
 	font-size:20px;
 }
@@ -200,8 +200,8 @@ select {
 	font-size:150%;
 	
 }
-#search {
-	font-size:150%;
+#search, #dock_search {
+	font-size:120%;
 	width:100%;
 }
 .larger {
