@@ -332,14 +332,17 @@ function show_dims()
 			
 			<div id='m1_temp_div_LR_comp' class='LR_description center'></div>
 			<div id='m1_temp_div_LR_comp' class='center modal_head'>PICKED</div>
-			<div id='m1_temp_div_chef_LR'><input name='m1_chef_id_LR' size=10></div>
+			<div id='m1_temp_div_chef_LR' class='hidden'><input name='m1_chef_id_LR' size=10></div>
 			<div class='btns'>
-			<button type='button'  class='m_btn' onclick="set_user('m1_chef_id_LR','m_temp_modal4',0);">Scan Authorised Chef ID</button>
+			<!-- button type='button'  class='m_btn' onclick="set_user('m1_chef_id_LR','m_temp_modal4',0);">Scan Authorised Chef ID</button -->
+			<button type='button'  class='m_btn'>Scan Authorised Chef ID</button>
 			</div>
 		</div>
 		<div class='m_modal2' id='m_temp_modal4'>
-			<div class='center modal_head'><span>TEMPERATURE</span></div>
-			<div id='m1_temp_div_4' class='temp_reading'></div>
+			<div id='m_temp_modal4a'>
+				<div class='center modal_head'><span>TEMPERATURE</span></div>
+				<div id='m1_temp_div_4' class='temp_reading'></div>
+			</div>
 			<div id='m1_temp_div_5' class='centerpad modal_head'></div>
 			<div class='centerpad grey'>LABEL QUANTITY</div>
 			<div class='center'><input type='number' name='m1_label_qty' maxlength='3' class='label_num'></div>
@@ -347,6 +350,7 @@ function show_dims()
 			<button type='button'  class='m_btn' onclick="start_component();">Print Labels</button>
 			</div>
 		</div>
+		
 		<div class='m_modal2' id='m_reprint_modal4'>
 			<div class='center modal_head'><span>Reprint Labels</span></div>
 			<div class='center' id='kitchen_reprint_qty_div'>

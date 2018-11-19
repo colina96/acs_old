@@ -985,7 +985,7 @@ function component_selected(id)
 {
 	console.log("component selected - loading chefs");
 	load_chefs(null);
-	new_comp == null;
+	new_comp = null;
 	active_comp = null;
 	if (id) {
 		new_comp = get_component_by_id(id);
@@ -1277,6 +1277,7 @@ function start_component(dock)
             var qty = document.getElementsByName(qty_input)[0].value;
             active_comp.id = comp.id;
             active_comp.expiry_date = comp.expiry_date;
+            active_comp.M1_time = comp.M1_time;
             print_component_labels(qty);
             document.getElementsByName(qty_input)[0].value = 1;
             console.log('comp.dock = ',comp.dock);
@@ -1302,18 +1303,17 @@ function set_user(input_name,next_page,uid) {
 		document.getElementsByName(input_name)[0].value = uid;
 	}
 	console.log("got user id ",uid);
-	// openPage(next_page, this, 'red','m_modal2','tabclass');
-/*	if (uid.substring(0,1) == 'u') {
-		uid = parseInt(uid.substring(4));
-		console.log("parsed user id ",uid);
-		document.getElementsByName(input_name)[0].value = uid;
-	} */
+
 	var chef = get_chef_by_id(uid);
 	if (chef) {
 	    console.log("found chef ",chef['label']); 
+	    console.log(new_comp);
 	    document.getElementById('m1_temp_div_5').innerHTML = chef['label'];
+	    if (new_comp['M1_temp']) show('m_temp_modal4a');
+	    else hide ('m_temp_modal4a');
 	    openPage(next_page, this, 'red','m_modal2','tabclass');
 	    new_comp['M1_chef_id'] = uid;
+	    console.log(new_comp);
 	}
 		
 	
@@ -1703,6 +1703,7 @@ function print_component_labels(qty)
 	
 	var data =  {data: JSON.stringify(comp)};
     console.log("Sent Off: ", data);
+    console.log(comp);
     
     $.ajax({
         url: RESTHOME + "comp_label.php",

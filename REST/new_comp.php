@@ -58,6 +58,7 @@ if ($result) {
 	while($row = mysql_fetch_array($result)) {
 		$ret['now'] = $row['now'];
 		$ret['expiry_date'] = $row['expiry_date'];
+		$ret['M1_time'] = $row['now'];
 	}
 }
 if ($M0) { // record ingredients
