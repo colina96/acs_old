@@ -20,6 +20,10 @@ $sql = "update COMPONENT ";
 $sql .= "set M3_temp = " . $M3_temp . ", M3_chef_id=".$M3_chef_id;
 $sql .= ",M3_check_id = ".$_SESSION['userID'];
 $sql .= ",M3_time = now()";
+if (!empty ($comp['M3_action_code']) && !empty ($comp['M3_action_id'])) {
+	$sql .= ",M3_action_code = ".$comp['M3_action_code'];
+	$sql .= ",M3_action_id = ".$comp['M3_action_id'];
+}
 $sql .= ",finished = now()";
 $sql .= ' where id='.$id;
 echo $sql."\n\n";

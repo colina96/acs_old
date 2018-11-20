@@ -12,7 +12,7 @@ var kitchen_report_fmt = {
 		'M3 TIME':'M3_time',
 		'M3 TEMP':'M3_temp',
 		'Q/A':'M1_action_code',
-		'CHEF':'M1_action_id'},
+		'QA':'M1_action_id'},
 	'HF': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
@@ -145,8 +145,8 @@ function report_components(data,format)
 		//	tab.appendChild(tr);
 			var data_count = new Object();
 		   	for (var i=0; i<data.length; i++) {
-			   	console.log('item ' + data[i]['description'] + ' prep ' + data[i]['prep_type_id'] + 
-					  " : " + preptype_id);
+		/*	   	console.log('item ' + data[i]['description'] + ' prep ' + data[i]['prep_type_id'] + 
+					  " : " + preptype_id); */
 			   	if (data[i]['prep_type_id'] == preptype_id) {
 				   	if (!data_count[preptype_id]) {
 				   		tab.appendChild(tr1);
@@ -198,6 +198,7 @@ function kitchen_reports(format,tab)
 	        type: "POST",
 	        dataType: 'json',	      
 	        success: function(result) {
+		        console.log(result);
 	            active_comps = result;	          
 	            console.log("got " + result.length + " comps");
 	            report_components(result,format);	            

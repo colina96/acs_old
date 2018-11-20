@@ -182,6 +182,10 @@ function process_barcode(s)
 			force_M3(uid);
 			barcode_mode = null;
 		}
+		else if (barcode_mode == 'KQA_override') {
+			k_qa_override(uid);
+			barcode_mode = null;
+		}
 		else if (barcode_mode == 'PT') { // plating team member
 			add_team_member(uid);
 		}
@@ -1244,6 +1248,25 @@ function force_M3(uid)
 	openPage('m2_temp_modal_force_M3', null, 'red','m_modal2','tabclass');
 
 }
+function k_qa_override(uid)
+{
+	console.log('k_qa_override');
+	active_comp.qa_override_uid = uid;
+	active_comp.qa_override_temp = last_temp;
+	console.log(active_comp);
+	var chef = get_chef_by_id(uid);
+	if (active_comp['M2_time'] && active_comp['M2_time'].length > 1) { // at M3
+		document.getElementById('force_M3_overdue_uid').innerHTML = chef['label'];
+		openPage('m2_temp_overdue_B', null, 'red','m_modal2','tabclass');
+	}
+	else {  // at M2
+		document.getElementById('m2_temp_overdue_div_2').innerHTML = last_temp;
+		document.getElementById('force_M2_overdue_uid').innerHTML = chef['label'];
+		openPage('m2_temp_overdue_M2B', null, 'red','m_modal2','tabclass');
+	}
+	
+
+}
 
 function start_component(dock)
 {
@@ -1253,7 +1276,7 @@ function start_component(dock)
 	console.log(active_comp);
 	console.log(new_comp);
 	// check if component at M0 - has ingredients
-	if (!active_comp['M1_time'] || (active_comp && active_comp['selected_ingredients'])) {
+	if ((active_comp && !active_comp['M1_time']) || (active_comp && active_comp['selected_ingredients'])) {
 		console.log('component start - need to print labels');
 		comp_milestone(active_comp['M1_temp']);
         goto_m_main();
@@ -1360,11 +1383,11 @@ function comp_milestone(temp_reading,force,qa_code)
 	var url = '';
 	if (force && qa_code) {
 		component.M3_temp = temp_reading;
-		active_comp['M2_time'] = 'now';
-		active_comp['M3_time'] = 'now';
-		active_comp['M3_action_code'] = qa_code;
-		active_comp['M3_action_id'] = active_comp['force_M3_uid'] ;
-		active_comp['M3_temp'] = last_temp ;
+		component['M2_time'] = 'now';
+		component['M3_time'] = 'now';
+		component['M3_action_code'] = qa_code;
+		component['M3_action_id'] = active_comp['force_M3_uid'] ;
+		component['M3_temp'] = last_temp ;
 		component.M3_chef_id = 0;
 		url = RESTHOME + 'M3_comp.php';
 	}
@@ -1380,6 +1403,10 @@ function comp_milestone(temp_reading,force,qa_code)
 		component.M2_temp = temp_reading;
 		active_comp['M2_time'] = 'now';
 		component.M2_chef_id = 0;
+		if (qa_code) {
+			component['M2_action_code'] = qa_code;
+			component['M2_action_id'] = active_comp.qa_override_uid ;
+		}
 		var M3_time_minutes = get_preptype_val(prep_type_id,'M3_time_minutes');
 		console.log("At M2, M3 time = " + M3_time_minutes + " ->" + typeof(M3_time_minutes));
 		if (M3_time_minutes == null) {
@@ -1476,7 +1503,7 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 		if (parseInt(t) < parseInt(temp_target)) {
 			document.getElementById('m2_temp_div_2a').innerHTML= milestone + " achieved";
 			document.getElementById('m2_temp_div_3a').innerHTML= milestone + " achieved";
-			comp_milestone(t);
+			if (active_comp.remaining > 0) comp_milestone(t);		
 		}
 		else {
 			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
@@ -1485,7 +1512,21 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			document.getElementById('m2_temp_div_3a').innerHTML= milestone + " not achieved";
 			document.getElementById('m2_temp_div_2').innerHTML= "<div class='red'>" + parseInt(t) + "&#176C</div>"
 		}
-		openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
+		if (active_comp.remaining > 0) {
+			openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
+		}
+		else {
+			
+			console.log("overdue - QA");
+			set_barcode_mode('KQA_override');
+			if (active_comp['M2_time'].length > 1) {
+				openPage('m2_temp_overdue_A', this, 'red','m_modal2','tabclass');
+			}
+			else {
+				openPage('m2_temp_overdue_M2A', this, 'red','m_modal2','tabclass');
+			}
+			
+		}
 	}
 	
 }
@@ -1538,6 +1579,7 @@ function active_comp_selected(id)
 		target_temp = " < " + get_preptype_val(prep_type_id,'M3_temp');
 	}
 	document.getElementById('ms_1').innerHTML = milestone_due;
+	active_comp.remaining = remaining;
 	if (milestone_due != 'M1') {
 		if (remaining >= 0) {
 			document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + " REMAINING";

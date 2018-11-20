@@ -379,9 +379,48 @@ function show_dims()
 			<button type='button'  class='m_btn' onclick="set_barcode_mode('force_M3');">Force M3 - Scan ID</button>
 			</div>
 		</div>
+		
 		<div class='m_modal2' id='m2_temp_modal_force_M3'>
 			<div id='force_M3_signoff_uid' class='center modal_head'></div>
 			<div class='red center'>Force M3</div>
+			<div class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
+			<div class='btns'>
+			
+			<button type='button'  class='m_submit' onclick="comp_milestone(last_temp,true,11);">QA Sign-Off Emergency</button>
+			<button type='button'  class='m_btn' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
+			</div>
+		</div>
+		<div class='m_modal2' id='m2_temp_overdue_M2A'><!-- Screen 3.9 or maybe 6.9.1 -->
+			<div class='center modal_head'>TEMPERATURE</div>
+			<div id='m2_temp_overdue_div_2' class='temp_reading'></div>
+			<div id='m2_temp_overdue_div_2a' class='temp_achieved center'>CORRECTIVE ACTION REQUIRED</div>
+			<div class='btns'>
+			<button type='button'  class='m_submit' onclick="goto_m_main();">Re-Check</button><!--  TODO -->
+			<button type='button'  class='m_btn' onclick="set_barcode_mode('KQA_override');">Scan Authorised Chef ID</button>
+			</div>
+		</div>
+		<div class='m_modal2' id='m2_temp_overdue_M2B'><!-- Screen 3.10  -->
+			<div id='force_M2_overdue_uid' class='center modal_head'></div>
+			
+			<div id='m2_temp_overdue_div_2a' class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
+			<div class='btns'>
+			<button type='button'  class='m_submit' onclick="comp_milestone(last_temp,false,4);">Evacuate Blass Chiller<BR>Hard Chill</button><!--  TODO -->
+			<button type='button'  class='m_btn' onclick="comp_milestone(last_temp,false,5);">Decant Product into Shallow Trays<br>Continue Chilling</button>
+			</div>
+		</div>
+		<div class='m_modal2' id='m2_temp_overdue_A'>
+			<div class='center modal_head'>TEMPERATURE</div>
+			<div id='m2_temp_div_2' class='temp_reading'></div>
+			<div id='m2_temp_div_2a' class='temp_achieved center'></div>
+			<div class='btns'>
+			<button type='button' class='m_submit' onclick='goto_m_main();'>REJECT</button>
+			<button type='button'  class='m_submit' onclick="goto_m_main();">Re-Check</button>
+			<button type='button'  class='m_btn' onclick="set_barcode_mode('KQA_override');">QA OVERRIDE - SCAN ID</button>
+			</div>
+		</div>
+		<div class='m_modal2' id='m2_temp_overdue_B'>
+			<div id='force_M3_overdue_uid' class='center modal_head'></div>
+			<div class='red center'>Overdue</div>
 			<div class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
 			<div class='btns'>
 			
