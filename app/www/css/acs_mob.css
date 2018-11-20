@@ -284,9 +284,8 @@ select {
 	display:flex;
 }
 #m1_temp_div {
-	font-size: 12vw;
-    width: 30vw;
-    margin: auto;
+	font-size: 20px;
+   
 }
 #m1_temp {
 	font-size: 12vw;

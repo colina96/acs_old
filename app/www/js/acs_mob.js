@@ -56,10 +56,10 @@ function set_temp_mode(new_mode)
 	qpack_resume();
 }
 // var temp_callback = null;
-function temp_callback(s,probe) // works out where to send the temperature reading
+function temp_callback(s) // works out where to send the temperature reading
 {
 	console.log('temp_callback',s,temp_mode);
-	temp_probe = probe;
+//	temp_probe = probe;
 	if (temp_mode == null) {
 		log ('temp_mode not set');
 		return;
@@ -1050,6 +1050,15 @@ function component_selected(id)
 		document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
 		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
 		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
+		temp_probe = false;
+		if (new_comp['probe_type'] && new_comp['probe_type'] == 2) {
+			console.log('use probe');
+			temp_probe = true;
+			document.getElementById('m1_temp_div').innerHTML = 'USE PROBE';
+		}
+		else {
+			document.getElementById('m1_temp_div').innerHTML = 'USE IR SENSOR';
+		}
 	}
 	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
 	// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
@@ -1074,7 +1083,7 @@ function dock_read_M1temp(callback)
 function read_M1temp(callback){
 	load_chefs(null);
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
-	document.getElementById('m1_temp_div').innerHTML = '';
+	// document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M1');
 }
 
@@ -1171,7 +1180,7 @@ function check_temp(t) // start a new component
 	var prep_type_id = new_comp['prep_type'];
 	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
 	var M1_temp_sign = get_preptype_val(prep_type_id,'M1_temp_above');
-	document.getElementById('m1_temp_div').innerHTML = '';
+	// 
 	document.getElementById('m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 	document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 	document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
