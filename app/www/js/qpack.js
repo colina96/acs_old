@@ -149,10 +149,10 @@ function process(text)
     	}
     	if(temp_mode) { // read temperature
     		if (temp_probe) {
-    			serial.write('LT')
+    			serial.write('LT');
     		}
     		else {
-    			serial.write('Lt')
+    			serial.write('Lt');
     		}
     	}
        // qpack_temp();
@@ -185,6 +185,7 @@ function process(text)
 		var j = text.indexOf(']');
 		var s = text.substring(i + 1, j);
 		log("barcode " + s);
+		serial.write('!')
 		process_barcode(s);
 	}
 	else if (text.indexOf('T') == 0) {

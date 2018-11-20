@@ -57,6 +57,12 @@ if ($userID > 0) {
 	}
 }
 
+else {
+	$ret = array();
+	$ret['error'] = 'not logged in';
+	echo json_encode($ret);
+	error_log ("not logged in",0);
+}
 
 
 

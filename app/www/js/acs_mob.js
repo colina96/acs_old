@@ -3,7 +3,7 @@ var comps = null;
 var plating_comps = null; // components in cool room
 var preptypes = null;
 
-var plating_teams = null;
+
 var plating_item = null;
 var active_plating_team = 0;
 var active_comp = null; // the component currently being worked on
@@ -48,6 +48,7 @@ var str;
 var temp_mode = null;
 var temp_probe = null;
 var button_mode = null; // determines what happens when the qpac button is pressed
+var last_temp = null;
 function set_temp_mode(new_mode)
 {
 	temp_mode = new_mode;
@@ -63,6 +64,7 @@ function temp_callback(s,probe) // works out where to send the temperature readi
 		log ('temp_mode not set');
 		return;
 	}
+	last_temp = s;
 	if (temp_mode == 'M0') {
 		set_ingredient_temp(s);
 	}
@@ -174,6 +176,10 @@ function process_barcode(s)
 		}
 		else if (barcode_mode == 'M1_LR') {
 			set_user('m1_chef_id_LR','m_temp_modal4',uid);
+			barcode_mode = null;
+		}
+		else if (barcode_mode == 'force_M3') {
+			force_M3(uid);
 			barcode_mode = null;
 		}
 		else if (barcode_mode == 'PT') { // plating team member
@@ -1217,6 +1223,18 @@ function dock_start_component()
 {
 	start_component(true);
 }
+function force_M3(uid)
+{
+	console.log('force_M3');
+	console.log(active_comp);
+	active_comp.force_M3_uid = uid;
+	active_comp.force_M3_temp = last_temp;
+	console.log(active_comp);
+	var chef = get_chef_by_id(uid);
+	document.getElementById('force_M3_signoff_uid').innerHTML = chef['label'];
+	openPage('m2_temp_modal_force_M3', null, 'red','m_modal2','tabclass');
+
+}
 
 function start_component(dock)
 {
@@ -1226,7 +1244,7 @@ function start_component(dock)
 	console.log(active_comp);
 	console.log(new_comp);
 	// check if component at M0 - has ingredients
-	if (!new_comp || (active_comp && active_comp['selected_ingredients'])) {
+	if (!active_comp['M1_time'] || (active_comp && active_comp['selected_ingredients'])) {
 		console.log('component start - need to print labels');
 		comp_milestone(active_comp['M1_temp']);
         goto_m_main();
@@ -1305,6 +1323,7 @@ function set_user(input_name,next_page,uid) {
 	console.log("got user id ",uid);
 
 	var chef = get_chef_by_id(uid);
+	if (new_comp == null && active_comp != null) new_comp = active_comp;
 	if (chef) {
 	    console.log("found chef ",chef['label']); 
 	    console.log(new_comp);
@@ -1318,7 +1337,7 @@ function set_user(input_name,next_page,uid) {
 		
 	
 }
-function comp_milestone(temp_reading)
+function comp_milestone(temp_reading,force,qa_code)
 {
 	// send data to REST interface
 	console.log('comp_milestone');
@@ -1330,7 +1349,17 @@ function comp_milestone(temp_reading)
 	var component = new Object();
 	component.id = active_comp['id'];
 	var url = '';
-	if (active_comp['M1_time'] == '') { // M1
+	if (force && qa_code) {
+		component.M3_temp = temp_reading;
+		active_comp['M2_time'] = 'now';
+		active_comp['M3_time'] = 'now';
+		active_comp['M3_action_code'] = qa_code;
+		active_comp['M3_action_id'] = active_comp['force_M3_uid'] ;
+		active_comp['M3_temp'] = last_temp ;
+		component.M3_chef_id = 0;
+		url = RESTHOME + 'M3_comp.php';
+	}
+	else if (active_comp['M1_time'] == '') { // M1
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M1_temp = temp_reading;
 		component.M1_chef_id = 0; // TODO
@@ -1380,6 +1409,7 @@ function comp_milestone(temp_reading)
             else {
             	if (active_comp['M3_time'] != '') {
             		console.log('finished');
+            		if (force) document.getElementById('m2_temp_div_3a').innerHTML= "M3 FORCED";
             		openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
             	}
             	else {
@@ -1426,6 +1456,7 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 	//	document.getElementById('dock_m1_temp_div_3').innerHTML= parseInt(t * 10) / 10 + "&#176C";
 		document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C";
 		if (milestone == 'M1' && parseInt(t) > parseInt(temp_target)) {
+			set_barcode_mode('M1');
 			document.getElementById('m2_temp_div_2a').innerHTML= milestone + " achieved";
 			document.getElementById('m2_temp_div_3a').innerHTML= milestone + " achieved";
 			active_comp['M1_temp'] = t;
@@ -1892,37 +1923,6 @@ function m_show_active_components(data,reprint)
    	div.appendChild(tab);
 }
 
-function find_plating_teams(menu_items)
-{
-	console.log('searching for assigned plating teams ',menu_items.length);
-	
-	if (plating_teams == null) plating_teams = [];
-	for (var i = 0; i < menu_items.length; i++) {
-		// console.log("item ",menu_items[i]['code'],menu_items[i]['plating_team']);
-		if (menu_items[i]['plating_team'] != '') {
-			console.log("item ",menu_items[i]['code'],menu_items[i]['plating_team']);
-			var pt = menu_items[i]['plating_team'];
-			if (typeof plating_teams[pt] == 'undefined') {
-				plating_teams[menu_items[i]['plating_team']] = [];
-			}
-		}
-	}
-	var d = document.getElementById('plating_teams_list');
-	d.innerHTML = '';
-	var select = document.createElement('select');
-	select.name = 'sel_pt';
-	console.log('found plating teams ',plating_teams.length);
-	for (var i = 0; i < plating_teams.length; i++) {
-		if (plating_teams[i]) {
-			 option = document.createElement( 'option' );
-			 option.value = i;
-			 option.textContent =  'Team ' + i;
-		    select.appendChild( option );
-		}
-		d.appendChild(select);
-	}
-	load_chefs(null);
-}
 
 
 
@@ -2032,47 +2032,7 @@ function get_plating_item_by_id(id)
 }
 
 
-function load_menu_items()
-{	
-	console.log("loading menu items" + RESTHOME + "get_menu_items.php");
-    $.ajax({
-    	url: RESTHOME + "get_menu_items.php",
-        type: "POST",
-       // data: data,
-       //  data: {points: JSON.stringify(points)},
-        dataType: 'json',
-        // contentType: "application/json",
-        success: function(result) {
-            menu_items = result;
-            find_plating_teams(menu_items); // see what plating teams are needed
-            console.log("got menu_items" + menu_items.length);
-            $('#search_menu').autocomplete({
-                // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
-                minLength: 2,
-        		source: menu_items,
-        		// Once a value in the drop down list is selected, do the following:
-                select: function(event, ui) {
-                	
-                    // place the person.given_name value into the textfield called 'select_origin'...
-                    $('#search_menu').val(ui.item.label);
-                    // and place the person.id into the hidden textfield called 'link_origin_id'. 
-                 	console.log('selected ',ui.item.value);
-                 	show_menu_item_components(ui.item.value);
-                    return false;
-                }
-        	
-            })
-            console.log("got " + result.length + " menu itemss");
-            
-        },
-        done: function(result) {
-            console.log("load_menu_items");
-        },
-        fail: (function (result) {
-            console.log("fail load_menu_items",result);
-        })
-    });
-}
+
 
 
 function load_comps(fn)

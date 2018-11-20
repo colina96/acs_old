@@ -1,6 +1,84 @@
 var plating_items = null; // array of menu_items currently plating
 var menu_items = null;
 var chefs = null;
+var plating_teams = null;
+
+function load_menu_items()
+{	
+	console.log("loading menu items" + RESTHOME + "get_menu_items.php");
+    $.ajax({
+    	url: RESTHOME + "get_menu_items.php",
+        type: "POST",
+       // data: data,
+       //  data: {points: JSON.stringify(points)},
+        dataType: 'json',
+        // contentType: "application/json",
+        success: function(result) {
+            menu_items = result;
+            find_plating_teams(menu_items); // see what plating teams are needed
+            console.log("got menu_items" + menu_items.length);
+            $('#search_menu').autocomplete({
+                // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+                minLength: 2,
+        		source: menu_items,
+        		// Once a value in the drop down list is selected, do the following:
+                select: function(event, ui) {
+                	
+                    // place the person.given_name value into the textfield called 'select_origin'...
+                    $('#search_menu').val(ui.item.label);
+                    // and place the person.id into the hidden textfield called 'link_origin_id'. 
+                 	console.log('selected ',ui.item.value);
+                 	show_menu_item_components(ui.item.value);
+                    return false;
+                }
+        	
+            })
+            console.log("got " + result.length + " menu itemss");
+            
+        },
+        done: function(result) {
+            console.log("load_menu_items");
+        },
+        fail: (function (result) {
+            console.log("fail load_menu_items",result);
+        })
+    });
+}
+
+function find_plating_teams(menu_items)
+{
+	console.log('searching for assigned plating teams ',menu_items.length);
+	
+	if (plating_teams == null) plating_teams = [];
+	for (var i = 0; i < menu_items.length; i++) {
+		// console.log("item ",menu_items[i]['code'],menu_items[i]['plating_team']);
+		if (menu_items[i]['plating_team'] != '') {
+			console.log("item ",menu_items[i]['code'],menu_items[i]['plating_team']);
+			var pt = menu_items[i]['plating_team'];
+			if (typeof plating_teams[pt] == 'undefined') {
+				plating_teams[menu_items[i]['plating_team']] = [];
+			}
+		}
+	}
+	var d = document.getElementById('plating_teams_list');
+	if (d) {
+		d.innerHTML = '';
+	
+		var select = document.createElement('select');
+		select.name = 'sel_pt';
+		console.log('found plating teams ',plating_teams.length);
+		for (var i = 0; i < plating_teams.length; i++) {
+			if (plating_teams[i]) {
+				 option = document.createElement( 'option' );
+				 option.value = i;
+				 option.textContent =  'Team ' + i;
+			    select.appendChild( option );
+			}
+			d.appendChild(select);
+		}
+	}
+	load_chefs(null);
+}
 
 function load_plating_items(callback) // load menu_items currently being plated
 {
@@ -10,6 +88,12 @@ function load_plating_items(callback) // load menu_items currently being plated
         dataType: 'json',
         success: function(result) {
             plating_items = result; // need to populate with descritions
+            console.log('load_plating_items got result');
+            console.log(result);
+            if (!result || result.error ) {
+            	console.log('forcing reload');
+            	location.reload(true);
+            }
             for (var i = 0; i < plating_items.length; i++) {
             	
             	var menu_item = get_menu_item_by_id(plating_items[i].menu_item_id);
@@ -36,6 +120,7 @@ function get_menu_item_by_id(menu_item_id) {
 	for (var i = 0; i < menu_items.length; i++) {
 		if (menu_items[i].id == menu_item_id) return(menu_items[i]);
 	}
+	console.log('ERROR - could not find menu_item id',menu_item_id,menu_items.length);
 	return(null);
 }
 function show_time(d)
@@ -100,7 +185,10 @@ function load_chefs(fn)
         dataType: 'json',
         success: function(result) {
             chefs = result;
-            
+            if (!result || result.error ) {
+            	console.log('forcing reload');
+            	location.reload(true);
+            }
             if (fn) {
             	console.log("calling fn");
             	fn();

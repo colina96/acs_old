@@ -67,7 +67,7 @@ if ($userID > 0) {
 		$json = json_encode($comps);
 		if ($json) {
 			echo $json;
-			error_log($json,0);
+		//	error_log($json,0);
 		}
 		else {
 			echo "json_encode failed<br>";
@@ -80,6 +80,9 @@ if ($userID > 0) {
 	}
 }
 else {
+	$ret = array();
+	$ret['error'] = 'not logged in';
+	echo json_encode($ret);
 	error_log ("not logged in",0);
 }
 

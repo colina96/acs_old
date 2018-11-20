@@ -105,7 +105,8 @@ var plating_item_report_fmt = {
 
 function reports()
 {
-	load_chefs();
+
+	load_menu_items();
 	// load_qa();
 	openPage('REPORTS', this, 'red','tabcontent','tabclass');
 }
