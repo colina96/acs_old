@@ -1404,6 +1404,7 @@ function comp_milestone(temp_reading,force,qa_code)
 		active_comp['M2_time'] = 'now';
 		component.M2_chef_id = 0;
 		if (qa_code) {
+			console.log('setting action code');
 			component['M2_action_code'] = qa_code;
 			component['M2_action_id'] = active_comp.qa_override_uid ;
 		}
@@ -1450,6 +1451,7 @@ function comp_milestone(temp_reading,force,qa_code)
             	}
             	else {
             		console.log('at M2');
+            		openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
             	}
             }
         },
