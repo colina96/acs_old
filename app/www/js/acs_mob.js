@@ -1434,7 +1434,7 @@ function comp_milestone(temp_reading,force,qa_code)
         success: function(result) {
             console.log("comp_milestone result ",result);
             console.log(active_comp);
-            if (active_comp['M2_time'] == '') { 
+            if (active_comp['M2_time'] == '' && !force) { 
             	// at M1 - component has tracked ingredients
             	// get chef id and print labels
             	console.log("At M1");
@@ -1451,7 +1451,8 @@ function comp_milestone(temp_reading,force,qa_code)
             	}
             	else {
             		console.log('at M2');
-            		openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
+            		goto_m_main();
+            		// openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
             	}
             }
         },
