@@ -535,6 +535,15 @@ function show_dims()
 					<button type='button'  class='m_btn' onclick="goto_active_plating();">Return</button>
 				</div>
 			</div>
+			<div class='m_modal hidden' id='m_plating_temp_decant'>
+				<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
+				<div id='chk_plating_item_temp_divA' class='margin10'></div>
+				<div class='btns'>
+					<button type='button' class='m_submit' onclick="show('popup-labels');">Decant</button>
+					<button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
+					<button type='button'  class='m_btn' onclick="goto_active_plating();">Return</button>
+				</div>
+			</div>
 			<div class='m_modal hidden' id='m_plating_options'>
 				<div class='center modal_head'><span>PLATING OPTIONS</span></div>
 				<div id='plating_options_item_div' class='center orange margin10'></div>
@@ -587,6 +596,13 @@ function show_dims()
 		<div class='enter_temp center'>
 			<input name='manual_temp' id='manual_temp' length='3' size='3' type='number'>
 			<button type='button'  class='m_btn' onclick='manual_temp_submit()'>Submit</button>
+		</div>
+	</div>
+	<div class='popup' id='popup-labels'>
+		<div class='center'><h2>Enter Number of Labels</h2></div>
+		<div class='enter_temp center'>
+			<input name='manual_temp' id='decant_label_num' length='3' size='3' type='number'>
+			<button type='button'  class='m_btn' onclick='decant_labels()'>Submit</button>
 		</div>
 	</div>
 

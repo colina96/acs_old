@@ -491,7 +491,33 @@ function record_finish_plating()
     });
 }
 
-
+function decant_labels() 
+{
+	var num = document.getElementById('decant_label_num').value;
+	console.log('decant_labels ',num);
+	if (num < 1) return;
+	i = plating_item.active_item;
+	var items = menu_item.items;
+	if (i >= 0 && i < items.length) {
+		console.log("selected " + items[i].description);
+		console.log(items[i]);
+		items[i].decanted_labels = num;
+	}
+	$.ajax({
+	    url: RESTHOME + "decant.php",
+	    type: "POST",
+	    data: items[i],
+	
+	    success: function(result) {
+	        console.log("decant result ",result);
+	        
+	    },
+	    
+	    fail: (function (result) {
+	        console.log("decant fail ",result);
+	    })
+	});
+}
 
 function plating_comp_selected(i)
 {
@@ -500,8 +526,16 @@ function plating_comp_selected(i)
 	var items = menu_item.items;
 	if (i >= 0 && i < items.length) {
 		console.log("selected " + items[i].description);
+		console.log(items[i]);
 	}
-	openPage('m_plating_temp', this, 'red','m_modal','tabclass');
+	if (items[i].prep_type_id == 2) { // HF decant?
+		openPage('m_plating_temp_decant', this, 'red','m_modal','tabclass');
+		document.getElementById('chk_plating_item_temp_divA').innerHTML = items[i].description;
+	}
+	else {
+		openPage('m_plating_temp', this, 'red','m_modal','tabclass');
+	}
+	
 	document.getElementById('chk_plating_item_temp_div').innerHTML = items[i].description;
 }
 

@@ -2,7 +2,7 @@
 <widget android-packageName="com.ACS" id="io.cordova.hellocordova" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>ACS2.2</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        QPack test
     </description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Apache Cordova Team

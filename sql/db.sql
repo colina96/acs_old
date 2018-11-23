@@ -189,6 +189,7 @@ CREATE table COMPONENT (
 	finished datetime,
 	shelf_life_days int,
 	expiry_date datetime,
+	decanted_from int,
 	constraint pk_example primary key (id) 
 );
 

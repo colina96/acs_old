@@ -88,6 +88,7 @@ function load_menu_item_links($menu_id)
 			$comp = [];
 			$comp['id'] = $component_id;
 			$comp['description'] = utf8_encode($d);
+			$comp['prep_type_id'] = $row[7];
 			$menu_item_links[$menu_item_id][] = $comp; // $component_id;
 		}
 	}
