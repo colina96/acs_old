@@ -52,6 +52,13 @@ var kitchen_report_fmt = {
 		'M2 TEMP':'M2_temp',
 		'Q/A':'M1_action_code',
 		'CHEF':'M1_action_id'
+	},
+	'DECANT': {
+		'COMPONENT NAME':'description',
+		'BATCH CODE':'id',
+		'M1 TIME':'M1_time',
+		'CHEF':'M1_check',
+		'EXPIRY DATE':'expiry_date'
 	}
 }
 var dock_report_fmt = {

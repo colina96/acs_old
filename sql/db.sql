@@ -64,6 +64,7 @@ insert into PREP_TYPES values (5,'AHR' ,	0, 3,		5,   0,	45,  20, 15,0, null  ,nu
 insert into PREP_TYPES values (6,'FRESH' ,1, 3,		5,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
 insert into PREP_TYPES values (7,'FROZEN',1, 3,		-5,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
 insert into PREP_TYPES values (8,'DRY'   ,1, 3,		15,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
+insert into PREP_TYPES values (9,'DECANT'   ,0, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0);
 
 drop table if exists CORRECTIVE_ACTIONS;
 CREATE table CORRECTIVE_ACTIONS

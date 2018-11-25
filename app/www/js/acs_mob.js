@@ -497,16 +497,17 @@ function decant_labels()
 	console.log('decant_labels ',num);
 	if (num < 1) return;
 	i = plating_item.active_item;
-	var items = menu_item.items;
+	var items = plating_item.items;
 	if (i >= 0 && i < items.length) {
 		console.log("selected " + items[i].description);
 		console.log(items[i]);
 		items[i].decanted_labels = num;
 	}
+	var data =  {data: JSON.stringify(items[i])};
 	$.ajax({
 	    url: RESTHOME + "decant.php",
 	    type: "POST",
-	    data: items[i],
+	    data: data,
 	
 	    success: function(result) {
 	        console.log("decant result ",result);
