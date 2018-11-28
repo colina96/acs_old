@@ -51,15 +51,15 @@ session_start();
 
         <div class="collapse navbar-collapse" id="codebrainery-toggle-nav">
           <ul class="nav navbar-nav">
-            <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('USERS', this, 'red')" href="#">USERS</a></li>
-            <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="#">MENU</a></li>
+            <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('USERS', this, 'red')">USERS</a></li>
+            <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="">MENU</a></li>
             <li class='tabclass' onclick="daily_orders();"><a href="#">DAILY ORDERS</a></li>
-            <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')" href="#">PT SETTINGS</a></li>
-            <li class='tabclass' onclick="openPage('SUPPLIERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SUPPLIERS', this, 'red')" href="#">SUPPLIER LIST</a></li>
-            <li class='tabclass' onclick="openPage('APP', this, 'red','tabcontent','tabclass')"><a href="#">APP</a></li>
-            <li class='tabclass' onclick="reports();"><a href="#">REPORTS</a></li>
-            <!--  li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="#">KITCHEN</a></li>
-            <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="#">ASSEMBLY</a></li -->
+            <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')">PT SETTINGS</a></li>
+            <li class='tabclass' onclick="openPage('SUPPLIERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SUPPLIERS', this, 'red')">SUPPLIER LIST</a></li>
+            <li class='tabclass' onclick="openPage('APP', this, 'red','tabcontent','tabclass')"><a>APP</a></li>
+            <li class='tabclass' onclick="reports();"><a>REPORTS</a></li>
+            <!--  li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="">KITCHEN</a></li>
+            <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="">ASSEMBLY</a></li -->
             
             </ul>
             <ul class="nav navbar-nav navbar-right">
