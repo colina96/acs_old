@@ -13,13 +13,13 @@ $d = json_decode($_POST["data"],true);
 $plating_team = $d['plating_team'];
 // $shelf_life_days = $d['shelf_life_days'];
 $menu_item_id = $d['menu_item_id'];
-
+$shelf_life_days = 3; // TODO - where does this come from?????
 
 $userID = $_SESSION['userID'];
 
 	$sql = "insert into PLATING_ITEM ";
-	$sql .= "(id, user_id, team_id, menu_item_id,time_started) ";
-	$sql .= "values (null,".$userID.",".$plating_team.",".$menu_item_id.",now())";
+	$sql .= "(id, user_id, team_id, menu_item_id,time_started,expiry_date) ";
+	$sql .= "values (null,".$userID.",".$plating_team.",".$menu_item_id.",now(),DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY))";
 
 	test_mysql_query($sql);
 	$plating_item_id = mysql_insert_id();
@@ -41,10 +41,11 @@ $userID = $_SESSION['userID'];
 		$items[] = $comp;
 	}
 	$response['items'] = $items;
-	$result = mysql_query("select now() as M1_time");
+	$result = mysql_query("select now() as M1_time, DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY) as expiry_date");
 	if ($result) {
 		while($row = mysql_fetch_array($result)) {
 			$response['M1_time'] = $row['M1_time'];
+			$response['expiry_date'] = $row['expiry_date'];
 		}
 	}
 

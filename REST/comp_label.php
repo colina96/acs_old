@@ -32,6 +32,9 @@ if (!empty($_POST['data'])) {
 	$id = $comp['id'];
 	$copies = $comp['copies'];
 	$description = $comp['description'];
+	if (strlen($description) > 25) {
+		$description = substr($description,0,25);
+	}
 	$expiry_date = $comp['expiry_date'];
 	$prepped_date = $comp['M1_time'];
 	$preparedBy = $comp['preparedBy'];

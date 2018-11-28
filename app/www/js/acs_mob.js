@@ -207,7 +207,7 @@ function process_barcode(s)
 		if (barcode_mode == 'kitchen_reprint') {
 			for (var i = 0; i < active_comps.length; i++) {
 				if (active_comps[i].id == cid) {
-					reprint_active_comp_labels(i);
+					reprint_active_comp_labels(cid);
 					barcode_mode = null;
 				}
 			}
@@ -707,6 +707,7 @@ function start_plating_item()
             plating_item['plating_item_id'] = p['id'];
             plating_item['id'] = p['id'];
             plating_item['M1_time'] = p['M1_time'];
+            plating_item['expiry_date'] = p['expiry_date'];
             
             
             // prob should store plating_item_component ids but not needed at this point
@@ -1902,7 +1903,11 @@ function dock_reprint()
 
 function reprint_active_comp_labels(id)
 {
-	active_comp = active_comps[id];
+	active_comp = get_component_by_id(id); // get component
+	if (!active_comp) {
+		console.log('cant find component id',id );
+		return;
+	}
 	clear_comp_fields();
 	document.getElementById('chk_temp_item_div').innerHTML = active_comp['description'];
 	openPage('m_reprint_modal4', this, 'red','m_modal2','tabclass');
@@ -1960,7 +1965,7 @@ function m_show_active_components(data,reprint)
    		var tr = document.createElement('tr');
    		var span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
    		var clickdiv = "<div class='tooltip' onclick='active_comp_selected(" + i + ");'>" + data[i]['description'] + span_txt + "</div>";
-   		if (reprint) clickdiv = "<div onclick='reprint_active_comp_labels(" + i + ");'>" + data[i]['description'] + "</div>";
+   		if (reprint) clickdiv = "<div onclick='reprint_active_comp_labels(" + data[i]['id'] + ");'>" + data[i]['description'] + "</div>";
    		// tr.appendChild(new_td(data[i]['description'],'comp'));
    		tr.appendChild(new_td(clickdiv,'comp'));
    		

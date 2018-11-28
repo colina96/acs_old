@@ -214,6 +214,7 @@ CREATE table PLATING_ITEM
 	menu_item_id smallint unsigned not null,
 	time_started datetime,
 	time_completed datetime,
+	expiry_date datetime,
 	M1_temp float,
 	M2_temp float,
 	corrective_item smallint,
