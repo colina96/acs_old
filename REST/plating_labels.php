@@ -2,34 +2,13 @@
 session_start();
 
 include '../db.php';
-/*
 
-Print user nametag label thing.
-Format...
-
-Jobname:prep 1
-Printer:10.0.0.100
-Port:9101
-Label:USER.LNT
-Endheader
-# start of individual labels
-Copies:1
-NAME:David Cox
-#barcode should be no more than many digits
-BARCODE:U01000002
-Endlabel
-*/
-/* need some security - make sure requester is logged in
-
-$userID = $_SESSION['userID'];
-
-*/
 $job_dir = "/tmp/monarch/jobs/";
 $job_dir = "tmp/";
 
 if (!empty($_POST['data'])) {
-	echo $_POST['data'];
-	echo "\n\n<br>XXXXXXXXXXXX<br>\n\n";
+	// echo $_POST['data'];
+	
 	$comp = json_decode($_POST["data"],true);
 	$id = $comp['id'];
 	$d_copies = $comp['description_labels'];
@@ -41,43 +20,17 @@ if (!empty($_POST['data'])) {
 	$expiry_date = $comp['expiry_date'];
 	$code = $comp['code'];
 	
-	$tmp_file = $job_dir.'plate'.$id.".tmp";
-	$job_file = $job_dir.'plate'.$id.".job";
+	$tmp_file = $job_dir.'trolley'.$id.".tmp";
+	$job_file = $job_dir.'trolley'.$id.".job";
 	echo "openning ".$tmp_file;
 	$handle = fopen($tmp_file, 'w') or die('Cannot open file:  '.$tmp_file);
-/*
-	echo "opened ".$tmp_file;
-	fwrite($handle,"Jobname:user ".$id."\n");
-	fwrite($handle,"Printer:10.0.0.100"."\n");
-	fwrite($handle,"Port:9101"."\n");
-	fwrite($handle,"Label:PLATING.LNT"."\n");
-	fwrite($handle,"Endheader"."\n");
-	fwrite($handle,"Copies:1"."\n");
-	fwrite($handle,"NAME:".$dish_name."\n");
-	fwrite($handle,"CODE:".$code."\n");
-	
-	$facility = 1; // not used yet.... maybe one day
-	$barcode = sprintf("p%02d%06d",$facility,$id);
-	// fwrite($handle,"BARCODE:U01000002"."\n");
 
-	//fwrite($handle,"ID:".$barcode."\n");
-	fwrite($handle,'BARCODE:'.$barcode."\n");
-	$barcodeTxt = sprintf("BARCODETXT:p%02d%06d",$facility,$id);
-	fwrite($handle,$barcodeTxt."\n");
-	$barcodeTxt = "EXPIRYDATE:Expiry: ".$expiry_date;
-	fwrite($handle,$barcodeTxt."\n");
-	fwrite($handle,"Endlabel"."\n");
-	fclose($handle);
-	chmod ($tmp_file,0666);
-	rename($tmp_file,$job_file);
-	
-	*/
-	fwrite($handle,"Jobname:plating ".$id."\n");
+	fwrite($handle,"Jobname:trolley ".$id."\n");
 	fwrite($handle,"Printer:10.0.0.99"."\n");
 	fwrite($handle,"Port:9100"."\n");
 	fwrite($handle,"Label:ACS_TROLLEY.LBL"."\n");
 	fwrite($handle,"Endheader"."\n");
-	fwrite($handle,"Copies:1"."\n");
+	fwrite($handle,"Copies:".$t_copies."\n");
 	fwrite($handle,"NAME:".$dish_name."\n");
 	fwrite($handle,"CODE:".$code."\n");
 	$facility = 1; // not used yet.... maybe one day
@@ -88,6 +41,35 @@ if (!empty($_POST['data'])) {
 	$d = strtotime($expiry_date);
 	$barcodeTxt = "EXPIRYDATE:".date("d M y H:i",$d); 
 	fwrite($handle,$barcodeTxt."\n"); 
+	// $d = strtotime($prepped_date);
+	//$barcodeTxt = "PREPPED:".date("d M y H:i",$d);
+	// fwrite($handle,$barcodeTxt."\n");
+	fwrite($handle,"Endlabel"."\n");
+	fclose($handle);
+	chmod ($tmp_file,0666);
+	rename($tmp_file,$job_file);
+	// now do plating label
+	$tmp_file = $job_dir.'plate'.$id.".tmp";
+	$job_file = $job_dir.'plate'.$id.".job";
+	echo "openning ".$tmp_file;
+	$handle = fopen($tmp_file, 'w') or die('Cannot open file:  '.$tmp_file);
+	
+	fwrite($handle,"Jobname:plating ".$id."\n");
+	fwrite($handle,"Printer:10.0.0.99"."\n");
+	fwrite($handle,"Port:9100"."\n");
+	fwrite($handle,"Label:ACS_PL.LBL"."\n");
+	fwrite($handle,"Endheader"."\n");
+	fwrite($handle,"Copies:".$d_copies."\n");
+	fwrite($handle,"NAME:".$dish_name."\n");
+	// fwrite($handle,"CODE:".$code."\n");
+	$facility = 1; // not used yet.... maybe one day
+	$barcode = sprintf("BARCODE:p%02d%06d",$facility,$id);
+	fwrite($handle,$barcode."\n");
+	//$barcodeTxt = sprintf("BARCODETXT:c%02d%06d",$facility,$id);
+	//fwrite($handle,$barcodeTxt."\n");
+//	$d = strtotime($expiry_date);
+////	$barcodeTxt = "EXPIRYDATE:".date("d M y H:i",$d);
+//	fwrite($handle,$barcodeTxt."\n");
 	// $d = strtotime($prepped_date);
 	//$barcodeTxt = "PREPPED:".date("d M y H:i",$d);
 	// fwrite($handle,$barcodeTxt."\n");

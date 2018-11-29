@@ -89,7 +89,7 @@ var plating_report_fmt = {
 		'ITEM CODE':'code',
 		'ITEM NAME':'menu_item',
 		'ITEM COMPONENTS':'description',
-		'BATCH CODE':'id',
+		'BATCH CODE':'component_id',
 		'QTY':'qty',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
@@ -100,7 +100,7 @@ var plating_report_fmt = {
 }
 var plating_item_report_fmt = {
 		'ITEM COMPONENTS':'description',
-		'BATCH CODE':'id',
+		'BATCH CODE':'component_id',
 		'QTY':'qty',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',

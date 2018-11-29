@@ -525,11 +525,16 @@ function show_dims()
 					</div>
 				    <button type='button'  class='m_btn' id='print_plating_labels_btn' onclick="start_plating_item();">Print Labels</button>	
 				</div>
+				<div class='btns' id='plating_batch_change_btns'>
+					<button type='button'  class='m_btn' onclick="set_barcode_mode('plating_batch_change');">SCAN BARCODE</button>
+					<button type='button'  class='m_btn' onclick="goto_plating();">Return</button>
+				</div>
 			</div>
 			
 			<div class='m_modal hidden' id='m_plating_temp'>
 				<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
-				<div id='chk_plating_item_temp_div' class='margin10'></div>
+				<div id='chk_plating_item_temp_div' class='center'></div>
+				<div id='chk_plating_item_exp_div' class='center'></div>
 				<div class='btns'>
 					<button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
 					<button type='button'  class='m_btn' onclick="goto_active_plating();">Return</button>

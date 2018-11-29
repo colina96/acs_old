@@ -195,6 +195,9 @@ function process_barcode(s)
 		if (barcode_mode == 'PT_comp') {
 			plating_comp_barcode_scanned(cid);
 		}
+		if (barcode_mode == 'plating_batch_change') {
+			plating_comp_barcode_scanned(cid,true);
+		}
 		if (barcode_mode == 'active_comp') {
 			console.log('loogin for ' + cid);
 			for (var i = 0; i < active_comps.length; i++) {
@@ -419,6 +422,12 @@ function goto_plating()
 	t.appendChild(tab);
 }
 
+function plating_batch_change()
+{
+	console.log('plating_batch_change');
+	console.log(plating_item);
+	do_show_menu_item_components(plating_item.menu_item_id,true);
+}
 function show_plating_options(id)
 {
 	plating_item = get_plating_item_by_id(id);
@@ -520,10 +529,11 @@ function decant_labels()
 	});
 }
 
-function plating_comp_selected(i)
+function plating_comp_selected(i,batch_change)
 {
 	var menu_item = plating_item; // get_menu_item_by_id(active_menu_item_id);
 	plating_item.active_item = i;
+	plating_item.batch_change = batch_change;
 	var items = menu_item.items;
 	if (i >= 0 && i < items.length) {
 		console.log("selected " + items[i].description);
@@ -538,34 +548,71 @@ function plating_comp_selected(i)
 	}
 	
 	document.getElementById('chk_plating_item_temp_div').innerHTML = items[i].description;
+	document.getElementById('chk_plating_item_exp_div').innerHTML = items[i].expiry_date;
 }
 
-function plating_comp_barcode_scanned(barcode_id) {
-	console.log('plating_comp_barcode_scanned '  + barcode_id);
+function plating_comp_barcode_scanned(cid,batch_change)
+{
+	
+	console.log('plating_comp_barcode_scanned',cid);
+
+	$.ajax({
+        url: RESTHOME + "get_active_comps.php?cid=" + cid,
+        type: "POST",
+
+        success: function(result) {
+        	console.log(result);
+        	
+        	var comps = JSON.parse(result);
+            if (comps && comps.length > 0) {
+            	var comp = comps[0];
+            	process_scanned_plating_comp(comp,batch_change);
+            }
+            else {
+            	console.log('could not find incredient')
+            	set_barcode_mode('dock_reprint');
+            }
+            
+        },
+        fail: (function (result) {
+            console.log("fail check_ingredient ",result);
+        })
+    });
+
+}
+
+function process_scanned_plating_comp(comp,batch_change)
+{
+	// console.log('plating_comp_barcode_scanned '  + barcode_id);
 	// find item in active components
-	var description = null;
+/*
 	for (var i = 0; i < plating_comps.length; i++) {
 		if (plating_comps[i].id == barcode_id) {
-			console.log("plating_comp_barcode_scanned found " + plating_comps[i].description + ' ' + plating_comps[i].expired);
-			if (plating_comps[i].expired == 1) {
+			comp = plating_comps[i]; */
+			console.log("plating_comp_barcode_scanned found " + comp.description + ' ' + comp.expired);
+			if (comp.expired == 1) {
 				console.log('item expired');
-				document.getElementById('m2_pt_sl_div2').innerHTML = 'expired ' + plating_comps[i].expiry_date;
+				document.getElementById('m2_pt_sl_div2').innerHTML = 'expired ' + comp.expiry_date;
 				openPage('m_temp', this, 'red','mobile_main','tabclass');
 				openPage('m2_sl_plating', this, 'red','m_modal2','tabclass');
 				
 				return; // jump to expired page
 			}
+/*
 			description = plating_comps[i].description;
 		}
 	}
+*/
 	var items = plating_item.items;
-	console.log("now checking plating item " + items.length);
+	console.log("now checking plating item " + items.length,batch_change);
 	for (var i = 0; i < items.length; i++) {
-		if (items[i].description == description && !items[i].M1_temp) {
+		if (items[i].description == comp.description && (!items[i].M1_temp || batch_change)) {
+			items[i].M1_temp = null; // reset for batch_change
 			items[i].checked = true;
-			items[i].component_id = barcode_id;
-			console.log("found item");
-			plating_comp_selected(i);
+			items[i].component_id = comp.id;
+			items[i].expiry_date = comp.expiry_date;
+			console.log("found item",i,batch_change);
+			plating_comp_selected(i,batch_change);
 		}		
 	}
 }
@@ -574,6 +621,26 @@ function goto_active_plating()
 	show_menu_item_components(active_menu_item_id)
 }
 
+function batch_change_component(comp)
+{
+	var data =  {data: JSON.stringify(comp)};
+    console.log("batch_change_component Sent Off: ", data);
+    
+    $.ajax({
+        url: RESTHOME + "batch_change.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) {
+            console.log("batch_change_component ",result);
+            
+        },
+        
+        fail: (function (result) {
+            console.log("batch_change_component fail ",result);
+        })
+    });
+}
 
 function set_plating_M1_temp(temperature) 
 {
@@ -584,7 +651,18 @@ function set_plating_M1_temp(temperature)
 	var temp_target = get_preptype_val(plating_prep_type,'M1_temp');
 	if (temperature < temp_target) {
 		plating_item.items[plating_item.active_item].M1_temp = temperature;
-		goto_active_plating();
+		plating_item.items[plating_item.active_item].M1_time = null;
+		if (plating_item.batch_change) {
+			console.log('batch change temp',temperature);
+			plating_item.items[plating_item.active_item].plating_team_id = plating_item.team_id;
+			console.log(plating_item);
+			console.log(plating_item.items[plating_item.active_item]);
+			batch_change_component(plating_item.items[plating_item.active_item]);
+			// record new component and got back to main plaing screeen
+		}
+		else {
+			goto_active_plating();
+		}
 	}
 	
 }
@@ -733,7 +811,7 @@ function reprint_plating_labels()
 	console.log(plating_item);
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 }
-function do_show_menu_item_components(menu_item_id)
+function do_show_menu_item_components(menu_item_id,batch_change)
 {
 	set_barcode_mode("PT_comp");
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
@@ -802,13 +880,24 @@ function do_show_menu_item_components(menu_item_id)
 			
 		}
 		div.appendChild(tab);
+		
 		if (all_good) {
-			hide('plating_return');
-			show('plating_print_labels');
-			plating_item.checked = true;
+			if (batch_change) {
+				hide('plating_return');
+				hide('plating_print_labels');
+				show('plating_batch_change_btns');
+				set_barcode_mode('plating_batch_change');
+			}
+			else {
+				hide('plating_return');
+				hide('plating_batch_change_btns');
+				show('plating_print_labels');
+				plating_item.checked = true;
+			}
 		}
 		else {
 			show('plating_return');
+			hide('plating_batch_change_btns');
 			hide('plating_print_labels');
 			plating_item.checked = false;
 		}
@@ -1708,7 +1797,7 @@ function load_tracking_data()
 
 function get_comps_for_plating(item)
 {
-	console.log('get_comps_for_plating');
+	console.log('get_comps_for_plating',item);
 	 $.ajax({
 	        url: RESTHOME + "get_active_comps.php?finished=true",
 	        type: "POST",
