@@ -145,6 +145,7 @@ function get_component_by_id(id)
 	for(var i= 0; i < comps.length; i++) {
 		if (comps[i].id == id) return (comps[i]);
 	}
+	console.log(comps);
 	return null;
 }
 

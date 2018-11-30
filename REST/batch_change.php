@@ -33,7 +33,11 @@ $userID = $_SESSION['userID'];
 			$response['M1_time'] = $row['M1_time'];
 		}
 	}
-
+	if (!empty($item['replace'])) {
+		$replace_id = $item['replace'];
+		$sql = "update PLATING_ITEM_COMPONENT set time_completed = now() where id = ".$replace_id;
+		test_mysql_query($sql);
+	}
 	$json = json_encode($response);
 	echo $json;
 

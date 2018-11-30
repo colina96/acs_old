@@ -2,7 +2,7 @@ var default_tab='m_current_tracking_tab';
 var comps = null;
 var plating_comps = null; // components in cool room
 var preptypes = null;
-
+var active_comps = null;
 
 var plating_item = null;
 var active_plating_team = 0;
@@ -160,7 +160,7 @@ function process_barcode(s)
 		console.log('setup');
 	}
 	if (barcode_mode == null) {
-		return;
+		// return;
 	}
 	if ((s.indexOf('u') >= 0) || (s.indexOf('U') >= 0)) { // user barcode scanned
 		var uid = parseInt(s.substring(4));
@@ -195,10 +195,10 @@ function process_barcode(s)
 		if (barcode_mode == 'PT_comp') {
 			plating_comp_barcode_scanned(cid);
 		}
-		if (barcode_mode == 'plating_batch_change') {
+		else if (barcode_mode == 'plating_batch_change') {
 			plating_comp_barcode_scanned(cid,true);
 		}
-		if (barcode_mode == 'active_comp') {
+		else if (barcode_mode == 'active_comp') {
 			console.log('loogin for ' + cid);
 			for (var i = 0; i < active_comps.length; i++) {
 				if (active_comps[i].id == cid) {
@@ -207,7 +207,7 @@ function process_barcode(s)
 				}
 			}
 		}
-		if (barcode_mode == 'kitchen_reprint') {
+		else if (barcode_mode == 'kitchen_reprint') {
 			for (var i = 0; i < active_comps.length; i++) {
 				if (active_comps[i].id == cid) {
 					reprint_active_comp_labels(cid);
@@ -215,13 +215,20 @@ function process_barcode(s)
 				}
 			}
 		}
-		if (barcode_mode == 'dock_reprint') {
+		else if (barcode_mode == 'dock_reprint') {
 			reprint_dock_labels(cid);
 			barcode_mode = null;
 		}
-		if (barcode_mode == 'scan_ingredients') {
+		else if (barcode_mode == 'scan_ingredients') {
 			console.log('read ingredient ' + cid);
 			check_ingredient(cid);
+		}
+		else { // barcode mode null
+			console.log('barcode_mode not set',mode);
+			if (mode == 'plating') {
+				// maybe decant?
+				plating_comp_barcode_scanned(cid,false);
+			}
 		}
 	}
 }
@@ -502,17 +509,25 @@ function record_finish_plating()
 
 function decant_labels() 
 {
+	i = plating_item.active_item;
+	var items = plating_item.items;
 	var num = document.getElementById('decant_label_num').value;
 	console.log('decant_labels ',num);
 	if (num < 1) return;
-	i = plating_item.active_item;
-	var items = plating_item.items;
 	if (i >= 0 && i < items.length) {
 		console.log("selected " + items[i].description);
 		console.log(items[i]);
 		items[i].decanted_labels = num;
+		decant_item_labels(items[i]); 
 	}
-	var data =  {data: JSON.stringify(items[i])};
+}
+
+function decant_item_labels(item) 
+{
+	
+
+
+	var data =  {data: JSON.stringify(item)};
 	$.ajax({
 	    url: RESTHOME + "decant.php",
 	    type: "POST",
@@ -520,7 +535,9 @@ function decant_labels()
 	
 	    success: function(result) {
 	        console.log("decant result ",result);
-	        
+	        active_comp = JSON.parse(result);
+	        print_component_labels(item.decanted_labels);
+	        goto_m_main();
 	    },
 	    
 	    fail: (function (result) {
@@ -585,35 +602,53 @@ function process_scanned_plating_comp(comp,batch_change)
 {
 	// console.log('plating_comp_barcode_scanned '  + barcode_id);
 	// find item in active components
-/*
-	for (var i = 0; i < plating_comps.length; i++) {
-		if (plating_comps[i].id == barcode_id) {
-			comp = plating_comps[i]; */
-			console.log("plating_comp_barcode_scanned found " + comp.description + ' ' + comp.expired);
-			if (comp.expired == 1) {
-				console.log('item expired');
-				document.getElementById('m2_pt_sl_div2').innerHTML = 'expired ' + comp.expiry_date;
-				openPage('m_temp', this, 'red','mobile_main','tabclass');
-				openPage('m2_sl_plating', this, 'red','m_modal2','tabclass');
-				
-				return; // jump to expired page
-			}
-/*
-			description = plating_comps[i].description;
+
+	console.log("plating_comp_barcode_scanned found " + comp.description + ' ' + comp.expired);
+	if (comp.expired == 1) {
+		console.log('item expired');
+		document.getElementById('m2_pt_sl_div2').innerHTML = 'expired ' + comp.expiry_date;
+		openPage('m_temp', this, 'red','mobile_main','tabclass');
+		openPage('m2_sl_plating', this, 'red','m_modal2','tabclass');
+		
+		return; // jump to expired page
+	}
+	if (plating_item && plating_item.items) {
+		var items = plating_item.items;
+		console.log("now checking plating item " + items.length,batch_change);
+		for (var i = 0; i < items.length; i++) {
+			if (items[i].description == comp.description && (!items[i].M1_temp || batch_change)) {
+				items[i].M1_temp = null; // reset for batch_change
+				items[i].checked = true;
+				items[i].component_id = comp.id;
+				items[i].expiry_date = comp.expiry_date;
+				console.log("found item",i,batch_change);
+				plating_comp_selected(i,batch_change);
+				return;
+			}		
 		}
 	}
-*/
-	var items = plating_item.items;
-	console.log("now checking plating item " + items.length,batch_change);
-	for (var i = 0; i < items.length; i++) {
-		if (items[i].description == comp.description && (!items[i].M1_temp || batch_change)) {
-			items[i].M1_temp = null; // reset for batch_change
-			items[i].checked = true;
-			items[i].component_id = comp.id;
-			items[i].expiry_date = comp.expiry_date;
-			console.log("found item",i,batch_change);
-			plating_comp_selected(i,batch_change);
-		}		
+	// didn't find it - maybe decant?
+	if (comp.prep_type == 'HF') {
+		console.log(plating_items);
+		console.log('-----------');
+		// find item
+		for (var i = 0; i < plating_items.length; i++) {
+			
+			for (var j = 0; j < plating_items[i].items.length; j++) {
+				if (plating_items[i].items[j].component_id == comp.id) {
+					console.log("found item ");
+					console.log(plating_items[i].items[j]);
+					plating_item = plating_items[i];
+					plating_item.active_item = j;
+					openPage('m_plating', this, 'red','mobile_main','tabclass');
+					openPage('m_plating_temp_decant', this, 'red','m_modal','tabclass');
+					document.getElementById('chk_plating_item_temp_divA').innerHTML = comp.description;
+				}
+			}
+			
+		}
+		
+		
 	}
 }
 function goto_active_plating()
@@ -654,6 +689,7 @@ function set_plating_M1_temp(temperature)
 		plating_item.items[plating_item.active_item].M1_time = null;
 		if (plating_item.batch_change) {
 			console.log('batch change temp',temperature);
+			plating_item.items[plating_item.active_item].replace = plating_item.items[plating_item.active_item].id;
 			plating_item.items[plating_item.active_item].plating_team_id = plating_item.team_id;
 			console.log(plating_item);
 			console.log(plating_item.items[plating_item.active_item]);
@@ -1896,8 +1932,8 @@ function reprint_labels()
 function print_component_labels(qty)
 {
 	console.log(" print_component_labels ",qty);
-
-	var comp = Object.assign({}, active_comp);
+	console.log(active_comp);
+	var comp = active_comp;
 	comp.copies = qty;
 	if (!comp.preparedBy) {
 		console.log(comp);
@@ -1990,9 +2026,18 @@ function dock_reprint()
 	}
 }
 
+function get_active_comp_by_id(cid)
+{
+	for (var i = 0; i < active_comps.length; i++) {
+		if (active_comps[i].id == cid) {
+			return (active_comps[i]);
+		}
+	}
+}
+
 function reprint_active_comp_labels(id)
 {
-	active_comp = get_component_by_id(id); // get component
+	active_comp = get_active_comp_by_id(id); // get component
 	if (!active_comp) {
 		console.log('cant find component id',id );
 		return;

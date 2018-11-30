@@ -175,7 +175,7 @@ function show_dims()
 				<div class='center pad10'>
 					<div class='center pad10' id='drl_details_div'></div>
 					<div class='center pad10 grey'>LABEL QUANTITY</div>
-					<div class='center larger'><input type='number' id='dock_reprint_label_qty'  size=3 max=200 min=1></div>
+					<div class='center larger'><input type='number' class='label_num' id='dock_reprint_label_qty'  size=3 max=200 min=1></div>
 				</div>
 				<div class='btns'>
 					<button type='button'  class='m_btn' onclick="dock_reprint();">Print Labels</button>
@@ -201,7 +201,7 @@ function show_dims()
 				<div class='center modal_head'><span>TEMPERATURE</span></div>
 				<div id='dock_m1_temp_div_4' class='temp_reading'></div>
 				<div id='dock_m1_temp_div_5' class='center modal_head'></div>
-				<div class='center grey'>LABEL QUANTITY<input type='number' name='dock_m1_label_qty' length='3'></div>
+				<div class='center grey'>LABEL QUANTITY<input type='number' class='label_num' name='dock_m1_label_qty' length='3'></div>
 				<div class='btns'>
 					<button type='button'  class='m_btn' onclick="dock_start_component();">Print Labels</button>
 				</div>
@@ -345,7 +345,7 @@ function show_dims()
 			</div>
 			<div id='m1_temp_div_5' class='centerpad modal_head'></div>
 			<div class='centerpad grey'>LABEL QUANTITY</div>
-			<div class='center'><input type='number' name='m1_label_qty' maxlength='3' class='label_num'></div>
+			<div class='center'><input type='number' class='label_num' name='m1_label_qty' maxlength='3' class='label_num'></div>
 			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="start_component();">Print Labels</button>
 			</div>
@@ -354,7 +354,8 @@ function show_dims()
 		<div class='m_modal2' id='m_reprint_modal4'>
 			<div class='center modal_head'><span>Reprint Labels</span></div>
 			<div class='center' id='kitchen_reprint_qty_div'>
-				<div class='center grey'>LABEL QUANTITY<input type='number' name='m1_reprint_label_qty' maxlength='4'></div>
+				<div class='center grey'>LABEL QUANTITY</div>
+				<div class='center'><input class='label_num' type='number' name='m1_reprint_label_qty' maxlength='4'></div>
 			</div>
 			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="reprint_labels();">Print Labels</button>
@@ -606,7 +607,9 @@ function show_dims()
 	<div class='popup' id='popup-labels'>
 		<div class='center'><h2>Enter Number of Labels</h2></div>
 		<div class='enter_temp center'>
-			<input name='manual_temp' id='decant_label_num' length='3' size='3' type='number'>
+			<input name='manual_temp' class='label_num' id='decant_label_num' length='3' size='3' type='number'>
+		</div>
+		<div class='enter_temp center'>
 			<button type='button'  class='m_btn' onclick='decant_labels()'>Submit</button>
 		</div>
 	</div>
