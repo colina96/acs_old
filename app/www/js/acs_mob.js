@@ -129,11 +129,11 @@ function read_temp(m)
 	console.log('read temp mode',m);
 // 	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
 	// if (typeof(serial.write) === 'undefined') {
-//	if (!ioio_started) {
+	if (!serial) {
 		console.log('serial undefined');
 		popup_manual_temp();
-/*	}
-	else {
+	}
+/*	else {
 		// serial.write('R'); arduino
 		var t = parseInt(100.0 * p37);
 		log('read temp ' + t);
