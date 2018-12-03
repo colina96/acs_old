@@ -284,7 +284,7 @@ function show_dims()
 <!--  next four pages are for starting a new component at M1 -->
 		<div class='m_modal2' id='m_temp_modal'>
 			<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
-			<div class='center' id='m1_temp_div'></div>
+			<div id='m1_temp_div'  class='temp_reading red'></div>
 			<div class='btns'>
 				<button type='button' class='m_submit' onclick="read_M1temp();">Check Now</button>
 				<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
@@ -293,7 +293,7 @@ function show_dims()
 		<!--  scan components -->
 		<div class='m_modal2' id='m_temp_modal1'>
 			<div class='m_label'><span>SCAN INGREDIENTS</span></div>
-			<div class='center'><input placeholder='Enter existing barcode' name='ingredient_barcode' id='ingredient_barcode' onchange='manual_barcode_submit("ingredient_barcode")'></div>
+			<!-- div class='center'><input placeholder='Enter existing barcode' name='ingredient_barcode' id='ingredient_barcode' onchange='manual_barcode_submit("ingredient_barcode")'></div -->
 			<div id='m1_temp_div_1'></div>
 			<div id='m1_temp_div_1_error'> </div>
 			<div class='btns'>
@@ -303,8 +303,10 @@ function show_dims()
 		<div class='m_modal2' id='m_temp_modal1a'>
 			<div class='m_label'><span>INGREDIENT TEMP</span></div>
 			<div class='center'></div>
-			<div id='m1_temp_div_1a'></div>
+			<div id='m1_temp_div_1a' class='temp_reading red'></div>
 			<div class='btns'>
+				<button type='button' class='m_submit' onclick="read_temp('M0');">Check Now</button>
+			
 				<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
 			</div>
 		</div>

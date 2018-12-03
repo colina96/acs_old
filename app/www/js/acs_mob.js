@@ -53,8 +53,9 @@ function set_temp_mode(new_mode)
 {
 	temp_mode = new_mode;
 	button_mode = 'T';
-	qpack_resume();
+	
 	document.getElementById('button_mode_div').innerHTML = 'T';
+	qpack_resume();
 }
 // var temp_callback = null;
 function temp_callback(s) // works out where to send the temperature reading
@@ -240,10 +241,21 @@ function process_barcode(s)
 function set_ingredient_temp(s)
 {
 	var i = new_comp['read_temp'];
+	console.log('set ingredient temp for ',i,s,new_comp['selected_ingredients'][i]['target']);
+	
+	if (parseInt(s) > parseInt(new_comp['selected_ingredients'][i]['target'])) {
+		document.getElementById('m1_temp_div_1a').innerHTML = parseInt(s * 10) / 10 + "&#176C";
+		console.log("Too high!!!");
+		return;
+	}
 	new_comp['selected_ingredients'][i]['temp'] = s;
 	if (draw_ingredients()) {
+		// set_barcode_mode('scan_ingredients');
 		// save ingredient - new_comp.php
 		start_component(false,true);
+	}
+	else {
+		set_barcode_mode('scan_ingredients');
 	}
 }
 
@@ -272,7 +284,14 @@ function check_ingredient(cid)
     				draw_ingredients();
     				new_comp['read_temp'] = i;
     				read_temp('M0');
-    				
+    				openPage('m_temp_modal1a', this, 'red','m_modal2','tabclass');
+    				var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+    				// d += "<tr><td>" + sub['description'] + '</td>';
+    				document.getElementById('ms_1_text').innerHTML = sub['description'];
+    				document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
+    				new_comp['selected_ingredients'][i]['target'] = get_preptype_val(sub['prep_type'],'M1_temp');
+    				console.log(new_comp);
+    				read_temp('M0');
     			}
     			
     		}
@@ -1126,9 +1145,14 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 {
 	var finished = true;
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
+	document.getElementById('m1_temp_div_1a').innerHTML = '';
 	div = document.getElementById('m1_temp_div_1');
 	var d = "<div class='margin10'><table width='100%'>";
 	d += "<tr><td>Description</td><td>ID</td><td>Temperature</td></tr>";
+	var prep_type_id = new_comp['prep_type'];
+	console.log(' draw_ingredients prep_type_id',prep_type_id);
+	document.getElementById('ms_2_target').innerHTML = '';
+	;
 	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
 		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
 		d += "<tr><td>" + sub['description'] + '</td>';
@@ -1286,8 +1310,8 @@ function check_temp_m1_dock(t)
 	document.getElementById('dock_m1_temp_div').innerHTML = '';
 // 	document.getElementById('dock_m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 	//document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
-	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C"
-	document.getElementById('dock_m1_temp_div_6').innerHTML= parseInt(t * 10) / 10 + "&#176C"
+	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C";
+	document.getElementById('dock_m1_temp_div_6').innerHTML= parseInt(t * 10) / 10 + "&#176C";
 	console.log("check temp",t,M1_temp_target);
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {// should never happen
@@ -1705,6 +1729,7 @@ function active_comp_selected(id)
 	console.log("active_comp_selected",id);
 	load_chefs(null);
 	openPage('m2_temp_modal', this, 'red','m_modal2','tabclass');
+	read_M2temp();
 	active_comp = active_comps[id];
 	console.log(active_comp);
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
