@@ -144,10 +144,10 @@ function process(text)
     if (text=="+T") {
         //L turns on laser
         //S starts scan
-    	if (barcode_mode || user_id <= 0 ) {
+    	if ((button_mode && button_mode == 'B') || user_id <= 0 ) {
     		serial.write("BS");
     	}
-    	if(temp_mode) { // read temperature
+    	if((button_mode && button_mode == 'T')) { // read temperature
     		if (temp_probe) {
     			serial.write('LT');
     		}

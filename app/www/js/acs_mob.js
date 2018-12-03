@@ -52,8 +52,9 @@ var last_temp = null;
 function set_temp_mode(new_mode)
 {
 	temp_mode = new_mode;
-	button_mode = 'temp';
+	button_mode = 'T';
 	qpack_resume();
+	document.getElementById('button_mode_div').innerHTML = 'T';
 }
 // var temp_callback = null;
 function temp_callback(s) // works out where to send the temperature reading
@@ -129,7 +130,7 @@ function read_temp(m)
 	console.log('read temp mode',m);
 // 	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
 	// if (typeof(serial.write) === 'undefined') {
-	if (!serial) {
+	if (typeof(serial) == 'undefined') {
 		console.log('serial undefined');
 		popup_manual_temp();
 	}
@@ -146,7 +147,8 @@ function set_barcode_mode(mode)
 {
 	console.log('set_barcode_mode',mode);
 	barcode_mode = mode;
-	button_mode = 'barcode';
+	button_mode = 'B';
+	document.getElementById('button_mode_div').innerHTML = 'B';
 	keyboard_str = '';
 	document.getElementsByName('kitchen_manual_barcode')[0].value = '';
 	qpack_resume();
@@ -231,6 +233,7 @@ function process_barcode(s)
 			}
 		}
 	}
+	document.getElementById('button_mode_div').innerHTML = (barcode_mode)?'B':'-';
 }
 
 function set_ingredient_temp(s)
@@ -2323,6 +2326,7 @@ function refresh_times()
 	// console.log("time!");
 	load_tracking_data();
 	setTimeout(refresh_times,60 * 1000);
+	qpack_resume();
 }
 
 function search_suppliers()

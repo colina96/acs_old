@@ -10,6 +10,14 @@ select {
 	--acs_blue: #7F9FFD;
 }
 
+#button_mode_div {
+	position:absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 1000;
+	color:white;
+	
+}
 .background_div {
 	background: var(--acs_blue_background);
 }
