@@ -126,7 +126,8 @@ function popup_manual_temp()
 var p37 = 0;
 function read_temp(m)
 {
-	temp_mode = m;
+	set_temp_mode(m);
+	
 	console.log('read temp mode',m);
 // 	console.log("typeof(serial)",typeof(serial),typeof(serial.write));
 	// if (typeof(serial.write) === 'undefined') {
