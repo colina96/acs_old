@@ -243,7 +243,7 @@ function set_ingredient_temp(s)
 	var i = new_comp['read_temp'];
 	console.log('set ingredient temp for ',i,s,new_comp['selected_ingredients'][i]['target']);
 	
-	if (parseInt(s) > parseInt(new_comp['selected_ingredients'][i]['target'])) {
+	if (parseInt(s * 10) > parseInt(new_comp['selected_ingredients'][i]['target']) * 10) {
 		document.getElementById('m1_temp_div_1a').innerHTML = parseInt(s * 10) / 10 + "&#176C";
 		console.log("Too high!!!");
 		return;
