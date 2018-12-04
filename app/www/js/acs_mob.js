@@ -1,4 +1,5 @@
 var default_tab='m_current_tracking_tab';
+var PLATING_M1_TEMP = 5.0; // should be set in database????
 var comps = null;
 var plating_comps = null; // components in cool room
 var preptypes = null;
@@ -584,6 +585,7 @@ function plating_comp_selected(i,batch_change)
 		document.getElementById('chk_plating_item_temp_divA').innerHTML = items[i].description;
 	}
 	else {
+		read_plating_M1temp();
 		openPage('m_plating_temp', this, 'red','m_modal','tabclass');
 	}
 	
@@ -706,8 +708,8 @@ function set_plating_M1_temp(temperature)
 			plating_item.items[plating_item.active_item].description);
 	// check temp is below M1_temp
 	
-	var temp_target = get_preptype_val(plating_prep_type,'M1_temp');
-	if (temperature < temp_target) {
+	var temp_target = PLATING_M1_TEMP;
+	if (parseInt(temperature) < temp_target) {
 		plating_item.items[plating_item.active_item].M1_temp = temperature;
 		plating_item.items[plating_item.active_item].M1_time = null;
 		if (plating_item.batch_change) {
@@ -720,8 +722,12 @@ function set_plating_M1_temp(temperature)
 			// record new component and got back to main plaing screeen
 		}
 		else {
+			
 			goto_active_plating();
 		}
+	}
+	else {
+		document.getElementById('chk_plating_item_overtemp').innerHTML= parseInt(temperature * 10) / 10 + "&#176C";
 	}
 	
 }
@@ -1294,6 +1300,7 @@ function read_pt_M2temp(callback){
 function read_plating_M1temp(callback){
 	
 	// document.getElementById('m1_temp_div').innerHTML = '';
+	document.getElementById('chk_plating_item_overtemp').innerHTML= '';
 	read_temp('M1_plating');
 }
 

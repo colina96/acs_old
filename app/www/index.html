@@ -443,7 +443,7 @@ function show_dims()
 		</div>
 		<div class='m_modal2' id='m2_temp_modal4'>
 			<div class='center modal_head'><span>TEMPERATURE</span></div>
-			<div id='m2_temp_div_4 class='temp_reading red'></div>
+			<div id='m2_temp_div_4' class='temp_reading red'></div>
 			<div id='m2_temp_div_4a' class='temp_achieved center'>CORRECTIVE ACTION REQUIRED</div>
 			<div class='btns'>
 			<button type='button'  class='m_btn' onclick="goto_m_main();">Scan Authorised Chef ID</button>
@@ -540,6 +540,8 @@ function show_dims()
 				<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
 				<div id='chk_plating_item_temp_div' class='center'></div>
 				<div id='chk_plating_item_exp_div' class='center'></div>
+				<div id='chk_plating_item_overtemp' class='temp_reading red'></div>
+				<div id='chk_plating_item_undertemp' class='temp_reading'></div>
 				<div class='btns'>
 					<button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
 					<button type='button'  class='m_btn' onclick="goto_active_plating();">Return</button>
