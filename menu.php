@@ -16,7 +16,7 @@
 		<div class="acs_right_content">
 			<!--  popup -->
 			<div class='popup' id='del_comp_popup'>
-				<div class='h2'>Delete component?</div>
+				<div class='h3'>Delete component?</div>
 				<div id='del_comp_description'></div>
 				<input type='hidden' id='del_comp_miid'>
 				<input type='hidden' id='del_comp_menu_id'>
@@ -24,6 +24,17 @@
 				<div class='margin10'>
 					<div class='btn' onclick='do_delete_comp()'>Yes</div>
 					<div class='btn' onclick='dont_delete_comp()'>No</div>
+				</div>
+			</div>
+			<div class='popup' id='new_comp_popup'>
+				<div class='h3'>New Component?</div>
+				
+				<input type='hidden' id='new_comp_miid'>
+				<input type='hidden' id='new_comp_menu_id'>
+				<input id='new_comp_description'>
+				<div class='margin10'>
+					<div class='btn' onclick='do_new_comp()'>Add</div>
+					<div class='btn' onclick='dont_new_comp()'>Cancel</div>
 				</div>
 			</div>
 			<div id='add_sub_popup'>
@@ -298,7 +309,7 @@ function show_menu()
             	}
             	tr.appendChild(td);
             	td = document.createElement('td');
-            	td.innerHTML += "<div class='add_subcompdiv' onclick='del_component(" + mid + ","+ item['id'] + ");'>-</div>";
+            	td.innerHTML += "<div class='add_subcompdiv red' onclick='del_component(" + mid + ","+ item['id'] + ");'>&#x274c</div>";
             	td.colSpan = 2;
             	if (menu_item_components[mid].subcomponents) {
                 	// td.innerHTML += 'checked';
@@ -436,8 +447,8 @@ function do_delete_comp()
             console.log("start_componentfail ",result);
         })
     });
-
 }
+
 function dont_delete_comp()
 {
 	hide('del_comp_popup');
@@ -453,6 +464,49 @@ function del_component(comp_id,menu_item_id)
 	document.getElementById('del_comp_id').value = comp_id;
 	show('del_comp_popup');
 }
+
+function do_new_comp()
+{
+	hide('new_comp_popup');
+	var component = new Object();
+	component['menu_item_id'] = document.getElementById('new_comp_miid').value;
+	component['menu_id'] = document.getElementById('new_comp_menu_id').value;
+	component['description'] = document.getElementById('new_comp_description').value;
+
+	
+	var data =  {data: JSON.stringify(component)};
+    console.log("do_new_comp Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "new_menu_item_comp.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { 
+            console.log("do_new_comp result ",result);
+            load_menu(active_menu_id);
+        },
+        fail: (function (result) {
+            console.log("do_new_comp fail ",result);
+        })
+    });
+}
+
+function dont_new_comp()
+{
+	hide('new_comp_popup');
+}
+function new_menu_item_component(menu_item_id)
+{
+	console.log('new component',menu_item_id,active_menu_id);
+	
+	document.getElementById('new_comp_description').value = '';
+	document.getElementById('new_comp_miid').value = menu_item_id;
+	document.getElementById('new_comp_menu_id').value = active_menu_id;
+	
+	show('new_comp_popup');
+}
+
 function set_high_risk(checkbox,menu_item_component_id) 
 {
 	var component = new Object();
