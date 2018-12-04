@@ -1,5 +1,5 @@
 <div class='acs_main'>
-	
+		
 		<div class="acs_sidebar">
 		  <button type='button' class='acs_menu_btn' href="#" id="add_new_menu"
 		  onclick="openPage('new_menu', this, 'red','menu_details','acs_menu_btn')">Add new</button>
@@ -15,6 +15,17 @@
 	
 		<div class="acs_right_content">
 			<!--  popup -->
+			<div class='popup' id='del_comp_popup'>
+				<div class='h2'>Delete component?</div>
+				<div id='del_comp_description'></div>
+				<input type='hidden' id='del_comp_miid'>
+				<input type='hidden' id='del_comp_menu_id'>
+				<input type='hidden' id='del_comp_id'>
+				<div class='margin10'>
+					<div class='btn' onclick='do_delete_comp()'>Yes</div>
+					<div class='btn' onclick='dont_delete_comp()'>No</div>
+				</div>
+			</div>
 			<div id='add_sub_popup'>
 				<div id='component_title' class='h2'>Add subcomponent</div>
 				<form id='menu_item_component_form'>
@@ -286,6 +297,13 @@ function show_menu()
                 	// td.innerHTML += 'checked';
             	}
             	tr.appendChild(td);
+            	td = document.createElement('td');
+            	td.innerHTML += "<div class='add_subcompdiv' onclick='del_component(" + mid + ","+ item['id'] + ");'>-</div>";
+            	td.colSpan = 2;
+            	if (menu_item_components[mid].subcomponents) {
+                	// td.innerHTML += 'checked';
+            	}
+            	tr.appendChild(td);
             	table.appendChild(tr);
             	if (menu_item_components[mid].subcomponents) {
                 	var subs = menu_item_components[mid].subcomponents;
@@ -382,8 +400,9 @@ function remove_ingredient(menu_id,component_id,subcomponent_id)
         type: "POST",
         data: data,
 
-        success: function(result) { // need to get the id of the new component back to print labels
+        success: function(result) { 
             console.log("insert_ingredient result ",result);
+            load_menu(active_menu_id);
  
         },
         fail: (function (result) {
@@ -392,6 +411,48 @@ function remove_ingredient(menu_id,component_id,subcomponent_id)
     });
 }
 
+function do_delete_comp()
+{
+	hide('del_comp_popup');
+	var component = new Object();
+	component['menu_item_id'] = document.getElementById('del_comp_miid').value;
+	component['menu_id'] = document.getElementById('del_comp_menu_id').value;
+	component['component_id'] = document.getElementById('del_comp_id').value;
+	
+	var data =  {data: JSON.stringify(component)};
+    console.log("do_delete_comp Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "unlink_comp.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { 
+            console.log("insert_ingredient result ",result);
+            load_menu(active_menu_id);
+ 
+        },
+        fail: (function (result) {
+            console.log("start_componentfail ",result);
+        })
+    });
+
+}
+function dont_delete_comp()
+{
+	hide('del_comp_popup');
+}
+function del_component(comp_id,menu_item_id)
+{
+	console.log('delete component',comp_id,menu_item_id);
+	var comp = menu_item_components[comp_id];
+	console.log(comp);
+	document.getElementById('del_comp_description').innerHTML = comp.description;
+	document.getElementById('del_comp_miid').value = menu_item_id;
+	document.getElementById('del_comp_menu_id').value = comp.menu_id;
+	document.getElementById('del_comp_id').value = comp_id;
+	show('del_comp_popup');
+}
 function set_high_risk(checkbox,menu_item_component_id) 
 {
 	var component = new Object();
