@@ -164,7 +164,7 @@ function select_prep_type(preptypes,prep_type_id,comp_id,dock)
 	var idx = 1;
 	for (var i in preptypes) {
 		// console.log(i);
-		if ((!dock && preptypes[i].dock != 1) || (dock && preptypes[i].dock == 1)) { 
+		if ((!dock && preptypes[i].dock == 0) || (dock && preptypes[i].dock == 1)) { 
 			ret += "<option value='" + i + "'";
 			if (preptypes[i].id == prep_type_id) { ret += " selected"; }
 			ret +=  ">"+ preptypes[i].code + "</option>";

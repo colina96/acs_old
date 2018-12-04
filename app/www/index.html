@@ -183,7 +183,7 @@ function show_dims()
 			</div>
 			<div class='m_modal' id='dock_m_temp_modal'>
 				<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
-				<div id='dock_m1_temp_div'><!--  input type='number' name='m1_temp' size=4 --></div>
+				<div id='dock_m1_temp_div' class='center'><!--  input type='number' name='m1_temp' size=4 --></div>
 				<div class='btns'>
 			  		<button type='button' class='m_submit' onclick="dock_read_M1temp();">Check Now</button> 
 					<button type='button'  class='m_btn' onclick="goto_dock();">RETURN</button>
@@ -200,8 +200,10 @@ function show_dims()
 			<div class='m_modal' id='dock_m_temp_modal_labels'>
 				<div class='center modal_head'><span>TEMPERATURE</span></div>
 				<div id='dock_m1_temp_div_4' class='temp_reading'></div>
-				<div id='dock_m1_temp_div_5' class='center modal_head'></div>
-				<div class='center grey'>LABEL QUANTITY<input type='number' class='label_num' name='dock_m1_label_qty' length='3'></div>
+				<div id='dock_m1_temp_div_5' class='center'></div>
+				
+				<div class='center'><input type='number' class='label_num' name='dock_m1_label_qty' length='3'></div>
+				<div class='center grey'>LABEL QUANTITY</div>
 				<div class='btns'>
 					<button type='button'  class='m_btn' onclick="dock_start_component();">Print Labels</button>
 				</div>

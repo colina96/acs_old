@@ -1268,7 +1268,8 @@ function dock_read_M1temp(callback)
 	console.log(active_comp);
 	load_chefs(null);
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
-	document.getElementById('dock_m1_temp_div').innerHTML = '';
+	
+	document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
 	show('dock_m_temp_modal');
 	read_temp('M1_dock');
 }
@@ -1307,10 +1308,11 @@ function check_temp_m1_dock(t)
 	var prep_type_id = new_comp['prep_type']; // should always be 6,7 or 8 (DOCK)
 	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
 	var M1_temp_sign = get_preptype_val(prep_type_id,'M1_temp_above');
-	document.getElementById('dock_m1_temp_div').innerHTML = '';
+	document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
 // 	document.getElementById('dock_m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 	//document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C";
+	document.getElementById('dock_m1_temp_div_5').innerHTML= new_comp['description'];
 	document.getElementById('dock_m1_temp_div_6').innerHTML= parseInt(t * 10) / 10 + "&#176C";
 	console.log("check temp",t,M1_temp_target);
 	if (t.length > 0) {
