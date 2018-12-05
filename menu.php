@@ -263,6 +263,12 @@ function show_menu()
     	tr.appendChild(td);
     	td = document.createElement('td');
     	td.innerHTML = "<div class='btn' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
+    	
+    	tr.appendChild(td);
+
+       	td = document.createElement('td');
+    	td.innerHTML += "<div class='add_subcompdiv red' onclick='del_menuitem("+ item['id'] + ");'>&#x26D4</div>";
+    	td.colSpan = 2;
     	tr.appendChild(td);
         table.appendChild(tr);
         if (item['components']) {
@@ -311,9 +317,6 @@ function show_menu()
             	td = document.createElement('td');
             	td.innerHTML += "<div class='add_subcompdiv red' onclick='del_component(" + mid + ","+ item['id'] + ");'>&#x274c</div>";
             	td.colSpan = 2;
-            	if (menu_item_components[mid].subcomponents) {
-                	// td.innerHTML += 'checked';
-            	}
             	tr.appendChild(td);
             	table.appendChild(tr);
             	if (menu_item_components[mid].subcomponents) {
