@@ -200,3 +200,21 @@ function load_shift_data($menu_id)
 	return($shift_data);
 }
 
+function get_params()
+{
+	$sql = "select * from PARAMS";
+	
+	$params = [];
+	$result = mysql_query($sql);
+	if ($result) {
+		while($row = mysql_fetch_array($result))
+		{
+			$pkey = $row['pkey'];
+			$pvalue = $row['pvalue'];
+			$params[$pkey] = $pvalue;
+		}
+	}
+	return $params;
+	
+}
+

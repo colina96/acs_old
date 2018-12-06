@@ -28,6 +28,7 @@ $uid =null;
 $username = null;
 $job_dir = "/tmp/monarch/jobs/";
 $job_dir = "tmp/";
+$params = get_params();
 
 if (!empty(get_url_token('username')) && !empty(get_url_token('uid'))) {
 	$username = get_url_token('username');
@@ -45,9 +46,9 @@ if ($username != null && $uid != null) {
 	$handle = fopen($tmp_file, 'w') or die('Cannot open file:  '.$tmp_file);
 
 	echo "opened ".$tmp_file;
-	fwrite($handle,"Jobname:user ".$uid."\n");
-	fwrite($handle,"Printer:10.0.0.99"."\n");
-	fwrite($handle,"Port:9100"."\n");
+	fwrite($handle,"Jobname:user label ".$uid."\n");
+	fwrite($handle,"Printer:".$params['KITCHEN_BELS_IP']."\n");
+	fwrite($handle,"Port:9100".$params['KITCHEN_LABELS_PORT']."\n");
 	fwrite($handle,"Label:ACS_USER.LBL"."\n");
 	fwrite($handle,"Endheader"."\n");
 	fwrite($handle,"Copies:1"."\n");

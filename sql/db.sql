@@ -275,3 +275,23 @@ create table SHIFT_ORDERS
 	sdate datetime,
 	constraint pk_example primary key (id) 
 );
+
+/* miscellaneous parameters that have to be stored somewhere */
+drop table if exists PARAMS;
+create table PARAMS
+(
+	id smallint unsigned not null auto_increment, 
+	pkey varchar(30) not null,
+	pvalue varchar (30),
+	lastchange datetime,
+	constraint pk_example primary key (id) 
+);
+insert into PARAMS values(null,'DOCK_LABELS_IP','10.0.0.99',now());
+insert into PARAMS values(null,'DOCK_LABELS_PORT','9100',now());
+insert into PARAMS values(null,'KITCHEN_LABELS_IP','10.0.0.99',now());
+insert into PARAMS values(null,'KITCHEN_LABELS_PORT','9100',now());
+insert into PARAMS values(null,'PLATING_LABELS1_IP','10.0.0.99',now());
+insert into PARAMS values(null,'PLATING_LABELS1_PORT','9100',now());
+insert into PARAMS values(null,'PLATING_LABELS2_IP','10.0.0.99',now());
+insert into PARAMS values(null,'PLATING_LABELS2_PORT','9100',now());
+

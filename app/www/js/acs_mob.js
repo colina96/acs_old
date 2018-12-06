@@ -1434,6 +1434,12 @@ function dock_start_component()
 {
 	start_component(true);
 }
+
+function setup_force_M3() // 
+{
+	document.getElementById('m2_temp_div_2a').innerHTML = 'SCAN AUTHORISED ID';
+	set_barcode_mode('force_M3');
+}
 function force_M3(uid)
 {
 	console.log('force_M3');
@@ -1714,12 +1720,16 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			if (active_comp.milestone ==  'M3') {
 				document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " achieved";
 				active_comp.milestone_ok = true;
+				
 				if (active_comp.remaining > 0) comp_milestone(t);
 			}
 			if (active_comp.milestone ==  'M2' && parseInt(t) < parseInt(temp_target)) {
-				
+				console.log("M3 achieved");
 				active_comp.milestone = 'M3';
 				active_comp['M2_temp'] = t;
+				active_comp['M3_temp'] = t;
+				active_comp['M3_time'] = 'now';
+				active_comp['M2_time'] = 'now';
 				if (active_comp.remaining > 0) comp_milestone(t);
 			}
 			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " achieved";
