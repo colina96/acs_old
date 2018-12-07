@@ -406,8 +406,9 @@ function show_dims()
 		</div>
 		<div class='m_modal2' id='m2_temp_overdue_M2B'><!-- Screen 3.10  -->
 			<div id='force_M2_overdue_uid' class='center modal_head'></div>
+			<div id='m2_temp_overdue_M2B_2' class='temp_reading red'></div>
+			<div id='m2_temp_overdue_M2B_2a' class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
 			
-			<div id='m2_temp_overdue_div_2a' class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
 			<div class='btns'>
 			<button type='button'  class='m_submit' onclick="comp_milestone(last_temp,false,4);">Evacuate Blass Chiller<BR>Hard Chill</button><!--  TODO -->
 			<button type='button'  class='m_btn' onclick="comp_milestone(last_temp,false,5);">Decant Product into Shallow Trays<br>Continue Chilling</button>
@@ -415,8 +416,8 @@ function show_dims()
 		</div>
 		<div class='m_modal2' id='m2_temp_overdue_A'>
 			<div class='center modal_head'>TEMPERATURE</div>
-			<div id='m2_temp_div_2' class='temp_reading'></div>
-			<div id='m2_temp_div_2a' class='temp_achieved center'></div>
+			<div id='m2_temp_div_overdue_2' class='temp_reading'></div>
+			<div id='m2_temp_div_overdue_2a' class='temp_achieved center'></div>
 			<div class='btns'>
 			<button type='button' class='m_submit' onclick='goto_m_main();'>REJECT</button>
 			<button type='button'  class='m_submit' onclick="goto_m_main();">Re-Check</button>
@@ -425,6 +426,7 @@ function show_dims()
 		</div>
 		<div class='m_modal2' id='m2_temp_overdue_B'>
 			<div id='force_M3_overdue_uid' class='center modal_head'></div>
+			<div id='m2_temp_overdue_B_temp' class='temp_reading center red'></div>
 			<div class='red center'>Overdue</div>
 			<div class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
 			<div class='btns'>

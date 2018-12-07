@@ -1461,15 +1461,23 @@ function k_qa_override(uid)
 	var chef = get_chef_by_id(uid);
 	if (active_comp['M2_time'] && active_comp['M2_time'].length > 1) { // at M3
 		document.getElementById('force_M3_overdue_uid').innerHTML = chef['label'];
+		show_temp('m2_temp_overdue_B_temp',last_temp);
 		openPage('m2_temp_overdue_B', null, 'red','m_modal2','tabclass');
 	}
 	else {  // at M2
 		document.getElementById('m2_temp_overdue_div_2').innerHTML = last_temp;
 		document.getElementById('force_M2_overdue_uid').innerHTML = chef['label'];
+		show_temp('m2_temp_overdue_M2B_2',last_temp);
 		openPage('m2_temp_overdue_M2B', null, 'red','m_modal2','tabclass');
 	}
 	
 
+}
+
+function show_temp(div_id,t)
+{
+	console.log('show_temp',div_id,t);
+	document.getElementById(div_id).innerHTML= parseInt(t * 10) / 10 + "&#176C";
 }
 
 function start_component(dock)
@@ -1754,6 +1762,7 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			console.log("overdue - QA");
 			set_barcode_mode('KQA_override');
 			if (active_comp['M2_time'].length > 1) {
+				document.getElementById('m2_temp_div_overdue_2').innerHTML = "<div class='red'>" + parseInt(t) + "&#176C</div>";
 				openPage('m2_temp_overdue_A', this, 'red','m_modal2','tabclass');
 			}
 			else {
