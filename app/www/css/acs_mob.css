@@ -232,11 +232,23 @@ select {
 	margin-right: 2vw;
 }
 .m_label {
+	.position:relative;
+	display:table;
+	margin : 10px auto;
+	.padding: 5px;
+	
+	color:var(--acs_grey_text);
+	.border-radius: 15px;
+	font-size: larger;
+	.display:flex;
+}
+.plating_team {
 	position:relative;
-	margin : 10px;
+	
+	margin : 10px auto;
 	padding: 5px;
-	background:#5375DA;
-	color:white;
+	
+	color:var(--acs_grey_text);
 	.border-radius: 15px;
 	font-size: larger;
 	display:flex;

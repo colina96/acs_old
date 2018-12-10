@@ -67,6 +67,7 @@ function temp_callback(s) // works out where to send the temperature reading
 		log ('temp_mode not set');
 		return;
 	}
+	show_temp(s);
 	last_temp = s;
 	if (temp_mode == 'M0') {
 		set_ingredient_temp(s);
@@ -1318,9 +1319,9 @@ function check_temp_m1_dock(t)
 	document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
 // 	document.getElementById('dock_m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 	//document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
-	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C";
+/*	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C";
 	document.getElementById('dock_m1_temp_div_5').innerHTML= new_comp['description'];
-	document.getElementById('dock_m1_temp_div_6').innerHTML= parseInt(t * 10) / 10 + "&#176C";
+	document.getElementById('dock_m1_temp_div_6').innerHTML= parseInt(t * 10) / 10 + "&#176C"; */
 	console.log("check temp",t,M1_temp_target);
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {// should never happen
@@ -1461,23 +1462,32 @@ function k_qa_override(uid)
 	var chef = get_chef_by_id(uid);
 	if (active_comp['M2_time'] && active_comp['M2_time'].length > 1) { // at M3
 		document.getElementById('force_M3_overdue_uid').innerHTML = chef['label'];
-		show_temp('m2_temp_overdue_B_temp',last_temp);
+		show_temp(last_temp);
 		openPage('m2_temp_overdue_B', null, 'red','m_modal2','tabclass');
 	}
 	else {  // at M2
 		document.getElementById('m2_temp_overdue_div_2').innerHTML = last_temp;
 		document.getElementById('force_M2_overdue_uid').innerHTML = chef['label'];
-		show_temp('m2_temp_overdue_M2B_2',last_temp);
+		show_temp(last_temp);
 		openPage('m2_temp_overdue_M2B', null, 'red','m_modal2','tabclass');
 	}
 	
 
 }
 
-function show_temp(div_id,t)
+function show_temp(t)
 {
-	console.log('show_temp',div_id,t);
-	document.getElementById(div_id).innerHTML= parseInt(t * 10) / 10 + "&#176C";
+	console.log('show_temp',t);
+    tdiv = document.getElementsByClassName('temp_reading');
+    for (i = 0; i < tdiv.length; i++) {
+    	console.log("found div ",tdiv[i].id);
+    	try {
+    		tdiv[i].innerHTML= parseInt(t * 10) / 10 + "&#176C";
+    	}
+        catch (e) {
+        	console.log("who knows.....");
+        }
+    }
 }
 
 function start_component(dock)
@@ -1645,8 +1655,8 @@ function comp_milestone(temp_reading,force,qa_code)
 
         success: function(result) {
             console.log("comp_milestone result ",result);
-            console.log(active_comp);
-            if (active_comp['M2_time'] == '' && !force) { 
+            console.log(component);
+            if (component['M2_time'] == '' && !force) { 
             	// at M1 - component has tracked ingredients
             	// get chef id and print labels
             	console.log("At M1");
@@ -1656,7 +1666,7 @@ function comp_milestone(temp_reading,force,qa_code)
           //  	openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
             }
             else {
-            	if (active_comp['M3_time'] != '') {
+            	if (component['M3_time'] != '') {
             		console.log('finished');
             		if (force) document.getElementById('m2_temp_div_3a').innerHTML= "M3 FORCED";
             		openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
@@ -1707,12 +1717,12 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			active_comp.milestone = 'M3';
 		} 
 		console.log('check_temp_m2 target temp',temp_target,t,active_comp.milestone);
-		document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
+/*		document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 		document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
 		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 		document.getElementById('m2_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 	//	document.getElementById('dock_m1_temp_div_3').innerHTML= parseInt(t * 10) / 10 + "&#176C";
-		document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C";
+		document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C"; */
 		if (active_comp.milestone == 'M1' && parseInt(t) > parseInt(temp_target)) {
 			set_barcode_mode('M1');
 			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " achieved";
@@ -2237,21 +2247,35 @@ function m_show_active_components(data,reprint)
 function goto_select_team()
 {
 	console.log('goto_select_team');
-	var s = document.getElementById('sel_team_member');
-	s.innerHTML = null;
-	var select = document.createElement('select');
-	select.name = 'sel_chef';
-	// console.log('found plating teams ',plating_teams.length);
-	for (var i = 0; i < chefs.length; i++) {
-		option = document.createElement( 'option' );
-		option.value = i;
-		option.textContent =  chefs[i]['label'];
-		select.appendChild( option );
-	}
-	s.appendChild(select);
-	
+
 	openPage('m_sel_team_members', this, 'red','m_modal','tabclass');
 	show_plating_team();
+}
+
+function show_chef_select()
+{
+	var s = document.getElementById('sel_team_member');
+	s.innerHTML = null;
+	if (typeof(serial) == 'undefined') {
+		var select = document.createElement('select');
+		select.name = 'sel_chef';
+		// console.log('found plating teams ',plating_teams.length);
+		var pt = plating_teams[active_plating_team];
+		
+		for (var i = 0; i < chefs.length; i++) {
+			var found = false;
+			for (var j = 0; j < pt.length; j++) {
+				if (pt[j]['id'] == chefs[i]['id']) found = true;
+			}
+			if (!found) {
+				option = document.createElement( 'option' );
+				option.value = i;
+				option.textContent =  chefs[i]['label'];
+				select.appendChild( option );
+			}
+		}
+		s.appendChild(select);
+	}
 }
 
 function add_team_member(id)
@@ -2298,12 +2322,13 @@ function show_plating_team()
 	l.innerHTML = '';
 	for (var i = 0; i < pt.length; i++) {
 		if (pt[i]) {
-			var d = "<div class='m_label'>" + pt[i]['label'];
+			var d = "<div class='plating_team'>" + pt[i]['label'];
 			d += "<div class='del' onclick='rem_pt_mem(" + active_plating_team + "," + i + ");'>&#x02A2F;</div>";
 			d += "</div>";
 			l.innerHTML += d;
 		}
 	}
+	show_chef_select();
 }
 
 function select_plating_team()

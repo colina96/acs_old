@@ -183,7 +183,7 @@ function show_dims()
 			</div>
 			<div class='m_modal' id='dock_m_temp_modal'>
 				<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
-				<div id='dock_m1_temp_div' class='center'><!--  input type='number' name='m1_temp' size=4 --></div>
+				<div id='dock_m1_temp_div' class='center'></div>
 				<div class='btns'>
 			  		<button type='button' class='m_submit' onclick="dock_read_M1temp();">Check Now</button> 
 					<button type='button'  class='m_btn' onclick="goto_dock();">RETURN</button>
@@ -285,8 +285,8 @@ function show_dims()
 		
 <!--  next four pages are for starting a new component at M1 -->
 		<div class='m_modal2' id='m_temp_modal'>
-			<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
-			<div id='m1_temp_div'  class='temp_reading red'></div>
+			<div class='m_label'>CHECK THE TEMPERATURE</div>
+			<div id='m1_temp_div'  class='center red'></div>
 			<div class='btns'>
 				<button type='button' class='m_submit' onclick="read_M1temp();">Check Now</button>
 				<button type='button'  class='m_btn' onclick="goto_m_main();">RETURN</button>
@@ -387,7 +387,7 @@ function show_dims()
 		
 		<div class='m_modal2' id='m2_temp_modal_force_M3'>
 			<div id='force_M3_signoff_uid' class='center modal_head'></div>
-			<div class='red center'>Force M3</div>
+			<div class='temp_achieved red center'>Force M3</div>
 			<div class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
 			<div class='btns'>
 			
@@ -398,7 +398,7 @@ function show_dims()
 		<div class='m_modal2' id='m2_temp_overdue_M2A'><!-- Screen 3.9 or maybe 6.9.1 -->
 			<div class='center modal_head'>TEMPERATURE</div>
 			<div id='m2_temp_overdue_div_2' class='temp_reading'></div>
-			<div id='m2_temp_overdue_div_2a' class='temp_achieved center'>CORRECTIVE ACTION REQUIRED</div>
+			<div id='m2_temp_overdue_div_2a' class='temp_achieved center red'>CORRECTIVE ACTION REQUIRED</div>
 			<div class='btns'>
 			<button type='button'  class='m_submit' onclick="read_M2temp();">Re-Check</button><!--  TODO -->
 			<button type='button'  class='m_btn' onclick="set_barcode_mode('KQA_override');">Scan Authorised Chef ID</button>
@@ -440,7 +440,8 @@ function show_dims()
 			<div id='m2_temp_div_3' class='temp_reading'></div>
 			<div id='m2_temp_div_3a' class='temp_achieved center'></div>
 			<div class='btns'>
-			<button type='button'  class='m_btn' onclick="goto_m_main();">Move Product to Coolroom</button>
+				<button type='button'  class='m_btn' onclick="goto_m_main();">Re-Check</button>
+				<button type='button'  class='m_btn' onclick="goto_m_main();">Move Product to Coolroom</button>
 			</div>
 		</div>
 		<div class='m_modal2' id='m2_temp_modal4'>
