@@ -408,7 +408,10 @@ function show_plating_items(team_id,tab)
 			td.innerHTML = margin(div);
 			tr.appendChild(td);
 			td = document.createElement('td');
-			td.innerHTML = margin(menu_items[i]['s1']);
+			//var shift = 's' + menu_items[i]['current_shift'];
+			//console.log('shift ',shift);
+			//console.log(menu_items[i]);
+			td.innerHTML = margin(menu_items[i]['current_shift']);
 			tr.appendChild(td);
 			tab.appendChild(tr);
 		}

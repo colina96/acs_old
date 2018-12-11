@@ -23,6 +23,7 @@ if ($userID > 0) {
 		while($row = mysql_fetch_array($result))
 		{
 			$item = array();
+			
 			$item['id'] = $row['id'];
 			$item['menu_id'] = $row['menu_id'];
 			$item['dish_name'] = utf8_encode($row['dish_name']);
@@ -34,6 +35,7 @@ if ($userID > 0) {
 				$item['s1'] = $sd[0]['s1'];
 				$item['s2'] = $sd[0]['s2'];
 				$item['s3'] = $sd[0]['s3'];
+				$item['current_shift'] = $shift_data['current_shift'];
 				
 			}
 			$items[] = $item;

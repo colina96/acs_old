@@ -171,10 +171,24 @@ function check_login()
 
 // acs functions below should be moved to a common lib
 
+
+function get_shift()
+{
+	$sql = "SELECT max(id) FROM `SHIFTS` WHERE time(now()) > start";
+	$result = mysql_query($sql);
+	$shift = 0;
+	if ($result) {
+		while($row = mysql_fetch_array($result)) {
+			$shift = $row[0];
+		}
+	}
+	return ($shift);
+}
 function load_shift_data($menu_id)
 {
 	$fieldnames = get_fieldnames("SHIFT_ORDERS");
 	$shift_data = Array();
+	$shift_data['current_shift'] = get_shift();
 	$sql = "select * from SHIFT_ORDERS";
 	if (!empty($menu_id) && $menu_id > 0) {
 		$sql .= " where menu_id=".$menu_id;

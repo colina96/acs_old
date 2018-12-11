@@ -82,6 +82,7 @@ function find_plating_teams(menu_items)
 
 function load_plating_items(callback) // load menu_items currently being plated
 {
+	console.log('load_plating_items');
    $.ajax({
     	url: RESTHOME + "get_plating.php",
         type: "POST",
