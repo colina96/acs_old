@@ -1697,6 +1697,7 @@ function continue_chilling()
 }
 function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 {
+	// TODO - rewrite this as a state machine. It's far to complex as it is.
 	// if M1 then need to print labels and log temperature to existing record TODO
 	console.log("check temp M2/3");
 	active_comp.milestone = '';
@@ -1767,7 +1768,10 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			document.getElementById('m2_temp_div_2').innerHTML= "<div class='red'>" + parseInt(t) + "&#176C</div>";
 			
 		}
-		if (active_comp.remaining > 0) {
+		if (active_comp['M1_time'].length < 1) {
+			openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
+		}
+		else if (active_comp.remaining > 0 ) {
 			openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
 		}
 		else {

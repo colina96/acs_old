@@ -41,7 +41,7 @@ if ($userID > 0) {
 				$item['s1'] = $sd[0]['s1'];
 				$item['s2'] = $sd[0]['s2'];
 				$item['s3'] = $sd[0]['s3'];
-				$item['current_shift'] =  $sd[0][$current_shift];// $shift_data['current_shift']; // stupid, redundant way of doing this but it does mean the data is where it is needed
+				$item['current_shift'] =  $sd[0][$current_shift];
 			}
 			$items[] = $item;
 

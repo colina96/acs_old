@@ -27,14 +27,17 @@ function show_prep_types()
 	$result = mysql_query($sql);
 	if ($result) {
 
-
 		while($data = mysql_fetch_array($result))
 		{
 			$prep_types[] = $data;
 		}
-		echo ("<table border=1 width='100%'>");
+		echo ("<div class='margin10'>");
+		echo ("<table border=0 width='100%' class='acs_table'>");
+		$rownum = 1;
 		foreach ($rows as $row => $fieldname) {
-			echo ("<tr><td>".$row."</td>");
+			$row_class = ($rownum%2)?'even_tr':'odd_tr';
+			
+			echo ("<tr class='".$row_class."'><th>".$row."</th>");
 			foreach ($prep_types as $prep => $val) {
 				if (strpos($row,"TIME") > 0) {
 					$min = $val[$rows[$row]];
@@ -46,16 +49,27 @@ function show_prep_types()
 					}
 					else {
 						$hrs = $min / 60;
-						echo ("<td>".$hrs." hours</td>");
+						if ($hrs > 1) {
+							echo ("<td>".$hrs." hours</td>");
+						}
+						else {
+							echo ("<td>".$hrs." hour</td>");
+						}
 					}
 				}
 				else {
-					echo ("<td>".$val[$rows[$row]]."</td>");
+					if ($rownum == 1) {
+						echo ("<th>".$val[$rows[$row]]."</th>");
+					}
+					else {
+						echo ("<td>".$val[$rows[$row]]."</td>");
+					}
 				}
 			}
 			echo "</tr>\n";
+			$rownum++;
 		}
-		echo ("</table>");
+		echo ("</table></div>");
 	}
 }
 			

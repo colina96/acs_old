@@ -299,3 +299,16 @@ background-color: #EEEEEE;
 	height:100%;
 	overflow:auto;
 }
+
+.odd_tr {
+	background: #DDDDDD;
+}
+.acs_table th {
+	background:#eeeeee;
+	width:8%;
+	padding:5px;
+}
+
+.blue {
+	background:var(--acs_blue_background);
+}
