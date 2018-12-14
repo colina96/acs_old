@@ -11,6 +11,7 @@
 #include <sys/wait.h>
 #include <sys/socket.h>
 #include <dirent.h>
+// #include <unistd.h> // here for sleep but causes lots of other issues :-(
 
 #define DEBUG 2
 
@@ -39,14 +40,6 @@ typedef struct {
 
 static int _printing_enabled = 1;	// on by default but can be cleared in settings file
 
-static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-                                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-                                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                                'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
-                                'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-                                'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-                                'w', 'x', 'y', 'z', '0', '1', '2', '3',
-                                '4', '5', '6', '7', '8', '9', '+', '/'};
 static char *decoding_table = NULL;
 static int mod_table[] = {0, 2, 1};
 
@@ -64,39 +57,6 @@ void trim(char *s)
 			break;
 }
 
-/*
- * encode data to base64
- */ 
-char *base64_encode(const unsigned char *data,
-                    int input_length,
-                    int *output_length) 
-{
-	int i,j;
-    *output_length = 4 * ((input_length + 2) / 3);
-
-    char *encoded_data = malloc(*output_length+10);
-    if (encoded_data == NULL) return NULL;
-
-    for (i=0,j=0; i<input_length;) 
-	{
-        uint32_t octet_a = i < input_length ? (unsigned char)data[i++] : 0;
-        uint32_t octet_b = i < input_length ? (unsigned char)data[i++] : 0;
-        uint32_t octet_c = i < input_length ? (unsigned char)data[i++] : 0;
-
-        uint32_t triple = (octet_a << 0x10) + (octet_b << 0x08) + octet_c;
-
-        encoded_data[j++] = encoding_table[(triple >> 3 * 6) & 0x3F];
-        encoded_data[j++] = encoding_table[(triple >> 2 * 6) & 0x3F];
-        encoded_data[j++] = encoding_table[(triple >> 1 * 6) & 0x3F];
-        encoded_data[j++] = encoding_table[(triple >> 0 * 6) & 0x3F];
-    }
-
-    for (i=0; i<mod_table[input_length % 3]; i++)
-        encoded_data[*output_length - 1 - i] = '=';
-
-    return encoded_data;
-}
-
 int send_raw (char *ip, int port, char *data, int data_size, int copies)
 {
     int sockfd; // Socket file descriptor
@@ -105,6 +65,7 @@ int send_raw (char *ip, int port, char *data, int data_size, int copies)
     struct sockaddr_in remote_addr;
 	char header[100];
 	int stat;
+	int i;
 
     /* Get the Socket file descriptor */
     if( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1 )
@@ -130,10 +91,11 @@ int send_raw (char *ip, int port, char *data, int data_size, int copies)
 		printf("connected to printer at port %d...ok!\n", port);
 
 
-
-		stat = send(sockfd, data, data_size, 0);
-		printf("Sent %d data (%d)\n",stat,data_size);
-		if (stat < 0) printf("ERROR: Failed to send %d bytes of LNT data.\n", data_size,errno);
+    for (i = 0; i < copies; i++) {
+    	stat = send(sockfd, data, data_size, 0);
+    	printf("Sent %d of %d size %d data (%d)\n",i,copies,stat,data_size);
+    }
+	if (stat < 0) printf("ERROR: Failed to send %d bytes of LNT data.\n", data_size,errno);
 
 
 	// data sent, now read any response
@@ -173,7 +135,7 @@ char *get_input_LNT(char *f_name, int *input_LNT_len, int *fields)
 		// SHOULD REALLY HAVE MAX FILE SIZE CHECKING HERE !!!
 		fsize += f_block_sz;
     }
-	close(fp);
+	fclose(fp);
 	printf("LBL file size %d\n",fsize);
 
 	// check for FIELDS definition - not used for 9419

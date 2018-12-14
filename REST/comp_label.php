@@ -31,6 +31,7 @@ if (!empty($_POST['data'])) {
 	$comp = json_decode($_POST["data"],true);
 	$id = $comp['id'];
 	$copies = $comp['copies'];
+	if ($copies <= 0) exit;
 	$description = $comp['description'];
 	if (strlen($description) > 25) {
 		$description = substr($description,0,25);
@@ -49,7 +50,7 @@ if (!empty($_POST['data'])) {
 	fwrite($handle,"Port:9100"."\n");
 	fwrite($handle,"Label:ACS_COMP.LBL"."\n");
 	fwrite($handle,"Endheader"."\n");
-	fwrite($handle,"Copies:1"."\n");
+	fwrite($handle,"Copies:".$copies."\n");
 	fwrite($handle,"NAME:".$description."\n");
 	fwrite($handle,"PREPAREDBY:".$preparedBy."\n");
 	$facility = 1; // not used yet.... maybe one day
