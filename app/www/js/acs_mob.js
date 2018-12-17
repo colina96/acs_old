@@ -56,6 +56,7 @@ function set_temp_mode(new_mode)
 	button_mode = 'T';
 	
 	document.getElementById('button_mode_div').innerHTML = 'T';
+	clear_temps();
 	qpack_resume();
 }
 // var temp_callback = null;
@@ -159,6 +160,14 @@ function set_barcode_mode(mode)
 	
 }
 
+function get_user(id)
+{
+	for (var i = 0; i < chefs.length; i++) {
+		if (chefs[i]['id'] == id) return (chefs[i]);
+	}
+	return null;
+}
+
 function process_barcode(s)
 { 
 	console.log("process_barcode " + s + " mode " + barcode_mode);
@@ -169,14 +178,21 @@ function process_barcode(s)
 		// return;
 	}
 	if ((s.indexOf('u') >= 0) || (s.indexOf('U') >= 0)) { // user barcode scanned
+		var user = get_user(uid);
 		var uid = parseInt(s.substring(4));
+		
 		if (barcode_mode == 'login' || user_id <= 0) {
 			login(uid);
 		}
-		if (barcode_mode == 'dock_QA') {
+		var user = get_user(uid);
+		if (!user) {
+			console.log('invalid user');
+			return;
+		}
+		if (barcode_mode == 'dock_QA' && user.supervisor && user.supervisor == 1) {
 			dock_QA_scan(uid);
 		}
-		if (barcode_mode == 'M1') {
+		if (barcode_mode == 'M1' && user.kitchen) {
 			set_user('m1_chef_id','m_temp_modal4',uid);
 			barcode_mode = null;
 		}
@@ -184,15 +200,15 @@ function process_barcode(s)
 			set_user('m1_chef_id_LR','m_temp_modal4',uid);
 			barcode_mode = null;
 		}
-		else if (barcode_mode == 'force_M3') {
+		else if (barcode_mode == 'force_M3'  && user.supervisor && user.supervisor == 1) {
 			force_M3(uid);
 			barcode_mode = null;
 		}
-		else if (barcode_mode == 'KQA_override') {
+		else if (barcode_mode == 'KQA_override' && user.supervisor && user.supervisor == 1) {
 			k_qa_override(uid);
 			barcode_mode = null;
 		}
-		else if (barcode_mode == 'PT') { // plating team member
+		else if (barcode_mode == 'PT' && user.plating && user.plating == 1) { // plating team member
 			add_team_member(uid);
 		}
 	}
@@ -462,6 +478,7 @@ function plating_batch_change()
 	console.log('plating_batch_change');
 	console.log(plating_item);
 	do_show_menu_item_components(plating_item.menu_item_id,true);
+	var hd = document.getElementById('active_plating_team_head').innerHTML = "BATCH CHANGE";
 }
 function show_plating_options(id)
 {
@@ -645,7 +662,14 @@ function process_scanned_plating_comp(comp,batch_change)
 		var items = plating_item.items;
 		console.log("now checking plating item " + items.length,batch_change);
 		for (var i = 0; i < items.length; i++) {
-			if (items[i].description == comp.description && (!items[i].M1_temp || batch_change)) {
+			if (items[i].description == comp.description && items[i].component_id == comp.id && (!items[i].M1_temp || batch_change)) {
+				console.log('component already entered',items[i].component_id, comp.id);
+				return;
+			}
+		}
+		for (var i = 0; i < items.length; i++) {
+			if (items[i].description == comp.description && items[i].component_id != comp.id && (!items[i].M1_temp || batch_change)) {
+				console.log('found component',items[i].component_id, comp.id);
 				items[i].M1_temp = null; // reset for batch_change
 				items[i].checked = true;
 				items[i].component_id = comp.id;
@@ -697,7 +721,7 @@ function batch_change_component(comp)
 
         success: function(result) {
             console.log("batch_change_component ",result);
-            
+            goto_plating();
         },
         
         fail: (function (result) {
@@ -723,6 +747,8 @@ function set_plating_M1_temp(temperature)
 			console.log(plating_item);
 			console.log(plating_item.items[plating_item.active_item]);
 			batch_change_component(plating_item.items[plating_item.active_item]);
+			document.getElementById('chk_plating_item_overtemp').innerHTML = '';
+			
 			// record new component and got back to main plaing screeen
 		}
 		else {
@@ -731,7 +757,8 @@ function set_plating_M1_temp(temperature)
 		}
 	}
 	else {
-		document.getElementById('chk_plating_item_overtemp').innerHTML= parseInt(temperature * 10) / 10 + "&#176C";
+		
+		document.getElementById('chk_plating_item_undertemp').innerHTML = '';
 	}
 	
 }
@@ -917,7 +944,11 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 		var items = plating_item.items;	
 		for (var i = 0; i < items.length; i++) {
 			
-				console.log("found ",items[i].description);
+			console.log("found ",items[i].description,items[i].time_completed);
+			if (items[i].time_completed && items[i].time_completed.length > 2) {
+				// item already used - what to do?
+			}
+			else {
 				var tr = document.createElement('tr');
 				// tr.appendChild(new_td(line++,'item'));
 				var clickdiv = "<div onclick='XXplating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
@@ -946,6 +977,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 				}
 				tr.appendChild(td);
 				tab.appendChild(tr);
+			}
 			
 		}
 		div.appendChild(tab);
@@ -1478,6 +1510,19 @@ function k_qa_override(uid)
 
 }
 
+function clear_temps()
+{
+    tdiv = document.getElementsByClassName('temp_reading');
+    for (i = 0; i < tdiv.length; i++) {
+    	console.log("found div ",tdiv[i].id);
+    	try {
+    		tdiv[i].innerHTML= "";
+    	}
+        catch (e) {
+        	console.log("who knows.....");
+        }
+    }
+}
 function show_temp(t)
 {
 	console.log('show_temp',t);
