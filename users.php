@@ -25,7 +25,7 @@ function center(id)
 	var div = document.getElementById(id);
 	var rect1 = div.getBoundingClientRect();
 	var rect2 = div.parentNode.getBoundingClientRect();
-	div.style.left = rect2.width / 2 + 'px';
+	div.style.left = parseInt(rect2.width / 2 - rect1.width/2) + 'px';
 }
 function conf_user_label(id,firstname,lastname)
 {
@@ -79,6 +79,7 @@ function set_user_flds(user)
 function edit_user(id)
 {
 	show('show_user_div');
+	center('show_user_div');
 	for (var i = 0; i < chefs.length; i++) {
 		if (chefs[i].id == id) {
 			set_user_flds(chefs[i]);
@@ -141,8 +142,8 @@ function save_user()
 	</div>
 	<div class='popup' id='show_user_div'>
 		<div class='center h2'>Edit User</div>
-		<div class='center' id='user_div'>
-			<div>
+		<div class='btns' id='user_div'>
+			<div class='margin10'>
 				<input type='hidden' name='user_id'>
 				<table>
 					<tr><td>Login</td><td><input type='text' name='user_email'></td></tr>
@@ -152,7 +153,7 @@ function save_user()
 					<tr><td>Function</td><td><input type='text' name='user_function'></td></tr>
 				</table>
 			</div>
-			<div>
+			<div class='margin10'>
 				<table>
 					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
 					<tr><td>Dock</td><td><input type='checkbox' name='user_dock'></td></tr>
@@ -167,145 +168,9 @@ function save_user()
 			<button class='button2' onclick='hide("show_user_div");'>Cancel</button>
 		</div>
 	</div>
-	<div class='acs_container' id='users_div'>
-	
-		
+	<div class='acs_container'>
+		<div id='users_div' class='margin10'>
+		</div>
+	</div>
+</div>
 
-<?php 
-{
-
-}
-?>
-</div></div>
-<?php 
-
-
-
-function delete_user()
-{
-	$del_id = $_GET['delete'];
-	if ($del_id < 0) return;
-	$sql = "delete from USERS where ID=".$del_id;
-	test_mysql_query($sql);
-}
-function update_user()
-{
-	$edit_id = $_POST['edit_id'];
-	if ($edit_id < 0) {
-		return(new_user());
-	}
-	// $fieldnames = ["username","password","organisation","email","firstname","lastname"];
-	$fieldnames = array();
-	$types = array();
-	$result = mysql_query("show columns from "."USERS");
-	while ($row = mysql_fetch_array($result)) {
-
-		$fieldname = $row['Field'];
-		$fieldnames[] = $fieldname;
-		$types[$fieldname] = $row['Type'];
-	}
-
-	
-	$sql = "update  USERS set ";
-	$n = 0;
-	foreach ($fieldnames as $i => $fieldname) {
-		if ($fieldname == "id") {
-				
-		}
-		else if (substr($types[$fieldname],0,7) == "varchar" )
-		{
-			if ($n++ > 0) $sql .= ", ";
-			$sql .= $fieldname."='".mysql_escape_string( $_POST[$fieldname])."'";
-		}
-		else if ($types[$fieldname] == "tinyint(1)") {
-			if ($n++ > 0) $sql .= ", ";
-			if (empty($_POST[$fieldname]) || $_POST[$fieldname] != 1) {
-				$sql .= $fieldname."=false";
-			}
-			else {
-				$sql .= $fieldname."=true";
-			}
-			
-		
-		}
-	}
-
-	$sql .= " where ID=".$edit_id;
-	test_mysql_query($sql); 
-}
-
-function email_new_user()
-{
-	$bodytext = "Hi ".$_POST['firstname']." ".$_POST['familyname']."\n\n";
-	
-	$bodytext .= "Kind Regards.....";
-	$email = new PHPMailer();
-	$email->From      = 'xxx';
-	$email->FromName  = 'xxx';
-	$email->Subject   = 'xxxx';
-	
-	$email->AddAddress( $_POST['email']);
-	$email->Body      = $bodytext;
-	
-	
-	echo "sending email";
-	return $email->Send();
-}
-function new_user()
-{
-	
-	// $fieldnames = ["username","password","organisation","email","firstname","lastname"];
-	$fieldnames = array();
-	$types = array();
-	$result = mysql_query("show columns from "."USERS");
-	while ($row = mysql_fetch_array($result)) {
-
-		$fieldname = $row['Field'];
-		$fieldnames[] = $fieldname;
-		$types[$fieldname] = $row['Type'];
-	}
-
-
-	$sql = "insert into USERS ";
-	$flds = "(id";
-	$vals = " values (null";
-	$n = 0;
-	foreach ($fieldnames as $i => $fieldname) {
-		if ($fieldname == "id") {
-			
-		}
-		else if (substr($types[$fieldname],0,7) == "varchar" )
-		{
-			if ($n > 0) {
-				$flds .= ",";
-				$vals .= ",";
-			}
-			$flds .= $fieldname;
-			
-			$vals .= "\"".mysql_escape_string( $_POST[$fieldname])."\"";
-		}
-		else if ($types[$fieldname] == "tinyint(1)") {
-			if ($n > 0) {
-				$flds .= ",";
-				$vals .= ",";
-			}
-			$flds .= $fieldname;
-			if (empty($_POST[$fieldname]) || $_POST[$fieldname] != 1) {
-				$vals .= 'false';
-			}
-			else {
-				$vals .= "true";
-			}
-		}
-		$n++;
-	}
-	//$flds .= ",date_added)";
-	//$vals .= ",now())";
-	$flds .= ")";
-	$vals .= ")";
-	
-	$sql .= $flds.$vals;
-	test_mysql_query($sql);
-	// email_new_user();
-}
-?>
