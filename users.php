@@ -6,6 +6,43 @@
 ?>
 <div class='acs_main'>
 <div class='acs_container'>
+<div class='popup' id='confirm_print_user_label'>
+<div class='center h2'>Print Label</div>
+<div class='center' id='ul1'>Print Label</div>
+<div class='btns'>
+<button class='button2' onclick='print_user_label();'>OK</button>
+<button class='button2' onclick='hide("confirm_print_user_label");'>Cancel</button>
+</div>
+</div>
+<script>
+
+var ulbl_id = null;
+var ulbl_firstname = null;
+var ulbl_lastname = null;
+
+function print_user_label()
+{
+	user_label(ulbl_id,ulbl_firstname,ulbl_lastname);
+	hide('confirm_print_user_label');
+}
+
+function center(id)
+{
+	var div = document.getElementById(id);
+	var rect1 = div.getBoundingClientRect();
+	var rect2 = div.parentNode.getBoundingClientRect();
+	div.style.left = rect2.width / 2 + 'px';
+}
+function conf_user_label(id,firstname,lastname)
+{
+	document.getElementById('ul1').innerHTML = firstname + ' ' + lastname;
+	ulbl_id = id;
+	ulbl_firstname = firstname;
+	ulbl_lastname = lastname;
+	center('confirm_print_user_label');
+	show('confirm_print_user_label');
+}
+</script>
 <?php 
 {
 	if( !empty($_SESSION['userID'] && $_SESSION['admin'] == 1)) { // logged in
@@ -48,7 +85,7 @@ function show_users()
 			echo "<td>".$row['last_login']."</td>";
 			echo "<td><a href='acs_users.php?edit=".$row['id']."'>edit</a></td>";
 			echo "<td><A href='acs_users.php?delete=".$row['id']."'>del</a></td>";
-			echo "<td onclick='user_label(".$row['id'].",\"".$row['firstname']."\",\"".$row['lastname']."\");'>Label</td>";
+			echo "<td onclick='conf_user_label(".$row['id'].",\"".$row['firstname']."\",\"".$row['lastname']."\");'>Label</td>";
 			echo "</tr>";
 		}
 		echo "</table>";

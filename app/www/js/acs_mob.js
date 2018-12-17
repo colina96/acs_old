@@ -196,7 +196,7 @@ function process_barcode(s)
 			set_user('m1_chef_id','m_temp_modal4',uid);
 			barcode_mode = null;
 		}
-		else if (barcode_mode == 'M1_LR') {
+		else if (barcode_mode == 'M1_LR' && user.kitchen) {
 			set_user('m1_chef_id_LR','m_temp_modal4',uid);
 			barcode_mode = null;
 		}

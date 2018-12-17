@@ -254,6 +254,31 @@ background-color: #EEEEEE;
 	background:white;
 	padding:20px;
 }
+btns {
+	bottom:5px;
+	width:100%;
+	position:absolute;
+	left:0;
+	display:table;
+	margin:0 auto;
+	.background: #eeeeee;
+	border-radius: 15px;
+	
+}
+.button2 {
+	.bottom:30px;
+	width:40%;
+	padding:5%;
+	margin:5%;
+	background: white;
+	color: var(--acs_background);
+	border:2px var(--acs_background) solid;
+	border-radius: 15px;
+}
+.center {
+	display:table;
+	margin:0 auto;
+}
 #add_sub_popup {
 	position:absolute;
 	top:10px;
