@@ -51,7 +51,7 @@ session_start();
 
         <div class="collapse navbar-collapse" id="codebrainery-toggle-nav">
           <ul class="nav navbar-nav">
-            <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('USERS', this, 'red')">USERS</a></li>
+            <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="users();">USERS</a></li>
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="">MENU</a></li>
             <li class='tabclass' onclick="daily_orders();"><a href="#">DAILY ORDERS</a></li>
             <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')">PT SETTINGS</a></li>

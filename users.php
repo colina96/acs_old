@@ -4,22 +4,16 @@
 
 #use PHPMailer\PHPMailer\PHPMailer;
 ?>
-<div class='acs_main'>
-<div class='acs_container'>
-<div class='popup' id='confirm_print_user_label'>
-<div class='center h2'>Print Label</div>
-<div class='center' id='ul1'>Print Label</div>
-<div class='btns'>
-<button class='button2' onclick='print_user_label();'>OK</button>
-<button class='button2' onclick='hide("confirm_print_user_label");'>Cancel</button>
-</div>
-</div>
 <script>
 
 var ulbl_id = null;
 var ulbl_firstname = null;
 var ulbl_lastname = null;
-
+function users()
+{
+	openPage('USERS', this, 'red');
+	load_chefs(show_users);
+}
 function print_user_label()
 {
 	user_label(ulbl_id,ulbl_firstname,ulbl_lastname);
@@ -42,108 +36,150 @@ function conf_user_label(id,firstname,lastname)
 	center('confirm_print_user_label');
 	show('confirm_print_user_label');
 }
-</script>
-<?php 
+function show_users()
 {
-	if( !empty($_SESSION['userID'] && $_SESSION['admin'] == 1)) { // logged in
-		if (!empty($_GET['delete'])) { delete_user(); }
-		if (!empty($_POST['update'])) { update_user(); }
-		if (!empty($_GET['edit'])) {
-			
-			show_user($_GET['edit']);
-			echo "<div class='draw_screen_btn'><a class='users_link' href='acs_users.php'>Back</a></div>";
-		}
-		else if (!empty($_GET['new'])) {
-			show_user(-1);
-			echo "<div class='draw_screen_btn'><a class='users_link' href='acs_users.php'>Back</a></div>";
-		}
-		else {
-			show_users();
-			// echo "<div class='draw_screen_btn'><a class='users_link' href='acs_users.php?new=1'>New User</a></div>";
+	var div = document.getElementById('users_div');
+
+	var h = "<table class='users' width='100%' border='1'>";
+	h += "<tr><td>USER</td><td>WORK FUNCTION</td><td>LAST ACCESS</td><td colspan=3 class='add_user'>";
+	h += "<button onclick='new_user()'>Add new user</button></td></tr>";
+	for (var i = 0; i < chefs.length; i++) {
+		
+		h += "<tr><td>" +  chefs[i]['firstname'] + " " + chefs[i]['lastname'] + "</td>";
+
+		h += "<td>" + chefs[i]['function'] + "</td>";
+		h += "<td>" + chefs[i]['last_login'] + "</td>";
+		
+		h += "<td onclick='edit_user(" + chefs[i]['id'] + ");'>edit</td>";
+		// h += "<td onclick='delete_user(" + chefs[i]['id'] + ");'>del</td>";
+		h += "<td onclick='conf_user_label(" + chefs[i]['id'] + ",\""+ chefs[i]['firstname'] + "\",\""+ chefs[i]['lastname'] +"\");'>Label</td>";
+		h += "</tr>";
+	}
+	h +=  "</table>";
+	div.innerHTML = h;
+}
+
+function set_user_flds(user)
+{
+	var flds = ['id','email','password','firstname','lastname','function'];
+	for (var i = 0; i < flds.length; i++ ) {
+		if (document.getElementsByName('user_' + flds[i])) {
+			document.getElementsByName('user_' + flds[i])[0].value = user[flds[i]];
 		}
 	}
+	var flds = ['admin','dock','kitchen','plating','supervisor'];
+	for (var i = 0; i < flds.length; i++ ) {
+		if (document.getElementsByName('user_' + flds[i])) {
+			var checked = (user[flds[i]] == 1) ?true:false;
+			document.getElementsByName('user_' + flds[i])[0].checked = checked;
+		}
+	}
+}
+
+function edit_user(id)
+{
+	show('show_user_div');
+	for (var i = 0; i < chefs.length; i++) {
+		if (chefs[i].id == id) {
+			set_user_flds(chefs[i]);
+		}
+	}
+}
+
+function new_user()
+{
+	show('show_user_div');
+	var flds = ['id','email','password','firstname','lastname','function'];
+	for (var i = 0; i < flds.length; i++ ) {
+		document.getElementsByName('user_' + flds[i])[0].value = '';
+	}
+	var flds = ['admin','dock','kitchen','plating','supervisor'];
+	for (var i = 0; i < flds.length; i++ ) {
+		if (document.getElementsByName('user_' + flds[i])) {
+			document.getElementsByName('user_' + flds[i])[0].checked = false;
+		}
+	}
+	
+}
+
+function save_user()
+{
+	var user = new Object();
+	var flds = ['id','email','password','firstname','lastname','function','admin','dock','kitchen','plating','supervisor'];
+	for (var i = 0; i < flds.length; i++ ) {
+		user[flds[i]] = inval('user_' + flds[i]);
+	}
+
+	console.log(user);
+	var data =  {data: JSON.stringify(user)};
+    console.log("save_user Sent Off: %j", data);
+    $.ajax({
+        url: RESTHOME + "save_user.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { 
+        	console.log(result);
+        	hide('show_user_div');
+        	users();
+        },
+        fail: (function (result) {
+            console.log("save_user fail ",result);
+        })
+    });
+}
+
+</script>
+<div class='acs_main'>
+	<div class='popup' id='confirm_print_user_label'>
+		<div class='center h2'>Print Label</div>
+		<div class='center' id='ul1'>Print Label</div>
+		<div class='btns'>
+			<button class='button2' onclick='print_user_label();'>OK</button>
+			<button class='button2' onclick='hide("confirm_print_user_label");'>Cancel</button>
+		</div>
+	</div>
+	<div class='popup' id='show_user_div'>
+		<div class='center h2'>Edit User</div>
+		<div class='center' id='user_div'>
+			<div>
+				<input type='hidden' name='user_id'>
+				<table>
+					<tr><td>Login</td><td><input type='text' name='user_email'></td></tr>
+					<tr><td>Password</td><td><input type='text' name='user_password'></td></tr>
+					<tr><td>First name</td><td><input type='text' name='user_firstname'></td></tr>
+					<tr><td>Last Name</td><td><input type='text' name='user_lastname'></td></tr>
+					<tr><td>Function</td><td><input type='text' name='user_function'></td></tr>
+				</table>
+			</div>
+			<div>
+				<table>
+					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
+					<tr><td>Dock</td><td><input type='checkbox' name='user_dock'></td></tr>
+					<tr><td>Kitchen</td><td><input type='checkbox' name='user_kitchen'></td></tr>
+					<tr><td>Plating</td><td><input type='checkbox' name='user_plating'></td></tr>
+					<tr><td>Supervisor</td><td><input type='checkbox' name='user_supervisor'></td></tr>
+				</table>
+			</div>
+		</div>
+		<div class='btns'>
+			<button class='button2' onclick='save_user();'>OK</button>
+			<button class='button2' onclick='hide("show_user_div");'>Cancel</button>
+		</div>
+	</div>
+	<div class='acs_container' id='users_div'>
+	
+		
+
+<?php 
+{
+
 }
 ?>
 </div></div>
 <?php 
 
-function show_users()
-{
-	$sql = "select * from USERS order by ID";
-	$result = mysql_query($sql);
-	if ($result) {
 
-		echo "<table class='users' width='100%' border='1'>";
-		echo "<tr><td>USER</td><td>WORK FUNCTION</td><td>LAST ACCESS</td><td colspan=2 class='add_user'>";
-		echo "<a class='users_link' href='acs_users.php?new=1'>Add new user</a></td></tr>";
-		while($row = mysql_fetch_array($result))
-		{
-//			echo "<tr class='users'><td><a href='?edit=".$row['id']."'>".$row['id']."</a></td>";
-//			echo "<td>".$row['username']."</td><td>".$row['password']."</td>";
-			echo "<td>".$row['firstname']." ".$row['lastname']."</td>";
-			echo "<td>".$row['function']."</td>";
-			echo "<td>".$row['last_login']."</td>";
-			echo "<td><a href='acs_users.php?edit=".$row['id']."'>edit</a></td>";
-			echo "<td><A href='acs_users.php?delete=".$row['id']."'>del</a></td>";
-			echo "<td onclick='conf_user_label(".$row['id'].",\"".$row['firstname']."\",\"".$row['lastname']."\");'>Label</td>";
-			echo "</tr>";
-		}
-		echo "</table>";
-	}
-}
-
-function show_user($edit_id)
-{
-	
-	// $fieldnames = ["username","password","organisation","email","firstname","lastname"];
-	
-	$fieldnames = array();
-	$types = array();
-	$result = mysql_query("show columns from "."USERS");
-
-	while ($row = mysql_fetch_array($result)) {
-		
-		$fieldname = $row['Field'];
-		$fieldnames[] = $fieldname;
-		$types[$fieldname] = $row['Type'];
-	}
-	if ($edit_id >= 0) {
-		$sql = "select * from USERS where ID=".$edit_id;
-		$result = mysql_query($sql);
-		$row = mysql_fetch_array($result);
-	}
-	if ($result || $edit_id == -1) {
-
-		echo "<form method='POST' action='acs_users.php'><table class='users' width='100%'>";
-	//	while ($row = mysql_fetch_array($result) )
-		{
-			// echo "<tr><td>".$row['id']."</td>";
-			foreach ($fieldnames as $i => $fieldname) {
-				if ($fieldname == "id") {
-					
-				} 
-				else if (substr($types[$fieldname],0,7) == "varchar" )
-				{
-					echo "<tr><td>".$fieldname."</td><td class='length_inputs'>";
-					echo "<input name='".$fieldname."' value=\"".$row[$fieldname]."\" width='100%'></td></tr>";
-				}
-				else if ($types[$fieldname] == "tinyint(1)") {
-					echo "<tr><td>".$fieldname."</td><td class='length_inputs'>";
-					echo "<input name='".$fieldname."' type='checkbox' value='1'";
-					if ($row[$fieldname] == 1) echo " checked";
-					echo "></td></tr>"; 
-				}/*
-				else {
-					echo "<tr><td>".$fieldname."</td><td class='length_inputs'>";
-					echo $types[$fieldname]."</td></tr>";
-				} */
-			}
-		}
-		echo "</table>";
-		echo "<input type=hidden name='edit_id' value='".$edit_id."'>";
-		echo "<input type='submit' name='update' value='update' class='draw_screen_btn users_submit'></form>";
-	}
-}
 
 function delete_user()
 {
@@ -240,13 +276,26 @@ function new_user()
 		}
 		else if (substr($types[$fieldname],0,7) == "varchar" )
 		{
-		if ($n > 0) {
+			if ($n > 0) {
 				$flds .= ",";
 				$vals .= ",";
 			}
 			$flds .= $fieldname;
 			
 			$vals .= "\"".mysql_escape_string( $_POST[$fieldname])."\"";
+		}
+		else if ($types[$fieldname] == "tinyint(1)") {
+			if ($n > 0) {
+				$flds .= ",";
+				$vals .= ",";
+			}
+			$flds .= $fieldname;
+			if (empty($_POST[$fieldname]) || $_POST[$fieldname] != 1) {
+				$vals .= 'false';
+			}
+			else {
+				$vals .= "true";
+			}
 		}
 		$n++;
 	}
