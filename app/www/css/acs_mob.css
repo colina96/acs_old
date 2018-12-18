@@ -274,7 +274,7 @@ select {
 	font-size:10vw;
 	font-weight: bold;
 }
-#chk_temp_item_div {
+#chk_temp_item_div, .chk_temp_item{
 	position:absolute;
 	top: 8vh;
 	left: 6vw;
@@ -376,7 +376,7 @@ select {
 	display:table;
 	min-width:20vw;
 }
-#close_m_temp, #close_m_plating {
+#close_m_temp, #close_m_plating, .m_close {
 	position:absolute;
 	font-size:10vw;
 	color:white;

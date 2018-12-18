@@ -526,8 +526,8 @@ function finish_plating()
 	document.getElementById('ms_1_text').innerHTML = calc_time_remaining(plating_item);
 	
 
-	document.getElementById('chk_temp_pt_div').innerHTML = plating_item.code;
-	openPage('m_temp', this, 'red','mobile_main','tabclass');
+	document.getElementById('chk_plat_temp_item_div').innerHTML = plating_item.code;
+	openPage('plating_temp_div', this, 'red','mobile_main','tabclass');
 	openPage('m2_temp_plating', this, 'red','m_modal2','tabclass');
 	
 }
@@ -655,11 +655,11 @@ function process_scanned_plating_comp(comp,batch_change)
 	console.log("plating_comp_barcode_scanned found " + comp.description + ' ' + comp.expired);
 	if (comp.expired == 1) {
 		console.log('item expired');
-		document.getElementById('chk_temp_item_div').innerHTML = comp.description;
-		document.getElementById('chk_temp_item_time_div').innerHTML = '';
-		document.getElementById('chk_temp_item_time_div2').innerHTML = '';
+		document.getElementById('chk_plat_temp_item_div').innerHTML = comp.description;
+		//document.getElementById('chk_temp_item_time_div').innerHTML = '';
+		//document.getElementById('chk_temp_item_time_div2').innerHTML = '';
 		document.getElementById('m2_pt_sl_div2').innerHTML = 'expired ' + comp.expiry_date;
-		openPage('m_temp', this, 'red','mobile_main','tabclass');
+		openPage('plating_temp_div', this, 'red','mobile_main','tabclass');
 		openPage('m2_sl_plating', this, 'red','m_modal2','tabclass');
 		
 		return; // jump to expired page
