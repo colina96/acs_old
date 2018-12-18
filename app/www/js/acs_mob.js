@@ -162,8 +162,10 @@ function set_barcode_mode(mode)
 
 function get_user(id)
 {
-	for (var i = 0; i < chefs.length; i++) {
-		if (chefs[i]['id'] == id) return (chefs[i]);
+	if (chefs) {
+		for (var i = 0; i < chefs.length; i++) {
+			if (chefs[i]['id'] == id) return (chefs[i]);
+		}
 	}
 	return null;
 }
@@ -178,12 +180,13 @@ function process_barcode(s)
 		// return;
 	}
 	if ((s.indexOf('u') >= 0) || (s.indexOf('U') >= 0)) { // user barcode scanned
-		var user = get_user(uid);
+		
 		var uid = parseInt(s.substring(4));
 		
 		if (barcode_mode == 'login' || user_id <= 0) {
 			login(uid);
 		}
+		
 		var user = get_user(uid);
 		if (!user) {
 			console.log('invalid user');
@@ -1714,8 +1717,8 @@ function comp_milestone(temp_reading,force,qa_code)
           //  	openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
             }
             else {
-            	if (component['M3_time'] != '') {
-            		console.log('finished');
+            	if (component['M3_temp'] && component['M3_temp'] != '') {
+            		console.log('M3 finished',component['M3_temp']);
             		if (force) document.getElementById('m2_temp_div_3a').innerHTML= "M3 FORCED";
             		openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
             	}

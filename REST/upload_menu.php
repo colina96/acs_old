@@ -117,7 +117,7 @@ function upload_menu()
 }
 function get_component_id($description,$menu_id,$supplier,$product,$spec,$shelflife,$preptype,$track)
 {
-	$sql = "select * from MENU_ITEM_COMPONENTS where description='".$description."' and menu_id=".$menu_id;
+	$sql = "select * from MENU_ITEM_COMPONENTS where description='".$description."'"; // and menu_id=".$menu_id; 
 	$result = mysql_query($sql);
 	$comp_id = -1;
 	while ($row = mysql_fetch_array($result) ) {

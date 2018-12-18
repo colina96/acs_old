@@ -7,6 +7,7 @@ document.getElementById("readbarcode").addEventListener("touchstart", read_barco
 
 var text = "";
 var temp_timer = null;
+var loglines = 0;
 
 function status(t)
 {
@@ -20,7 +21,12 @@ function statusclear()
 
 function log(t)
 {
+	if (loglines++ > 100) {
+		loglines = 0;
+		document.getElementById('log').innerHTML  = '';
+	}
     document.getElementById('log').innerHTML += "<br>" + t;
+    
 }
 
 function logclear()
