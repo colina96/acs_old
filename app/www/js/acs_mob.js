@@ -655,6 +655,9 @@ function process_scanned_plating_comp(comp,batch_change)
 	console.log("plating_comp_barcode_scanned found " + comp.description + ' ' + comp.expired);
 	if (comp.expired == 1) {
 		console.log('item expired');
+		document.getElementById('chk_temp_item_div').innerHTML = comp.description;
+		document.getElementById('chk_temp_item_time_div').innerHTML = '';
+		document.getElementById('chk_temp_item_time_div2').innerHTML = '';
 		document.getElementById('m2_pt_sl_div2').innerHTML = 'expired ' + comp.expiry_date;
 		openPage('m_temp', this, 'red','mobile_main','tabclass');
 		openPage('m2_sl_plating', this, 'red','m_modal2','tabclass');
@@ -665,6 +668,11 @@ function process_scanned_plating_comp(comp,batch_change)
 		var items = plating_item.items;
 		console.log("now checking plating item " + items.length,batch_change);
 		for (var i = 0; i < items.length; i++) {
+			// clear id if M1_temp not set
+			if (!items[i].M1_temp) {
+				console.log('clearing id ',items[i].component_id);
+				items[i].component_id = null;
+			}
 			if (items[i].description == comp.description && items[i].component_id == comp.id && (!items[i].M1_temp || batch_change)) {
 				console.log('component already entered',items[i].component_id, comp.id);
 				return;
@@ -946,7 +954,10 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 		console.log(JSON.stringify(plating_item));
 		var items = plating_item.items;	
 		for (var i = 0; i < items.length; i++) {
-			
+			if (!items[i].M1_temp) {
+				console.log('clearing id ',items[i].component_id);
+				items[i].component_id = null;
+			}
 			console.log("found ",items[i].description,items[i].time_completed);
 			if (items[i].time_completed && items[i].time_completed.length > 2) {
 				// item already used - what to do?
