@@ -46,8 +46,8 @@ if (!empty($_POST['data'])) {
 
 	echo "opened ".$tmp_file;
 	fwrite($handle,"Jobname:user ".$id."\n");
-	fwrite($handle,"Printer:10.0.0.99"."\n");
-	fwrite($handle,"Port:9100"."\n");
+	fwrite($handle,"Printer:".$params['KITCHEN_LABELS_IP']."\n");
+	fwrite($handle,"Port:".$params['KITCHEN_LABELS_PORT']."\n");
 	fwrite($handle,"Label:ACS_COMP.LBL"."\n");
 	fwrite($handle,"Endheader"."\n");
 	fwrite($handle,"Copies:".$copies."\n");

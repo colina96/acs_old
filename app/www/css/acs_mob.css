@@ -11,12 +11,15 @@ select {
 }
 
 #button_mode_div {
+	margin: 0 10px 0 10px;
+}
+.footer {
 	position:absolute;
 	bottom: 0;
 	left: 0;
 	z-index: 1000;
 	color:white;
-	
+	display:flex;
 }
 .background_div {
 	background: var(--acs_blue_background);

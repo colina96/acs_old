@@ -50,6 +50,14 @@ var temp_mode = null;
 var temp_probe = null;
 var button_mode = null; // determines what happens when the qpac button is pressed
 var last_temp = null;
+var last_error_msg = '';
+
+function set_info(msg)
+{
+	console.log('set info',msg);
+	last_error_msg = msg;
+	document.getElementById('error_msg_div').innerHTML = last_error_msg;
+}
 function set_temp_mode(new_mode)
 {
 	temp_mode = new_mode;
@@ -151,6 +159,7 @@ function read_temp(m)
 function set_barcode_mode(mode)
 {
 	console.log('set_barcode_mode',mode);
+	set_info('');
 	barcode_mode = mode;
 	button_mode = 'B';
 	document.getElementById('button_mode_div').innerHTML = 'B';
@@ -168,6 +177,13 @@ function get_user(id)
 		}
 	}
 	return null;
+}
+
+function check_user(user_flag)
+{
+	if (user_flag && user_flag) return true;
+	set_info('INVALID USER');
+	return false;
 }
 
 function process_barcode(s)
@@ -189,29 +205,30 @@ function process_barcode(s)
 		
 		var user = get_user(uid);
 		if (!user) {
-			console.log('invalid user');
+			set_info('INVALID USER');
 			return;
 		}
+		set_info('');
 		if (barcode_mode == 'dock_QA' && user.supervisor && user.supervisor == 1) {
 			dock_QA_scan(uid);
 		}
-		if (barcode_mode == 'M1' && user.kitchen) {
+		if (barcode_mode == 'M1' && check_user(user.kitchen)) {
 			set_user('m1_chef_id','m_temp_modal4',uid);
 			barcode_mode = null;
 		}
-		else if (barcode_mode == 'M1_LR' && user.kitchen) {
+		else if (barcode_mode == 'M1_LR' && check_user(user.kitchen)) {
 			set_user('m1_chef_id_LR','m_temp_modal4',uid);
 			barcode_mode = null;
 		}
-		else if (barcode_mode == 'force_M3'  && user.supervisor && user.supervisor == 1) {
+		else if (barcode_mode == 'force_M3'  && check_user(user.supervisor)) {
 			force_M3(uid);
 			barcode_mode = null;
 		}
-		else if (barcode_mode == 'KQA_override' && user.supervisor && user.supervisor == 1) {
+		else if (barcode_mode == 'KQA_override' && check_user(user.supervisor)) {
 			k_qa_override(uid);
 			barcode_mode = null;
 		}
-		else if (barcode_mode == 'PT' && user.plating && user.plating == 1) { // plating team member
+		else if (barcode_mode == 'PT' && check_user(user.plating)) { // plating team member
 			add_team_member(uid);
 		}
 	}

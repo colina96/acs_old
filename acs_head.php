@@ -3,7 +3,6 @@ session_start();
 ?>
 <!DOCTYPE html>
 <?php include 'db.php' ?>
-
 <html lang="en">
   <head>
     <meta charset="utf-8">
