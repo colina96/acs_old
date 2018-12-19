@@ -26,6 +26,7 @@ $userID = $_SESSION['userID'];
 */
 $job_dir = "/tmp/monarch/jobs/";
 $job_dir = "tmp/";
+$params = get_params();
 
 if (!empty($_POST['data'])) {
 	$comp = json_decode($_POST["data"],true);
