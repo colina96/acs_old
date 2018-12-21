@@ -13,10 +13,16 @@ select {
 #button_mode_div {
 	margin: 0 10px 0 10px;
 }
+#battery_div {
+	position:absolute;
+	margin: 0 10px 0 10px;
+	right:0;
+}
 .footer {
 	position:absolute;
 	bottom: 0;
 	left: 0;
+	width:100%;
 	z-index: 1000;
 	color:white;
 	display:flex;

@@ -11,8 +11,8 @@ var active_comp = null; // the component currently being worked on
 var active_menu_item_id = null;
 var new_comp = null; // start a new component - M1
 
-//var RESTHOME = "http://10.0.0.32/acs/REST/";
-var RESTHOME = "http://192.168.0.52/acs/REST/";
+var RESTHOME = "http://10.0.0.32/acs/REST/";
+// var RESTHOME = "http://192.168.0.52/acs/REST/";
 
 var barcode_mode = null;
 var mode = null; // kitchen or plating
@@ -193,8 +193,8 @@ function process_barcode(s)
 	if (s == 'setup1') {
 		console.log('setup');
 	}
-	if (barcode_mode == null) {
-		// return;
+	if (user_id <= 0) {
+		barcode_mode = 'login';
 	}
 	if ((s.indexOf('u') >= 0) || (s.indexOf('U') >= 0)) { // user barcode scanned
 		
@@ -267,7 +267,7 @@ function process_barcode(s)
 			check_ingredient(cid);
 		}
 		else { // barcode mode null
-			console.log('barcode_mode not set',mode);
+			console.log('barcode_mode not set',barcode_mode,mode);
 			if (mode == 'plating') {
 				// maybe decant?
 				plating_comp_barcode_scanned(cid,false);
@@ -2507,11 +2507,14 @@ function new_td(content,classname) {
 	return(td);
 }
 
+var refresh_count = 0;
 function refresh_times()
 {
-	// console.log("time!");
+	console.log("time!");
 	load_tracking_data();
 	setTimeout(refresh_times,60 * 1000);
+	document.getElementById('battery_div').innerHTML = " - " + refresh_count++;
+	get_internal_battery_voltage();
 	qpack_resume();
 }
 

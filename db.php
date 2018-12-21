@@ -115,7 +115,7 @@ function check_login()
 		$fieldnames = get_fieldnames('USERS');
 		$sql = NULL;
 		if (!empty($email) && !empty($password)) {
-			$sql="SELECT * FROM USERS where email='" . $email."' and password = '".$password."'" ;
+			$sql="SELECT * FROM USERS where LOWER(email)=LOWER('" . $email."') and LOWER(password) = LOWER('".$password."')" ;
 		}
 		if (!empty($uid)) {
 			$sql="SELECT * FROM USERS where id=" . $uid;

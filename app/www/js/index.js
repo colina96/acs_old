@@ -58,7 +58,7 @@ var app = {
     	console.log("onDeviceReady");
     	log("starting");
     	//RESTHOME = "http://www.evoz.com.au/acs/REST/";
-    	RESTHOME = "http://10.0.0.35/acs/REST/";
+    	// RESTHOME = "http://192.168.0.52/acs/REST/";
     	// document.getElementById('login_btn').innerHTML = 'Login to www.evoz.com.au';
     	check_login();
     	qpack_init();
@@ -209,6 +209,7 @@ function login(barcode_uid)
             	user_name = data['user'];
             	USER = data['USER'];
             	if (user_id > 0) {
+            		set_info('OK');
                		load_comps();
                 	load_preptypes();
             		user_name = data['user'];
@@ -217,6 +218,7 @@ function login(barcode_uid)
             		goto_home();
             	}
             	else {
+            		set_info('INVALID USER');
             		document.getElementById('login_fail').innerHTML = "login fail for "+email + " " + password;
             		
             	}
@@ -233,7 +235,8 @@ function logout()
 {
     var loginString ="logout=login";
     console.log('logging out');
-    barcode_mode = 'login';
+    set_info('');
+    set_barcode_mode ('login');
     openPage('login_div', this, 'red','mobile_main','tabclass');
     openPage('login_div2', this, 'red','m_modal2','tabclass');
     $.ajax({

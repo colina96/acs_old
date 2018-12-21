@@ -109,6 +109,11 @@ function qpack_stop()
     });
 }
 
+function get_internal_battery_voltage()
+{
+	if (typeof(serial) != 'undefined') serial.write('?');
+}
+
 function qpack_pause()
 {
     qpack_stop();
@@ -117,6 +122,7 @@ function qpack_pause()
 function qpack_resume()
 {
     qpack_start();
+    // serial_write('?');
 }
 
 function qpack_power(on)
@@ -193,6 +199,7 @@ function process(text)
 		log("barcode " + s);
 		serial.write('!')
 		process_barcode(s);
+		serial_write('?');
 	}
 	else if (text.indexOf('T') == 0) {
 		log ("IR temp reading " + text);
@@ -203,5 +210,8 @@ function process(text)
 		log ("Probe temp reading " + text);
 		var s = text.substring(1);
 		temp_callback(s);
+	}
+	else if (text.indexOf('?') == 0) {
+		document.getElementById('battery_div').innerHTML = " - " + text + " - ";
 	}
 }
