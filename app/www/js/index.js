@@ -58,6 +58,7 @@ var app = {
     	console.log("onDeviceReady");
     	log("starting");
     	//RESTHOME = "http://www.evoz.com.au/acs/REST/";
+    	RESTHOME = "http://10.0.0.32/acs/REST/";
     	// RESTHOME = "http://192.168.0.52/acs/REST/";
     	// document.getElementById('login_btn').innerHTML = 'Login to www.evoz.com.au';
     	check_login();
@@ -165,7 +166,7 @@ function set_admin()
 
 function save_resthome()
 {
-	RESTHOME=document.getElementsByName('resthome')[0].value;
+	RESTHOME = document.getElementsByName('resthome')[0].value;
 	var storage = window.localStorage;
 	
     storage.setItem('RESTHOME',RESTHOME);
@@ -182,11 +183,12 @@ function login(barcode_uid)
 		loginString="uid="+barcode_uid+"&login=login";
 	}
 	else {
-		var email = document.getElementsByName('email')[0].value;
-		var password = document.getElementsByName('password')[0].value;
+		var email = document.getElementsByName('email')[0].value.toLowerCase();
+		var password = document.getElementsByName('password')[0].value.toLowerCase();
     //$("#status").text("Authenticating...");
-		console.log("Authenticating...",RESTHOME);
+		
 		loginString ="email="+email+"&password="+password+"&login=login";
+		console.log("Authenticating...",RESTHOME,loginString);
 		if (email == 'admin' && password == "zzz") {
 			set_admin();
 			return;

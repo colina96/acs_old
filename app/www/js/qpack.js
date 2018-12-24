@@ -178,11 +178,12 @@ function process(text)
     }
     else if (text=="+B") {
         //S starts scan
-        serial.write("S");
+        // serial.write("S");
+    	serial.write("?"); // read battery voltage
     }
     else if (text=="-B") {
         //s ends scan
-        serial.write("s");
+        //serial.write("s");
     }
     else if (text=="+P") {
         //test low power consumption
@@ -199,7 +200,7 @@ function process(text)
 		log("barcode " + s);
 		serial.write('!')
 		process_barcode(s);
-		serial_write('?');
+		// serial_write('?');
 	}
 	else if (text.indexOf('T') == 0) {
 		log ("IR temp reading " + text);
@@ -212,6 +213,10 @@ function process(text)
 		temp_callback(s);
 	}
 	else if (text.indexOf('?') == 0) {
-		document.getElementById('battery_div').innerHTML = " - " + text + " - ";
+		var volts = text;
+		if (text.indexOf(",")) {
+			volts = text.substr(text.indexOf(",") + 1);
+		}
+		document.getElementById('battery_div').innerHTML = " Handset Battery: " + volts + " Volts";
 	}
 }
