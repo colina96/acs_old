@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
   char msg[MAX_MSG];
   int broadcast = 1;
   char *response_msg = "RESTHOME";
+  int client = 0;
   
   /* socket creation */
   sd=socket(AF_INET, SOCK_DGRAM, 0);
@@ -83,7 +84,10 @@ int main(int argc, char *argv[]) {
 
   printf("%s: waiting for data on port UDP %u\n", 
 	   argv[0],UDP_PORT);
-
+  if (argc > 1) {
+	  client = 1;
+	  send_response(sd,"255.255.255.255",argv[1]);
+  }
   /* server infinite loop */
   while(1) {
     
@@ -105,8 +109,12 @@ int main(int argc, char *argv[]) {
     printf("%s: from %s:UDP%u : %s \n", 
 	   argv[0],inet_ntoa(cliAddr.sin_addr),
 	   ntohs(cliAddr.sin_port),msg);
-    send_response(sd,inet_ntoa(cliAddr.sin_addr),response_msg);
-    
+    //
+    if (!client && strcmp(msg,response_msg)) {
+    	send_response(sd,inet_ntoa(cliAddr.sin_addr),response_msg);
+    	// send_response(sd,"255.255.255.255",response_msg);
+    	sleep(1);
+    }
   }/* end of server infinite loop */
 
 return 0;
