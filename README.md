@@ -9,19 +9,60 @@ This toplevel acts as the codebase for the __Q-Admin__ system, which is the serv
 ### app
 This contains the actual app. It is supposed to be used with the __cordova__ environment (called __phonegap__ before), enabling builds for android devices.
 
-To setup
+#### To setup
 
 ```bash
 cd app
 cordova prepare
 ```
 
-To build an app
+#### To build an app
 
 ```bash
 ./go.sh #builds, bumps version number
+```
+
+#### To flash the app
+
+##### via download
+When developing for the Q-Pack, the USB port of the phone is not easily accessible. 
+The easiest way to get the app onto the phone is therefore to download it.
+To offer a place to download it from, a simple local webserver is suggested. 
+_npm_ provides _http-server_. Install if necessary:
+```bash
+npm install -g http-server
+```
+
+Run in correct directory:
+```bash
+http-server app/platforms/android/build/outputs/apk/debug/
+```
+
+This will produce something like:
+```bash
+[f:app]$ http-server platforms/android/build/outputs/apk/debug/
+Starting up http-server, serving platforms/android/build/outputs/apk/debug/
+Available on:
+  http://127.0.0.1:8080
+  http://10.0.28.120:8080
+Hit CTRL-C to stop the server
+```
+and you can open any of the given addresses on the handhelds browser and download the apk.
+If you will download multiple times, consider setting a home screen shortcut to the ip to avoid repetitive typing,
+You might need to change wifi to reach this if your developer machine is not in the QAmC network.
+If you do, __make sure you switch WiFi back again or you will not reach Q-Admin anymore.__
+If you build the app again, the server will automatically serve the new apk without any need for action from your side.
+
+##### via USB
+```bash
 cordova run android
 ```
+
+#### Install the app
+After the download, a window usually pops up, showing the downloaded file.
+Click it. The first time, it will tell you to change the settings allowing to install apps from unknown sources.
+Do so.
+Then, just click and install it.
 
 #### www
 
