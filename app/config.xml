@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget android-packageName="com.ACS" id="co.qamc.qamc" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://qamc.co/ns/1.0">
-    <name>ACS2.0041</name>
+    <name>ACS2.0043</name>
     <description>
         QPack test
     </description>
@@ -25,5 +25,6 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <plugin name="cordova-plugin-kiosk" spec="https://github.com/hkalina/cordova-plugin-kiosk.git" />
+    <plugin name="cordovarduino" spec="https://github.com/xseignard/cordovarduino" />
     <engine name="android" spec="^6.2.0" />
 </widget>
