@@ -71,19 +71,19 @@ We use [cordova-plugin-kiosk](https://github.com/hkalina/cordova-plugin-kiosk "G
 2. Open the app. All hardware button except home should not do anything. The home button will still lead to start screen.
 3. Go to settings of the ACS app. There are two ways to achieve this:
 __Easy__
-Open _Settings_. Go to 'Apps/ACS2.<version>'. Continue to step 4.
+Open _Settings_. Go to 'Apps/ACS2.*__version__*'. Continue to step 4.
 
 __Hard__
 If for whatever reason the other way does not work, try this one. Otherwise, always prefer the easy way.
 Log into admin user. Click _Escape Kiosk Mode_. On the _J2 Pro_, a popup will show:
 
 Select destination....
-* ACS2.<version>
+* ACS2.*__version__*
 * TouchWiz home
 
 Tap and hold on the ACS app. Another popup will show:
 
-ACS2.<version>
+ACS2.*__version__*
 * Pin/Unpin
 * App Info
 
