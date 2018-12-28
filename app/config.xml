@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-packageName="com.ACS" id="io.cordova.hellocordova" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>ACS2.0033</name>
+<widget android-packageName="com.ACS" id="co.qamc.qamc" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://qamc.co/ns/1.0">
+    <name>ACS2.0037</name>
     <description>
         QPack test
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="colin@qamc.co" href="http://qamc.co">
+        Advanced Catering Solutions
     </author>
     <content src="index.html" />
     <preference name="orientation" value="portrait" />
