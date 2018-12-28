@@ -1,8 +1,51 @@
-# Hello World PhoneGap Template [![bitHound Score][bithound-img]][bithound-url]
+# QAmC App
+## Quality Assurance meets Chefs
+This Repository contains all code necessary to run the [QAmC](http://qamc.co "QAmC's homepage") app.
 
-A PhoneGap Hello World template
+## Folders
+### toplevel / acs
+This toplevel acts as the codebase for the __Q-Admin__ system, which is the server for the system.
 
-## Usage
+### app
+This contains the actual app. It is supposed to be used with the __cordova__ environment (called __phonegap__ before), enabling builds for android devices.
+
+To setup
+
+```bash
+cd app
+cordova prepare
+```
+
+To build an app
+
+```bash
+./go.sh #builds, bumps version number
+cordova run android
+```
+
+#### www
+
+Cordova allows you to write your app as you would write a website. It is then turned into an app by the build system.
+The main code resides in the www folder, as it would with a website.
+
+### udp
+The base station __Q-Admin__ has to be reached by the handheld devices, the __Q-Packs__.
+It sends its IP address out as a UDP Broadcast to let them know it.
+This folder contains the necessary files
+
+### monarch and monarch_9417
+Printer specific code. The printer prints barcode labels. _monarch_9417_ is the currently used printer.
+
+## Troubleshooting
+
+### Q-Pack does not connect
+* Check that Q-Pack and Q-Admin are in the same network
+* Log into admin user and check that ip matches Q-Admin IP
+
+### Q-Pack keeps beeping
+* Recharge. The battery is probably flat
+
+## Usage tips from hello world template
 
 #### PhoneGap CLI
 
