@@ -172,6 +172,10 @@ function save_resthome()
     storage.setItem('RESTHOME',RESTHOME);
 }
 
+function exit_app()
+{
+	KioskPlugin.exitKiosk();
+}
 
 function login(barcode_uid)
 {
@@ -269,7 +273,6 @@ function logout()
 
 function openPage(pageName, elmnt, color,content_class,tab_class,callback) 
 {
-
 	var popups = document.getElementsByClassName('popup');
     for (i = 0; i < popups.length; i++) {
     		popups[i].style.display = "none";

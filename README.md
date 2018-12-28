@@ -64,6 +64,42 @@ Click it. The first time, it will tell you to change the settings allowing to in
 Do so.
 Then, just click and install it.
 
+#### App Pinning / Kiosk Mode
+We use [cordova-plugin-kiosk](https://github.com/hkalina/cordova-plugin-kiosk "Git repository for cordova-plugin-kiosk") to pin the app.
+##### Pin the app
+1. Upon installation, the app will ask permission to draw on top of other apps. Allow it to do so.
+2. Open the app. All hardware button except home should not do anything. The home button will still lead to start screen.
+3. Go to settings of the ACS app. There are two ways to achieve this:
+__Easy__
+Open _Settings_. Go to 'Apps/ACS2.<version>'. Continue to step 4.
+
+__Hard__
+If for whatever reason the other way does not work, try this one. Otherwise, always prefer the easy way.
+Log into admin user. Click _Escape Kiosk Mode_. On the _J2 Pro_, a popup will show:
+
+Select destination....
+* ACS2.<version>
+* TouchWiz home
+
+Tap and hold on the ACS app. Another popup will show:
+
+ACS2.<version>
+* Pin/Unpin
+* App Info
+
+While the _Pin_ Option seems the way to go, __it does not seem to actually do anything!__
+
+Click _App info_. The settings page for the app will show up.
+
+4. You should now be in the app settings page for the ACS app. Scroll down. Under `APP SETTINGS/Home screen` select the ACS app.
+5. Test this by pressing the _Home_ button. Sometimes you __need__ to press the home button to confirm this choice, but the phone will tell you if this is the case.
+
+##### Escape the app
+1. Log in as the admin user. 
+2. Click `Escape Kiosk Mode`.
+3. Select `TouchWiz home` in the popup.
+4. (Optional:) follow steps 3-5 in _Pin the app_ above, but select `TouchWiz home` as the home screen app. Pressing the home button should now redirect to phone home screen again.
+
 #### www
 
 Cordova allows you to write your app as you would write a website. It is then turned into an app by the build system.

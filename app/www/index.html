@@ -114,17 +114,17 @@ function show_dims()
 	<div class='mobile_main' id='splash'>
 		
 	</div> 
-	<div class='mobile_main hidden'  id='setup'>
+	<div class='mobile_main hidden' id='setup'>
 		<div class='center'><input name='resthome' id='resthome'></div>
 		<div id='setup_result'></div>
 		<div class='btns'>
+			<button id='escape_btn' type='button'  class='m_btn' onclick="exit_app();">Exit Kiosk Mode</button>
 			<button id='plat_btn' type='button'  class='m_btn' onclick="save_resthome();">Save</button>
 			<button id='out_btn' type='button'  class='m_btn' onclick="logout();">Logout</button>
 		</div>
 	</div> 
 	
 	<div class='mobile_main hidden' id='mm1'>
-		
 		<div class='m_main'>
 			<div id='m_login'></div>
 			<div id='log_div' class='serial hidden' onclick='qpack_init();'>start scan</div>
@@ -137,6 +137,7 @@ function show_dims()
 			</div>
 		</div>
 	</div>
+
 	<!--  dock pages -->
 	<!--  there is some duplication of kitchen pages and functionality but safer to have copies -->
 	<div class='mobile_main hidden' id='dock_main'>
@@ -504,11 +505,7 @@ function show_dims()
 					<button type='button'  class='m_btn' onclick="add_team_member(-1);">Add Team Member</button>
 					<button type='button'  class='m_btn' onclick="save_plating_team();">Continue</button>
 					</div>
-				
 			</div>
-			
-		
-		
 		</div>
 	</div> 
 	<div class='mobile_main hidden' id='m_plating'>
