@@ -46,7 +46,8 @@ select {
 	background-repeat: no-repeat;
 	spacing:10px;
 	width:100vw;
-	height:100vh;
+	.height:100vh;
+	height:590px;
 	margin:0;
 	.background:green;
 	top:0;
@@ -155,7 +156,7 @@ select {
     position: absolute;
     top: 0;
     width: 356px;
-    height: 610px;
+    height: 570px;
     color:red;
     margin:auto;
     display: flex;
