@@ -224,7 +224,7 @@
 
 #status, #log {
     height: 20vh;
-    width: 100vw;
+    width: 100%;
     background: white;
     color: black;
     overflow: auto;
