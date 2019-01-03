@@ -174,13 +174,37 @@ select {
 	border-radius: 15px;
 	z-index:1001;
 }
+
 .input {
-	width:80%;
-	margin:2% 10%;
-	font-size:5vw;
-	background-color:var(--acs_background_light);
+     width:80%;
+     margin:2% 10%;
+     font-size:5vw;
+ }
+input[type="text"] {
+    -webkit-appearance: textfield;
+    background-color: rgba(255, 0, 0, 0.0);
+    -webkit-rtl-ordering: logical;
+    cursor: text;
+    font: 15px Arial, Helvetica, sans-serif;
+    padding: 10px 2px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--acs_green);
+    border-radius: 10px;
+    text-rendering: auto;
+    color: var(--acs_text_normal_light);
+    text-indent: 20px;
+    display: inline-block;
+    text-align: start;
+    margin: 0em;
+    -webkit-writing-mode: horizontal-tb !important;
+    box-sizing: border-box;
+    width:100%;
 }
 
+input::placeholder{
+    color: var(--acs_lightpurple);
+}
 .m_main {
     position: absolute;
     top: 0;
@@ -205,6 +229,7 @@ select {
 	.color:var(--acs_text_normal_light);
 	font-size:x-small;
 	.border:1px solid var(--acs_button_border);
+    border-radius: 10px;
 	width:94vw;
 }
 #kitchen_barcode, #dock_barcode, .manual_barcode,#dock_search_div {
@@ -260,7 +285,7 @@ select {
 	
 }
 #search, #dock_search {
-	font-size:120%;
+	/*font-size:120%;*/
 	width:100%;
 }
 .larger {
