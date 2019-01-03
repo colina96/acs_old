@@ -2454,10 +2454,6 @@ function get_plating_item_by_id(id)
 	return(null);
 }
 
-
-
-
-
 function load_comps(fn)
 {
 console.log("loading menu item components");
@@ -2528,4 +2524,3 @@ function search_suppliers()
 {
 	console.log('search_suppliers');
 }
-

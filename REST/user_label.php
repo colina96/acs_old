@@ -40,9 +40,10 @@ else if (!empty($_POST['data'])) {
 	$username = $user['firstname'].' '.$user['lastname'];
 }
 if ($username != null && $uid != null) {
+	echo "Sending to printer KITCHEN_LABEL".$params['KITCHEN_LABELS_IP'].":".$params['KITCHEN_LABELS_PORT']."\n";
 	$tmp_file = $job_dir.'user'.$uid.".tmp";
 	$job_file = $job_dir.'user'.$uid.".job";
-	echo "openning ".$tmp_file;
+	echo "opening ".$tmp_file;
 	$handle = fopen($tmp_file, 'w') or die('Cannot open file:  '.$tmp_file);
 
 	echo "opened ".$tmp_file;

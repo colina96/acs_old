@@ -5,10 +5,9 @@ include '../db.php';
 
 $job_dir = "/tmp/monarch/jobs/";
 $job_dir = "tmp/";
+$params = get_params();
 
 if (!empty($_POST['data'])) {
-	// echo $_POST['data'];
-	
 	$comp = json_decode($_POST["data"],true);
 	$id = $comp['id'];
 	$d_copies = $comp['description_labels'];
@@ -22,12 +21,13 @@ if (!empty($_POST['data'])) {
 	
 	$tmp_file = $job_dir.'trolley'.$id.".tmp";
 	$job_file = $job_dir.'trolley'.$id.".job";
-	echo "openning ".$tmp_file;
+	echo "opening ".$tmp_file;
 	$handle = fopen($tmp_file, 'w') or die('Cannot open file:  '.$tmp_file);
 
+	echo "Sending to printer KITCHEN_LABEL".$params['KITCHEN_LABELS_IP'].":".$params['KITCHEN_LABELS_PORT']."\n";
 	fwrite($handle,"Jobname:trolley ".$id."\n");
-	fwrite($handle,"Printer:".$params['KITCHEN_BELS_IP']."\n");
-	fwrite($handle,"Port:9100".$params['KITCHEN_LABELS_PORT']."\n");
+	fwrite($handle,"Printer:".$params['KITCHEN_LABELS_IP']."\n");
+	fwrite($handle,"Port:".$params['KITCHEN_LABELS_PORT']."\n");
 	fwrite($handle,"Label:ACS_TROLLEY.LBL"."\n");
 	fwrite($handle,"Endheader"."\n");
 	fwrite($handle,"Copies:".$t_copies."\n");
@@ -51,12 +51,12 @@ if (!empty($_POST['data'])) {
 	// now do plating label
 	$tmp_file = $job_dir.'plate'.$id.".tmp";
 	$job_file = $job_dir.'plate'.$id.".job";
-	echo "openning ".$tmp_file;
+	echo "opening ".$tmp_file;
 	$handle = fopen($tmp_file, 'w') or die('Cannot open file:  '.$tmp_file);
 	
 	fwrite($handle,"Jobname:plating ".$id."\n");
-	fwrite($handle,"Printer:10.0.0.99"."\n");
-	fwrite($handle,"Port:9100"."\n");
+	fwrite($handle,"Printer:".$params['KITCHEN_LABELS_IP']."\n");
+	fwrite($handle,"Port:".$params['KITCHEN_LABELS_PORT']."\n");
 	fwrite($handle,"Label:ACS_PL.LBL"."\n");
 	fwrite($handle,"Endheader"."\n");
 	fwrite($handle,"Copies:".$d_copies."\n");
