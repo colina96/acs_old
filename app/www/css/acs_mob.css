@@ -13,6 +13,7 @@ select {
 #button_mode_div {
 	margin: 0 10px 0 10px;
 }
+
 #battery_div {
 	position:absolute;
 	margin: 0 10px 0 10px;
@@ -178,7 +179,7 @@ select {
 	.border:1px solid green;
 	width:94vw;
 }
-#kitchen_barcode, #dock_barcode, .manual_barcode,#dock_search_div {
+#kitchen_barcode, #dock_barcode, .manual_barcode, #dock_search_div {
 	position:absolute;
 	top:30px;
 	left:6vw;
