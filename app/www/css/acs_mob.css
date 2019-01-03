@@ -444,7 +444,6 @@
 	height:75vh;
 	background:var(--acs_background_light);
 	border-radius: 15px;
-	border:1px solid var(--acs_background_light);
 	.padding:10px;
 	color:var(--acs_text_normal_dark);
 	font-size:small;
@@ -626,7 +625,7 @@ table.plating_tab th, table.item_table th {
 	color:var(--acs_text_normal_light);
 	height:45px;
 	background: var(--acs_background_dark);
-	border-spacing: 0;
+    border-spacing: 0;
 	padding:0;
 }
 table.plating_tab td , table.item_table td {
