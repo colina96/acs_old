@@ -111,8 +111,12 @@
 	font-size: 12vw;
 
 }
-
-#kitchen_barcode, #dock_barcode, .manual_barcode,#dock_search_div {
+#m_current_tracking_tab, #m_reprint_labels_tab {
+	top: 30px;
+	right: 20px;
+	position: relative;
+}
+#kitchen_barcode, #dock_barcode, .manual_barcode,#dock_search_div{
 	position:absolute;
 	top:30px;
 	left:6vw;
@@ -127,7 +131,7 @@
 }
 #current_time_kitchen, #current_time_dock {
 	position:absolute;
-	top:35px;
+	top:0px;
 	right:25px;
 	margin:0 auto;
 	color:var(--acs_text_normal_light);
