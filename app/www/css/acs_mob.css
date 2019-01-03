@@ -239,7 +239,7 @@
 	background: var(--acs_button_background_main);
 	color:var(--acs_button_text_main);
 	border-radius: 10px;
-    border-style: solid var(--acs_button_border);
+	border:2px var(--acs_button_border) solid;
 	padding: 10px;
     /*spacing: 5px; */
     width: 80%;
