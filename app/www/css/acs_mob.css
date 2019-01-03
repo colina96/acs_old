@@ -440,11 +440,12 @@
 	height:75vh;
 	background:var(--acs_background_light);
 	border-radius: 15px;
-	border:1px solid var(--acs_text_normal_dark);
+	border:1px solid var(--acs_background_light);
 	.padding:10px;
 	color:var(--acs_text_normal_dark);
 	font-size:small;
 	overflow:auto;
+	box-shadow: 0 0 15px lightgrey;
 }
 .m_modal2 {
 	position: absolute;
