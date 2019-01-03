@@ -54,14 +54,12 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function () {
-        console.log("onDeviceReady");
-        log("starting");
-        //RESTHOME = "http://www.evoz.com.au/acs/REST/";
-        RESTHOME = "http://10.0.0.32/acs/REST/";
-        // RESTHOME = "http://192.168.0.52/acs/REST/";
-        // document.getElementById('login_btn').innerHTML = 'Login to www.evoz.com.au';
+	console.log("onDeviceReady");
+    	RESTHOME = SERVER_URL+"/acs/REST/";
+	log("starting with RESTHOME:"+RESTHOME);
+
         check_login();
-        qpack_init();
+    	qpack_init();
         app.receivedEvent('deviceready');
     },
 
