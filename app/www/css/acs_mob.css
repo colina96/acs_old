@@ -30,6 +30,13 @@
     --acs_text_preptype_normal: var(--acs_darkblue);
     --acs_text_preptype_correctiveaction: var(--acs_darkpurple);
 }
+
+#dock_reprint_title {
+	text-transform: uppercase;
+	color: var(--acs_text_scan);
+	font-weight: bold;
+}
+
 #m_login {
 	position:relative;
 	font-weight: bold;
