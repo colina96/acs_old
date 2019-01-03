@@ -204,7 +204,7 @@
 .banner {
 	position:absolute;
 	top: 0;
-	width:100%;
+	width:100vw;
 	height:30px;
 	left: 0;
 	background: var(--acs_background_dark);
