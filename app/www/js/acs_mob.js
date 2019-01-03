@@ -377,7 +377,6 @@ function goto_home()
 
 function goto_plating_teams()
 {
-	
 	load_menu_items();
 	load_plating_items();
 	mode = 'plating';
@@ -487,9 +486,9 @@ function goto_plating()
 	
 	// now list all items for other plating teams
 	for (var pti = 1; pti < plating_teams.length; pti++ ) {
-		if (pti != active_plating_team)
+		if (pti != active_plating_team) {
 			show_plating_items(pti,tab);
-		
+		}
 	}
 	t.appendChild(tab);
 }

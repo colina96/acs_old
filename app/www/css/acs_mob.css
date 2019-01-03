@@ -190,7 +190,9 @@
 	overflow:auto;
 }
 #sel_team_member { margin-top:10px;}
-.margin10 { margin:10px;}
+.margin10 {
+	margin:10px;
+}
 .pad10 { padding:10px;}
 .item_table {
 	width:100%;
@@ -627,10 +629,12 @@ table.plating_tab th, table.item_table th {
 	background: var(--acs_background_dark);
     border-spacing: 0;
 	padding:0;
+	text-align: left;
 }
 table.plating_tab td , table.item_table td {
 	color:var(--acs_text_normal_dark);
 	height:45px;
+	text-align: left;
 }
 
 th.plating_tab {
