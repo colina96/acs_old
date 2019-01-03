@@ -11,8 +11,8 @@ var active_comp = null; // the component currently being worked on
 var active_menu_item_id = null;
 var new_comp = null; // start a new component - M1
 
-var RESTHOME = "http://10.0.0.32/acs/REST/";
-// var RESTHOME = "http://192.168.0.52/acs/REST/";
+
+var RESTHOME = SERVER_URL+"acs/REST/";
 
 var barcode_mode = null;
 var mode = null; // kitchen or plating
@@ -2105,7 +2105,7 @@ function reprint_labels()
 
 function print_component_labels(qty)
 {
-	console.log(" print_component_labels ",qty);
+	console.log("print_component_labels ",qty);
 	console.log(active_comp);
 	var comp = active_comp;
 	comp.copies = qty;
