@@ -244,18 +244,19 @@ function show_dims()
 		<div class='m_main'>
 			<div class='m_top_menu_container'>
 				<div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">X</div>
-				<div class='m_top_menu' id='m_current_tracking_tab'  
-					onclick="openPage('m_current_tracking', this, 'red','m_modal','m_top_menu',m_tracking);">CURRENT TRACKING</div>
-				<div class='m_top_menu' id='m_reprint_labels_tab'  
-					onclick="openPage('m_reprint_labels', this, 'red','m_modal','m_top_menu',reprint_comp_labels);">RE-PRINT LABELS</div>
-				<div class='m_top_menu larger' id='m_search_tab'  
+				<div class='m_top_menu larger' id='m_search_tab'
 					onclick="openPage('m_search', this, 'red','m_modal','m_top_menu',goto_comp_search);"></div>
+				<div class='m_top_menu' id='m_current_tracking_tab'
+					 onclick="openPage('m_current_tracking', this, 'red','m_modal','m_top_menu',m_tracking);">CURRENT TRACKING</div>
+				<div class='m_top_menu' id='m_reprint_labels_tab'
+					 onclick="openPage('m_reprint_labels', this, 'red','m_modal','m_top_menu',reprint_comp_labels);">RE-PRINT LABELS</div>
+				<div id='current_time_kitchen'>TIME</div>
+
 				<!--  div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div -->
 			</div>
 			<div id='kitchen_barcode' class='manual_barcode hidden'>
 				<input placeholder='Enter existing barcode' name='kitchen_manual_barcode' id='kitchen_manual_code' onchange='manual_barcode_submit("kitchen_manual_barcode")'>
 			</div>
-			<div id='current_time_kitchen'>TIME</div>
 			<div class='m_modal' id='m_current_tracking' >CURRENT TRACKING</div>
 			<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
 			
