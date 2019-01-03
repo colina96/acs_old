@@ -1,23 +1,38 @@
 select {
 	font-size: 6vw;
 }
+
 :root {
-	--acs_green:#18e0af;
-	--acs_background:#18e0af;
-    --acs_orange_text: #e9ab17;
-    --acs_red_text: #ed165d;
-    --acs_blue_text: #82A0FD;
-    --acs_blue: #7F9FFD;
-    --acs_purple_text: #93b3fd;
-    --acs_blue_dark_text: #1543ab;
-    --acs_purple_dark_text: #4f198d;
-    --acs_grey:#8f8f8f;
-    --acs_grey_text: #8f8f8f;
+    --acs_grey: #8f8f8f;
+    --acs_white: #ffffff;
+    --acs_lightpurple: #93b3fd;
+    --acs_red: #ed165d;
+    --acs_orange: #e9ab17;
+    --acs_green:#18e0af;
+    --acs_blue: #2e6af2;
+    --acs_purple: #882cdf;
+    --acs_darkblue: #1543ab;
+    --acs_darkpurple: #4f198d;
 
-	--acs_white_background: white;
-    --acs_blue_background: #2e6af2;
-    --acs_purple_background: #882cdf;
+    --acs_background_light: var(--acs_white);
+    --acs_background_dark: var(--acs_blue);
+    --acs_background_highlight: var(--acs_green);
+    --acs_background_correctiveaction: var(--acs_purple);
 
+    --acs_button_background_main: var(--acs_green);
+    --acs_button_background_minor: var(--acs_white);
+    --acs_button_text_main: var(--acs_white);
+    --acs_button_text_minor: var(--acs_green);
+    --acs_button_border: var(--acs_green);
+
+    --acs_text_normal_dark: var(--acs_grey);
+    --acs_text_normal_light: var(--acs_white);
+    --acs_text_scan: var(--acs_lightpurple);
+    --acs_text_milestone_complete: var(--acs_green);
+    --acs_text_milestone_fail: var(--acs_red);
+    --acs_text_milestone_warning: var(--acs_orange);
+    --acs_text_preptype_normal: var(--acs_darkblue);
+    --acs_text_preptype_correctiveaction: var(--acs_darkpurple);
 }
 
 #button_mode_div {
