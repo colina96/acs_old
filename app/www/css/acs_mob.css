@@ -200,6 +200,11 @@ input[type="text"] {
     -webkit-writing-mode: horizontal-tb !important;
     box-sizing: border-box;
     width:100%;
+	background-image: url('../img/icon_search.png');
+	background-size: 25px;
+	background-repeat: no-repeat;
+	background-position: right 20px center;
+
 }
 
 input::placeholder{
