@@ -2,12 +2,22 @@ select {
 	font-size: 6vw;
 }
 :root {
-	--acs_green:#51DD9F;
-	--acs_background:#23DD9F;
-	--acs_grey:#969696;
-	--acs_blue_text: #82A0FD;
-	--acs_blue_background: #3D64E7;
-	--acs_blue: #7F9FFD;
+	--acs_green:#18e0af;
+	--acs_background:#18e0af;
+    --acs_orange_text: #e9ab17;
+    --acs_red_text: #ed165d;
+    --acs_blue_text: #82A0FD;
+    --acs_blue: #7F9FFD;
+    --acs_purple_text: #93b3fd;
+    --acs_blue_dark_text: #1543ab;
+    --acs_purple_dark_text: #4f198d;
+    --acs_grey:#8f8f8f;
+    --acs_grey_text: #8f8f8f;
+
+	--acs_white_background: white;
+    --acs_blue_background: #2e6af2;
+    --acs_purple_background: #882cdf;
+
 }
 
 #button_mode_div {
@@ -39,7 +49,7 @@ select {
 	position:absolute;
 	top: 30px;
 	left: 0;
-	background: var(--acs_blue_background);
+	background: var(--acs_white_background);
 }
 .mobile_main {
 	background-image: url('../img/qac_mobile.png');
@@ -110,8 +120,12 @@ select {
 	margin:0 auto;
 	.background: #eeeeee;
 	border-radius: 15px;
-	
 }
+
+#front_page_btns {
+	background-color: var(--acs_white_background);
+}
+
 .m_submit {
 	.bottom:30px;
 	background: white;
@@ -157,7 +171,7 @@ select {
     top: 0;
     width: 356px;
     height: 570px;
-    color:red;
+    color:#8f8f8f;
     margin:auto;
     display: flex;
     flex-direction: row;
@@ -391,7 +405,7 @@ select {
 	position:relative;
 	font-size:7vw;
 	.background:blue;
-	color:white;
+	color: var(--acs_grey_text);
 	margin:0 auto;
 	top:5vh;
 	display:table;
