@@ -42,10 +42,12 @@ if (!empty($_POST['data'])) {
 	$preparedBy = $comp['preparedBy'];
 	$tmp_file = $job_dir.'comp'.$id.".tmp";
 	$job_file = $job_dir.'comp'.$id.".job";
-	echo "openning ".$tmp_file;
-	$handle = fopen($tmp_file, 'w') or die('Cannot open file:  '.$tmp_file);
 
+	echo "opening ".$tmp_file."\n";
+	$handle = fopen($tmp_file, 'w') or die('Cannot open file:  '.$tmp_file);
 	echo "opened ".$tmp_file;
+
+	echo "Sending to printer KITCHEN_LABEL".$params['KITCHEN_LABELS_IP'].":".$params['KITCHEN_LABELS_PORT']."\n";
 	fwrite($handle,"Jobname:user ".$id."\n");
 	fwrite($handle,"Printer:".$params['KITCHEN_LABELS_IP']."\n");
 	fwrite($handle,"Port:".$params['KITCHEN_LABELS_PORT']."\n");
@@ -54,7 +56,7 @@ if (!empty($_POST['data'])) {
 	fwrite($handle,"Copies:".$copies."\n");
 	fwrite($handle,"NAME:".$description."\n");
 	fwrite($handle,"PREPAREDBY:".$preparedBy."\n");
-	$facility = 1; // not used yet.... maybe one day
+	$facility = 1; //TODO not used yet.... maybe one day
 	$barcode = sprintf("BARCODE:c%02d%06d",$facility,$id);
 	fwrite($handle,$barcode."\n");
 	//$barcodeTxt = sprintf("BARCODETXT:c%02d%06d",$facility,$id);
