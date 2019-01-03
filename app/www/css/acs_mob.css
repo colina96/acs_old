@@ -8,7 +8,7 @@ select {
     --acs_lightpurple: #93b3fd;
     --acs_red: #ed165d;
     --acs_orange: #e9ab17;
-    --acs_green:#18e0af;
+	--acs_green:#18e0af;
     --acs_blue: #2e6af2;
     --acs_purple: #882cdf;
     --acs_darkblue: #1543ab;
@@ -49,7 +49,7 @@ select {
 	left: 0;
 	width:100%;
 	z-index: 1000;
-	color:white;
+	color: var(--acs_text_normal_dark);
 	display:flex;
 }
 .banner {
@@ -58,13 +58,13 @@ select {
 	width:100%;
 	height:30px;
 	left: 0;
-	background: var(--acs_blue_background);
+	background: var(--acs_background_dark);
 }
 .background_div {
 	position:absolute;
 	top: 30px;
 	left: 0;
-	background: var(--acs_white_background);
+	background: var(--acs_background_light);
 }
 .mobile_main {
 	background-image: url('../img/qac_mobile.png');
@@ -74,21 +74,22 @@ select {
 	.height:100vh;
 	height:590px;
 	margin:0;
-	.background:green;
+	.background:var(--acs_background_highlight);
 	top:0;
 }
 .m_btn, .m_submit {
 	
 	position:relative;
 	left:10%;
-	background: var(--acs_background);
-	color:white;
-	border-radius: 15px;
+	background: var(--acs_button_background_main);
+	color:var(--acs_button_text_main);
+	border-radius: 10px;
+    border-style: solid var(--acs_button_border);
 	padding: 10px;
     spacing: 5px;
     width: 80%;
     font-size:larger;
-    margin:10px auto;
+    margin:5px auto;
 }
 
 .btn_top {
@@ -113,18 +114,18 @@ select {
 	margin:10px auto;
 }
 .modal_head {
-	color:var(--acs_grey_text);
+	color:var(--acs_text_normal_dark);
 	margin-top:10px;
 	margin-bottom:10px;
 	font-size:20px;
 }
 .LR_description {
-	color:var(--acs_green);
+	color:var(--acs_text_milestone_complete);
 	margin-top:35px;
 	font-size:20px;
 }
 .temp_achieved {
-	color:var(--acs_blue_text);
+	color:var(--acs_text_milestone_complete);
 }
 .btns {
 	bottom:5px;
@@ -138,14 +139,14 @@ select {
 }
 
 #front_page_btns {
-	background-color: var(--acs_white_background);
+	background-color: var(--acs_background_light);
 }
 
 .m_submit {
 	.bottom:30px;
-	background: white;
-	color: var(--acs_background);
-	border:2px var(--acs_background) solid;
+	background: var(--acs_background_light);
+	color: var(--acs_button_text_minor);
+	border:2px var(--acs_button_border) solid;
 	border-radius: 15px;
 }
 @media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
@@ -166,10 +167,9 @@ select {
 	left:20vw;
 	.height:50vh;
 	top:40vh;
-	.border:1px solid blue;
+	.border:1px solid var(--acs_blue);
 	background:#dddddd;
-	color:black;
-	z-index:2001;
+	color:var(--acs_text_normal_dark);
 	display:none;
 	border-radius: 15px;
 	z-index:1001;
@@ -178,7 +178,7 @@ select {
 	width:80%;
 	margin:2% 10%;
 	font-size:5vw;
-	background-color:white;
+	background-color:var(--acs_background_light);
 }
 
 .m_main {
@@ -186,7 +186,7 @@ select {
     top: 0;
     width: 356px;
     height: 570px;
-    color:#8f8f8f;
+    color:var(--acs_text_normal_dark);
     margin:auto;
     display: flex;
     flex-direction: row;
@@ -200,11 +200,11 @@ select {
 	position:absolute;
 	top:0;
 	left:1vw;
-	margin:0vw;
+	margin:0;
 	display:flex;
-	.color:white;
+	.color:var(--acs_text_normal_light);
 	font-size:x-small;
-	.border:1px solid green;
+	.border:1px solid var(--acs_button_border);
 	width:94vw;
 }
 #kitchen_barcode, #dock_barcode, .manual_barcode,#dock_search_div {
@@ -213,7 +213,7 @@ select {
 	left:6vw;
 	margin:0 auto;
 	width:86%;
-	color:white;
+	color:var(--acs_text_normal_light);
 	font-size:20px;
 }
 #kitchen_manual_code, #dock_manual_code {
@@ -225,7 +225,7 @@ select {
 	top:35px;
 	right:25px;
 	margin:0 auto;
-	color:white;
+	color:var(--acs_text_normal_light);
 	font-size:17px;
 }
 
@@ -239,13 +239,13 @@ select {
 	left:9vw;
 	margin:2vw;
 	display:flex;
-	color:white;
+	color:var(--acs_text_normal_light);
 	font-size:20px;
 }
 .m_top_menu {
 	margin:auto;
 	.width:30vw;
-	color:white;
+	color:var(--acs_text_normal_light);
 	font-size:larger;
 }
 
@@ -267,15 +267,15 @@ select {
 	font-size:5vw;
 }
 .m_bluedot {
-	background:#5375DA;
-	color:white;
+	background:var(--acs_background_dark);
+	color:var(--acs_text_normal_light);
 	border-radius: 15px;
 	padding: 5px 10px;
 	width:8px;
 	font-size:larger;
 }
 #ms_1,#ms_2 {
-	color:orange;
+	color:var(--acs_text_milestone_warning);
 	margin-right: 2vw;
 }
 #ms_2_text {
@@ -287,7 +287,7 @@ select {
 	margin : 10px auto;
 	.padding: 5px;
 	
-	color:var(--acs_grey_text);
+	color:var(--acs_text_normal_dark);
 	.border-radius: 15px;
 	font-size: larger;
 	.display:flex;
@@ -298,7 +298,7 @@ select {
 	margin : 10px auto;
 	padding: 5px;
 	
-	color:var(--acs_grey_text);
+	color:var(--acs_text_normal_dark);
 	.border-radius: 15px;
 	font-size: larger;
 	display:flex;
@@ -312,7 +312,7 @@ select {
 	padding: 0 5px;
     top: -6px;
     right: 4px;
-	.border: 2px solid red;
+	.border: 2px solid var(--acs_red);
     .border-radius: 10px;
     font-size:25px;
 }
@@ -320,7 +320,7 @@ select {
 	position:absolute;
 	top: 2vh;
 	right: 6vw;
-	color:blue;
+	color:var(--acs_blue);
 	font-size:10vw;
 	font-weight: bold;
 }
@@ -328,7 +328,7 @@ select {
 	position:absolute;
 	top: 8vh;
 	left: 6vw;
-	color:white;
+	color:var(--acs_text_normal_light);
 	font-size:6vw;
 	font-weight: bold;
 
@@ -338,7 +338,7 @@ select {
 	position:absolute;
 	top: 18vh;
 	left: 6vw;
-	color:white;
+	color:var(--acs_text_normal_light);
 	font-size:5.2vw;
 	display:flex;
 }
@@ -350,7 +350,7 @@ select {
 	position:absolute;
 	top: 22vh;
 	left: 6vw;
-	color:white;
+	color:var(--acs_text_normal_light);
 	font-size:5.5vw;
 	display:flex;
 }
@@ -368,9 +368,9 @@ select {
 	left:8vw;
 	margin:2vw;
 	.display:flex;
-	.color:white;
+	.color:var(--acs_text_normal_light);
 	font-size:x-small;
-	.border:1px solid green;
+	.border:1px solid var(--acs_button_border);
 }
 .m_modal {
 	position: absolute;
@@ -379,12 +379,11 @@ select {
 	.margin:2vw;
 	width:87vw;
 	height:75vh;
-	background:white;
+	background:var(--acs_background_light);
 	border-radius: 15px;
-	border:1px solid black;
+	border:1px solid var(--acs_text_normal_dark);
 	.padding:10px;
-	color:black;
-	background: white;
+	color:var(--acs_text_normal_dark);
 	font-size:small;
 	overflow:auto;
 }
@@ -394,14 +393,13 @@ select {
 	width:80vw;
 	top:25vh;
 	height:60vh;
-	background:white;
+	background:var(--acs_background_light);
 	border-radius: 15px;
-	border:1px solid black;
+	border:1px solid var(--acs_text_normal_dark);
 	padding:10px;
-	color:black;
+	color:var(--acs_text_normal_dark);
 	font-size:small;
-	background: white;
-	averflow:auto;
+	overflow:auto;
 }
 .m_modal3 {
 	position: relative;
@@ -411,25 +409,28 @@ select {
 	height:10vh;
 	.background:pink;
 	.border-radius: 15px;
-	.border:1px solid black;
+	.border:1px solid var(--acs_grey);
 	padding:10px;
-	color:white;
+	color:var(--acs_text_normal_light);
 }
 	
 #m_login {
 	position:relative;
-	font-size:7vw;
-	.background:blue;
-	color: var(--acs_grey_text);
-	margin:0 auto;
+    font-weight: bold;
+	font-size:6vw;
+	.background:var(--acs_background_dark);
+	color: var(--acs_text_normal_dark);
+	margin: 0 auto;
+    margin-top: 10vw;
 	top:5vh;
 	display:table;
 	min-width:20vw;
+    text-transform: uppercase;
 }
 #close_m_temp, #close_m_plating, .m_close {
 	position:absolute;
 	font-size:10vw;
-	color:white;
+	color:var(--acs_text_normal_light);
 	top:2px;
 	left:6vw;
 }
@@ -451,19 +452,19 @@ select {
 .temp_reading {
 	font-size: 25vw;
 	margin: 0 auto;
-	margin-top:25px;
+	margin-top: 25px;
 	display: table;
 	font-weight: bold;
 	color:var(--acs_green);
 }
 .red {
-	color:red;
+	color:var(--acs_red);
 }
 .green {
-	color:green;
+	color:var(--acs_green);
 }
 .orange {
-	color:orange;
+	color:var(--acs_orange);
 }
 .milestone_div {
 	font-size: 10vw;
@@ -475,7 +476,7 @@ select {
 	display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    color:var(--acs_grey_text);
+    color:var(--acs_text_normal_dark);
     width:100%;
 }
 .label_txt {
@@ -484,7 +485,7 @@ select {
 }
 .dec_labels, .inc_labels {
 	border-radius: 25px;
-	border:3px solid grey;
+	border:3px solid var(--acs_text_normal_dark);
 	padding: 5px 10px;
 	width:8px;
 	font-size:larger;
@@ -500,7 +501,7 @@ select {
 	top:2vh;
 	left:16vw;
 	font-size:18px;
-	color:white;
+	color:var(--acs_text_normal_light);
 }
 #plating_sched_list {
 	position:absolute;
@@ -520,14 +521,14 @@ select {
 	border-collapse: collapse;
 }
 table.plating_tab th, table.item_table th {
-	color:white;
+	color:var(--acs_text_normal_light);
 	height:45px;
-	background: var(--acs_blue);
-	border-spacing:0px;
+	background: var(--acs_background_dark);
+	border-spacing: 0;
 	padding:0;
 }
 table.plating_tab td , table.item_table td {
-	color:black;
+	color:var(--acs_text_normal_dark);
 	height:45px;
 }
 
@@ -540,12 +541,12 @@ table.plating_tab td , table.item_table td {
     position: relative;
     height: 25px;
     padding: 3px 1em 3px .4em;
-    color: blue;
+    color: var(--acs_blue);
     font-size: larger;
     max-width: 70vw;
     margin:1px;
     border-radius: 15px;
-    background:white;
+    background:var(--acs_background_light);
 }
 .ui-autocomplete {
     position: absolute;
@@ -559,7 +560,7 @@ table.plating_tab td , table.item_table td {
     padding: 4px 0;
     margin: 0 0 10px 25px;
     list-style: none;
-    background-color: #blue;
+    background-color:var(--acs_background_dark);
     border-color: #ccc;
     border-color: rgba(0, 0, 0, 0.2);
     border-style: solid;
@@ -588,7 +589,5 @@ table.plating_tab td , table.item_table td {
 
 th.plating_tab {
 	background:lightblue;
-}
-
 }
 
