@@ -71,9 +71,8 @@ body {
 .btn {
 	width:50vw;
 	/height:10vh;
-
+    color: var(--acs_white);
 	padding:10px;
-	border:2px solid red;     
 	margin:auto;
 	font-size:5vw;
 	border-radius: 15px;
