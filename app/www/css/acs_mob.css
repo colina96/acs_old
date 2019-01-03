@@ -309,7 +309,7 @@
 	background: var(--acs_background_light);
 	color: var(--acs_button_text_minor);
 	border:2px var(--acs_button_border) solid;
-	border-radius: 15px;
+	border-radius: 10px;
 }
 
 .hidden {
