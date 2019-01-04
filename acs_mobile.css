@@ -21,7 +21,6 @@ body {
 	background: #23DD9F;
 	border-radius: 15px;
 	padding: 10px;
-    spacing: 5px;
     width: 80%;
     font-size:larger;
 }
@@ -85,31 +84,26 @@ body {
 	border-radius: 15px;
 	font-size: large;
 }
-.m_modal {
+
+.m_modal, .m_modal2 {
 	position: relative;
 	margin:24px;
 	width:80%;
-	height:80%;
 	background:white;
-	border-radius: 15px;
+	border-radius: var(--acs_modal_radius);
 	border:1px solid black;
 	padding:10px;
 	color:black;
 	font-size:small;
+}
+.m_modal {
+	height:80%;
 }
 .m_modal2 {
-	position: relative;
-	margin:24px;
-	width:80%;
 	top:22%;
 	height:60%;
-	background:white;
-	border-radius: 15px;
-	border:1px solid black;
-	padding:10px;
-	color:black;
-	font-size:small;
 }
+
 .m_login {
 	position:absolute;
 	font-size:larger;
