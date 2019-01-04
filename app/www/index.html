@@ -111,12 +111,9 @@ function show_dims()
 <body>
 <div class='footer' onclick='logout();'><div id='button_mode_div'>-</div><div id='error_msg_div'></div><div id='battery_div'>Battery</div></div>
 <div class='banner'><div class='center'>Advanced Catering Solutions</div></div>
-<div class='m_modal_shadow' ></div>
 
 <div class='background_div' tabindex="0" onkeypress='global_key(event);'>
-	<div class='mobile_main' id='splash'>
-		
-	</div> 
+	<div class='mobile_main' id='splash'></div>
 	<div class='mobile_main hidden' id='setup'>
 		<div class='center'><input name='resthome' id='resthome'></div>
 		<div id='setup_result'></div>
@@ -144,6 +141,9 @@ function show_dims()
 	<!--  dock pages -->
 	<!--  there is some duplication of kitchen pages and functionality but safer to have copies -->
 	<div class='mobile_main hidden' id='dock_main'>
+		<div class='m_modal_shadow' ></div>
+		<image class="bg-image" src="img/qac_mobile.png"></image>
+
 		<div class='m_main'>
 			<div class='m_top_menu_container'>
 				<div class='m_top_menu larger left' id='m_home_tab'  onclick="goto_home()">X</div>
@@ -155,7 +155,7 @@ function show_dims()
 			<div class='hidden' id='dock_barcode'><input placeholder='Enter existing barcode' name='dock_manual_code' id='dock_manual_code' onchange='manual_barcode_submit("dock_manual_code")'>
 			</div>
 			<div class='hidden' id='current_time_dock'></div>
-			
+
 			<div class='m_modal' id='m_dock'>
 				<div class='margin10'>
 					<div id='dock_display_comp_div'>
@@ -267,7 +267,6 @@ function show_dims()
 					</div>
 				</div>
 			</div>
-			<div class='m_modal_shadow' ></div>
 		</div>
 	</div>
 	
@@ -498,7 +497,6 @@ function show_dims()
 					<button type='button'  class='m_btn' onclick="select_plating_team();">Continue</button>
 					</div>
 			</div>
-			<div class='m_modal_shadow' ></div>
 			<div class='m_modal hidden' id='m_sel_team_members' >
 				
 					<div id='plating_team_list'></div>

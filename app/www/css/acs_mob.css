@@ -42,14 +42,16 @@
 	border-style: none;
 	background-image: none;
 }
+
+#mm1 {
+
+}
 #m_login {
 	position:relative;
 	font-weight: bold;
 	font-size:6vw;
 .background:var(--acs_background_dark);
 	color: var(--acs_text_normal_dark);
-	margin: 0 auto;
-	margin-top: 10vw;
 	top:5vh;
 	display:table;
 	min-width:20vw;
@@ -190,7 +192,7 @@
 .top:5px;
 .width:95%;
 	width:100%;
-	border-radius: 15px;
+
 	height:75vh;
 	overflow:auto;
 }
@@ -222,15 +224,19 @@
 }
 
 .mobile_main {
-	background-image: url('../img/qac_mobile.png');
-	background-repeat: no-repeat;
 	/* spacing:10px; */
 	width:100vw;
 	height:590px;
 	position: relative;
 	margin:0;
 	top:0;
-	z-index: 1;
+}
+
+.bg-image {
+	background-image: url('../img/qac_mobile.png');
+	background-repeat: no-repeat;
+	width: 100%;
+	position:relative;
 }
 
 .m_btn, .m_submit {
@@ -464,8 +470,7 @@
 }
 
 .m_modal_shadow {
-	z-index: 1;
-	box-shadow: 0 0 15px 15px lightgrey;
+	box-shadow: 0 30px 20px 2px lightgrey;
 }
 
 .m_modal2 {
