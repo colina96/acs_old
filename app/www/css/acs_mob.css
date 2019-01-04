@@ -11,6 +11,7 @@
     --acs_darkpurple: #4f198d;
 
 	--acs_modal_radius: 15px;
+	--acs_button_radius: 10px;
 
     --acs_background_light: var(--acs_white);
     --acs_background_dark: var(--acs_blue);
@@ -243,22 +244,25 @@
 	left:10%;
 	background: var(--acs_button_background_main);
 	color:var(--acs_button_text_main);
-	border-radius: 10px;
+	border-radius: var(--acs_button_radius);
 	border:2px var(--acs_button_border) solid;
 	padding: 10px;
     /*spacing: 5px; */
     width: 80%;
     font-size:larger;
     margin:5px auto;
+	font-family: "Ubuntu Medium", sans-serif;
 }
 
 .btn_top {
 	position:absolute;
 	bottom:40vh;
+	font-family: "Ubuntu Medium", sans-serif;
 }
 .btn_mid {
 	position:absolute;
 	bottom:30vh;
+	font-family: "Ubuntu Medium", sans-serif;
 }
 .enter_temp {
 	width:50%;
@@ -296,6 +300,7 @@
 	margin:0 auto;
 	.background: #eeeeee;
 	border-radius: 15px;
+	font-family: "Ubuntu Medium", sans-serif;
 }
 
 .footer {
@@ -314,7 +319,7 @@
 	background: var(--acs_background_light);
 	color: var(--acs_button_text_minor);
 	border:2px var(--acs_button_border) solid;
-	border-radius: 10px;
+	border-radius: var(--acs_button_radius);
 }
 
 .hidden {
@@ -364,7 +369,7 @@
 	.color:var(--acs_text_normal_light);
 	font-size:x-small;
 	.border:1px solid var(--acs_button_border);
-    border-radius: 10px;
+    border-radius: var(--acs_button_radius);
 	width:94vw;
 }
 
@@ -438,7 +443,7 @@
     top: -6px;
     right: 4px;
 	.border: 2px solid var(--acs_red);
-    .border-radius: 10px;
+    .border-radius: var(--acs_button_radius);
     font-size:25px;
 }
 
@@ -592,12 +597,12 @@ input[type="text"] {
 	background-color: rgba(255, 0, 0, 0.0);
 	-webkit-rtl-ordering: logical;
 	cursor: text;
-	font: 15px Arial, Helvetica, sans-serif;
+	font: 15px Ubuntu, sans-serif;
 	padding: 10px 2px;
 	border-width: 1px;
 	border-style: solid;
 	border-color: var(--acs_green);
-	border-radius: 10px;
+	border-radius: var(--acs_button_radius);
 	text-rendering: auto;
 	color: var(--acs_text_normal_light);
 	text-indent: 20px;
