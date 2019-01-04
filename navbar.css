@@ -102,16 +102,17 @@ td { padding: 5px; }
 .acs_container {
 	.padding: 10px;
 	border-radius: 15px 15px;
-    spacing: 10px;
 }
-.margin10 { margin:10px;}
+.m-10 {
+	margin:10px;
+}
+
 .acs_sidebar {
 position: relative;
 	height:100%;
 	width:25%;
 	.border: 1px solid blue;
 	padding: 15px;
-    spacing: 15px;
     border-radius: 15px 0 0 15px;
     background: #648AFB;
 }

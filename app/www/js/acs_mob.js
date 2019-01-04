@@ -434,9 +434,9 @@ function show_plating_items(team_id,tab)
 
 			tr = document.createElement('tr');
 			var td = document.createElement('td');
-			td.innerHTML = margin(menu_items[i]['code']);
-			tr.appendChild(td);
+			td.innerHTML = menu_items[i]['code'];
 
+			tr.appendChild(td);
 			td = document.createElement('td');
 
 			//figure out color class and link
@@ -458,15 +458,13 @@ function show_plating_items(team_id,tab)
 			//console.log(menu_items[i]);
 			td.innerHTML = menu_items[i]['current_shift'];
 			tr.appendChild(td);
-			tr.className = 'margin10';
-
 			tab.appendChild(tr);
 		}
 	}
 }
+
 function goto_plating()
 {
-	
 	// ???? load_menu_items();
 	show('plating_return');
 	hide('plating_print_labels');
@@ -481,10 +479,11 @@ function goto_plating()
 	t.innerHTML = '';
 	var tab = document.createElement('table');
 	tab.className = 'plating_tab';
+
 	var tr = document.createElement('tr');
-	tr.className = 'plating_tab';
+
 	var th = document.createElement('th');
-	th.innerHTML = margin('CODE');
+	th.innerHTML = 'CODE';
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML = 'PRODUCT NAME';
@@ -492,6 +491,7 @@ function goto_plating()
 	th = document.createElement('th');
 	th.innerHTML = 'QTY';
 	tr.appendChild(th);
+
 	tab.appendChild(tr);
 	show_plating_items(active_plating_team,tab);
 	
@@ -526,14 +526,13 @@ function calc_time_remaining(item)
 	var event_time = new Date(item['time_started']);
 	console.log("calc_time_remaining -" + event_time + " - " + item['time_started']);
 	console.log(item);
-	var remaining = 0;
 	var now = new Date();
 	var now_ms = now.getTime();
 	var event_ms = event_time.getTime(); // time in millisecs
 	
 	var due_min = get_preptype_val(plating_prep_type,'M2_time_minutes');
 	var due_ms = event_ms + due_min * 60 * 1000;  			
-	remaining = (due_ms - now_ms) / (60 * 1000);
+	var remaining = (due_ms - now_ms) / (60 * 1000);
 	console.log("M2_due_min M1_ms",due_min,event_ms,due_ms,format_minutes(remaining));
 	return(format_minutes(remaining));
 }
@@ -1084,7 +1083,6 @@ function new_component() {
 
         success: function(result) { 
         	load_comps(component_selected);
-        	// component_selected();
         },
         fail: (function (result) {
             console.log("new _component fail ",result);
@@ -1231,12 +1229,12 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
 	document.getElementById('m1_temp_div_1a').innerHTML = '';
 	div = document.getElementById('m1_temp_div_1');
-	var d = "<div class='margin10'><table width='100%'>";
+	var d = "<div class='m-10'><table width='100%'>";
 	d += "<tr><td>Description</td><td>ID</td><td>Temperature</td></tr>";
 	var prep_type_id = new_comp['prep_type'];
 	console.log(' draw_ingredients prep_type_id',prep_type_id);
 	document.getElementById('ms_2_target').innerHTML = '';
-	;
+
 	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
 		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
 		d += "<tr><td>" + sub['description'] + '</td>';
@@ -2511,7 +2509,7 @@ console.log("loading menu item components");
 function new_td(content,classname) {
 	var td = document.createElement('td');
 	td.className = classname;
-	td.innerHTML = "<div class='margin10'>" + content + "</div>";
+	td.innerHTML = "<div class='m-10'>" + content + "</div>";
 	return(td);
 }
 

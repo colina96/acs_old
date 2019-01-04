@@ -159,7 +159,7 @@ function get_component_by_description(description)
 }
 function margin(t)
 {
-	return("<div class='margin10'>" + t + "</div");
+	return("<div class='m-10'>" + t + "</div");
 }
 
 function zeropad(s,n) // return string length n padded with zeroes

@@ -22,12 +22,14 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta charset="utf-8"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
     <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *"/>
     <!-- Good default declaration:
     * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
     * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
@@ -38,80 +40,84 @@
     -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
 
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <link rel="stylesheet" href="css/jquery.mobile-1.3.2.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <link rel="stylesheet" href="css/jquery.mobile-1.3.2.min.css"/>
     <link rel="stylesheet" href="css/jquery-ui.min.css">
-        <script src="js/jquery.min.js"></script> 
-        <script type="text/javascript">
-    $(document).bind('mobileinit',function(){
-        $.mobile.loadingMessage = false;
-    })
-</script>           
-        <script src="js/jquery.mobile-1.3.2.min.js"></script> 
-         <script src="js/jquery-ui.min.js"></script>     
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).bind('mobileinit', function () {
+            $.mobile.loadingMessage = false;
+        })
+    </script>
+    <script src="js/jquery.mobile-1.3.2.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-     <script type="text/javascript" src="js/acs_mob.js"></script>
-     <script type="text/javascript" src="js/acs_common.js"></script>
-      <script type="text/javascript" src="js/qpack.js"></script>
-     
-       <link rel="stylesheet" type="text/css" href="css/acs_mob.css" />
+    <script type="text/javascript" src="js/acs_mob.js"></script>
+    <script type="text/javascript" src="js/acs_common.js"></script>
+    <script type="text/javascript" src="js/qpack.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/acs_mob.css"/>
     <title>ACS</title>
 </head>
 <style>
-.serial {
-width:90vw;
-height:50vh;
-margin:5vw;
-position:absolute;
-top:0;
-left:0;
-border:2px solid green;
-background: darkgrey;
-color:white;
-overflow:auto;
-z-index:2000;
-overflow:auto;
-}
-#status,#log {
-height:20vh;
-width:100vw;
-background:white;
-color:black;
-overflow:auto;
-}
+    .serial {
+        width: 90vw;
+        height: 50vh;
+        margin: 5vw;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 2px solid green;
+        background: darkgrey;
+        color: white;
+        overflow: auto;
+        z-index: 2000;
+        overflow: auto;
+    }
+
+    #status, #log {
+        height: 20vh;
+        width: 100vw;
+        background: white;
+        color: black;
+        overflow: auto;
+    }
 </style>
 <script>
 
-var keyboard_str = '';
+    var keyboard_str = '';
 
-function global_key(event)
-{
-	// this is mostly to handle barcode scanner input. 
-	// on a pc the barcode scanner arrives as a string 
+    function global_key(event) {
+        // this is mostly to handle barcode scanner input.
+        // on a pc the barcode scanner arrives as a string
 //	console.log(">>>" + event.keyCode);
-	keyboard_str += String.fromCharCode(event.keyCode);
+        keyboard_str += String.fromCharCode(event.keyCode);
 //	console.log(">>>" + keyboard_str);
-	if (event.keyCode == 13) {
-		console.log(">>>" + keyboard_str);
-		process_barcode(keyboard_str);
-		keyboard_str = '';
-	}
-}
+        if (event.keyCode == 13) {
+            console.log(">>>" + keyboard_str);
+            process_barcode(keyboard_str);
+            keyboard_str = '';
+        }
+    }
 
-function show_dims()
-{
-	var div = document.getElementById('log_div');
-	div.style.display = 'block';
-	div.innerHTML = " width: " + window.innerWidth;
-	div.innerHTML += "<br>height: " + window.innerHeight;
-	
-}
+    function show_dims() {
+        var div = document.getElementById('log_div');
+        div.style.display = 'block';
+        div.innerHTML = " width: " + window.innerWidth;
+        div.innerHTML += "<br>height: " + window.innerHeight;
+
+    }
 </script>
 <body>
-<div class='footer' onclick='logout();'><div id='button_mode_div'>-</div><div id='error_msg_div'></div><div id='battery_div'>Battery</div></div>
-<div class='banner'><div class='center'>Advanced Catering Solutions</div></div>
-
+<div class='footer' onclick='logout();'>
+    <div id='button_mode_div'>-</div>
+    <div id='error_msg_div'></div>
+    <div id='battery_div'>Battery</div>
+</div>
+<div class='banner'>
+    <div class='center'>Advanced Catering Solutions</div>
+</div>
 <div class='background_div' tabindex="0" onkeypress='global_key(event);'>
 	<div class='mobile_main' id='splash'></div>
 	<div class='mobile_main hidden' id='setup'>
@@ -122,8 +128,8 @@ function show_dims()
 			<button id='plat_btn' type='button'  class='m_btn' onclick="save_resthome();">Save</button>
 			<button id='out_btn' type='button'  class='m_btn' onclick="logout();">Logout</button>
 		</div>
-	</div> 
-	
+	</div>
+
 	<div class='mobile_main hidden' id='mm1'>
 		<image class="bg-image" src="img/qac_mobile.png"></image>
 		<div class='m_main'>
@@ -149,7 +155,7 @@ function show_dims()
 			<div class='m_top_menu_container'>
 				<div class='m_top_menu larger left' id='m_home_tab'  onclick="goto_home()">X</div>
 				<div class='m_top_menu' id='supplier_list_tab'  onclick="openPage('m_dock', this, 'red','m_modal','m_top_menu',goto_dock);">SUPPLIER LIST</div>
-				<div class='m_top_menu' id='s_reprint_labels_tab'  
+				<div class='m_top_menu' id='s_reprint_labels_tab'
 					onclick="openPage('m_dock_reprint', this, 'red','m_modal','m_top_menu',reprint_supplier_labels);">RE-PRINT LABELS</div>
 			</div>
 			<div class='search' id='dock_search_div'><input placeholder='Search' type="text" id="dock_search"></div>
@@ -158,7 +164,7 @@ function show_dims()
 			<div class='hidden' id='current_time_dock'></div>
 
 			<div class='m_modal' id='m_dock'>
-				<div class='margin10'>
+				<div class='m-10'>
 					<div id='dock_display_comp_div'>
 						<div id='dock_display_comp_div1'></div>
 						<div class='btns hidden' id='dock_comp_selected_btns'>
@@ -187,7 +193,7 @@ function show_dims()
 				<div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
 				<div id='dock_m1_temp_div' class='center'></div>
 				<div class='btns'>
-			  		<button type='button' class='m_submit' onclick="dock_read_M1temp();">Check Now</button> 
+			  		<button type='button' class='m_submit' onclick="dock_read_M1temp();">Check Now</button>
 					<button type='button'  class='m_btn' onclick="goto_dock();">RETURN</button>
 				</div>
 			</div>
@@ -203,7 +209,7 @@ function show_dims()
 				<div class='center modal_head'><span>TEMPERATURE</span></div>
 				<div id='dock_m1_temp_div_4' class='temp_reading'></div>
 				<div id='dock_m1_temp_div_5' class='center'></div>
-				
+
 				<div class='center'><input type='number' class='label_num' name='dock_m1_label_qty' length='3'></div>
 				<div class='center grey'>LABEL QUANTITY</div>
 				<div class='btns'>
@@ -263,8 +269,8 @@ function show_dims()
 			<div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
 			
 			<div class='m_modal hidden' id='m_search'>
-				<div class='margin10'>SEARCH</div>
-				<div class='margin10'><input type="text" id="search" name='new_comp_desc'>
+				<div class='m-10'>SEARCH</div>
+				<div class='m-10'><input type="text" id="search" name='new_comp_desc'>
 					<div class='btns hidden' id='new_comp_btns'>
 						<button type='button' class='m_submit' onclick="new_component();">Add New</button>
 					</div>
@@ -466,7 +472,7 @@ function show_dims()
 		<div class='m_modal_shadow' ></div>
 		<image class="bg-image" src="img/qac_mobile.png"></image>
 		<div class='m_close' onclick="goto_m_main();">&#x02A2F;</div>
-		
+
 		<div class='chk_temp_item' id='chk_plat_temp_item_div'></div>
 		<div class='m_modal2' id='m2_sl_plating'> <!-- plating 3.2 & 3.3 -->
 			<div class='center modal_head'><span>SHELF LIFE</span></div>
@@ -524,7 +530,7 @@ function show_dims()
 			<input placeholder='Enter existing barcode' name='plating_manual_barcode' id='plating_manual_code' onchange='manual_barcode_submit("plating_manual_barcode")'>
 			</div>
 			<div class='m_modal hidden' id='m_plating_sched' >
-				
+
 				<div id='plating_sched_list'></div>
 				<div class='btns' id='plating_return'>
 				   <button type='button'  class='m_btn' onclick="goto_plating();">Return</button>
@@ -542,14 +548,14 @@ function show_dims()
 						<div class='label_qty' id="pt_description_labels">1</div>
 						<div class='inc_labels' onclick='inc_labels("pt_description_labels",1,0,9);'>+</div>
 					</div>
-				    <button type='button'  class='m_btn' id='print_plating_labels_btn' onclick="start_plating_item();">Print Labels</button>	
+				    <button type='button'  class='m_btn' id='print_plating_labels_btn' onclick="start_plating_item();">Print Labels</button>
 				</div>
 				<div class='btns' id='plating_batch_change_btns'>
 					<button type='button'  class='m_submit' onclick="set_barcode_mode('plating_batch_change');">SCAN BARCODE</button>
 					<button type='button'  class='m_btn' onclick="goto_plating();">Return</button>
 				</div>
 			</div>
-			
+
 			<div class='m_modal hidden' id='m_plating_temp'>
 				<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
 				<div id='chk_plating_item_temp_div' class='center'></div>
@@ -563,7 +569,7 @@ function show_dims()
 			</div>
 			<div class='m_modal hidden' id='m_plating_temp_decant'>
 				<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
-				<div id='chk_plating_item_temp_divA' class='margin10'></div>
+				<div id='chk_plating_item_temp_divA' class='m-10'></div>
 				<div class='btns'>
 					<button type='button' class='m_submit' onclick="show('popup-labels');">Decant</button>
 					<button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
@@ -572,7 +578,7 @@ function show_dims()
 			</div>
 			<div class='m_modal hidden' id='m_plating_options'>
 				<div class='center modal_head'><span>PLATING OPTIONS</span></div>
-				<div id='plating_options_item_div' class='center orange margin10'></div>
+				<div id='plating_options_item_div' class='center orange m-10'></div>
 				<div class='btns'>
 					<button type='button' class='m_submit' onclick="plating_batch_change();">Batch Change</button>
 					<button type='button' class='m_submit' onclick="reprint_plating_labels();">Re-Print Labels</button>
@@ -580,19 +586,19 @@ function show_dims()
 				</div>
 			</div>
 	</div>
-	<!--  
+	<!--
 	<div class='mobile_main hidden' id='m_plating2'>
-	
+
 			<div id='close_m_temp' onclick="goto_plating_teams();">&#x02A2F;</div>
 			<div id='plating_action'>SCAN TEMPERATURE</div>
 			<div id='chk_temp_item_div'></div>
 			<div class='m_modal hidden' id='m_plating_list' >
-				
+
 				<div id='plating_sched_list'></div>
 			</div>
-			
+
 			<div class='m_modal hidden' id='m_plating_temp'>SEARCH
-			
+
 			</div>
 	</div>
 	-->
@@ -600,7 +606,7 @@ function show_dims()
 	<div class='mobile_main' id='login_div'>
 		<image class="bg-image" src="img/qac_mobile.png"></image>
 	<div id='status' class='hidden' onclick='qpack_start();'>status</div>
-		
+
 		<div id='login_div2' class='m_modal2'>
 			<input name='email' placeholder='Email' type='text' class='input'
 				   autocapitalize="off"
@@ -626,36 +632,36 @@ function show_dims()
 	
 </div>
 
-	<div class='popup' id='manual_entry'>
-		<div class='center'><h2>Enter Temperature</h2></div>
-		<div class='enter_temp center'>
-			<input name='manual_temp' id='manual_temp' length='3' size='3' type='number'>
-			<button type='button'  class='m_btn' onclick='manual_temp_submit()'>Submit</button>
-		</div>
-	</div>
-	<div class='popup' id='popup-labels'>
-		<div class='center'><h2>Enter Number of Labels</h2></div>
-		<div class='enter_temp center'>
-			<input name='manual_temp' class='label_num' id='decant_label_num' length='3' size='3' type='number'>
-		</div>
-		<div class='enter_temp center'>
-			<button type='button'  class='m_btn' onclick='decant_labels()'>Submit</button>
-		</div>
-	</div>
+<div class='popup' id='manual_entry'>
+    <div class='center'><h2>Enter Temperature</h2></div>
+    <div class='enter_temp center'>
+        <input name='manual_temp' id='manual_temp' length='3' size='3' type='number'>
+        <button type='button' class='m_btn' onclick='manual_temp_submit()'>Submit</button>
+    </div>
+</div>
+<div class='popup' id='popup-labels'>
+    <div class='center'><h2>Enter Number of Labels</h2></div>
+    <div class='enter_temp center'>
+        <input name='manual_temp' class='label_num' id='decant_label_num' length='3' size='3' type='number'>
+    </div>
+    <div class='enter_temp center'>
+        <button type='button' class='m_btn' onclick='decant_labels()'>Submit</button>
+    </div>
+</div>
 
-    <script type="text/javascript">
-   console.log("initialising serial type",typeof(serial));
+<script type="text/javascript">
+    console.log("initialising serial type", typeof (serial));
     app.initialize();
-    $(document).ready(function(){
-    	
-    	RESTHOME = "../../REST/";
-    	check_login();
-    	load_comps();
-    	load_preptypes();
-    	setTimeout(refresh_times,60); // once a minute
-    	console.log("STARTED timer");
+    $(document).ready(function () {
+
+        RESTHOME = "../../REST/";
+        check_login();
+        load_comps();
+        load_preptypes();
+        setTimeout(refresh_times, 60); // once a minute
+        console.log("STARTED timer");
     });
-    </script>
+</script>
 
 </body>
 
