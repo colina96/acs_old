@@ -136,7 +136,7 @@
 }
 #current_time_kitchen, #current_time_dock {
 	position:absolute;
-	top:0px;
+	top:0;
 	right:25px;
 	margin:0 auto;
 	color:var(--acs_text_normal_light);
@@ -226,14 +226,14 @@
 	background-repeat: no-repeat;
 	/* spacing:10px; */
 	width:100vw;
-	.height:100vh;
 	height:590px;
+	position: relative;
 	margin:0;
-	.background:var(--acs_background_highlight);
 	top:0;
+	z-index: 1;
 }
+
 .m_btn, .m_submit {
-	
 	position:relative;
 	left:10%;
 	background: var(--acs_button_background_main);
@@ -447,7 +447,7 @@
 	font-size:x-small;
 	.border:1px solid var(--acs_button_border);
 }
-.m_modal {
+.m_modal, .m_modal_shadow {
 	position: absolute;
 	top:12vh;
 	left:6vw;
@@ -461,8 +461,13 @@
 	color:var(--acs_text_normal_dark);
 	font-size:small;
 	overflow:auto;
-	box-shadow: 0 0 15px lightgrey;
 }
+
+.m_modal_shadow {
+	z-index: 1;
+	box-shadow: 0 0 15px 15px lightgrey;
+}
+
 .m_modal2 {
 	position: absolute;
 	margin:24px;
