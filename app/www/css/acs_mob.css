@@ -200,6 +200,31 @@
 .m-10 {
 	margin:10px;
 }
+
+#status, #log {
+    height: 20vh;
+    width: 100vw;
+    background: white;
+    color: black;
+    overflow: auto;
+}
+
+
+.serial {
+    width: 90vw;
+    height: 50vh;
+    margin: 5vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 2px solid green;
+    background: darkgrey;
+    color: white;
+    overflow: auto;
+    z-index: 2000;
+    overflow: auto;
+}
+
 .pad10 { padding:10px;}
 .item_table {
 	width:100%;
