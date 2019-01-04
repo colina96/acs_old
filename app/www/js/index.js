@@ -86,11 +86,11 @@ function setup_front_page() {
     var div = document.getElementById('front_page_btns');
     var innerHTML = '';
     if (USER.dock && USER.dock == 1)
-        innerHTML += "<button type='button' class='m_btn' onclick='goto_dock();'>Dock</button>";
+        innerHTML += "<button type='button' class='m_submit' onclick='goto_dock();'>Dock</button>";
     if (USER.kitchen && USER.kitchen == 1)
-        innerHTML += "<button id='kit_btn' type='button' class='m_btn' onclick=\"goto_m_main('kitchen');\">Kitchen</button>";
+        innerHTML += "<button id='kit_btn' type='button' class='m_submit' onclick=\"goto_m_main('kitchen');\">Kitchen</button>";
     if (USER.plating && USER.plating == 1)
-        innerHTML += "<button id='plat_btn' type='button'  class='m_btn' onclick=\"goto_plating_teams();\">Plating</button>";
+        innerHTML += "<button id='plat_btn' type='button'  class='m_submit' onclick=\"goto_plating_teams();\">Plating</button>";
     innerHTML += "<button id='out_btn' type='button'  class='m_btn' onclick=\"logout();\">Logout</button>";
     div.innerHTML = innerHTML;
 }
