@@ -26,7 +26,6 @@ body {
 }
 .m_submit {
 	bottom:18%;
-	background: #23DD9F;
 	border-radius: 15px;
 }
 @media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
