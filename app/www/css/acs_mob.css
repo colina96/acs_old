@@ -209,7 +209,10 @@
     overflow: auto;
 }
 
-
+#m_home_tab {
+	height:20px;
+	transform: rotate(180deg);
+}
 .serial {
     width: 90vw;
     height: 50vh;
