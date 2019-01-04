@@ -61,7 +61,7 @@
 	position:absolute;
 	font-size:10vw;
 	color:var(--acs_text_normal_light);
-	top:2px;
+	top:12px;
 	left:6vw;
 }
 .ui_menu_item {
@@ -212,6 +212,10 @@
 #m_home_tab, #plating_home_tab {
 	height:20px;
 	transform: rotate(180deg);
+}
+
+.m_close {
+	height:20px;
 }
 .serial {
     width: 90vw;
