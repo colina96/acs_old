@@ -209,7 +209,7 @@
     overflow: auto;
 }
 
-#m_home_tab {
+#m_home_tab, #plating_home_tab {
 	height:20px;
 	transform: rotate(180deg);
 }
