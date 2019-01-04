@@ -464,6 +464,7 @@
 
 .m_modal, .m_modal_shadow {
 	top:12vh;
+    margin-top: 10px;
 	left:6vw;
 	width:87vw;
 	height:75vh;
