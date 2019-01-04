@@ -14,9 +14,9 @@ session_start();
     <!-- Bootstrap -->
 <link href="bootstrap.min.css" rel="stylesheet">
 <script src="jquery/jquery.min.js"></script>
-<script src="jquery/jquery-ui.min.js"></script -->
+<script src="jquery/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="jquery/jquery-ui.min.css"/>
-  <!--  link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <!--  link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
   
   <!--  script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script -->
@@ -27,7 +27,7 @@ session_start();
    <!-- Custom styles for this template -->
     <link href="navbar.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries  -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
