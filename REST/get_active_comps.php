@@ -22,9 +22,33 @@ if ($userID > 0) {
 	}
 	if (!empty(get_url_token('all'))) {
 		$sql = "select *,(expiry_date < now()) as expired  from COMPONENT";
+		$where = false;
 		if ($search_terms['search_for']) {
+			$where = true;
 			$sql .= " where DESCRIPTION like '%".$search_terms['search_for']."%'";
 			// $sql .= " where DESCRIPTION like '"."ST"."%'";
+		}
+		if ($search_terms['start_date']) {
+			if (!$where) {
+				$sql .= " where ";
+				$where = true;
+			}
+			else {
+				$sql .= ' and ';
+			}
+			$sql .= "M1_time > '".$search_terms['start_date']."'";
+			
+		}
+		if ($search_terms['end_date']) {
+			if (!$where) {
+				$sql .= " where ";
+				$where = true;
+			}
+			else {
+				$sql .= ' and ';
+			}
+			$sql .= "M1_time <= '".$search_terms['end_date']." 23:59'";
+				
 		}
 	}
 	if (!empty(get_url_token('cid'))) {
