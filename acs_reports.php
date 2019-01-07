@@ -176,7 +176,10 @@ function report_components(data,format)
 			   			}
 			   			else if (e.indexOf('time') > 0) {
 			   	   			var s= data[i][e];
-			   	   			td.innerHTML = s.substring(11,16);
+			   	   			console.log("time - " + s);
+			   	   			if (s.length > 0) {
+			   	   				td.innerHTML = s.substring(11,16) + " " + s.substring(8,10) + '/' + s.substring(5,7) ;
+			   	   			}
 			   			}
 			   			else {
 			   				td.innerHTML = data[i][e]?data[i][e]:'-';
