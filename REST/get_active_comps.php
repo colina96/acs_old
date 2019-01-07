@@ -4,6 +4,7 @@ session_start();
 include '../db.php';
 // error_log("running get_active_components",0);
 $userID = $_SESSION['userID'];
+$search_terms = json_decode($_POST["data"],true);
 
 // echo "userID ".$userID."\n";
 if ($userID > 0) {
@@ -21,6 +22,10 @@ if ($userID > 0) {
 	}
 	if (!empty(get_url_token('all'))) {
 		$sql = "select *,(expiry_date < now()) as expired  from COMPONENT";
+		if ($search_terms['search_for']) {
+			$sql .= " where DESCRIPTION like '%".$search_terms['search_for']."%'";
+			// $sql .= " where DESCRIPTION like '"."ST"."%'";
+		}
 	}
 	if (!empty(get_url_token('cid'))) {
 		$sql = "select *,(expiry_date < now()) as expired  from COMPONENT";

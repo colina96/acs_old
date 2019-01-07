@@ -1,5 +1,6 @@
 <script>
 
+var report_mode = null; // can be dock, kitchen or plating
 var kitchen_report_fmt = {
 	'CC': {
 		'COMPONENT NAME':'description',
@@ -190,8 +191,16 @@ function report_components(data,format)
    	div.appendChild(tab);
 }
 
-function kitchen_reports(format,tab)
+function kitchen_reports(format,tab,mode)
 {
+	
+	var search_terms = new Object();
+	search_terms.start_date = document.getElementById('report_start').value;
+	search_terms.end_date = document.getElementById('report_end').value;
+	search_terms.search_for = document.getElementById('report_search').value;
+	search_terms.all = true;
+	var data =  {data: JSON.stringify(search_terms)};
+	report_mode = mode;
 	load_preptypes();
 	// really lazy .... must fix
 	document.getElementById('dock_report_tab').className = 'top_menu';
@@ -199,11 +208,13 @@ function kitchen_reports(format,tab)
 	document.getElementById('plating_report_tab').className = 'top_menu';
 	document.getElementById(tab).className = 'top_menu_highlighted';
 	var div = document.getElementById('report_container');
+	console.log(data);
 	div.innerHTML = '';
 	 $.ajax({
 	        url:  "REST/get_active_comps.php?all=true",
 	        type: "POST",
-	        dataType: 'json',	      
+	        dataType: 'json',
+	        data: data,	      
 	        success: function(result) {
 		        console.log(result);
 	            active_comps = result;	          
@@ -274,16 +285,23 @@ function plating_reports()
 	div.appendChild(tab);
 }
 
+function search_report()
+{
+	if (report_mode == 'kitchen') {
+		kitchen_reports(kitchen_report_fmt,'kitchen_report_tab','kitchen');
+	}
+}
+
 </script>
 <div class='top_menu_container'>
-			<div class='top_menu' id='dock_report_tab'  onclick="kitchen_reports(dock_report_fmt,'dock_report_tab')">DOCK</div>
-			<div class='top_menu' id='kitchen_report_tab'  onclick="kitchen_reports(kitchen_report_fmt,'kitchen_report_tab')">KITCHEN</div>
+			<div class='top_menu' id='dock_report_tab'  onclick="kitchen_reports(dock_report_fmt,'dock_report_tab','dock')">DOCK</div>
+			<div class='top_menu' id='kitchen_report_tab'  onclick="kitchen_reports(kitchen_report_fmt,'kitchen_report_tab','kitchen')">KITCHEN</div>
 			<div class='top_menu' id='plating_report_tab'  onclick="load_plating_data();">PLATING</div>
 			<div class='top_menu' id='report_range_tab'>
 				<input type="text" id="report_start" name="report_start" placeholder='start date' class='datepicker' readonly="readonly"></td>
 				<input type="text" id="report_end" name="report_end" placeholder='end date' class='datepicker' readonly="readonly">
-				<input type="text" id="report_search" name="report_search" placeholder="search" onclick='search_report();'>
-				<button>go</button>
+				<input type="text" id="report_search" name="report_search" placeholder="search" >
+				<button onclick='search_report();'>go</button>
 			</div>
 			
 </div>
