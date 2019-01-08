@@ -6,12 +6,18 @@ include '../db.php';
 $userID = $_SESSION['userID'];
 // echo "userID ".$userID."\n";
 $table_name = "PLATING_ITEM";
+$sql = "select * from ".$table_name;
 if ($userID > 0) {
 	$menu_id = get_url_token('menu_id');
 	$fieldnames = get_fieldnames($table_name);
 	$plating_item_component_flds = get_fieldnames('PLATING_ITEM_COMPONENT');
-	$sql = "select * from ".$table_name." where user_id = ".$userID;
-    $sql.= " and DATE(time_started) = CURDATE()";
+	if (!empty($_POST["data"])) {
+		$search_terms = json_decode($_POST["data"],true);
+	}
+	else {
+		$sql .= " where user_id = ".$userID;
+    	$sql.= " and DATE(time_started) = CURDATE()";
+	}
 	// echo $sql;
 	$result = mysql_query($sql);
 	$items = array();
