@@ -212,6 +212,7 @@
 #m_home_tab, #plating_home_tab {
 	height:20px;
 	transform: rotate(180deg);
+	margin: 0;
 }
 
 .m_close {
@@ -410,6 +411,7 @@
 	.width:30vw;
 	color:var(--acs_text_normal_light);
 	font-size:larger;
+	letter-spacing: 0.1em;
 }
 
 .left {
