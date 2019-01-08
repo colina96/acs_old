@@ -196,6 +196,13 @@
 	height:75vh;
 	overflow:auto;
 }
+
+#barcode {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 #sel_team_member { margin-top:10px;}
 .m-10 {
 	margin:10px;
