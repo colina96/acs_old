@@ -194,6 +194,7 @@ function report_components(data,format)
    	div.appendChild(tab);
 }
 
+
 function kitchen_reports(format,tab,mode)
 {
 	
@@ -233,6 +234,7 @@ function kitchen_reports(format,tab,mode)
 
 function load_plating_data()
 {
+	report_mode = 'plating'
 	load_plating_items(plating_reports);
 }
 
@@ -273,7 +275,15 @@ function plating_reports()
     	   		var e = plating_item_report_fmt[ii];
     	   		var s= plating_items[i].items[j][plating_item_report_fmt[ii]];
     	   		if (s) {
-    	   			td.innerHTML = (e.indexOf('time') > 0)?s.substring(11,16):s;
+    	   			if (e.indexOf('time') > 0) {
+		   	   			
+		   	   			console.log("time - " + s);
+		   	   			if (s.length > 0) {
+		   	   				td.innerHTML = s.substring(11,16) + " " + s.substring(8,10) + '/' + s.substring(5,7) ;
+		   	   			}
+    	   			}
+    	   			else 
+    	   				td.innerHTML = s;
     	   		}
     	   		
     	   		tr.appendChild(td);    
@@ -292,6 +302,15 @@ function search_report()
 {
 	if (report_mode == 'kitchen') {
 		kitchen_reports(kitchen_report_fmt,'kitchen_report_tab','kitchen');
+	}
+	else if (report_mode == 'dock') {
+		kitchen_reports(dock_report_fmt,'dock_report_tab','dock');
+	}
+	else if (report_mode == 'plating') {
+		load_plating_items(plating_reports);
+	}
+	else {
+		console.log('unknown report mode' + report_mode);
 	}
 }
 
