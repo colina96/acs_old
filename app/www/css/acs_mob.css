@@ -480,7 +480,7 @@ select {
 	.width:95%;
 	width:100%;
 	border-radius: 15px;
-	height:75vh;
+	height:65vh;
 	overflow:auto;
 }
 #sel_team_member { margin-top:10px;}

@@ -237,7 +237,7 @@ function show_menu()
     table.className = 'menu_table';
     table.width='100%';
     var tr = document.createElement('tr');
-    var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','TRACK FROM DOCK','PLATING TEAM'];
+    var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','STRAIGHT TO PLATING','PLATING TEAM'];
     for (var i in  header) {
       //   console.log(i);
     	var th = document.createElement('th');
@@ -308,7 +308,7 @@ function show_menu()
             	td.innerHTML = innerHTML;
             	tr.appendChild(td);
             	td = document.createElement('td');
-            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>Add ingredient</div>";
+            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>Add HR ingredient</div>";
             	td.colSpan = 2;
             	if (menu_item_components[mid].subcomponents) {
                 	// td.innerHTML += 'checked';
@@ -633,7 +633,7 @@ function clear_flds(flds)
 function add_subcomponent(menu_item_component_id)
 {
 	show('add_sub_popup');
-	document.getElementById('component_title').innerHTML = 'Add ingredient';
+	document.getElementById('component_title').innerHTML = 'Add high risk ingredient';
 	active_menu_item_component_id = menu_item_component_id;
 	console.log('add_subcomponent ' + menu_item_component_id);
 	clear_flds(['comp_id','comp_supplier','comp_product','comp_spec']);
