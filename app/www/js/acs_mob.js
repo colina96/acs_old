@@ -2256,7 +2256,7 @@ function m_show_active_components(data,reprint)
 	var div = document.getElementById('m_current_tracking');
 	if (reprint) div = document.getElementById('m_reprint_labels');
 	if (data.length < 1) {
-		div.innerHTML = "<h1>No Active Components</h1>";
+		div.innerHTML = "<span>No Active Components</span>";
 		return;
 	}
 	if (reprint) {

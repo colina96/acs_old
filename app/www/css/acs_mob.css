@@ -197,6 +197,20 @@
 	overflow:auto;
 }
 
+#m_current_tracking span {
+	display:table;
+	margin : 10px auto;
+	color:var(--acs_text_normal_dark);
+	font-size: larger;
+}
+
+#m_reprint_labels span {
+	display:table;
+	margin : 10px auto;
+	color:var(--acs_text_normal_dark);
+	font-size: larger;
+}
+
 #barcode {
 	display: block;
 	margin-left: auto;

@@ -123,7 +123,7 @@ function report_components(data,format)
 	var div = document.getElementById('report_container');
 	
 	if (data.length < 1) {
-		div.innerHTML = "<h1>No Active Components</h1>";
+		div.innerHTML = "<span>No Active Components</span>";
 		return;
 	}
 	var tab = document.createElement('table');
