@@ -6,13 +6,55 @@ include '../db.php';
 $userID = $_SESSION['userID'];
 // echo "userID ".$userID."\n";
 $table_name = "PLATING_ITEM";
+$sql = "select * from ".$table_name;
+$log = 'LOG: ';
+$search_terms = null;
 if ($userID > 0) {
 	$menu_id = get_url_token('menu_id');
 	$fieldnames = get_fieldnames($table_name);
 	$plating_item_component_flds = get_fieldnames('PLATING_ITEM_COMPONENT');
-	$sql = "select * from ".$table_name." where user_id = ".$userID;
-    $sql.= " and DATE(time_started) = CURDATE()";
+	if (!empty($_POST["data"])) {
+		/*
+		$search_terms = json_decode($_POST["data"],true);
+		if (!empty($search_terms)) {
+			$log .= 'found search terms';
+			if ($search_terms['search_for']) {
+				$where = true;
+				$sql .= " where ITEM_NAME like '%".$search_terms['search_for']."%'";
+			}
+			if ($search_terms['start_date']) {
+				if (!$where) {
+					$sql .= " where ";
+					$where = true;
+				}
+				else {
+					$sql .= ' and ';
+				}
+				$sql .= "time_started > '".$search_terms['start_date']."'";
+		
+			}
+			if ($search_terms['end_date']) {
+				if (!$where) {
+					$sql .= " where ";
+					$where = true;
+				}
+				else {
+					$sql .= ' and ';
+				}
+				$sql .= "time_started <= '".$search_terms['end_date']." 23:59'";
+					
+			}
+		}
+		else {
+			$log .= " no search terms";
+		} */
+	}
+	else {
+		$sql .= " where user_id = ".$userID;
+    	$sql.= " and DATE(time_started) = CURDATE()";
+	}
 	// echo $sql;
+	$log .= ' sql= '.$sql;
 	$result = mysql_query($sql);
 	$items = array();
 	if ($result) {
@@ -43,7 +85,14 @@ if ($userID > 0) {
 			// echo json_encode($pc)."<br><hr>";
 			
 		}
+		$ret = array();
+		$ret['log'] = $log;
+		$ret['items'] = $items;
+	
+		$ret['sql'] = $sql;
+		$ret['search'] = $search_terms;
 		$json = json_encode($items);
+		// $json = json_encode($ret);
 		if ($json) {
 			echo $json;
 		}

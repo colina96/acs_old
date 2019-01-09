@@ -79,14 +79,37 @@ function find_plating_teams(menu_items)
 	}
 	load_chefs(null);
 }
+function get_search_terms()
+{
+	// check elements exist
+	// console.log('get_search_terms');
+	if (!document.getElementById('report_start') ||
+			!document.getElementById('report_end') ||
+			!document.getElementById('report_search')) {
+		console.log('search elements do not exist');
+		return null;
+	}
+	var search_terms = new Object();
+	
+	search_terms.start_date = document.getElementById('report_start').value;
+	search_terms.end_date = document.getElementById('report_end').value;
+	search_terms.search_for = document.getElementById('report_search').value;
+	search_terms.all = true;
+	var data =  {data: JSON.stringify(search_terms)};
+	// console.log(data);
+	return (data);
+}
 
 function load_plating_items(callback) // load menu_items currently being plated
 {
 	console.log('load_plating_items');
+	var data = get_search_terms();
+	console.log(data);
    $.ajax({
     	url: RESTHOME + "get_plating.php",
         type: "POST",
         dataType: 'json',
+        data: data,
         success: function(result) {
             plating_items = result; // need to populate with descritions
             console.log('load_plating_items got result');
@@ -159,7 +182,7 @@ function get_component_by_description(description)
 }
 function margin(t)
 {
-	return("<div class='margin10'>" + t + "</div");
+	return("<div class='m-10'>" + t + "</div");
 }
 
 function zeropad(s,n) // return string length n padded with zeroes

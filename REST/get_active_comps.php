@@ -4,6 +4,11 @@ session_start();
 include '../db.php';
 // error_log("running get_active_components",0);
 $userID = $_SESSION['userID'];
+$search_terms = null;
+$log = 'LOG:';
+if (!empty($_POST["data"])) {
+	$search_terms = json_decode($_POST["data"],true);
+}
 
 // echo "userID ".$userID."\n";
 if ($userID > 0) {
@@ -19,8 +24,41 @@ if ($userID > 0) {
 	else {
 		
 	}
-	if (!empty(get_url_token('all'))) {
-		$sql = "select *,(expiry_date < now()) as expired  from COMPONENT";
+	if (!empty(get_url_token('all')) || !empty($search_terms)) {
+		$sql = "SELECT *,(expiry_date < now()) as expired  from COMPONENT";
+		$where = false;
+		if (!empty($search_terms)) {
+			$log .= 'found search terms';
+			if ($search_terms['search_for']) {
+				$where = true;
+				$sql .= " where DESCRIPTION like '%".$search_terms['search_for']."%'";
+			}
+			if ($search_terms['start_date']) {
+				if (!$where) {
+					$sql .= " where ";
+					$where = true;
+				}
+				else {
+					$sql .= ' and ';
+				}
+				$sql .= "M1_time > '".$search_terms['start_date']."'";
+				
+			}
+			if ($search_terms['end_date']) {
+				if (!$where) {
+					$sql .= " where ";
+					$where = true;
+				}
+				else {
+					$sql .= ' and ';
+				}
+				$sql .= "M1_time <= '".$search_terms['end_date']." 23:59'";
+					
+			}
+		}
+		else {
+			$log .= " no search terms";
+		}
 	}
 	if (!empty(get_url_token('cid'))) {
 		$sql = "select *,(expiry_date < now()) as expired  from COMPONENT";
@@ -61,10 +99,14 @@ if ($userID > 0) {
 			
 		}
 		$ret = array();
+		$ret['log'] = $log;
 		$ret['comps'] = $comps;
 		$ret['qa'] = $qa;
-		// $json = json_encode($comps);
+		$ret['sql'] = $sql;
+		$ret['search'] = $search_terms;
+		
 		$json = json_encode($comps);
+		//$json = json_encode($ret);
 		if ($json) {
 			echo $json;
 		//	error_log($json,0);
