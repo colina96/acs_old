@@ -165,7 +165,7 @@ function set_barcode_mode(mode)
 	button_mode = 'B';
 	document.getElementById('button_mode_div').innerHTML = 'B';
 	keyboard_str = '';
-	document.getElementsByName('kitchen_manual_barcode')[0].value = '';
+	// document.getElementsByName('kitchen_manual_barcode')[0].value = '';
 	qpack_resume();
 	
 }
@@ -1063,7 +1063,7 @@ function goto_comp_search()
 	$('#search').val('');
 	document.getElementById('new_comp_btns').style.display = 'none';
 	openPage('m_search', this, 'red','m_modal','tabclass');
-	hide('kitchen_manual_code');
+	// hide('kitchen_manual_code');
 }
 
 function new_component() {
@@ -1950,7 +1950,7 @@ function reprint_comp_labels()
 	console.log('reprint_comp_labels');
 	openPage('m_reprint_labels', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
-	show('kitchen_manual_code');
+	// show('kitchen_manual_code');
 	set_barcode_mode('kitchen_reprint');
 	load_reprint_data();
 	load_chefs();
@@ -1985,7 +1985,7 @@ function m_tracking()
 	console.log('goto_active_components');
 	openPage('m_current_tracking', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
-	show('kitchen_manual_code');
+	// show('kitchen_manual_code');
 	set_barcode_mode('active_comp');
 	load_tracking_data();
 }

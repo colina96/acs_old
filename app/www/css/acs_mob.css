@@ -116,11 +116,8 @@
 }
 #m1_temp {
 	font-size: 12vw;
-
 }
 #m_current_tracking_tab, #m_reprint_labels_tab {
-	top: 30px;
-	right: 20px;
 	position: relative;
 }
 #kitchen_barcode, #dock_barcode, .manual_barcode,#dock_search_div{

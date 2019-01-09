@@ -42,7 +42,7 @@ var kitchen_report_fmt = {
 	'LR': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
-		'M1 TIME':'M1_time',
+		'TIME':'M1_time',
 		},
 	'AHR': {
 		'COMPONENT NAME':'description',
@@ -89,6 +89,7 @@ var dock_report_fmt = {
 var plating_report_fmt = {
 		'ITEM CODE':'code',
 		'ITEM NAME':'menu_item',
+		'TIME':'time_started',
 		'ITEM COMPONENTS':'description',
 		'BATCH CODE':'component_id',
 		'QTY':'qty',
@@ -174,16 +175,9 @@ function report_components(data,format)
 			   				// td.innerHTML = 'c01' + zeropad(data[i][e],6);
 			   				td.innerHTML = sprintf('C01%06d',data[i][e]);
 			   			}
-			   			else if (e.indexOf('time') > 0) {
-			   	   			var s= data[i][e];
-			   	   			console.log("time - " + s);
-			   	   			if (s.length > 0) {
-			   	   				td.innerHTML = s.substring(11,16) + " " + s.substring(8,10) + '/' + s.substring(5,7) ;
-			   	   			}
-			   			}
-			   			else {
-			   				td.innerHTML = data[i][e]?data[i][e]:'-';
-			   			}
+			   			else 
+			   				td.innerHTML = report_fmt_str(e,data[i][e]);
+		   				
 			   			tr.appendChild(td);   
 			   		}
 			   		tab.appendChild(tr);
@@ -215,15 +209,15 @@ function kitchen_reports(format,tab,mode)
 	console.log(data);
 	div.innerHTML = '';
 	 $.ajax({
-	        url:  "REST/get_active_comps.php?all=true",
+	        url:  "REST/get_active_comps.php",
 	        type: "POST",
 	        dataType: 'json',
 	        data: data,	      
 	        success: function(result) {
 		        console.log(result);
 	            active_comps = result;	          
-	            console.log("got " + result.length + " comps");
-	            report_components(result,format);	            
+	            console.log("REPORTS got " + active_comps.length + " comps");
+	            report_components(active_comps,format);	            
 	        },
 	        fail: (function (result) {
 	            console.log("fail load_comps",result);
@@ -238,6 +232,21 @@ function load_plating_data()
 	load_plating_items(plating_reports);
 }
 
+function report_fmt_str(field,value)
+{
+	if (value) {
+		if (field.indexOf('time') >= 0) {
+	   	
+   			if (value.length > 0) {
+   				return(value.substring(11,16) + " " + value.substring(8,10) + '/' + value.substring(5,7)) ;
+   			}
+		}
+		else 
+			return(value);
+	}
+
+	return('-');
+}
 
 function plating_reports()
 {
@@ -262,6 +271,7 @@ function plating_reports()
 	for (var i = 0; i < plating_items.length; i++) {
    
     	for (var j = 0; j < plating_items[i].items.length; j++) {
+        	// TODO - better report system
     		var tr = document.createElement('tr');
     		
     		var td = document.createElement('td');
@@ -270,21 +280,14 @@ function plating_reports()
        		var td = document.createElement('td');
        		td.innerHTML = (j == 0) ?plating_items[i].dish_name:'';
        		tr.appendChild(td);    
+       		var td = document.createElement('td');
+       		td.innerHTML = (j == 0) ?report_fmt_str('time_started',plating_items[i].time_started):'';
+       		tr.appendChild(td);    
     		for (var ii in plating_item_report_fmt) {
     			var td = document.createElement('td');
-    	   		var e = plating_item_report_fmt[ii];
-    	   		var s= plating_items[i].items[j][plating_item_report_fmt[ii]];
-    	   		if (s) {
-    	   			if (e.indexOf('time') > 0) {
-		   	   			
-		   	   			console.log("time - " + s);
-		   	   			if (s.length > 0) {
-		   	   				td.innerHTML = s.substring(11,16) + " " + s.substring(8,10) + '/' + s.substring(5,7) ;
-		   	   			}
-    	   			}
-    	   			else 
-    	   				td.innerHTML = s;
-    	   		}
+    	   		var field = plating_item_report_fmt[ii];
+    	   		var value = plating_items[i].items[j][plating_item_report_fmt[ii]];
+    	   		td.innerHTML = report_fmt_str(field,value);
     	   		
     	   		tr.appendChild(td);    
     	   		tab.appendChild(tr);
