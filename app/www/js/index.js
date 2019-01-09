@@ -53,14 +53,15 @@ var app = {
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function () {
-	console.log("onDeviceReady");
-    	RESTHOME = SERVER_URL+"/acs/REST/";
-	log("starting with RESTHOME:"+RESTHOME);
 
-        check_login();
-    	qpack_init();
-        app.receivedEvent('deviceready');
+    onDeviceReady: function () {
+  	console.log("onDeviceReady");
+    RESTHOME = SERVER_URL+"/acs/REST/";
+	  log("starting with RESTHOME:"+RESTHOME);
+
+    check_login();
+    qpack_init();
+    app.receivedEvent('deviceready');
     },
 
     // Update DOM on a Received Event
