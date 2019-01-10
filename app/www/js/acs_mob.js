@@ -1199,21 +1199,23 @@ function goto_dock()
 {
 	load_comps(show_dock);
 }
+
 function goto_m_main(new_mode)
 {
 	if (new_mode) mode = new_mode;
 	load_comps();
 	$('#search').val('');
-	if (mode == 'kitchen') {
-		openPage('mm2', document.getElementById('m_current_tracking_tab'), 'red','mobile_main','tabclass');
-		m_tracking();
-	}
-	else if (mode == 'dock') {
-		openPage('dock_main', document.getElementById('m_plating_team_tab'), 'red','mobile_main','tabclass');
-		
-	}
-	else {
-		goto_plating();
+	switch (mode) {
+		case 'kitchen':
+			openPage('mm2', document.getElementById('m_current_tracking_tab'), 'red','mobile_main','tabclass');
+			m_tracking();
+			break;
+		case 'dock':
+			openPage('dock_main', document.getElementById('m_plating_team_tab'), 'red','mobile_main','tabclass');
+			break;
+		default:
+			goto_plating();
+			break;
 	}
 }
 
