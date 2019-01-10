@@ -1,6 +1,6 @@
 /* drop database acs; */;
 /* CREATE database acs;  */;
-/* use acs; */;
+use acs;
 /* GRANT ALL PRIVILEGES ON *.* TO 'acs'@'localhost' IDENTIFIED BY 'acs';  */;
 
 drop table if exists USERS;
@@ -17,22 +17,16 @@ plating BOOLEAN,
 supervisor BOOLEAN,
 last_login datetime,
 constraint pk_example primary key (id) );
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
- VALUES ( null, 'col','acs','Colin','Atkinson','admin',1,1,1,1,1);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
- VALUES ( null, 'david@qamc.co','acs','David','Cox','admin',1,1,1,1,1);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
- VALUES ( null, 'dock','acs','Dock','One','Dock',0,1,0,0,0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
- VALUES ( null, 'ds','acs','Dock','Super','super',0,1,0,0,1);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
- VALUES ( null, 'bob','acs','Bob the','Chef','chef',0,0,1,0,1);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
- VALUES ( null, 'plating','acs','Plating','Person','chef',0,0,0,1,0);
-INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
- VALUES ( null, 'PS','acs','Plating','Super','chef',0,0,0,1,1);
- INSERT INTO USERS ( id, email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
- VALUES ( null, 'kean','acs','Kean','Maizels','guru',1,1,1,1,1);
+INSERT INTO USERS (email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor) VALUES
+ ('col','acs','Colin','Atkinson','admin',1,1,1,1,1),
+ ('david@qamc.co','acs','David','Cox','admin',1,1,1,1,1),
+ ('dock','acs','Dock','One','Dock',0,1,0,0,0),
+ ('ds','acs','Dock','Super','super',0,1,0,0,1),
+ ('bob','acs','Bob the','Chef','chef',0,0,1,0,1),
+ ('plating','acs','Plating','Person','chef',0,0,0,1,0),
+ ('PS','acs','Plating','Super','chef',0,0,0,1,1),
+ ('kean','acs','Kean','Maizels','guru',1,1,1,1,1),
+ ('falk','acs','Falk','Schoenfeld','admin',1,1,1,1,1);
 
 select * from USERS;
 
