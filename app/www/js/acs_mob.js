@@ -1089,6 +1089,7 @@ function show_dock_component(cid)
 	// var div = document.getElementById('dock_display_comp_div1');
 	// div.innerHTML = '';
 
+	// TODO check if necessary
 	new_comp = get_component_by_id(cid);
 	if (!new_comp) {
 		alert("ERROR");
@@ -1096,6 +1097,7 @@ function show_dock_component(cid)
 	}
 	console.log(new_comp);
 
+	// TODO take some to M1?
 	// var flds = ['description','supplier','product','spec','shelf_life_days'];
 	// for (var i =0; i < flds.length; i++) {
 	// 	var d = document.createElement('div');
