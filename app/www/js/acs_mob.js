@@ -1896,7 +1896,7 @@ function active_comp_selected(id)
 	
 	var prep_type_id = active_comp['prep_type_id'];
 	console.log('prep_type_id',prep_type_id);
-	if (prep_type_id < 1) prep_type_id = 1;
+	if (prep_type_id < 1) {prep_type_id = 1};
 	var prep_type_val = get_preptype_val(prep_type_id,'M2_temp');
 	document.getElementById('chk_temp_item_div').innerHTML = active_comp['description'];
 	var milestone_due = 'NA';
@@ -1907,23 +1907,21 @@ function active_comp_selected(id)
 	var M2_time = new Date(active_comp['M2_time']);
 
 	console.log("M2 time -",active_comp['M2_time'],"-");
-	var remaining = 0;
+
 	var now = new Date();
 	var now_ms = now.getTime();
 	var M1_ms = M1_time.getTime(); // time in millisecs
 	if (active_comp['M1_time'] == '') {
 		milestone_due = 'M1';
 		target_temp = " > " + get_preptype_val(prep_type_id,'M1_temp');
-	}
-	else if (active_comp['M2_time'] == '') {
+	} else if (active_comp['M2_time'] == '') {
 		milestone_due = 'M2';
 		var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
 		var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
 		remaining = (M2_due_ms - now_ms) / (60 * 1000);
 		console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
 		target_temp = " < " + get_preptype_val(prep_type_id,'M2_temp');
-		}
-	else {
+	} else {
 		milestone_due = 'M3';
 		var M3_due_min = get_preptype_val(prep_type_id,'M3_time_minutes');
 		var M3_due_ms = M1_ms + M3_due_min * 60 * 1000;  			
@@ -1934,14 +1932,9 @@ function active_comp_selected(id)
 	document.getElementById('ms_1').innerHTML = milestone_due;
 	active_comp.remaining = remaining;
 	if (milestone_due != 'M1') {
-		if (remaining >= 0) {
-			document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + " REMAINING";
-		}
-		else {
-			document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + " OVERDUE";
-		}
-	}
-	else {
+		var tt = (remaining >= 0) ? "REMAINING" : "OVERDUE";
+		document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + tt;
+	} else {
 		document.getElementById('ms_1_text').innerHTML = "";
 	}
 	document.getElementById('ms_2').innerHTML = milestone_due;
