@@ -1332,20 +1332,17 @@ function component_selected(id)
 		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
 		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 		temp_probe = false;
+
 		let temp_div = document.getElementById('m1_temp_div');
-		let sensor;
 		if (new_comp['probe_type'] && new_comp['probe_type'] == 2) {
 			console.log('use probe');
 			temp_probe = true;
 			temp_div.innerHTML = 'USE PROBE';
-			sensor=iconProbe();
 		} else {
 			console.log('use IR');
 			temp_div.innerHTML = 'USE IR SENSOR';
-			sensor=iconIR();
 		}
-		sensor.setAttribute("onclick","read_M1temp()");
-		temp_div.append(sensor);
+		appendSensorImage(temp_div,"read_M1temp()");
 	}
 
 	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
@@ -1357,6 +1354,16 @@ function component_selected(id)
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
 
+function appendSensorImage(anchor,onclick){
+	let sensor;
+	if (new_comp['probe_type'] && new_comp['probe_type'] == 2) {
+		sensor=iconProbe();
+	} else {
+		sensor=iconIR();
+	}
+	sensor.setAttribute("onclick",onclick);
+	anchor.append(sensor);
+}
 
 function dock_read_M1temp(callback)
 {
@@ -1476,24 +1483,31 @@ function check_temp(t) // start a new component
 	document.getElementById('m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 	document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 	document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
+
 	console.log("check temp",t,M1_temp_target);
+
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {
 			if (parseInt(t) < parseInt(M1_temp_target)) {
 				console.log("M1 temp too low");
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
-			}
-			else {
+				appendSensorImage(
+					document.getElementById('m1_temp_div_2'),
+					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass');"
+				);
+			} else {
 				set_barcode_mode("M1");
 				openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			}
-		}
-		else {
+		} else {
 			if (parseInt(t) > parseInt(M1_temp_target)) {
 				console.log("M1 temp too high");
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
-			}
-			else {
+				appendSensorImage(
+					document.getElementById('m1_temp_div_2'),
+					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass');"
+				);
+			} else {
 				set_barcode_mode("M1");
 				openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			}
