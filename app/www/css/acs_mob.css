@@ -99,9 +99,11 @@ select {
 	margin-top:35px;
 	font-size:20px;
 }
+
 .temp_achieved {
 	color:var(--acs_blue_text);
 }
+
 .btns {
 	bottom:5px;
 	width:100%;
@@ -214,6 +216,18 @@ select {
 	color:white;
 	font-size:20px;
 }
+
+#out_btn {
+	width:80%;
+}
+
+.icon_logout {
+	height: 20px;
+	width: auto;
+	transform: rotate(180deg);
+	margin: 0;
+}
+
 .m_top_menu {
 	margin:auto;
 	.width:30vw;

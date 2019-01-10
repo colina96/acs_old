@@ -91,7 +91,8 @@ function setup_front_page()
 		innerHTML += "<button id='kit_btn' type='button' class='m_btn' onclick=\"goto_m_main('kitchen');\">Kitchen</button>";
 	if (USER.plating && USER.plating == 1)
 		innerHTML += "<button id='plat_btn' type='button'  class='m_btn' onclick=\"goto_plating_teams();\">Plating</button>";
-	innerHTML += "<button id='out_btn' type='button'  class='m_btn' onclick=\"logout();\">Logout</button>";
+	innerHTML += "<button id='out_btn' type='button' class='m_btn' onclick=\"logout();\">" +
+		"<img src='img/icon_logout.png' class='icon_logout'></button>\n";
 	div.innerHTML = innerHTML;
 }
 
