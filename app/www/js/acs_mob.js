@@ -1084,45 +1084,51 @@ function new_component() {
 
 function show_dock_component(cid)
 {
-	show('dock_display_comp_div');
-	var div = document.getElementById('dock_display_comp_div1');
-	div.innerHTML = '';
+	// show('dock_display_comp_div');
+	//
+	// var div = document.getElementById('dock_display_comp_div1');
+	// div.innerHTML = '';
+
 	new_comp = get_component_by_id(cid);
 	if (!new_comp) {
 		alert("ERROR");
 		return;
 	}
 	console.log(new_comp);
-	var flds = ['description','supplier','product','spec','shelf_life_days'];
-	for (var i =0; i < flds.length; i++) {
-		var d = document.createElement('div');
-		d.className = 'smaller';
-		d.innerHTML = flds[i] + ":";
-		div.appendChild(d);
-		var d = document.createElement('div');
-		d.className = 'small';
-		if (new_comp[flds[i]] == null) {
-			d.innerHTML = "NOT SET";
-		}
-		else {
-			d.innerHTML = new_comp[flds[i]];
-		}
-		
-		div.appendChild(d);
-	}
-	// show preptype details
-	var ptid = new_comp['prep_type'];
 
-	var d = document.createElement('div');
-	d.className = 'smaller';
-	d.innerHTML = "Prep Type:";
-	div.appendChild(d);
-	var d = document.createElement('div');
-	d.className = 'small';
-	d.innerHTML = get_preptype_val(ptid,'code');
-	
-	div.appendChild(d);
-	show('dock_comp_selected_btns');
+	// var flds = ['description','supplier','product','spec','shelf_life_days'];
+	// for (var i =0; i < flds.length; i++) {
+	// 	var d = document.createElement('div');
+	// 	d.className = 'smaller';
+	// 	d.innerHTML = flds[i] + ":";
+	// 	div.appendChild(d);
+	// 	var d = document.createElement('div');
+	// 	d.className = 'small';
+	// 	if (new_comp[flds[i]] == null) {
+	// 		d.innerHTML = "NOT SET";
+	// 	}
+	// 	else {
+	// 		d.innerHTML = new_comp[flds[i]];
+	// 	}
+	//
+	// 	div.appendChild(d);
+	// }
+
+	// show preptype details
+	// var ptid = new_comp['prep_type'];
+	//
+	// var d = document.createElement('div');
+	// d.className = 'smaller';
+	// d.innerHTML = "Prep Type:";
+	// div.appendChild(d);
+	// var d = document.createElement('div');
+	// d.className = 'small';
+	// d.innerHTML = get_preptype_val(ptid,'code');
+	//
+	// div.appendChild(d);
+	// show('dock_comp_selected_btns');
+
+	dock_read_M1temp()
 }
 
 function show_dock()
