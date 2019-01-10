@@ -131,9 +131,16 @@ select {
 		
 	}
 }
+
+.icon_IR {
+	margin: auto;
+	display: block;
+}
+
 .hidden {
 	display:none;
 }
+
 .popup {
 	position:absolute;
 	width:60vw;
