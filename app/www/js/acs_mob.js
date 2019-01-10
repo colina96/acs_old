@@ -130,7 +130,6 @@ function ioio_start()
 
 function popup_manual_temp()
 {
-	
 	document.getElementsByName('manual_temp')[0].value = '';
 	temp_readings = 0;
 	document.getElementById('manual_entry').style.display = 'block';
