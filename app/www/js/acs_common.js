@@ -227,7 +227,7 @@ function load_chefs(fn)
             
         },
         fail: (function (result) {
-            console.log("fail load_chefss",result);
+            console.log("fail load_chefs",result);
         })
     });
 }
