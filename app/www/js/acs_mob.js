@@ -1323,8 +1323,7 @@ function component_selected(id)
 		document.getElementById('ms_2_text').innerHTML = ' ';
 		document.getElementById('ms_2_target').innerHTML = "";
 		document.getElementById('chk_temp_item_div').innerHTML = '';
-	}
-	else {
+	} else {
 		set_barcode_mode("M1");
 		set_temp_mode("M1");
 		openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
@@ -1334,17 +1333,21 @@ function component_selected(id)
 		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 		temp_probe = false;
 		let temp_div = document.getElementById('m1_temp_div');
+		let sensor;
 		if (new_comp['probe_type'] && new_comp['probe_type'] == 2) {
 			console.log('use probe');
 			temp_probe = true;
 			temp_div.innerHTML = 'USE PROBE';
-			temp_div.append(iconProbe());
+			sensor=iconProbe();
 		} else {
 			console.log('use IR');
 			temp_div.innerHTML = 'USE IR SENSOR';
-			temp_div.append(iconIR());
+			sensor=iconIR();
 		}
+		sensor.setAttribute("onclick","read_M1temp()");
+		temp_div.append(sensor);
 	}
+
 	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
 	// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 	document.getElementById('ms_1').innerHTML = '';
