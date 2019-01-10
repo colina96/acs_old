@@ -88,7 +88,8 @@ var udp = {
 	}
 }
 
- 
+var udp_socket = -1;
+
 function listen_in()
 {
 	var port = 1500;
@@ -98,8 +99,9 @@ function listen_in()
 	try {
 		chrome.sockets.udp.create(function(createInfo) {
 			log('created socket ' + createInfo.socketId);
-			chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 1501, function(result) {
-				log("bound socket result |" + result + "|");
+			udp_socket = createInfo.socketId;
+			chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 1500, function(result) {
+				log("bound socket to 1500 result |" + result + "|");
 				chrome.sockets.udp.onReceive.addListener(function(msg)  //Listen for receiving messages
 		        {
 		                  log("got msg " + msg.socketId + " - " + ab2str(msg.data) + " from " + msg.remoteAddress);
@@ -130,6 +132,27 @@ function listen_in()
 	}
 	
 }
+
+function retry_udp()
+{
+	log('retrying udp');
+	if (udp_socket >= 0) {
+		var port = 1500;
+		var addr = "255.255.255.255";
+		var data = "RETRY";
+		log('trying udp');
+		chrome.sockets.udp.send(createInfo.socketId, str2ab(data), addr, port, function(result) {
+			if (result < 0) {
+				log('send fail: ' + result);
+				// chrome.sockets.udp.close(createInfo.socketId);
+			} else {
+				log('sendTo: success ' + port);
+				// chrome.sockets.udp.close(createInfo.socketId);
+			}
+		});
+	}
+	else log('no socket');
+}
 var app = {
     // Application Constructor
     initialize: function() {
@@ -143,6 +166,7 @@ var app = {
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
 		 listen_in();
+		 setTimeout(retry_udp,5 * 1000);
       //  udp.initialize();
     },
 

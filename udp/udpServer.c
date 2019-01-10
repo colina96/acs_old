@@ -127,6 +127,7 @@ int main(int argc, char *argv[]) {
     }
     //
     if (!client && strcmp(msg,response_msg)) {
+    	// send_response(sd,"255.255.255.255",ntohs(cliAddr.sin_port),response_msg);
     	send_response(sd,inet_ntoa(cliAddr.sin_addr),ntohs(cliAddr.sin_port),response_msg);
 
     	// send_response(sd,"255.255.255.255",response_msg);
