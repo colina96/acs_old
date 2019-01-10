@@ -2294,10 +2294,8 @@ function m_show_active_components(data,reprint)
 			span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
 			clickdiv = "<div class='tooltip' onclick='active_comp_selected(" + i + ");'>";
 		}
-
 		clickdiv += data[i]['description']+span_txt+ "</div>";
 
-		// tr.appendChild(new_td(data[i]['description'],'comp'));
    		tr.appendChild(new_td(clickdiv,'comp'));
    		
    		var M1_time = new Date(data[i]['M1_time']);
@@ -2310,45 +2308,43 @@ function m_show_active_components(data,reprint)
 		var M1_ms = M1_time.getTime(); // time in millisecs
 	//	console.log("prep_type_id",prep_type_id);
 		if (reprint) {
-   			
-   		}
-		else if (data[i]['M1_time'] == '') { // M0 - ingredients have been selected
+
+   		}else if (data[i]['M1_time'] == '') { // M0 - ingredients have been selected
 			tr.appendChild(new_td('.','comp'));
 			tr.appendChild(new_td('Cooking','comp'));
-		}
-   		else {
+		}else {
+			var num;
+			var due_min;
 	   		if (data[i]['M2_time'] == '') {
-	   			var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
-	   			var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
-	   			remaining = (M2_due_ms - now_ms) / (60 * 1000);
-	//   			console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
-	   			tr.appendChild(new_td('<div class="m_bluedot">2</div>','comp'));
+				num = '2';
+
+				due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
+				//	console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
+	   		} else {
+				num = '3';
+
+				due_min = get_preptype_val(prep_type_id,'M3_time_minutes');
 	   		}
-	   		else {
-	   			var M3_due_min = get_preptype_val(prep_type_id,'M3_time_minutes');  			
-	   			var M3_due_ms = M1_ms + M3_due_min * 60 * 1000; 			
-	   			remaining = (M3_due_ms - now_ms) / (60 * 1000);
-	   			tr.appendChild(new_td('<div class="m_bluedot">3</div>','comp'));
-	   		}
+
+			var due_ms = M1_ms + due_min * 60 * 1000;
+			remaining = (due_ms - now_ms) / (60 * 1000);
+
+	   		tr.appendChild(new_td('<div class="m_bluedot">'+num+'</div>','comp'));
    		// var M1_t = M1_time.getHours() + ":" + M1_time.getMinutes();
    		
 	   		if (remaining > 0) {
-	   			tr.appendChild(new_td(format_minutes(remaining) + " remaining",'comp'));
+	   			td = new_td(format_minutes(remaining) + " remaining",'comp');
+	   		} else {
+	   			td = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
 	   		}
-	   		else {
-	   			var td = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
-	   			
-	   			tr.appendChild(td);
-	   		}
+	   		tr.appendChild(td)
    		}
    		// tr.appendChild(new_td(data[i]['M1_time'],'comp'));
    		
-   		  		tab.appendChild(tr);
+		tab.appendChild(tr);
     }
    	div.appendChild(tab);
 }
-
-
 
 
 function goto_select_team()
