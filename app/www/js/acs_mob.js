@@ -1333,13 +1333,16 @@ function component_selected(id)
 		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
 		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 		temp_probe = false;
+		let temp_div = document.getElementById('m1_temp_div');
 		if (new_comp['probe_type'] && new_comp['probe_type'] == 2) {
 			console.log('use probe');
 			temp_probe = true;
-			document.getElementById('m1_temp_div').innerHTML = 'USE PROBE';
-		}
-		else {
-			document.getElementById('m1_temp_div').innerHTML = 'USE IR SENSOR';
+			temp_div.innerHTML = 'USE PROBE';
+			temp_div.append(iconProbe());
+		} else {
+			console.log('use IR');
+			temp_div.innerHTML = 'USE IR SENSOR';
+			temp_div.append(iconIR());
 		}
 	}
 	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
@@ -1350,6 +1353,7 @@ function component_selected(id)
 
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
+
 
 function dock_read_M1temp(callback)
 {
@@ -2514,6 +2518,22 @@ function new_td(content,classname) {
 	td.className = classname;
 	td.innerHTML = "<div class='margin10'>" + content + "</div>";
 	return(td);
+}
+
+
+function iconProbe(){
+	return new_img("img/icon_Probe.svg","icon_Probe");
+}
+
+function iconIR(){
+	return new_img("img/icon_IR.svg","icon_IR");
+}
+
+function new_img(source,classname) {
+	var img = document.createElement('img');
+	img.className = classname;
+	img.src = source;
+	return(img);
 }
 
 var refresh_count = 0;
