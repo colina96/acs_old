@@ -41,12 +41,12 @@ function show_users()
 	var div = document.getElementById('users_div');
 
 	var h = "<table class='users' width='100%' border='1'>";
-	h += "<tr><td>USER</td><td>WORK FUNCTION</td><td>LAST ACCESS</td><td colspan=3 class='add_user'>";
+	h += "<tr><td>USER</td><td>BARCODE</td><td>WORK FUNCTION</td><td>LAST ACCESS</td><td colspan=3 class='add_user'>";
 	h += "<button onclick='new_user()'>Add new user</button></td></tr>";
 	for (var i = 0; i < chefs.length; i++) {
 		
 		h += "<tr><td>" +  chefs[i]['firstname'] + " " + chefs[i]['lastname'] + "</td>";
-
+		h += "<td>" +  sprintf('U01%06d',chefs[i]['id']); + "</td>";
 		h += "<td>" + chefs[i]['function'] + "</td>";
 		h += "<td>" + chefs[i]['last_login'] + "</td>";
 		
