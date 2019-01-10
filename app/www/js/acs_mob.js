@@ -2008,10 +2008,7 @@ function load_tracking_data()
 	        // contentType: "application/json",
 	        success: function(result) {
 	            active_comps = result;
-	           // document.getElementById('active_comps').innerHTML = result;
-	            // console.log("got " + result.length + " comps");
 	            m_show_active_components(result,false);
-	            
 	        },
 	        done: function(result) {
 	            console.log("done load_comps ");
@@ -2264,20 +2261,20 @@ function m_show_active_components(data,reprint)
 	display_real_time();
 	var div = document.getElementById('m_current_tracking');
 	if (reprint) div = document.getElementById('m_reprint_labels');
+
 	if (data.length < 1) {
 		div.innerHTML = "<h1>No Active Components</h1>";
 		return;
 	}
 	if (reprint) {
 		div.innerHTML = "<h1>Reprint Labels</h1>";
-	}
-	else {
+	} else {
 		div.innerHTML = "<h1>Active Components</h1>";
 	}
+
 	var tab = document.createElement('table');
 	tab.className = 'component_table';
 	var tr = document.createElement('tr');
-	
 	
     tr.appendChild(new_td('Description','comp'));  
     if (!reprint) {
@@ -2287,11 +2284,20 @@ function m_show_active_components(data,reprint)
     }
    	tab.appendChild(tr);
    	for (var i=0; i<data.length; ++i) {
-   		var tr = document.createElement('tr');
-   		var span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
-   		var clickdiv = "<div class='tooltip' onclick='active_comp_selected(" + i + ");'>" + data[i]['description'] + span_txt + "</div>";
-   		if (reprint) clickdiv = "<div onclick='reprint_active_comp_labels(" + data[i]['id'] + ");'>" + data[i]['description'] + "</div>";
-   		// tr.appendChild(new_td(data[i]['description'],'comp'));
+   		tr = document.createElement('tr');
+
+   		var clickdiv;
+   		var span_txt='';
+   		if(reprint){
+			clickdiv = "<div onclick='reprint_active_comp_labels(" + data[i]['id'] + ");'>";
+		}else{
+			span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
+			clickdiv = "<div class='tooltip' onclick='active_comp_selected(" + i + ");'>";
+		}
+
+		clickdiv += data[i]['description']+span_txt+ "</div>";
+
+		// tr.appendChild(new_td(data[i]['description'],'comp'));
    		tr.appendChild(new_td(clickdiv,'comp'));
    		
    		var M1_time = new Date(data[i]['M1_time']);
