@@ -84,7 +84,7 @@ int send_raw (char *ip, int port, char *data, int data_size, int copies)
     /* Try to connect the remote */
     if (connect(sockfd, (struct sockaddr *)&remote_addr, sizeof(struct sockaddr)) == -1)
     {
-        printf ("ERROR: Failed to connect to the printer!\n");
+        printf ("ERROR: Failed to connect to the printer @ %s! %s\n",ip, strerror(errno));
         return (0);
     }
     else
