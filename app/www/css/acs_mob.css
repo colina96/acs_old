@@ -132,7 +132,7 @@ select {
 	}
 }
 
-.icon_IR {
+.icon_IR, .icon_Probe {
 	margin: auto;
 	display: block;
 }
