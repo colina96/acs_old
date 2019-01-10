@@ -1191,6 +1191,8 @@ function goto_dock()
 function goto_m_main(new_mode)
 {
 	if (new_mode) mode = new_mode;
+	load_comps();
+	$('#search').val('');
 	if (mode == 'kitchen') {
 		openPage('mm2', document.getElementById('m_current_tracking_tab'), 'red','mobile_main','tabclass');
 		m_tracking();
@@ -1975,6 +1977,8 @@ function load_reprint_data()
 function m_tracking()
 {
 	console.log('goto_active_components');
+	load_comps();
+	$('#search').val('');
 	openPage('m_current_tracking', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
 	// show('kitchen_manual_code');
@@ -2479,6 +2483,7 @@ console.log("loading menu item components");
                     // and place the person.id into the hidden textfield called 'link_origin_id'. 
                  	console.log('selected ',ui.item.value);
                  	component_selected(ui.item.value);
+                 	$('#search').val(''); // this might go wrong
                  	// cordova.plugins.Keyboard.close();
                  	$('#search').blur();
                     return false;
