@@ -45,8 +45,8 @@ function show_users()
 	h += "<button onclick='new_user()'>Add new user</button></td></tr>";
 	for (var i = 0; i < chefs.length; i++) {
 		
-		h += "<tr><td>" +  chefs[i]['firstname'] + " " + chefs[i]['lastname'] + "</td>";
-		h += "<td>" +  sprintf('U01%06d',chefs[i]['id']); + "</td>";
+		h += "<tr><td onclick='edit_user(" + chefs[i]['id'] + ");'>" +  chefs[i]['firstname'] + " " + chefs[i]['lastname'] + "</td>";
+		h += "<td onclick='edit_user(" + chefs[i]['id'] + ");'>" +  sprintf('U01%06d',chefs[i]['id']); + "</td>";
 		h += "<td>" + chefs[i]['function'] + "</td>";
 		h += "<td>" + chefs[i]['last_login'] + "</td>";
 		
