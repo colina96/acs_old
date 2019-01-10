@@ -1953,7 +1953,7 @@ function active_comp_selected(id)
 	document.getElementById('ms_1').innerHTML = milestone_due;
 	active_comp.remaining = remaining;
 	if (milestone_due != 'M1') {
-		var tt = (remaining >= 0) ? "REMAINING" : "OVERDUE";
+		var tt = (remaining >= 0) ? " REMAINING" : " OVERDUE";
 		document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + tt;
 	} else {
 		document.getElementById('ms_1_text').innerHTML = "";
@@ -2303,10 +2303,12 @@ function m_show_active_components(data,reprint)
    		var clickdiv;
    		var span_txt='';
    		if(reprint){
-			clickdiv = "<div onclick='reprint_active_comp_labels(" + data[i]['id'] + ");'>";
+			tr.setAttribute("onclick","reprint_active_comp_labels(" + data[i]['id'] + ");");
+			clickdiv = "<div>";
 		}else{
+			tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
 			span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
-			clickdiv = "<div class='tooltip' onclick='active_comp_selected(" + i + ");'>";
+			clickdiv = "<div class='tooltip'>";
 		}
 		clickdiv += data[i]['description']+span_txt+ "</div>";
 
