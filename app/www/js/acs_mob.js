@@ -1139,12 +1139,16 @@ function show_dock()
 	for (var i = 0; i < comps.length;i++) {
 		if (comps[i].high_risk == 1) {
 			var tr = document.createElement('tr');
+
+			var func = '<div onclick="show_dock_component('+comps[i]['id']+');" >';
+
 			var td = document.createElement('td');
-			var innerHTML = "<div onclick='show_dock_component(" + comps[i]['id'] + ");'>" + comps[i]['description'] + "</div>";
-			td.innerHTML = innerHTML;
+			td.innerHTML = func+comps[i]['description']+'</div>';
 			tr.appendChild(td);
+
 			var td = document.createElement('td');
-			td.innerHTML = comps[i]['supplier'];
+			td.innerHTML = func+comps[i]['supplier']+'</div>';
+
 			comps[i].label = comps[i]['supplier'] + ": " + comps[i]['description'];
 			
 			tr.appendChild(td);
