@@ -32,9 +32,8 @@ function load_menu_items()
                     return false;
                 }
         	
-            })
-            console.log("got " + result.length + " menu itemss");
-            
+            });
+            console.log("got " + result.length + " menu items");
         },
         done: function(result) {
             console.log("load_menu_items");
@@ -182,7 +181,7 @@ function get_component_by_description(description)
 }
 function margin(t)
 {
-	return("<div class='margin10'>" + t + "</div");
+	return("<div class='m-10'>" + t + "</div");
 }
 
 function zeropad(s,n) // return string length n padded with zeroes

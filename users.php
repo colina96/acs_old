@@ -143,7 +143,7 @@ function save_user()
 	<div class='popup' id='show_user_div'>
 		<div class='center h2'>Edit User</div>
 		<div class='btns' id='user_div'>
-			<div class='margin10'>
+			<div class='m-10'>
 				<input type='hidden' name='user_id'>
 				<table>
 					<tr><td>Login</td><td><input type='text' name='user_email'></td></tr>
@@ -153,7 +153,7 @@ function save_user()
 					<tr><td>Function</td><td><input type='text' name='user_function'></td></tr>
 				</table>
 			</div>
-			<div class='margin10'>
+			<div class='m-10'>
 				<table>
 					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
 					<tr><td>Dock</td><td><input type='checkbox' name='user_dock'></td></tr>
@@ -169,7 +169,7 @@ function save_user()
 		</div>
 	</div>
 	<div class='acs_container'>
-		<div id='users_div' class='margin10'>
+		<div id='users_div' class='m-10'>
 		</div>
 	</div>
 </div>

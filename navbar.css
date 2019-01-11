@@ -42,6 +42,7 @@ td { padding: 5px; }
      -moz-box-sizing: border-box;
           box-sizing: border-box;
   padding: 10px;
+	margin: 10px;
   font-size: 16px;
 }
 .form-signin .form-control:focus {
@@ -49,13 +50,10 @@ td { padding: 5px; }
 }
 .form-signin input[type="email"] {
   margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
 }
 .form-signin input[type="password"] {
   margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+
 }
 
 .submit {
@@ -104,16 +102,17 @@ td { padding: 5px; }
 .acs_container {
 	.padding: 10px;
 	border-radius: 15px 15px;
-    spacing: 10px;
 }
-.margin10 { margin:10px;}
+.m-10 {
+	margin:10px;
+}
+
 .acs_sidebar {
 position: relative;
 	height:100%;
 	width:25%;
 	.border: 1px solid blue;
 	padding: 15px;
-    spacing: 15px;
     border-radius: 15px 0 0 15px;
     background: #648AFB;
 }
@@ -234,10 +233,8 @@ background-color: #EEEEEE;
 	display: flex;
 }
 .btn {
-	border:1px solid black;
 	border-radius: 15px;
-	background:white;
-	padding:2px 10px;
+	padding:5px 10px;
 	margin:2px 10px;
 }
 .datepicker {

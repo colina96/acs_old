@@ -21,7 +21,7 @@
 				<input type='hidden' id='del_comp_miid'>
 				<input type='hidden' id='del_comp_menu_id'>
 				<input type='hidden' id='del_comp_id'>
-				<div class='margin10'>
+				<div class='m-10'>
 					<div class='btn' onclick='do_delete_comp()'>Yes</div>
 					<div class='btn' onclick='dont_delete_comp()'>No</div>
 				</div>
@@ -32,7 +32,7 @@
 				<input type='hidden' id='new_comp_miid'>
 				<input type='hidden' id='new_comp_menu_id'>
 				<input id='new_comp_description'>
-				<div class='margin10'>
+				<div class='m-10'>
 					<div class='btn' onclick='do_new_comp()'>Add</div>
 					<div class='btn' onclick='dont_new_comp()'>Cancel</div>
 				</div>
@@ -40,28 +40,37 @@
 			<div id='add_sub_popup'>
 				<div id='component_title' class='h2'>Add subcomponent</div>
 				<form id='menu_item_component_form'>
-				<table><input name='comp_id' type='hidden'>
-				<tr><td>Description</td><td><input name='description' id='comp_description'></td></tr>
-				<tr><td>Supplier</td><td><input name='comp_supplier'></td></tr>
-				<tr><td>Product</td><td><input name='comp_product'></td></tr>
-				<tr><td>Spec</td><td><input name='comp_spec'></td></tr>
-			<!-- 	<tr><td>PT</td><td>
+                    <input name='comp_id' type='hidden'>
+                    <table>
+				    <tr><td>Description</td><td><input name='description' id='comp_description'></td></tr>
+				    <tr><td>Supplier</td><td><input name='comp_supplier'></td></tr>
+				    <tr><td>Product</td><td><input name='comp_product'></td></tr>
+				    <tr><td>Spec</td><td><input name='comp_spec'></td></tr>
+			    <!--
+			        <tr><td>PT</td><td>
 					<select name='comp_PT_id'>
 						<option value='1'>Fresh</option>
 						<option value='2'>Frozen</option>
 						<option value='3'>Dry</option>
-
-						
 					</select>
-					</td></tr>  -->
-				<tr><td>Shelf life (days)</td><td><input type='number' name='comp_shelf_life_days'></td></tr>
-				<tr><td>Track from dock</td><td><input type='checkbox' name='comp_high_risk' value='1'></td></tr>
-				<tr><td>Prep type</td><td><div id='prep_type_div'><?php select_prep_type(null,'comp_prep_type'); ?></div></td></tr>
-				<tr><td colspan='2'>
-				<div class='btns'>
-					<div class='btn' onclick='new_subcomponent();'>Done</div>
-					<div class='btn' onclick='cancel_add_sub();'>Cancel</div>
-				</div>
+					</td></tr>
+				-->
+				    <tr><td>Shelf life (days)</td><td><input type='number' name='comp_shelf_life_days'></td></tr>
+				    <tr><td>Track from dock</td><td><input type='checkbox' name='comp_high_risk' value='1'></td></tr>
+				    <tr>
+                        <td>Prep type</td>
+                        <td><div id='prep_type_div'>
+                                <?php select_prep_type(null,'comp_prep_type'); ?>
+                        </div></td>
+                    </tr>
+				    <tr>
+                        <td colspan='2'>
+                            <div class='btns'>
+                                <div class='btn' onclick='new_subcomponent();'>Done</div>
+                                <div class='btn' onclick='cancel_add_sub();'>Cancel</div>
+                            </div>
+                        </td>
+                    </tr>
 				</table>
 				</form>
 			</div>
@@ -69,20 +78,43 @@
 				
 				<h1>CREATE NEW MENU</h1>
 				<form id='menuform' method="post" enctype="multipart/form-data">
-				<table><tr><td>OVERALL INFORMATION</td></tr>
-				<tr><td><input name='menu_name'></td>
-					<td><input name='menu_description'></td>
-					<td><input name='menu_comment'></td>
-				<tr><td>DATE RANGE</td></tr>
-				<tr><td><input type="text" id="menu_start" name="menu_start" placeholder='start date' class='datepicker' readonly="readonly"></td>
-				<td><input type="text" id="menu_end" name="menu_end" placeholder='end date' class='datepicker' readonly="readonly"></td></tr>
-				<tr><td colspan='3'>
-    			Select file to upload:
-   				 <input type="file" name="fileToUpload" id="fileToUpload">
-   				 <!--   div class='drop-files-container' id='drop-files-container'></div -->
-   				 <input type='button' name='submit_menu' value='Submit Menu' class='submit' onclick='upload_menu();'>
-   				
-   				 </td></tr></table></form>
+                    <table>
+                        <tr><td>OVERALL INFORMATION</td></tr>
+                        <tr>
+                            <td><input name='menu_name'></td>
+                            <td><input name='menu_description'></td>
+                            <td><input name='menu_comment'></td>
+                        </tr>
+                        <tr><td>DATE RANGE</td></tr>
+                        <tr>
+                            <td>
+                                <input type="text"
+                                       id="menu_start"
+                                       name="menu_start"
+                                       placeholder='start date'
+                                       class='datepicker'
+                                       readonly="readonly">
+                            </td>
+                            <td>
+                                <input type="text"
+                                       id="menu_end"
+                                       name="menu_end"
+                                       placeholder='end date'
+                                       class='datepicker'
+                                       readonly="readonly">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'>
+                                Select file to upload:
+                                <input type="file" name="fileToUpload" id="fileToUpload">
+                                <!--   div class='drop-files-container' id='drop-files-container'></div -->
+                                <input type='button' name='submit_menu'
+                                       value='Submit Menu' class='submit' onclick='upload_menu();'>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
 
 		
 			</div>
@@ -93,18 +125,18 @@
 			<div id='expired_menus' class='menu_details'>Expired menu details
 			<?php load_expired_menus(); ?></div>
 			<div id='add_menu_component_modal'>
-				<div class='modal_header'><span>Add menu item component</span>
-				<div id='menu_item_name_div'></div>
-				<div class='close_modal' onclick='close_menu_component_modal("add_menu_component_modal");'>X</div>
+				<div class='modal_header'>
+                    <span>Add menu item component</span>
+				    <div id='menu_item_name_div'></div>
+				    <div class='close_modal' onclick='close_menu_component_modal("add_menu_component_modal");'>X</div>
 				</div>
 			
 				<div id='menu_item_component_div'>
-				<form method='POST' action='acs_menu.php'>
-				<input type='hidden' name='cc_menu_item_id' >
-				<input type='hidden' name='cc_menu_id' >
-				<input name='menu_item_component_description' size='30'>
-				<select name='prep_type'>
-				
+				    <form method='POST' action='acs_menu.php'>
+				        <input type='hidden' name='cc_menu_item_id' >
+                        <input type='hidden' name='cc_menu_id' >
+                        <input name='menu_item_component_description' size='30'>
+                        <select name='prep_type'>
 <?php 
 $sql = "select * from PREP_TYPES order by ID";
 $result = mysql_query($sql);
@@ -114,11 +146,11 @@ if ($result) {
 	}
 }
 ?>
-</select>
-				<input type='submit' name='add_menu_component' value='Add'>
-				</form></div>
-			
-		</div>
+                        </select>
+                        <input type='submit' name='add_menu_component' value='Add'>
+                    </form>
+                </div>
+		    </div>
 		<div id='del_menu_component_modal'>
 			<div class='modal_header'>
 				<span>Delete menu item component</span>
@@ -134,7 +166,7 @@ if ($result) {
 				</form>
 			</div>
 		</div>
-</div>
+    </div>
 </div>
 <script>
 var menus = null;

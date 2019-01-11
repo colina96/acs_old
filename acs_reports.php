@@ -125,7 +125,7 @@ function report_components(data,format)
 	var div = document.getElementById('report_container');
 	
 	if (data.length < 1) {
-		div.innerHTML = "<h1>No Active Components</h1>";
+		div.innerHTML = "<span>No Active Components</span>";
 		return;
 	}
 	var tab = document.createElement('table');
@@ -322,7 +322,7 @@ function search_report()
 			<div class='top_menu' id='dock_report_tab'  onclick="kitchen_reports(dock_report_fmt,'dock_report_tab','dock')">DOCK</div>
 			<div class='top_menu' id='kitchen_report_tab'  onclick="kitchen_reports(kitchen_report_fmt,'kitchen_report_tab','kitchen')">KITCHEN</div>
 			<div class='top_menu' id='plating_report_tab'  onclick="load_plating_data();">PLATING</div>
-			<div class='top_menu' id='report_range_tab'">
+			<div class='top_menu' id='report_range_tab'>
 				<input type="text" id="report_start" name="report_start" placeholder='start date' class='datepicker' readonly="readonly"></td>
 				<input type="text" id="report_end" name="report_end" placeholder='end date' class='datepicker' readonly="readonly">
 				<input type="text" id="report_search" name="report_search" placeholder="search" >

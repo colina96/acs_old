@@ -31,7 +31,7 @@ function show_prep_types()
 		{
 			$prep_types[] = $data;
 		}
-		echo ("<div class='margin10'>");
+		echo ("<div class='m-10'>");
 		echo ("<table border=0 width='100%' class='acs_table'>");
 		$rownum = 1;
 		foreach ($rows as $row => $fieldname) {
