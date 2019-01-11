@@ -40,9 +40,14 @@ function show_users()
 {
 	var div = document.getElementById('users_div');
 
-	var h = "<table class='users' width='100%' border='1'>";
-	h += "<tr><td>USER</td><td>BARCODE</td><td>WORK FUNCTION</td><td>LAST ACCESS</td><td colspan=3 class='add_user'>";
-	h += "<button onclick='new_user()'>Add new user</button></td></tr>";
+	var h = "<table class='table' id='users' width='100%' border='0'>";
+	h += "<tr>" +
+        "<th>USER</th>" +
+        "<th>WORK FUNCTION</th>" +
+        "<th>LAST ACCESS</th>" +
+        "<th colspan=3 class='add_user'>" +
+        "<button onclick='new_user()'>Add new user</button>" +
+        "</th></tr>";
 	for (var i = 0; i < chefs.length; i++) {
 		
 		h += "<tr><td onclick='edit_user(" + chefs[i]['id'] + ");'>" +  chefs[i]['firstname'] + " " + chefs[i]['lastname'] + "</td>";
@@ -131,7 +136,7 @@ function save_user()
 }
 
 </script>
-<div class='acs_main'>
+<div class='acs_main' id="user_table">
 	<div class='popup' id='confirm_print_user_label'>
 		<div class='center h2'>Print Label</div>
 		<div class='center' id='ul1'>Print Label</div>

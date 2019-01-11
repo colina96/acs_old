@@ -76,7 +76,7 @@
 	position:absolute;
 	top: 2vh;
 	right: 6vw;
-	color:var(--acs_blue);
+	color:var(--acs_darkblue);
 	font-size:10vw;
 	font-weight: bold;
 }
@@ -207,6 +207,11 @@
 	margin : 10px auto;
 	color:var(--acs_text_normal_dark);
 	font-size: larger;
+}
+
+#m_temp {
+	/* background-image: url('../img/qac_mobile.png'); */
+	background-color: var(--acs_background_dark);
 }
 
 #barcode {
