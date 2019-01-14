@@ -210,12 +210,13 @@
             </div>
 
             <div class='m_modal' id='dock_m_temp_modal_labels'>
-                <div class='center modal_head'><span>TEMPERATURE</span></div>
+                <div class='center modal_head'><span class="temperature_label">TEMPERATURE</span></div>
                 <div id='dock_m1_temp_div_4' class='temp_reading'></div>
                 <div id='dock_m1_temp_div_5' class='center'></div>
 
-                <div class='center'><input type='number' class='label_num' name='dock_m1_label_qty' length='3'></div>
-                <div class='center grey'>LABEL QUANTITY</div>
+                <div class='center'> <div class='center grey'>LABEL QUANTITY</div>
+                    <input type='number' class='label_num' name='dock_m1_label_qty' length='3'>
+                </div>
                 <div class='btns'>
                     <button type='button' class='m_btn' onclick="dock_start_component();">Print Labels</button>
                 </div>
