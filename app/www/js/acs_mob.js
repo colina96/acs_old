@@ -1000,7 +1000,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 				td.id = 'plating_item_checked_' + i;
 				td.innerHTML = '-';
 				if (items[i].component_id) {
-					td.innerHTML = '&#x2713;';
+					td.innerHTML = '<image src="img/icon_pass.svg">';
 				}
 				else {
 					all_good = false;
