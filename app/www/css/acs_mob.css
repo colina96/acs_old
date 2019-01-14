@@ -260,6 +260,15 @@
 	display: inline-block;
 }
 
+.scan_instruction {
+    font-family: "Ubuntu Medium";
+    color: var(--acs_text_scan);
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 10px;
+}
+
 .temperature_label {
     font-weight: bold;
 }

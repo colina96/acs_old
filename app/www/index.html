@@ -223,13 +223,13 @@
             </div>
 
             <div class='m_modal' id='dock_m_temp_modal_high'>
-                <div class='center modal_head'><span>TEMPERATURE</span></div>
+                <div class='center modal_head'><span class="temperature_label">TEMPERATURE</span></div>
                 <div id='dock_m1_temp_div_6' class='temp_reading red'></div>
                 <img src="img/icon_IR.svg" class="icon_IR" onclick="dock_read_M1temp();" >
-                <div class="center"> Recheck possible </div>
+                <div class="scan_instruction"> Recheck possible </div>
                 <div class='btns'>
+                    <button type='button' class='m_submit' onclick="dock_qa_override();">QA Override</button>
                     <button type='button' class='m_btn' onclick="goto_dock();">Reject</button>
-                    <button type='button' class='m_btn' onclick="dock_qa_override();">QA Override</button>
                 </div>
             </div>
 
