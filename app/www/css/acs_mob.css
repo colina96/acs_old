@@ -239,8 +239,25 @@
 	margin: 0;
 }
 
+
+#temp_direction {
+	text-align: center;
+	color: var(--acs_text_scan);
+	line-height: 1.7em;
+}
+
 .m_close {
 	height:20px;
+}
+
+.temp_scan {
+	margin-top: 100px;
+	font-family: "Ubuntu Medium";
+}
+
+.temp_milestone {
+	color: var(--acs_text_milestone_complete);
+	display: inline-block;
 }
 .serial {
     width: 90vw;
