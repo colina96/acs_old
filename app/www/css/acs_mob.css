@@ -253,7 +253,9 @@
 #choose_ca {
     color: var(--acs_text_scan);
 }
-
+#dock_m1_temp_div_7 {
+	color: var(--acs_text_milestone_fail);
+}
 .m_close {
 	height:20px;
 }
