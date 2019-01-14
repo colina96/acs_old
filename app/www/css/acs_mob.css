@@ -258,6 +258,10 @@
 	color: var(--acs_text_milestone_fail);
 }
 
+#plating_teams_list{
+	position: relative;
+}
+
 .com_M2 {
     vertical-align: middle;
 }
@@ -861,7 +865,13 @@ th.plating_tab {
 }
 
 select {
-	font-size: 6vw;
+	font-size: 16pt;
+	border-radius: 10px;
+	border-color: lightgrey;
+	padding: 10px;
+	font-family: "Ubuntu";
+	color: var(--acs_text_normal_dark);
+
 }
 
 @media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
