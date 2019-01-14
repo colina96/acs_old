@@ -2315,7 +2315,7 @@ function m_show_active_components(data,reprint)
 			clickdiv = "<div>";
 		}else{
 			tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
-			span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
+		//	span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
 			clickdiv = "<div class='tooltip'>";
 		}
 		clickdiv += data[i]['description']+span_txt+ "</div>";
