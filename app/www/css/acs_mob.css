@@ -509,6 +509,10 @@
 	width:100px; 
 	font-size:45px;
 	margin: 0 auto;
+    border-radius: var(--acs_button_radius);
+    border: 1px solid lightgrey;
+    text-align: center;
+    color: var(--acs_text_normal_dark);
 	
 }
 #search, #dock_search {
@@ -750,6 +754,11 @@ input[type="text"] {
 input::placeholder{
 	color: var(--acs_lightpurple);
 }
+
+input::-webkit-inner-spin-button{
+     opacity:1;
+ }
+
 
 .plating_tab
 {
