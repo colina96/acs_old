@@ -190,7 +190,7 @@
             <div class='m_modal' id='dock_m_temp_modal'>
                 <div class="temp_scan">
                 <img src="img/icon_IR.svg" class="icon_IR">
-                    <div class='m_label' id="temp_direction"><span><b>CHECK THE TEMPERATURE </b><br> REQUIRED: <div class="temp_milestone">< 5°C </div><br> (USE IR SENSOR)</span></div>
+                    <div class='m_label' id="temp_instruction" ><span><b>CHECK THE TEMPERATURE </b><br> REQUIRED: <div class="temp_milestone">< 5°C </div><br> (USE IR SENSOR)</span></div>
                 <div id='dock_m1_temp_div' class='center'></div>
                 </div>
 
@@ -356,15 +356,15 @@
         </div>
 
         <div class='m_modal2' id='m_temp_modal3'>
-            <div class='m_label'><span>TEMPERATURE</span></div>
+            <div class="center modal_head">
+            <div class='temperature_label'><span>TEMPERATURE</span></div> </div>
 
             <div id='m1_temp_div_3' class='temp_reading'></div>
             <div id='m1_temp_div_chef' class='hidden'>
                 <!-- input name='m1_chef_id' onchange="set_user('m1_chef_id','m_temp_modal4',0);" --></div>
-            <div class='btns'>
-                <button type='button' onclick="set_barcode_mode('M1');" class='m_btn'>Scan Authorised Chef ID</button>
+                <image onclick="set_barcode_mode('M1');" src="img/icon_barscan.svg" class="icon_barscan"></image>
+                <span class="scan_instruction">Scan Authorised Chef ID</span>
                 <!--  button type='button' class='m_btn' onclick="set_user('m1_chef_id','m_temp_modal4',0);">Scan Authorised Chef ID</button -->
-            </div>
         </div>
 
         <div class='m_modal2' id='m_temp_modal_LR'>
