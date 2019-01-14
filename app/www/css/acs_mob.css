@@ -257,6 +257,25 @@
 #dock_m1_temp_div_7 {
 	color: var(--acs_text_milestone_fail);
 }
+
+.com_M2 {
+    vertical-align: middle;
+}
+
+.temp_achieved.center {
+    color: var(--acs_text_scan);
+    font-size: 14pt;
+    text-transform: uppercase;
+    vertical-align: middle;
+    margin: 10px;
+    font-family: "Ubuntu Medium";
+}
+
+.milestone_achieved {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .m_close {
 	height:20px;
 }
