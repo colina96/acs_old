@@ -246,6 +246,9 @@
 	line-height: 1.7em;
 }
 
+#last_item{
+	margin-bottom:30px;
+}
 .m_close {
 	height:20px;
 }
@@ -270,6 +273,12 @@
     display: block;
 }
 
+.authorised {
+	color: var(--acs_text_milestone_complete);
+	font-size: 12pt;
+	font-weight: normal;
+	margin-bottom: 10px;
+}
 .icon_barscan {
     margin:80px auto 0;
     display: block;
@@ -280,10 +289,9 @@
 }
 
 .center.grey  {
-	display: inline-block;
-	padding-top: 50px;
-	padding-bottom: 20px;
-	font-weight: bold;
+	padding: 20px;
+	color: var(--acs_text_scan);
+	font-size: 12pt;
 }
 
 .serial {
@@ -383,7 +391,9 @@
 	color:var(--acs_text_normal_dark);
 	margin-top:10px;
 	margin-bottom:10px;
-	font-size:20px;
+	font-size:20pt;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 .LR_description {
 	color:var(--acs_text_milestone_complete);
@@ -741,6 +751,10 @@
     *border-bottom-width: 2px;
 }
 
+hr {
+	border: 0.5px solid #f2f2f2;
+	width: 80%;
+}
 
 input[type="text"] {
 	-webkit-appearance: textfield;

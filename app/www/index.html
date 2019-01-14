@@ -246,13 +246,15 @@
             </div>
             <div class='m_modal' id='dock_m_temp_modal_qa2'>
                 <div class='center modal_head' id='dock_qa_chef_details'></div>
-                <div class='center modal_head'><span>Head Chef Authorised</span></div>
-                <div class='center red'>GOODS ACCEPTED</div>
+                <div class='center modal_head'><span class="authorised">Head Chef Authorised</span></div>
+                <div class='center red authorised' id="last_item">GOODS ACCEPTED</div>
+                <hr>
                 <div class='center grey'>CHOOSE CORRECTIVE ACTION</div>
+                <hr>
                 <div id='dock_m1_temp_div_7' class='temp_reading'></div>
                 <div class='btns'>
-                    <button type='button' class='m_btn' onclick="dock_qa_signof();">QA Sign Off</button>
-                    <button type='button' class='m_btn' onclick="dock_qa_client_request();">Emergency Client Request
+                    <button type='button' class='m_submit' onclick="dock_qa_signof();">QA Sign Off</button>
+                    <button type='button' class='m_submit' onclick="dock_qa_client_request();">Emergency Client Request
                     </button>
                 </div>
             </div>
