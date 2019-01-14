@@ -552,7 +552,7 @@
 	
 }
 #search, #dock_search {
-	width:100%;
+	width:87vw;
 	background-image: url('../img/icon_search.png');
 	background-size: 25px;
 	background-repeat: no-repeat;
