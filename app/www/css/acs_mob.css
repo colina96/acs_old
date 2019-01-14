@@ -267,6 +267,12 @@
     text-transform: uppercase;
     text-align: center;
     margin-top: 10px;
+    display: block;
+}
+
+.icon_barscan {
+    margin:80px auto 0;
+    display: block;
 }
 
 .temperature_label {
