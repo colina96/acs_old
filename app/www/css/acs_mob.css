@@ -249,6 +249,11 @@
 #last_item{
 	margin-bottom:30px;
 }
+
+#choose_ca {
+    color: var(--acs_text_scan);
+}
+
 .m_close {
 	height:20px;
 }
@@ -290,7 +295,7 @@
 
 .center.grey  {
 	padding: 20px;
-	color: var(--acs_text_scan);
+	color: var(--acs_text_normal_dark);
 	font-size: 12pt;
 }
 
