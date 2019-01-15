@@ -299,7 +299,7 @@ function show_menu()
     	tr.appendChild(td);
 
        	td = document.createElement('td');
-    	td.innerHTML += "<div class='add_subcompdiv red' onclick='del_menuitem("+ item['id'] + ");'>&#x26D4</div>";
+    	td.innerHTML += "<image class='icon' id='delete_dish' src='app/www/img/icon_delete_white.svg' onclick='del_menuitem("+ item['id'] + ");'></image>";
     	td.colSpan = 2;
     	tr.appendChild(td);
         table.appendChild(tr);
@@ -347,7 +347,7 @@ function show_menu()
             	}
             	tr.appendChild(td);
             	td = document.createElement('td');
-            	td.innerHTML += "<div class='add_subcompdiv red' onclick='del_component(" + mid + ","+ item['id'] + ");'>&#x274c</div>";
+            	td.innerHTML += "<image class='icon' id='delete_component' src='app/www/img/icon_delete.svg' onclick='del_component(" + mid + ","+ item['id'] + ");'></image>";
             	td.colSpan = 2;
             	tr.appendChild(td);
             	table.appendChild(tr);
