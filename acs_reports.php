@@ -130,6 +130,7 @@ function report_components(data,format)
 	}
 	var tab = document.createElement('table');
 	tab.className = 'component_table';
+    tab.id = 'reports';
 	for (var preptype_idx = 0; preptype_idx < preptypes.length; preptype_idx++) {
 		console.log(preptypes[preptype_idx]['code']);
 		
