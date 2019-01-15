@@ -130,6 +130,20 @@ td { padding: 5px; }
     padding:0;
 }
 
+#report_start, #report_end, #report_search{
+	border-radius: 10px;
+	border: 1px solid lightgrey;
+}
+
+#report_start::placeholder, #report_end::placeholder, #report_search::placeholder{
+	padding:5px;
+}
+
+#go {
+	width: 50px;
+	padding:0;
+}
+
 .icon  {
     height:15px;
 }
@@ -407,12 +421,16 @@ btns {
 	.top:0;
 	.left:8vw;
 	margin-left:2vw;
-	display:flex;
+	display:inline-block;
 	.color:white;
 	.font-size:x-small;
 	
 	width:84vw;
 	
+}
+
+.top_menu {
+	cursor: pointer;
 }
 .top_menu, .top_menu_highlighted {
 	margin:15px;
@@ -420,6 +438,7 @@ btns {
 	color:black;
 	font-size:larger;
 	border:1px solid white;
+	display: inline-block;
 }
 
 .top_menu_highlighted {

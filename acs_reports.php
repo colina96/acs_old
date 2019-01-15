@@ -327,7 +327,7 @@ function search_report()
 				<input type="text" id="report_start" name="report_start" placeholder='start date' class='datepicker' readonly="readonly"></td>
 				<input type="text" id="report_end" name="report_end" placeholder='end date' class='datepicker' readonly="readonly">
 				<input type="text" id="report_search" name="report_search" placeholder="search" >
-				<button onclick='search_report();'>go</button>
+				<button class='button_main' id='go' onclick='search_report();'>Go</button>
 			</div>
 			
 </div>
