@@ -102,7 +102,7 @@ td { padding: 5px; }
     border-radius: 15px 15px;
 }
 
-th {
+#users th {
 	background-image: linear-gradient(to right, #9D2CE3,#9323E4,#7A0FE7);
 	background-attachment:fixed;
 	color: white;
