@@ -141,7 +141,7 @@ function save_user()
 		<div class='center h2'>Print Label</div>
 		<div class='center' id='ul1'>Print Label</div>
 		<div class='btns'>
-			<button class='button_main' onclick='print_user_label();'>OK</button>
+			<button class='button_main' onclick='print_user_label();'>Save</button>
 			<button class='button_minor' onclick='hide("confirm_print_user_label");'>Cancel</button>
 		</div>
 	</div>
@@ -165,7 +165,7 @@ function save_user()
 				</table>
 		</div>
 		<div class='btns'>
-			<button class='button_main' onclick='save_user();'>OK</button>
+			<button class='button_main' onclick='save_user();'>Save</button>
 			<button class='button_minor' onclick='hide("show_user_div");'>Cancel</button>
 		</div>
 	</div>
