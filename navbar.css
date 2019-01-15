@@ -287,6 +287,10 @@ background-color: #EEEEEE;
 .component_table td {
     border-bottom: 1px solid lightgrey;
 }
+
+.component_table tr:hover, #settings tr:hover {
+	background-color:lightgrey;
+}
 #reports th {
     background: #7A0FE7;
 }
