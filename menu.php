@@ -81,9 +81,9 @@
                     <table>
                         <tr><td>OVERALL INFORMATION</td></tr>
                         <tr>
-                            <td><input name='menu_name' type="text" class="menu_description"></td>
-                            <td><input name='menu_description' type="text" class="menu_description"></td>
-                            <td><input name='menu_comment' type="text" class="menu_description"></td>
+                            <td><input name='menu_name' type="text" class="menu_description" placeholder="Client"></td>
+                            <td><input name='menu_description' type="text" class="menu_description" placeholder="Name"></td>
+                            <td><input name='menu_comment' type="text" placeholder="Description"></td>
                         </tr>
                         <tr><td>DATE RANGE</td></tr>
                         <tr>
@@ -91,7 +91,7 @@
                                 <input type="text"
                                        id="menu_start"
                                        name="menu_start"
-                                       placeholder='start date'
+                                       placeholder='Start date'
                                        class='datepicker'
                                        readonly="readonly">
                             </td>
@@ -99,7 +99,7 @@
                                 <input type="text"
                                        id="menu_end"
                                        name="menu_end"
-                                       placeholder='end date'
+                                       placeholder='End date'
                                        class='datepicker'
                                        readonly="readonly">
                             </td>
@@ -110,7 +110,7 @@
                                 <input type="file" name="fileToUpload" id="fileToUpload">
                                 <!--   div class='drop-files-container' id='drop-files-container'></div -->
                                 <input type='button' name='submit_menu'
-                                       value='Submit Menu' class='button_main' id="submit_menu" onclick='upload_menu();'>
+                                       value='Submit menu' class='button_main' id="submit_menu" onclick='upload_menu();'>
                             </td>
                         </tr>
                     </table>
