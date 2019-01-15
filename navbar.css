@@ -284,7 +284,9 @@ background-color: #EEEEEE;
     background-image: linear-gradient(to right, #9D2CE3, #9323E4, #7A0FE7);
 	color:white;
 }
-
+.component_table td {
+    border-bottom: 1px solid lightgrey;
+}
 #reports th {
     background: #7A0FE7;
 }
