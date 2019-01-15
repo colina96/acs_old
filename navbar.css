@@ -132,7 +132,7 @@ table input[type=text] {
 	padding:10px;
 }
 
-input[type=text]::placeholder {
+#user_id input[type=text]::placeholder {
 	font-size: 8pt;
 }
 

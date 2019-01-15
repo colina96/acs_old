@@ -920,7 +920,7 @@ function show_menus(active,data)
    		// tr.appendChild(new_td("<a href='acs_menu.php?menu_id=" + data[i]['id'] + "'>edit</a>",'comp'));
    		var btn = "<div class='btn' onclick='load_menu(" + data[i]['id'] + ");'>Edit</div>";
    		tr.appendChild(new_td(btn,'comp'));
-   		var btn = "<image class='icon' id='delete_menu' src='app/www/img/icon_fail.svg' onclick='delete_menu(" + data[i]['id'] + ");'></image>";
+   		var btn = "<image class='icon' id='delete_menu' src='app/www/img/icon_delete.svg' onclick='delete_menu(" + data[i]['id'] + ");'></image>";
    		tr.appendChild(new_td(btn,'comp'));
    		//var del = "<a href=acs_menu?delete_menu=" + data[i]['id'] + ">&#x274c</a>";
    		//tr.appendChild(new_td(del,'comp'));
