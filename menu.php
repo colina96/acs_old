@@ -340,7 +340,7 @@ function show_menu()
             	td.innerHTML = innerHTML;
             	tr.appendChild(td);
             	td = document.createElement('td');
-            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>Add HR ingredient</div>";
+            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>+ HR ingredient</div>";
             	td.colSpan = 2;
             	if (menu_item_components[mid].subcomponents) {
                 	// td.innerHTML += 'checked';
