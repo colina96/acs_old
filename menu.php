@@ -106,7 +106,7 @@
                         </tr>
                         <tr>
                             <td colspan='3'>
-                                Select file to upload:
+                                <span id="select_file"> Select file to upload: </span>
                                 <input type="file" name="fileToUpload" id="fileToUpload">
                                 <!--   div class='drop-files-container' id='drop-files-container'></div -->
                                 <input type='button' name='submit_menu'
