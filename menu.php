@@ -246,7 +246,7 @@ function show_menu_details (div)
 {
 	console.log(menu[active_menu_id]);
 	
-	var ret = "<table width=100%><tr><td>OVERALL INFORMATION</td></tr>"
+	var ret = "<table width=100%><tr><td class='user_subtitle' >OVERALL INFORMATION</td></tr>"
 	ret += "<tr><td>Description</td>";
 	ret += "<td>Code</td>";
 	ret += "<td>Comment</td></tr>";
@@ -254,7 +254,7 @@ function show_menu_details (div)
 	ret += "<td>" + menu[active_menu_id]['code'] + "</td>";
 	ret += "<td>" + menu[active_menu_id]['comment'] + "</td>";
 	
-	ret += "<tr><td>DATE RANGE</td></tr>";
+	ret += "<tr><td class='user_subtitle'>DATE RANGE</td></tr>";
 	ret += "<tr><td>From: " + menu[active_menu_id]['start_date'];
 	ret += "<td>To: " + menu[active_menu_id]['end_date'];
 	ret += "</table><hr>";
