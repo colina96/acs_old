@@ -100,7 +100,7 @@ td { padding: 5px; }
 	position: relative;
 	height:80%;
 	width:100%;
-	border: 1px solid blue;
+/*	border: 1px solid blue;*/
 	.padding: 10vw;
     .spacing: 10vw;
     border-radius: 15px 15px;
@@ -307,6 +307,10 @@ background-color: #EEEEEE;
 }
 #reports th {
     background: #7A0FE7;
+}
+
+#reports_frame {
+	border:1px solid lightgrey;
 }
 
 .menu_table th
