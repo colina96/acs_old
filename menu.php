@@ -247,9 +247,9 @@ function show_menu_details (div)
 	console.log(menu[active_menu_id]);
 	
 	var ret = "<table width=100%><tr><td class='user_subtitle' >OVERALL INFORMATION</td></tr>"
-	ret += "<tr><td>Description</td>";
-	ret += "<td>Code</td>";
-	ret += "<td>Comment</td></tr>";
+	ret += "<tr><td>Client</td>";
+	ret += "<td>Name</td>";
+	ret += "<td>Description</td></tr>";
 	ret += "<tr><td>" + menu[active_menu_id]['description'] + "</td>";
 	ret += "<td>" + menu[active_menu_id]['code'] + "</td>";
 	ret += "<td>" + menu[active_menu_id]['comment'] + "</td>";
@@ -902,10 +902,10 @@ function show_menus(active,data)
 	tab.width = '100%';
 	tab.border = '0';
 	var tr = document.createElement('tr');
-	tr.appendChild(new_td('Description','comp'));
+	tr.appendChild(new_td('Client','comp'));
 	tr.appendChild(new_td('Start','comp'));
-    tr.appendChild(new_td('End','comp'));   
-    tr.appendChild(new_td('Code','comp'));   
+    tr.appendChild(new_td('End','comp'));
+    tr.appendChild(new_td('Name','comp'));
     tr.appendChild(new_td('Edit','comp'));   
     tr.appendChild(new_td('Delete','comp'));   
    	tab.appendChild(tr);
