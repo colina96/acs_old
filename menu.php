@@ -361,7 +361,7 @@ function show_menu()
                     	tr.appendChild(td);
                     	tr.appendChild(td);
                 		td = document.createElement('td');
-                    	var innerHTML = "<span class='ingredient small'>Ingredient  - </span>";
+                    	var innerHTML = "<span class='ingredient small'>Ingredient: </span>";
                     	innerHTML += "<div onclick='edit_high_risk_component(" + comp.id + ");'>" + comp.description + "</div>";
                     	td.innerHTML= innerHTML;
                     	tr.appendChild(td);
