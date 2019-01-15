@@ -26,7 +26,6 @@ function show_prep_types()
 	$prep_types = array();
 	$result = mysql_query($sql);
 	if ($result) {
-
 		while($data = mysql_fetch_array($result))
 		{
 			$prep_types[] = $data;
