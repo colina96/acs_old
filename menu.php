@@ -900,7 +900,7 @@ function show_menus(active,data)
 	var tab = document.createElement('table');
 	tab.className = 'menu_table';
 	tab.width = '100%';
-	tab.border = '1';
+	tab.border = '0';
 	var tr = document.createElement('tr');
 	tr.appendChild(new_td('Description','comp'));
 	tr.appendChild(new_td('Start','comp'));
