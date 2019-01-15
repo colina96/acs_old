@@ -854,6 +854,10 @@ table.plating_tab tr td, table.item_table td {
 	text-align: left;
 }
 
+table.item_table td img {
+    height:20px;
+}
+
 table.plating_tab tr th:first-of-type,
 table.plating_tab tr th:last-of-type,
 table.plating_tab tr td:first-of-type,
