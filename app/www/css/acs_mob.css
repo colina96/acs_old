@@ -262,6 +262,10 @@
 	position: relative;
 }
 
+.even_tr {
+    color:black;
+}
+
 .com_M2 {
     vertical-align: middle;
 }
