@@ -116,6 +116,10 @@ td { padding: 5px; }
 	border-style: none;
 }
 
+#ul1 {
+	margin-bottom: 15px;
+}
+
 .add_user {
 	color:black;
 }
@@ -126,9 +130,8 @@ table input[type=text] {
 	padding:10px;
 }
 
-input[type=text]:placeholder {
-	font-size: 2pt;
-	font-family: "Ubuntu Medium";
+input[type=text]::placeholder {
+	font-size: 8pt;
 }
 
 .user_subtitle {

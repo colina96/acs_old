@@ -138,10 +138,10 @@ function save_user()
 </script>
 <div class='acs_main' id="user_table">
 	<div class='popup' id='confirm_print_user_label'>
-		<div class='center h2'>Print Label</div>
-		<div class='center' id='ul1'>Print Label</div>
+        <div class='center'>Print label for:</div>
+		<div class='center' id='ul1'>Print label for</div>
 		<div class='btns'>
-			<button class='button_main' onclick='print_user_label();'>Save</button>
+			<button class='button_main' onclick='print_user_label();'>Confirm</button>
 			<button class='button_minor' onclick='hide("confirm_print_user_label");'>Cancel</button>
 		</div>
 	</div>
