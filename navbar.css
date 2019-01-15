@@ -300,15 +300,21 @@ btns {
 	border-radius: 15px;
 	
 }
-.button2 {
-	.bottom:30px;
-	width:40%;
-	padding:5%;
-	margin:5%;
-	background: white;
-	color: var(--acs_background);
-	border:2px var(--acs_background) solid;
+.button_main, .button_minor {
+	color: white;
 	border-radius: 15px;
+    background: #18e0af;
+    position:relative;
+    border:2px #18e0af solid;
+    padding: 5px;
+    width: 80%;
+    margin:5px;
+    font-family: "Ubuntu", sans-serif;
+}
+
+.button_minor {
+    background: white;
+    color: #18e0af;
 }
 .center {
 	display:table;

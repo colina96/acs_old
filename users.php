@@ -141,8 +141,8 @@ function save_user()
 		<div class='center h2'>Print Label</div>
 		<div class='center' id='ul1'>Print Label</div>
 		<div class='btns'>
-			<button class='button2' onclick='print_user_label();'>OK</button>
-			<button class='button2' onclick='hide("confirm_print_user_label");'>Cancel</button>
+			<button class='button_main' onclick='print_user_label();'>OK</button>
+			<button class='button_minor' onclick='hide("confirm_print_user_label");'>Cancel</button>
 		</div>
 	</div>
 	<div class='popup' id='show_user_div'>
@@ -165,8 +165,8 @@ function save_user()
 				</table>
 		</div>
 		<div class='btns'>
-			<button class='button2' onclick='save_user();'>OK</button>
-			<button class='button2' onclick='hide("show_user_div");'>Cancel</button>
+			<button class='button_main' onclick='save_user();'>OK</button>
+			<button class='button_minor' onclick='hide("show_user_div");'>Cancel</button>
 		</div>
 	</div>
 	<div class='acs_container'>
