@@ -278,10 +278,15 @@ background-color: #EEEEEE;
 .component_table th {
 	
 	font-size:12px;
-	background:var(--acs_blue_background);
 	color:white;
+    padding-left: 10px;
+}
+.component_table tr:first-of-type {
+    background-image: linear-gradient(to right, #9D2CE3, #9323E4, #7A0FE7);
 }
 .menu_table th
+
+
 {
 	padding:2px;
 }
