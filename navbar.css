@@ -313,6 +313,10 @@ background-color: #EEEEEE;
 	border:1px solid lightgrey;
 }
 
+.reports_message {
+	padding: 10px;
+}
+
 .menu_table th
 {
 	padding:2px;

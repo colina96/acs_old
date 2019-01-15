@@ -125,7 +125,7 @@ function report_components(data,format)
 	var div = document.getElementById('report_container');
 	
 	if (data.length < 1) {
-		div.innerHTML = "<span>No Active Components</span>";
+		div.innerHTML = "<span class='reports_message' >No Active Components</span>";
 		return;
 	}
 	var tab = document.createElement('table');
@@ -331,9 +331,9 @@ function search_report()
 			</div>
 			
 </div>
-<div class='acs_main'>
+<div class='acs_main' id="reports_frame">
 
 <div id='report_container' class='acs_container'>
-Select a date range and click 'go'
+    <span class="reports_message">Select a date range and click 'Go' </span>
 </div>
 </div>
