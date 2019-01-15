@@ -135,6 +135,11 @@ td { padding: 5px; }
 	border: 1px solid lightgrey;
 }
 
+.menu_description {
+	border-radius: 10px;
+	border: 1px solid lightgrey;
+}
+
 #report_start::placeholder, #report_end::placeholder, #report_search::placeholder{
 	padding:5px;
 }

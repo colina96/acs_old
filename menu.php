@@ -81,9 +81,9 @@
                     <table>
                         <tr><td>OVERALL INFORMATION</td></tr>
                         <tr>
-                            <td><input name='menu_name'></td>
-                            <td><input name='menu_description'></td>
-                            <td><input name='menu_comment'></td>
+                            <td><input name='menu_name' type="text" class="menu_description"></td>
+                            <td><input name='menu_description' type="text" class="menu_description"></td>
+                            <td><input name='menu_comment' type="text" class="menu_description"></td>
                         </tr>
                         <tr><td>DATE RANGE</td></tr>
                         <tr>
