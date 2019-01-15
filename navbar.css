@@ -120,6 +120,17 @@ td { padding: 5px; }
 	color:black;
 }
 
+table input[type=text] {
+	border-radius: 10px;
+	border: 1px solid lightgrey;
+	padding:10px;
+}
+
+input[type=text]:placeholder {
+	font-size: 2pt;
+	font-family: "Ubuntu Medium";
+}
+
 .user_subtitle {
 	text-transform: uppercase;
 	color: #8f8f8f;
