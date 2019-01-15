@@ -118,6 +118,14 @@ td { padding: 5px; }
 	margin-bottom: 15px;
 }
 
+#add {
+    border: none;
+    background: #648afb;
+    color:white;
+    font-size: 20pt;
+    padding:0;
+}
+
 .icon  {
     height:15px;
 }

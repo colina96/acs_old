@@ -294,7 +294,7 @@ function show_menu()
     	td.innerHTML = select_plating_team(item.plating_team,item.id);
     	tr.appendChild(td);
     	td = document.createElement('td');
-    	td.innerHTML = "<div class='btn' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
+    	td.innerHTML = "<div class='btn' id='add' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
     	
     	tr.appendChild(td);
 
