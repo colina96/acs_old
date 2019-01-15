@@ -120,6 +120,12 @@ td { padding: 5px; }
 	color:black;
 }
 
+.user_subtitle {
+	text-transform: uppercase;
+	color: #8f8f8f;
+	font-weight: bold;
+}
+
 .acs_container {
 	.padding: 10px;
 	border-radius: 15px 15px;

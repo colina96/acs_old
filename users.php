@@ -146,19 +146,16 @@ function save_user()
 		</div>
 	</div>
 	<div class='popup' id='show_user_div'>
-		<div class='center h2'>Edit User</div>
+		<div class='user_subtitle'>Personal information</div>
 		<div class='btns' id='user_div'>
-			<div class='m-10'>
 				<input type='hidden' name='user_id'>
 				<table>
-					<tr><td>Login</td><td><input type='text' name='user_email'></td></tr>
-					<tr><td>Password</td><td><input type='text' name='user_password'></td></tr>
-					<tr><td>First name</td><td><input type='text' name='user_firstname'></td></tr>
-					<tr><td>Last Name</td><td><input type='text' name='user_lastname'></td></tr>
-					<tr><td>Function</td><td><input type='text' name='user_function'></td></tr>
+					<tr><td><input type='text' name='user_email' placeholder="EMAIL"></td></tr>
+					<tr><td><input type='text' name='user_password' placeholder="PASSWORD"></td></tr>
+					<tr><td><input type='text' name='user_firstname' placeholder="FIRST NAME"></td></tr>
+					<tr><td><input type='text' name='user_lastname' placeholder="LAST NAME"></td></tr>
+					<tr><td><input type='text' name='user_function' placeholder="WORK POSITION"></td></tr>
 				</table>
-			</div>
-			<div class='m-10'>
 				<table>
 					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
 					<tr><td>Dock</td><td><input type='checkbox' name='user_dock'></td></tr>
@@ -166,7 +163,6 @@ function save_user()
 					<tr><td>Plating</td><td><input type='checkbox' name='user_plating'></td></tr>
 					<tr><td>Supervisor</td><td><input type='checkbox' name='user_supervisor'></td></tr>
 				</table>
-			</div>
 		</div>
 		<div class='btns'>
 			<button class='button2' onclick='save_user();'>OK</button>
