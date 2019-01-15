@@ -317,6 +317,10 @@ background-color: #EEEEEE;
 	padding: 10px;
 }
 
+#submit_menu {
+	width: 150px;
+	margin-top: 40px;
+}
 .menu_table th
 {
 	padding:2px;

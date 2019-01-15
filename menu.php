@@ -110,7 +110,7 @@
                                 <input type="file" name="fileToUpload" id="fileToUpload">
                                 <!--   div class='drop-files-container' id='drop-files-container'></div -->
                                 <input type='button' name='submit_menu'
-                                       value='Submit Menu' class='submit' onclick='upload_menu();'>
+                                       value='Submit Menu' class='button_main' id="submit_menu" onclick='upload_menu();'>
                             </td>
                         </tr>
                     </table>
