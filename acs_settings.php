@@ -31,12 +31,13 @@ function show_prep_types()
 			$prep_types[] = $data;
 		}
 		echo ("<div class='m-10'>");
-		echo ("<table border=0 width='100%' class='acs_table'>");
+		echo ("<table border=0 width='100%' class='table' id='settings'>");
 		$rownum = 1;
 		foreach ($rows as $row => $fieldname) {
-			$row_class = ($rownum%2)?'even_tr':'odd_tr';
+			// $row_class = ($rownum%2)?'even_tr':'odd_tr';
 			
-			echo ("<tr class='".$row_class."'><th>".$row."</th>");
+			// echo ("<tr class='".$row_class."'><th>".$row."</th>");
+            echo ("<tr><th>".$row."</th>");
 			foreach ($prep_types as $prep => $val) {
 				if (strpos($row,"TIME") > 0) {
 					$min = $val[$rows[$row]];

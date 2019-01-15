@@ -102,13 +102,15 @@ td { padding: 5px; }
     border-radius: 15px 15px;
 }
 
-#users th {
+#users tr:first-of-type, #settings tr:first-of-type {
 	background-image: linear-gradient(to right, #9D2CE3,#9323E4,#7A0FE7);
 	background-attachment:fixed;
 	color: white;
-/*	border-radius: 10px 10px 0 0;*/
+	/* border-radius: 10px 10px 0 0; */
 	border-style: none;
 }
+
+
 
 #user_table {
 	border-style: none;
@@ -338,9 +340,6 @@ btns {
 	overflow:auto;
 }
 
-.odd_tr {
-	background: #DDDDDD;
-}
 .acs_table th {
 	background:#eeeeee;
 	width:8%;
