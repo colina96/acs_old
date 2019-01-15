@@ -11,6 +11,10 @@ body {
 	font-family: Ubuntu, sans-serif;
 }
 
+select {
+    color:black;
+}
+
 .phone {
 	border: 40px solid #ddd;
     border-width: 55px 7px;
@@ -120,7 +124,7 @@ td { padding: 5px; }
 
 #add {
     border: none;
-    background: #648afb;
+    background: none;
     color:white;
     font-size: 20pt;
     padding:0;
@@ -254,7 +258,8 @@ background-color: #EEEEEE;
     spacing: 5px;
 }
 .menu_item_row {
-	background: #648AFB;
+	background: linear-gradient(to right, #93b3fc, #769ffb);
+    color:white;
 }
 .close_modal {
 	position:absolute;
