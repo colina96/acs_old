@@ -199,6 +199,7 @@ table input[type=text] {
 position: relative;
 	display: block;
     border-radius: 15px 0 0 15px;
+	margin-left: auto;
 }
 .acs_right_content {
 	position: absolute;
@@ -222,7 +223,6 @@ position: relative;
 	border:none;
 	color:black;
 	font-size: larger;
-	margin-bottom: 30px;
 	border-bottom: 2px solid transparent;
 }
 
@@ -250,12 +250,18 @@ background-color: #EEEEEE;
 	background:#37DD9F;
 	border-radius: 15px;
 	color:white;
-	margin-bottom: 20px;
 	padding:5px 10px;
 }
 
 #add_new_menu:hover {
 	border-bottom:2px solid transparent;
+}
+
+.menu_buttons {
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	margin: 20px 0;
 }
 
 .comp_details {
