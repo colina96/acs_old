@@ -197,21 +197,14 @@ table input[type=text] {
 
 .acs_sidebar {
 position: relative;
-	height:100%;
-	width:25%;
-	.border: 1px solid blue;
-	padding: 15px;
+	display: block;
     border-radius: 15px 0 0 15px;
-    background: #648AFB;
 }
 .acs_right_content {
 	position: absolute;
 	top:0;
 	width:100%;
 	height:100%;
-	.border: 1px solid blue;
-	padding: 15px;
-    spacing: 15px;
     background: white;
     border-radius: 0 15px 15px 0;
     overflow: auto;
@@ -225,14 +218,16 @@ position: relative;
 	border: 2px solid black;
 }
 .acs_menu_btn, .acs_comp_btn, .acs_item_btn{
-	width:90%;
-	padding: 15px;
-    spacing: 15px;
-	background:#5375DA;
-	border-radius: 15px 15px;
-	margin:5%;
+	background: transparent;
 	border:none;
-	color:white;
+	color:black;
+	font-size: larger;
+	margin-bottom: 30px;
+	border-bottom: 2px solid transparent;
+}
+
+.acs_menu_btn:hover {
+	border-bottom: 2px solid black;
 }
 
 .acs_menu_space, .acs_comp_space, .acs_space {
@@ -252,8 +247,17 @@ position: relative;
 background-color: #EEEEEE;
 }
 #add_new_menu {
-	background:#37DD9F
+	background:#37DD9F;
+	border-radius: 15px;
+	color:white;
+	margin-bottom: 20px;
+	padding:5px 10px;
 }
+
+#add_new_menu:hover {
+	border-bottom:2px solid transparent;
+}
+
 .comp_details {
 	overflow: auto;
 }
