@@ -37,6 +37,10 @@ session_start();
   <body>
   <?php if (!empty($_SESSION['userID'])) { ?> 
  <nav class="navbar navbar-default">
+
+
+
+
       <div class="container">
  
         <div class="navbar-header">
@@ -49,7 +53,7 @@ session_start();
         </div>
 
         <div class="collapse navbar-collapse" id="codebrainery-toggle-nav">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav" id="navbar_top">
             <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="users();">USERS</a></li>
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="">MENU</a></li>
             <li class='tabclass' onclick="daily_orders();"><a>DAILY ORDERS</a></li>
