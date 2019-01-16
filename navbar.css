@@ -299,16 +299,20 @@ background-color: #EEEEEE;
     top: 4px;
     right: 4px;
 	border: 2px solid red;
-	
     border-radius: 10px;
-	
 }
+
+.table>tbody>tr>th {
+vertical-align: middle;
+	padding:10px;
+}
+
 .component_table {
 	width:100%;
-	font-size:10px;
+	font-size:14px;
 }
 .component_table th {
-	font-size:12px;
+	font-size:14px;
 	color:white;
     padding: 10px;
 }
@@ -351,9 +355,15 @@ background-color: #EEEEEE;
 	border-bottom: 1px solid lightgrey;
 }
 
+.table>tbody>tr>td {
+	padding:10px;
+}
+
 .menu_table tr:first-of-type {
 	background-image: linear-gradient(to right, #9D2CE3, #9323E4, #7A0FE7);
 	color:white;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 .btns {
 	display: flex;
