@@ -133,8 +133,17 @@ td { padding: 5px; }
 #report_start, #report_end, #report_search{
 	border-radius: 10px;
 	border: 1px solid lightgrey;
+
 }
 
+#report_start, #report_end {
+	text-align: center;
+}
+
+#report_search{
+	padding-left: 10px;
+	margin-left: 30px;
+}
 .menu_description {
 	border-radius: 10px;
 	border: 1px solid lightgrey;
@@ -147,6 +156,7 @@ td { padding: 5px; }
 #go {
 	width: 50px;
 	padding:0;
+	border-radius:10px;
 }
 
 .icon  {
