@@ -1,5 +1,5 @@
 <div class="menu_buttons">
-    <div class="menu_type">
+    <div class="menu_type" id="menu_status">
     <button type='button' class='acs_menu_btn' href="#" id="active_menu"
             onclick="show_active_menus()">ACTIVE</button>
     <button type='button' class='acs_menu_btn' href="#" id="future_menu"
@@ -171,7 +171,10 @@ if ($result) {
     </div>
 </div>
 <script>
-var menus = null;
+
+
+
+    var menus = null;
 
 function upload_menu()
 {
