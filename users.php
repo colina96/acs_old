@@ -46,7 +46,7 @@ function show_users()
         "<th>WORK FUNCTION</th>" +
         "<th>LAST ACCESS</th>" +
         "<th colspan=3 class='add_user'>" +
-        "<button onclick='new_user()'>Add new user</button>" +
+        "<button onclick='new_user()' class='add_user_button'>+ Add new user</button>" +
         "</th></tr>";
 	for (var i = 0; i < chefs.length; i++) {
 		
