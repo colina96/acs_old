@@ -423,6 +423,9 @@ function show_plating_items(team_id,tab)
 				td = document.createElement('th');
 				td.innerHTML = team_id;
 				tr.appendChild(td);
+				td = document.createElement('th');
+				td.innerHTML = ' ';
+				tr.appendChild(td);
 				tab.appendChild(tr);
 			}
 			item_count ++;
@@ -951,6 +954,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 	active_menu_item_id = menu_item_id; // global - so we can come back to it
 	// var div = document.getElementById('menu_item_components_div');
 	plating_item = find_plating_item(menu_item_id);
+	console.log('do_show_menu_item_components');
 	console.log(plating_item);
 	if (plating_item == null) { // 
 		console.log("ERROR do_show_menu_item_components");
@@ -963,7 +967,8 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 	tab.className = 'item_table';
 	var tr = document.createElement('tr');
 	var th = document.createElement('th');
-	th.innerHTML= margin(plating_item.dish_name + "<br>" + plating_item.code);
+	th.innerHTML= margin(plating_item.dish_name + "<br>" + plating_item.code + "<BR>Required: " + plating_item.current_shift);
+	document.getElementById('pt_description_labels').innerHTML = plating_item.current_shift;
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML=margin('S/L');

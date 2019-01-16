@@ -732,7 +732,7 @@
     width:100%;
 }
 .label_txt {
-	width:50%;
+	width:130px;
 	margin:10px;
 }
 .dec_labels, .inc_labels {
@@ -744,7 +744,7 @@
 	margin:5px;
 }
 .label_qty {
-	.width:10%;
+	width:50px;
 	padding: 5px 10px;
 	font-size:20px;
 }
