@@ -1234,7 +1234,7 @@ function goto_m_main(new_mode)
 
 function get_preptype_val(id,fld)
 {
-	for (var i = 0; i < preptypes.length; i++) {
+	for (let i = 0; i < preptypes.length; i++) {
 		if (preptypes[i].id == id) {
 			return(preptypes[i][fld]);
 		}
@@ -1355,7 +1355,7 @@ function component_selected(id)
 			console.log('use IR');
 			temp_div.innerHTML = 'USE IR SENSOR';
 		}
-		appendSensorImage(temp_div,"read_M1temp()");
+		appendSensorImage(temp_div, new_comp,"read_M1temp()");
 	}
 
 	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
@@ -1367,15 +1367,35 @@ function component_selected(id)
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
 
-function appendSensorImage(anchor,onclick){
+function checkTempDiv(anchor,comp,onclick,recheck = false) {
+	while (anchor.firstChild) {
+		anchor.removeChild(anchor.firstChild);
+	}
+
+	appendSensorImage(anchor,comp,onclick);
+
+	let div = document.createElement('div');
+	let text = "<b>"+(recheck?"RE":"")+"CHECK THE TEMPERATURE </b></br>";
+	text += "USE ";
+	if(comp['probe_type'] && comp['probe_type'] == 2) {
+		text += "PROBE";
+	}else{
+		text += "IR SENSOR";
+	}
+	div.innerHTML = text;
+	div.className = "center";
+	anchor.appendChild(div);
+}
+
+function appendSensorImage(anchor,comp,onclick){
 	let sensor;
-	if (new_comp['probe_type'] && new_comp['probe_type'] == 2) {
+	if (comp['probe_type'] && comp['probe_type'] == 2) {
 		sensor=iconProbe();
 	} else {
 		sensor=iconIR();
 	}
 	sensor.setAttribute("onclick",onclick);
-	anchor.append(sensor);
+	anchor.appendChild(sensor);
 }
 
 function dock_read_M1temp(callback)
@@ -1506,7 +1526,8 @@ function check_temp(t) // start a new component
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 				appendSensorImage(
 					document.getElementById('m1_temp_div_2'),
-					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass');"
+					new_comp,
+					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass')"
 				);
 			} else {
 				set_barcode_mode("M1");
@@ -1518,7 +1539,8 @@ function check_temp(t) // start a new component
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 				appendSensorImage(
 					document.getElementById('m1_temp_div_2'),
-					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass');"
+					new_comp,
+					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass')"
 				);
 			} else {
 				set_barcode_mode("M1");
@@ -1924,14 +1946,17 @@ function active_comp_selected(id)
 	load_chefs(null);
 	openPage('m2_temp_modal', this, 'red','m_modal2','tabclass');
 	read_M2temp();
+
 	active_comp = active_comps[id];
-	console.log(active_comp);
+	console.log("active_comp_selected: Listing active components\n",active_comp);
+
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
 	
 	var prep_type_id = active_comp['prep_type_id'];
 	console.log('prep_type_id',prep_type_id);
-	if (prep_type_id < 1) {prep_type_id = 1};
-	var prep_type_val = get_preptype_val(prep_type_id,'M2_temp');
+	if (prep_type_id < 1) {prep_type_id = 1}
+	// var prep_type_val = get_preptype_val(prep_type_id,'M2_temp');
+
 	document.getElementById('chk_temp_item_div').innerHTML = active_comp['description'];
 	var milestone_due = 'NA';
 	var remaining = 0;
@@ -1976,8 +2001,9 @@ function active_comp_selected(id)
 	document.getElementById('ms_2_target').innerHTML = target_temp + "&#176;";
 
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
-}
 
+	checkTempDiv(document.getElementById('m2_temp_div'), active_comp, "read_M2temp()");
+}
 
 function reprint_comp_labels()
 {
@@ -1989,6 +2015,7 @@ function reprint_comp_labels()
 	load_reprint_data();
 	load_chefs();
 }
+
 function load_reprint_data()
 {
 	

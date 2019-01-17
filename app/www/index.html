@@ -190,7 +190,14 @@
             <div class='m_modal' id='dock_m_temp_modal'>
                 <div class="temp_scan">
                 <img src="img/icon_IR.svg" class="icon_IR">
-                    <div class='m_label' id="temp_instruction" ><span><b>CHECK THE TEMPERATURE </b><br> REQUIRED: <div class="temp_milestone">< 5°C </div><br> (USE IR SENSOR)</span></div>
+                    <div class='m_label' id="temp_instruction" >
+                        <span>
+                            <b>CHECK THE TEMPERATURE </b><br>
+                            REQUIRED:
+                            <div class="temp_milestone">< 5°C </div><br>
+                            (USE IR SENSOR)
+                        </span>
+                    </div>
                 <div id='dock_m1_temp_div' class='center'></div>
                 </div>
 
@@ -303,8 +310,8 @@
     </div>
 
     <div class='mobile_main hidden' id='m_temp'>
-
         <image class='m_close' src="img/icon_arrow.png" onclick="goto_m_main();"></image>
+
         <div id='chk_temp_pt_div'>CC</div>
         <div id='chk_temp_item_div'></div>
         <div id='chk_temp_item_time_div'>
@@ -406,8 +413,8 @@
         <!--  next pages are for recording M2 and M3 -->
         <div class='m_modal2' id='m2_temp_modal'>
             <div id='m2_temp_div'><!--  input type='number' name='m2_temp' size=4 --></div>
+
             <div class='btns'>
-                <button type='button' class='m_submit' onclick="read_M2temp();">Check Now</button>
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
         </div>

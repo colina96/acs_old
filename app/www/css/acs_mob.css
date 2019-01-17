@@ -425,8 +425,9 @@
 	margin:0 auto;
 }
 .center {
-	display:table;
-	margin:0 auto;
+	display: table;
+	margin: 0 auto;
+	text-align: center;
 }
 .centerpad {
 	display:table;
