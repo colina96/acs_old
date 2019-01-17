@@ -339,7 +339,8 @@ vertical-align: middle;
 .component_table th {
 	font-size:14px;
 	color:white;
-    padding: 10px;
+	padding:10px
+
 }
 .component_table tr:first-of-type {
     background-image: linear-gradient(to right, #9D2CE3, #9323E4, #7A0FE7);
@@ -354,6 +355,7 @@ vertical-align: middle;
 }
 #reports th {
     background: #7A0FE7;
+	padding:0;
 }
 
 #reports_frame {
@@ -372,7 +374,7 @@ vertical-align: middle;
 
 .menu_table th
 {
-	padding:2px;
+	padding:10px;
 }
 
 .menu_table td

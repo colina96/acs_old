@@ -259,6 +259,7 @@ function plating_reports()
 	div.innerHTML = '';
 	var tab = document.createElement('table');
 	tab.className = 'component_table';
+	tab.id = 'reports';
 	var tr = document.createElement('tr');
 	// headings
 	for (var i in plating_report_fmt) {
