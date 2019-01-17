@@ -199,6 +199,10 @@ table input[type=text] {
 	font-weight: bold;
 }
 
+.user_description {
+	color: #8f8f8f;
+}
+
 .acs_container {
 	.padding: 10px;
 	border-radius: 15px 15px;
@@ -270,6 +274,10 @@ background-color: #EEEEEE;
 	margin:5px
 }
 
+#cancel_print, #confirm_print {
+	padding: 5px 15px;
+}
+
 #add_new_menu {
 	padding:5px 20px;
 }
@@ -281,6 +289,14 @@ background-color: #EEEEEE;
 #icon_print {
 height: 20px;
 	float: none;
+}
+
+#icon_print_large {
+	height: 100px;
+	display: block;
+	margin: 20px auto;
+	float:none;
+
 }
 
 .print {

@@ -145,6 +145,7 @@ function save_user()
 	<div class='popup' id='confirm_print_user_label'>
         <div class='center'>Print ID for:</div>
 		<div class='center' id='ul1'>Print ID for</div>
+        <image src="app/www/img/icon_printID.svg" class="icon" id="icon_print_large"></image>
 		<div class='btns'>
 			<button class='button_main' id='confirm_print' onclick='print_user_label();'>Confirm</button>
 			<button class='button_minor' id='cancel_print' onclick='hide("confirm_print_user_label");'>Cancel</button>
@@ -155,11 +156,11 @@ function save_user()
 		<div class='btns' id='user_div'>
 				<input type='hidden' name='user_id'>
 				<table>
-                    <tr><td><span>Email <i>optional</i></span><br><input type='text' name='user_email' placeholder=""></td></tr>
-					<tr><td><span>Password <i>optional</i></span><br><input type='text' name='user_password' placeholder=""></td></tr>
-					<tr><td><span>First name</span><br><input type='text' name='user_firstname' placeholder=""></td></tr>
-					<tr><td><span>Last name</span><br><input type='text' name='user_lastname' placeholder=""></td></tr>
-					<tr><td><span>Position</span><br><input type='text' name='user_function' placeholder=""></td></tr>
+                    <tr><td><span class="user_description">Email <i>optional</i></span><br><input type='text' name='user_email' placeholder=""></td></tr>
+					<tr><td><span class="user_description">Password <i>optional</i></span><br><input type='text' name='user_password' placeholder=""></td></tr>
+					<tr><td><span class="user_description">First name</span><br><input type='text' name='user_firstname' placeholder=""></td></tr>
+					<tr><td><span class="user_description">Last name</span><br><input type='text' name='user_lastname' placeholder=""></td></tr>
+					<tr><td><span class="user_description">Position</span><br><input type='text' name='user_function' placeholder=""></td></tr>
 				</table>
 				<table>
 					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
