@@ -55,7 +55,7 @@ session_start();
         <div class="collapse navbar-collapse" id="codebrainery-toggle-nav">
           <ul class="nav navbar-nav" id="navbar_top">
             <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="users();">USERS</a></li>
-            <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="">MENU</a></li>
+            <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a>MENU</a></li>
             <li class='tabclass' onclick="daily_orders();"><a>DAILY ORDERS</a></li>
             <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')">PT SETTINGS</a></li>
             <li class='tabclass' onclick="openPage('SUPPLIERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SUPPLIERS', this, 'red')">SUPPLIER LIST</a></li>
@@ -135,3 +135,4 @@ session_start();
 <script src="acs.js"></script>
 <script src="app/www/js/acs_common.js"></script>
 <script src="app/www/js/sprintf.js"></script>
+  <script src="navigation_select.js"></script>

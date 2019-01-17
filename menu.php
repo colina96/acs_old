@@ -1,11 +1,11 @@
 <div class="menu_buttons">
     <div class="menu_type" id="menu_status">
-    <button type='button' class='acs_menu_btn' href="#" id="active_menu"
-            onclick="show_active_menus()">ACTIVE</button>
-    <button type='button' class='acs_menu_btn' href="#" id="future_menu"
-            onclick="open_future_menus();">FUTURE</button>
-    <button type='button' class='acs_menu_btn' href="#" id="expired_menu"
-            onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
+        <button type='button' class='acs_menu_btn' href="#" id="active_menu"
+                onclick="show_active_menus()">ACTIVE</button>
+        <button type='button' class='acs_menu_btn' href="#" id="future_menu"
+                onclick="open_future_menus();">FUTURE</button>
+        <button type='button' class='acs_menu_btn' href="#" id="expired_menu"
+                onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
     </div>
     <div class="acs_sidebar">
         <button type='button' class='acs_menu_btn' href="#" id="add_new_menu"
@@ -171,8 +171,6 @@ if ($result) {
     </div>
 </div>
 <script>
-
-
 
     var menus = null;
 
@@ -1222,3 +1220,5 @@ function new_menu()
 	test_mysql_query($sql);
 }
 ?>
+<script src="navigation_select.js"></script>
+
