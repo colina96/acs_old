@@ -71,7 +71,6 @@
 	font-size:5vh;
 }
 
-
 #chk_temp_pt_div{
 	color:var(--acs_darkblue);
 	font-size:35px;
@@ -81,6 +80,7 @@
 	font-family: Ubuntu;
 	padding-right: 20px;
 }
+
 #chk_temp_item_div, .chk_temp_item{
 	position:absolute;
 	top: 8vh;
