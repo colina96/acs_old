@@ -575,3 +575,7 @@ btns {
 #oder_frame {
 	height:95%;
 }
+
+a:hover, a:focus {
+    text-decoration: none;
+}
