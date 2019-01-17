@@ -1375,7 +1375,12 @@ function checkTempDiv(anchor,comp,onclick,recheck = false) {
 	appendSensorImage(anchor,comp,onclick);
 
 	let div = document.createElement('div');
-	let text = "<b>"+(recheck?"RE":"")+"CHECK THE TEMPERATURE </b></br>";
+	let text;
+	if(recheck) {
+		text = "<b> RECHECK POSSIBLE </b></br>";
+	}else{
+		text = "<b> CHECK THE TEMPERATURE </b></br>";
+	}
 	text += "USE ";
 	if(comp['probe_type'] && comp['probe_type'] == 2) {
 		text += "PROBE";
@@ -1940,6 +1945,7 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 		}
 		else if (active_comp.remaining > 0 ) {
 			openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
+			checkTempDiv(document.getElementById('m2_temp_div_2a'),active_comp,"goto_m_main();",true);
 		} else {
 			
 			console.log("overdue - QA");
