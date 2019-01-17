@@ -66,7 +66,7 @@ session_start();
             
             </ul>
             <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?></a></li>
+            <li><a><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?></a></li>
             </ul>
           
         </div>
