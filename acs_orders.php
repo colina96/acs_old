@@ -28,7 +28,7 @@ function show_shift_orders(shift_data) // horrible hack TODO - work out what is 
 	var tab = document.createElement('table');
 	tab.className = 'component_table';
 	var tr = document.createElement('tr');
-	var headings = ['ITEM CODE','ITEM DESCRIPTION','09:30 AM','11:00 AM','05:00 AM'];
+	var headings = ['ITEM CODE','ITEM DESCRIPTION','Today, 09:30 AM','Today, 11:00 AM','Tomorrow, 05:00 AM'];
 	for (var i = 0; i < headings.length; i++) {
 		
 		var th = document.createElement('th');
