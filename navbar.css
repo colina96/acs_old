@@ -218,12 +218,18 @@ position: relative;
 	border-radius: 15px 15px;
 	border: 2px solid black;
 }
+
+#active_menu {
+	margin-left:0;
+}
+
 .acs_menu_btn, .acs_comp_btn, .acs_item_btn{
 	background: transparent;
 	border:none;
 	color:black;
 	font-size: larger;
 	border-bottom: 2px solid transparent;
+	margin:15px;
 }
 
 .acs_menu_btn:hover {
@@ -262,7 +268,7 @@ background-color: #EEEEEE;
 	display:flex;
 	justify-content: center;
 	align-items: center;
-	margin: 20px 0;
+	margin-bottom: 20px;
 }
 
 .comp_details {
@@ -498,22 +504,6 @@ btns {
 	
 }
 
-.top_menu {
-	cursor: pointer;
-}
-.top_menu, .top_menu_highlighted {
-	margin:15px;
-	.width:30vw;
-	color:black;
-	font-size:larger;
-	border:1px solid white;
-	display: inline-block;
-}
-
-.top_menu_highlighted {
-	border-bottom-color:black;
-}
-
 #report_container {
 	height:100%;
 	overflow:auto;
@@ -527,4 +517,36 @@ btns {
 
 .blue {
 	background:var(--acs_blue_background);
+}
+
+.top_menu, .top_menu_highlighted {
+	margin:15px;
+	color:black;
+	font-size:larger;
+	display: inline-block;
+	padding: 1px 6px;
+	outline:none;
+}
+
+.top_menu:hover {
+	border-bottom: 2px solid black;
+	outline:none;
+}
+
+.top_menu {
+	border-bottom: 2px solid transparent;
+	cursor: pointer;
+}
+
+.top_menu_highlighted {
+	border-bottom: 2px solid black;
+}
+
+#dock_report_tab {
+	margin-left: 0;
+}
+
+#report_range_tab:hover {
+	border-bottom: 2px solid transparent;
+	cursor: default;
 }
