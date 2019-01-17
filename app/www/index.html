@@ -421,11 +421,9 @@
         <div class='m_modal2' id='m2_temp_modal2'>
             <div class='center modal_head'>TEMPERATURE</div>
             <div id='m2_temp_div_2' class='temp_reading'></div>
-            <hr>
-            <div class="milestone_achieved"> <image class="icon_M2" src="img/icon_M2.svg"></image>
-            <div id='m2_temp_div_2a' class='temp_achieved center'></div>
-            </div>
-            <hr>
+
+            <div id='m2_temp_div_2a'></div>
+
             <div class='btns'>
                 <button type='button' class='m_submit' onclick='continue_chilling();'>Continue Chilling</button>
                 <button type='button' class='m_submit' onclick="goto_m_main();">Re-Check</button>
@@ -440,13 +438,13 @@
             <div class='center grey' id="choose_ca">CHOOSE CORRECTIVE ACTION</div>
             <hr>
             <div class='btns'>
-
                 <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,11);">QA Sign-Off
                     Emergency
                 </button>
                 <button type='button' class='m_btn' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_overdue_M2A'><!-- Screen 3.9 or maybe 6.9.1 -->
             <div class='center modal_head'>TEMPERATURE</div>
             <div id='m2_temp_overdue_div_2' class='temp_reading'></div>
@@ -458,6 +456,7 @@
                 </button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_overdue_M2B'><!-- Screen 3.10  -->
             <div id='force_M2_overdue_uid' class='center modal_head'></div>
             <div id='m2_temp_overdue_M2B_2' class='temp_reading red'></div>
@@ -472,6 +471,7 @@
                 </button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_overdue_A'>
             <div class='center modal_head'>TEMPERATURE</div>
             <div id='m2_temp_div_overdue_2' class='temp_reading'></div>
@@ -483,6 +483,7 @@
                 </button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_overdue_B'>
             <div id='force_M3_overdue_uid' class='center modal_head'></div>
             <div id='m2_temp_overdue_B_temp' class='temp_reading center red'></div>
@@ -496,19 +497,18 @@
                 <button type='button' class='m_btn' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_modal3'>
             <div class='center modal_head'><span>TEMPERATURE</span></div>
             <div id='m2_temp_div_3' class='temp_reading'></div>
-            <hr>
-            <div class="milestone_achieved"> <image class="icon_M2" src="img/icon_M3.svg"></image>
-                <div id='m2_temp_div_3a' class='temp_achieved center'></div>
-            </div>
-            <hr>
+            <div id='m2_temp_div_3a'></div>
+
             <div class='btns'>
                 <button type='button' class='m_btn' onclick="goto_m_main();">Re-Check</button>
                 <button type='button' class='m_btn' onclick="goto_m_main();">Move Product to Coolroom</button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_modal4'>
             <div class='center modal_head'><span>TEMPERATURE</span></div>
             <div id='m2_temp_div_4' class='temp_reading red'></div>

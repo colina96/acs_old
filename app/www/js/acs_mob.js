@@ -1422,11 +1422,13 @@ function read_M2temp(callback){
 	document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M2');
 }
+
 function read_pt_M2temp(callback){
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
 	document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M2_plating');
 }
+
 function read_plating_M1temp(callback){
 	
 	// document.getElementById('m1_temp_div').innerHTML = '';
@@ -1875,10 +1877,21 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 		document.getElementById('m2_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 	//	document.getElementById('dock_m1_temp_div_3').innerHTML= parseInt(t * 10) / 10 + "&#176C";
 		document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C"; */
+
+		let m2_temp_div_2a = document.getElementById('m2_temp_div_2a');
+		let m2_temp_div_3a = document.getElementById('m2_temp_div_3a');
+
+		while (m2_temp_div_2a.firstChild) {
+			m2_temp_div_2a.removeChild(m2_temp_div_2a.firstChild);
+		}
+		while (m2_temp_div_3a.firstChild) {
+			m2_temp_div_3a.removeChild(m2_temp_div_3a.firstChild);
+		}
+
 		if (active_comp.milestone == 'M1' && parseInt(t) > parseInt(temp_target)) {
 			set_barcode_mode('M1');
-			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " achieved";
-			document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " achieved";
+			m2_temp_div_2a.innerHTML= active_comp.milestone + " achieved";
+			m2_temp_div_3a.innerHTML= active_comp.milestone + " achieved";
 			active_comp['M1_temp'] = t;
 			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			return;
@@ -1888,49 +1901,53 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			console.log("check M3");
 			temp_target = get_preptype_val(prep_type_id,'M3_temp');
 			if (active_comp.milestone ==  'M3') {
-				document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " achieved";
+				//if M3 achieved
+				// milestone_achieved_box(m2_temp_div_3a,"M3");
 				active_comp.milestone_ok = true;
 				
-				if (active_comp.remaining > 0) comp_milestone(t);
-			}
-			if (active_comp.milestone ==  'M2' && parseInt(t) < parseInt(temp_target)) {
-				console.log("M3 achieved");
+				if (active_comp.remaining > 0) {
+					comp_milestone(t);
+				}
+			} else if (active_comp.milestone ==  'M2' && parseInt(t) < parseInt(temp_target)) {
+				console.log("M3 achieved"); //TODO is this correct?
 				active_comp.milestone = 'M3';
 				active_comp['M2_temp'] = t;
 				active_comp['M3_temp'] = t;
 				active_comp['M3_time'] = 'now';
 				active_comp['M2_time'] = 'now';
-				if (active_comp.remaining > 0) comp_milestone(t);
+
+				if (active_comp.remaining > 0) {
+					comp_milestone(t);
+				}
 			}
-			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " achieved";
-			document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " achieved";
-		 	// if (active_comp.remaining > 0) comp_milestone(t);
+			//if M2 achieved
+			milestone_achieved_box(m2_temp_div_2a,"M2");//add if direct skip M1 to M3
+			milestone_achieved_box(m2_temp_div_3a,"M3");
+
+			// if (active_comp.remaining > 0) comp_milestone(t);
 			active_comp.milestone_ok = true;
-			
-		}
-		else {
+
+		} else {
 			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			// document.getElementById('m2_temp_div_2a').innerHTML= milestone + "";
-			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " not achieved";
-			document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " not achieved";
+
 			document.getElementById('m2_temp_div_2').innerHTML= "<div class='red'>" + parseInt(t) + "&#176C</div>";
 			
 		}
+
 		if (active_comp['M1_time'].length < 1) {
 			openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 		}
 		else if (active_comp.remaining > 0 ) {
 			openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
-		}
-		else {
+		} else {
 			
 			console.log("overdue - QA");
 			set_barcode_mode('KQA_override');
 			if (active_comp['M2_time'].length > 1) {
 				document.getElementById('m2_temp_div_overdue_2').innerHTML = "<div class='red'>" + parseInt(t) + "&#176C</div>";
 				openPage('m2_temp_overdue_A', this, 'red','m_modal2','tabclass');
-			}
-			else {
+			} else {
 				openPage('m2_temp_overdue_M2A', this, 'red','m_modal2','tabclass');
 			}
 			
@@ -1939,6 +1956,27 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 	
 }
 
+function milestone_achieved_box(anchor, milestone){
+	anchor.appendChild(document.createElement('hr'));
+
+	let div = document.createElement('div');
+	div.className = 'milestone_achieved';
+
+	if(milestone == 'M2') {
+		div.appendChild(iconM2());
+	} else {
+		div.appendChild(iconM3());
+	}
+
+	let txtdiv = document.createElement('div');
+	txtdiv.className = "temp_achieved center";
+	txtdiv.innerText = milestone + ' achieved';
+	div.appendChild(txtdiv);
+
+	anchor.appendChild(div);
+
+	anchor.appendChild(document.createElement('hr'));
+}
 
 function active_comp_selected(id) 
 {
@@ -1988,6 +2026,7 @@ function active_comp_selected(id)
 		console.log("M3_due_min M1_ms",M3_due_min,M1_ms,M3_due_ms,format_minutes(remaining));
 		target_temp = " < " + get_preptype_val(prep_type_id,'M3_temp');
 	}
+
 	document.getElementById('ms_1').innerHTML = milestone_due;
 	active_comp.remaining = remaining;
 	if (milestone_due != 'M1') {
@@ -2577,6 +2616,13 @@ function new_td(content,classname) {
 	return(td);
 }
 
+function iconM2(){
+	return new_img("img/icon_M2.svg");
+}
+
+function iconM3(){
+	return new_img("img/icon_M3.svg");
+}
 
 function iconProbe(){
 	return new_img("img/icon_Probe.svg","icon_Probe");
@@ -2586,7 +2632,7 @@ function iconIR(){
 	return new_img("img/icon_IR.svg","icon_IR");
 }
 
-function new_img(source,classname) {
+function new_img(source,classname = "") {
 	var img = document.createElement('img');
 	img.className = classname;
 	img.src = source;
