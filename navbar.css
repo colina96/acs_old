@@ -139,6 +139,7 @@ td { padding: 10px; }
 #report_start, #report_end, #report_search{
 	border-radius: 10px;
 	border: 1px solid lightgrey;
+	vertical-align: middle;
 
 }
 
@@ -163,6 +164,8 @@ td { padding: 10px; }
 	width: 50px;
 	padding:0;
 	border-radius:10px;
+	vertical-align: middle;
+	font-size: 16.8px;
 }
 
 .icon  {
@@ -261,11 +264,13 @@ position: relative;
 .rightdiv {
 background-color: #EEEEEE;
 }
+
+#user_cancel, #user_save {
+	margin:5px
+}
+
 #add_new_menu {
-	background:#37DD9F;
-	border-radius: 15px;
-	color:white;
-	padding:5px 10px;
+	padding:5px 20px;
 }
 
 #add_new_menu:hover {
@@ -485,9 +490,9 @@ btns {
     position:relative;
     border:2px #18e0af solid;
     padding: 5px;
-    width: 80%;
-    margin:5px;
-    font-family: "Ubuntu", sans-serif;
+    width: 100%;
+    font-family: "Ubuntu Medium", sans-serif;
+	font-size: larger;
 }
 
 .button_minor {

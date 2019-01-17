@@ -8,7 +8,7 @@
                 onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
     </div>
     <div class="acs_sidebar">
-        <button type='button' class='acs_menu_btn' href="#" id="add_new_menu"
+        <button type='button' class='button_main' href="#" id="add_new_menu"
                 onclick="openPage('new_menu', this, 'red','menu_details','acs_menu_btn')">+ Add new menu</button>
     </div>
 </div>

@@ -169,8 +169,8 @@ function save_user()
 				</table>
 		</div>
 		<div class='btns'>
-			<button class='button_main' onclick='save_user();'>Save</button>
-			<button class='button_minor' onclick='hide("show_user_div");'>Cancel</button>
+			<button class='button_main' id='user_save' onclick='save_user();'>Save</button>
+			<button class='button_minor' id='user_cancel' onclick='hide("show_user_div");'>Cancel</button>
 		</div>
 	</div>
 	<div class='acs_container'>
