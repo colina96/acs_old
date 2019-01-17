@@ -62,7 +62,7 @@
 	color:var(--acs_text_normal_light);
 	top:12px;
 	left:6vw;
-	padding-left: 10px;
+	padding-left: 20px;
 }
 .ui_menu_item {
 	font-size: small;
@@ -79,6 +79,7 @@
 	line-height: 25px;
 	height: 30px;
 	font-family: Ubuntu;
+	padding-right: 20px;
 }
 #chk_temp_item_div, .chk_temp_item{
 	position:absolute;
@@ -264,7 +265,10 @@
 
 .topbar {
 	display: flex;
+	justify-content: center;
+	align-items: center;
 }
+
 .even_tr {
     color:black;
 }
@@ -296,6 +300,7 @@
 .m_close, .m_home {
 	height:20px;
 	display: block;
+	padding-left: 30px;
 }
 
 .m_home {
