@@ -154,11 +154,11 @@ function save_user()
 		<div class='btns' id='user_div'>
 				<input type='hidden' name='user_id'>
 				<table>
-					<tr><td><input type='text' name='user_email' placeholder="EMAIL"></td></tr>
-					<tr><td><input type='text' name='user_password' placeholder="PASSWORD"></td></tr>
-					<tr><td><input type='text' name='user_firstname' placeholder="FIRST NAME"></td></tr>
-					<tr><td><input type='text' name='user_lastname' placeholder="LAST NAME"></td></tr>
-					<tr><td><input type='text' name='user_function' placeholder="WORK POSITION"></td></tr>
+                    <tr><td><span>Email <i>(optional)</i></span><br><input type='text' name='user_email' placeholder=""></td></tr>
+					<tr><td><span>Password <i>(optional)</i></span><br><input type='text' name='user_password' placeholder=""></td></tr>
+					<tr><td><span>First name</span><br><input type='text' name='user_firstname' placeholder=""></td></tr>
+					<tr><td><span>Last name</span><br><input type='text' name='user_lastname' placeholder=""></td></tr>
+					<tr><td><span>Position</span><br><input type='text' name='user_function' placeholder=""></td></tr>
 				</table>
 				<table>
 					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
