@@ -58,11 +58,11 @@
 	text-transform: uppercase;
 }
 #close_m_temp, #close_m_plating, .m_close {
-	position:absolute;
 	font-size:10vw;
 	color:var(--acs_text_normal_light);
 	top:12px;
 	left:6vw;
+	padding-left: 10px;
 }
 .ui_menu_item {
 	font-size: small;
@@ -73,12 +73,12 @@
 
 
 #chk_temp_pt_div{
-	position:absolute;
-	top: 2vh;
-	right: 6vw;
 	color:var(--acs_darkblue);
-	font-size:10vw;
+	font-size:35px;
 	font-weight: bold;
+	line-height: 25px;
+	height: 30px;
+	font-family: Ubuntu;
 }
 #chk_temp_item_div, .chk_temp_item{
 	position:absolute;
@@ -262,6 +262,9 @@
 	position: relative;
 }
 
+.topbar {
+	display: flex;
+}
 .even_tr {
     color:black;
 }
@@ -290,8 +293,14 @@
     justify-content: center;
     align-items: center;
 }
-.m_close {
+.m_close, .m_home {
 	height:20px;
+	display: block;
+}
+
+.m_home {
+	margin: 0 auto;
+	display: block;
 }
 
 .ui-widget.ui-widget-content {
