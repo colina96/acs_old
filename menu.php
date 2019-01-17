@@ -272,7 +272,7 @@ function show_menu()
     table.className = 'menu_table';
     table.width='100%';
     var tr = document.createElement('tr');
-    var header = ['ITEM CODE','ITEM DESCRIPTION','PREP TYPE','SENSOR TYPE','STRAIGHT TO PLATING','PLATING TEAM'];
+    var header = ['ITEM CODE','ITEM DESCRIPTION','LOC','PREP TYPE','SENSOR TYPE','STRAIGHT TO PLATING','PLATING TEAM'];
     for (var i in  header) {
       //   console.log(i);
     	var th = document.createElement('th');
@@ -281,7 +281,7 @@ function show_menu()
     } 
     table.appendChild(tr);
     
-    var menu_fields = ['code','dish_name','','',''];
+    var menu_fields = ['code','dish_name','','','',''];
     for (var k in menu_items) {
     	var tr = document.createElement('tr');
     	tr.className = 'menu_item_row';
@@ -328,6 +328,11 @@ function show_menu()
             	td.innerHTML = innerHTML;
             	td.width='50%';
             	tr.appendChild(td);
+            	/* location */
+            	td = document.createElement('td');
+            	td.innerHTML = "<input type='text' maxlength='3' size='3' class='edit_location' name='location_" + mid + "'value='" +  menu_item_components[mid].location + "' onchange='set_location(this," + mid + ");'>";
+           		// td.innerHTML += 'location';
+            	tr.appendChild(td);
             	td = document.createElement('td');
             	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,false);
             	tr.appendChild(td);
@@ -368,6 +373,9 @@ function show_menu()
                     	innerHTML += "<div onclick='edit_high_risk_component(" + comp.id + ");'>" + comp.description + "</div>";
                     	td.innerHTML= innerHTML;
                     	tr.appendChild(td);
+                    	td = document.createElement('td');
+                    	td.innerHTML= '-';
+                    	tr.appendChild(td); // blank
                     	td = document.createElement('td');
                     	td.innerHTML += "<div class='add_subcompdiv' onclick='remove_subcomponent(" + mid + "," + comp.id + ");'>Remove</div>";
                     	tr.appendChild(td);
@@ -410,6 +418,31 @@ function remove_subcomponent(menu_item_component_id,ingredient_id)
  	console.log('ERROR - subcomponent not found',ingredient_id);
 	
 }
+
+function set_location(input,id)
+{
+	console.log('set_location',input.value,id);
+	var d = new Object();
+	d['id'] = id;
+	d['location' ] = input.value;
+	var data =  {data: JSON.stringify(d)};
+    console.log("Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "set_component_location.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { // need to get the id of the new component back to print labels
+            console.log("iset_location result ",result);
+ 
+        },
+        fail: (function (result) {
+            console.log("set_location fail ",result);
+        })
+    });
+}
+
 function insert_ingredient(menu_id,component_id,subcomponent_id)
 {
 	
@@ -595,6 +628,7 @@ function new_subcomponent() {
 	component.menu_id = active_menu_id;
 	component.menu_item_component_id = active_menu_item_component_id; 
 	component.id = inval('comp_id');
+	component.location = inval('location');
 	component.high_risk = inval('comp_high_risk');
 	component.supplier = inval('comp_supplier');
 	component.product = inval('comp_product');
