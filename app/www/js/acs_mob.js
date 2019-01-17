@@ -376,7 +376,6 @@ function goto_home()
 
 function goto_plating_teams()
 {
-	
 	load_menu_items();
 	load_plating_items();
 	mode = 'plating';
@@ -414,8 +413,10 @@ function show_plating_items(team_id,tab)
 	for (var i = 0; i < menu_items.length; i++) {
 		if (menu_items[i]['plating_team'] == team_id) {
 			if (item_count == 0 && team_id != active_plating_team) {
+				// create row
 				var tr = document.createElement('tr');
 				tr.className = 'plating_tab';
+				// create header with team name
 				var td = document.createElement('th');
 				td.innerHTML = margin('TEAM');
 				tr.appendChild(td);
@@ -428,37 +429,44 @@ function show_plating_items(team_id,tab)
 				tab.appendChild(tr);
 			}
 			item_count ++;
-			
+
+			// create item entry
 			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
 			console.log(plating_item);
+
 			tr = document.createElement('tr');
 			var td = document.createElement('td');
-			td.innerHTML = margin(menu_items[i]['code']);
+			td.innerHTML = menu_items[i]['code'];
+
 			tr.appendChild(td);
 			td = document.createElement('td');
-			var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>" + menu_items[i]['dish_name']; + "</div>"
+
+			//figure out color class and link
+			var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>";
 			if (plating_item && plating_item.time_started) {  // check plating_item.checked
-				div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>" + menu_items[i]['dish_name']; + "</div>";
+				div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>";
 				if (plating_item.time_completed) {
-					div = "<div class='red'>" + menu_items[i]['dish_name']; + "</div>";
+					div = "<div class='red'>";
 				}
 			}
+			//finish up
+			div += menu_items[i]['dish_name'] + "</div>";
 
-			td.innerHTML = margin(div);
+			td.innerHTML = div;
 			tr.appendChild(td);
 			td = document.createElement('td');
 			//var shift = 's' + menu_items[i]['current_shift'];
 			//console.log('shift ',shift);
 			//console.log(menu_items[i]);
-			td.innerHTML = margin(menu_items[i]['current_shift']);
+			td.innerHTML = menu_items[i]['current_shift'];
 			tr.appendChild(td);
 			tab.appendChild(tr);
 		}
 	}
 }
+
 function goto_plating()
 {
-	
 	// ???? load_menu_items();
 	show('plating_return');
 	hide('plating_print_labels');
@@ -473,10 +481,11 @@ function goto_plating()
 	t.innerHTML = '';
 	var tab = document.createElement('table');
 	tab.className = 'plating_tab';
+
 	var tr = document.createElement('tr');
-	tr.className = 'plating_tab';
+
 	var th = document.createElement('th');
-	th.innerHTML = margin('CODE');
+	th.innerHTML = 'CODE';
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML = 'PRODUCT NAME';
@@ -484,14 +493,15 @@ function goto_plating()
 	th = document.createElement('th');
 	th.innerHTML = 'QTY';
 	tr.appendChild(th);
+
 	tab.appendChild(tr);
 	show_plating_items(active_plating_team,tab);
 	
 	// now list all items for other plating teams
 	for (var pti = 1; pti < plating_teams.length; pti++ ) {
-		if (pti != active_plating_team)
+		if (pti != active_plating_team) {
 			show_plating_items(pti,tab);
-		
+		}
 	}
 	t.appendChild(tab);
 }
@@ -518,14 +528,13 @@ function calc_time_remaining(item)
 	var event_time = new Date(item['time_started']);
 	console.log("calc_time_remaining -" + event_time + " - " + item['time_started']);
 	console.log(item);
-	var remaining = 0;
 	var now = new Date();
 	var now_ms = now.getTime();
 	var event_ms = event_time.getTime(); // time in millisecs
 	
 	var due_min = get_preptype_val(plating_prep_type,'M2_time_minutes');
 	var due_ms = event_ms + due_min * 60 * 1000;  			
-	remaining = (due_ms - now_ms) / (60 * 1000);
+	var remaining = (due_ms - now_ms) / (60 * 1000);
 	console.log("M2_due_min M1_ms",due_min,event_ms,due_ms,format_minutes(remaining));
 	return(format_minutes(remaining));
 }
@@ -996,7 +1005,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 				td.id = 'plating_item_checked_' + i;
 				td.innerHTML = '-';
 				if (items[i].component_id) {
-					td.innerHTML = '&#x2713;';
+					td.innerHTML = '<image src="img/icon_pass.svg">';
 				}
 				else {
 					all_good = false;
@@ -1078,7 +1087,6 @@ function new_component() {
 
         success: function(result) { 
         	load_comps(component_selected);
-        	// component_selected();
         },
         fail: (function (result) {
             console.log("new _component fail ",result);
@@ -1241,12 +1249,12 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
 	document.getElementById('m1_temp_div_1a').innerHTML = '';
 	div = document.getElementById('m1_temp_div_1');
-	var d = "<div class='margin10'><table width='100%'>";
+	var d = "<div class='m-10'><table width='100%'>";
 	d += "<tr><td>Description</td><td>ID</td><td>Temperature</td></tr>";
 	var prep_type_id = new_comp['prep_type'];
 	console.log(' draw_ingredients prep_type_id',prep_type_id);
 	document.getElementById('ms_2_target').innerHTML = '';
-	;
+
 	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
 		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
 		d += "<tr><td>" + sub['description'] + '</td>';
@@ -2282,7 +2290,7 @@ function m_show_active_components(data,reprint)
 	if (reprint) div = document.getElementById('m_reprint_labels');
 
 	if (data.length < 1) {
-		div.innerHTML = "<h1>No Active Components</h1>";
+		div.innerHTML = "<span>No Active Components</span>";
 		return;
 	}
 	if (reprint) {
@@ -2312,7 +2320,7 @@ function m_show_active_components(data,reprint)
 			clickdiv = "<div>";
 		}else{
 			tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
-			span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
+		//	span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
 			clickdiv = "<div class='tooltip'>";
 		}
 		clickdiv += data[i]['description']+span_txt+ "</div>";
@@ -2468,10 +2476,8 @@ function select_plating_team()
 
 function get_plating_item_by_menu_item_id(menu_item_id)
 {
-	
 	if (typeof(plating_items) == 'undefined') return(null);
 	for (var i = 0; i < plating_items.length; i++) {
-		
 		if (plating_items[i].menu_item_id == menu_item_id) return(plating_items[i]);
 	}
 	return(null);
@@ -2540,7 +2546,7 @@ console.log("loading menu item components");
 function new_td(content,classname) {
 	var td = document.createElement('td');
 	td.className = classname;
-	td.innerHTML = "<div class='margin10'>" + content + "</div>";
+	td.innerHTML = "<div class='m-10'>" + content + "</div>";
 	return(td);
 }
 

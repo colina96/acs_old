@@ -89,7 +89,7 @@ function show_active_components(data)
 {
 	var div = document.getElementById('active_comps');
 	if (data.length < 1) {
-		div.innerHTML = "<h1>No Active Components</h1>";
+		div.innerHTML = "<span>No Active Components</span>";
 		return;
 	}
 	div.innerHTML = "<h1>Active Components</h1>";

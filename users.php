@@ -40,9 +40,14 @@ function show_users()
 {
 	var div = document.getElementById('users_div');
 
-	var h = "<table class='users' width='100%' border='1'>";
-	h += "<tr><td>USER</td><td>BARCODE</td><td>WORK FUNCTION</td><td>LAST ACCESS</td><td colspan=3 class='add_user'>";
-	h += "<button onclick='new_user()'>Add new user</button></td></tr>";
+	var h = "<table class='table' id='users' width='100%' border='0'>";
+	h += "<tr>" +
+        "<th>USER</th>" +
+        "<th>WORK FUNCTION</th>" +
+        "<th>LAST ACCESS</th>" +
+        "<th colspan=3 class='add_user'>" +
+        "<button onclick='new_user()'>Add new user</button>" +
+        "</th></tr>";
 	for (var i = 0; i < chefs.length; i++) {
 		
 		h += "<tr><td onclick='edit_user(" + chefs[i]['id'] + ");'>" +  chefs[i]['firstname'] + " " + chefs[i]['lastname'] + "</td>";
@@ -131,29 +136,26 @@ function save_user()
 }
 
 </script>
-<div class='acs_main'>
+<div class='acs_main' id="user_table">
 	<div class='popup' id='confirm_print_user_label'>
-		<div class='center h2'>Print Label</div>
-		<div class='center' id='ul1'>Print Label</div>
+        <div class='center'>Print label for:</div>
+		<div class='center' id='ul1'>Print label for</div>
 		<div class='btns'>
-			<button class='button2' onclick='print_user_label();'>OK</button>
-			<button class='button2' onclick='hide("confirm_print_user_label");'>Cancel</button>
+			<button class='button_main' onclick='print_user_label();'>Confirm</button>
+			<button class='button_minor' onclick='hide("confirm_print_user_label");'>Cancel</button>
 		</div>
 	</div>
 	<div class='popup' id='show_user_div'>
-		<div class='center h2'>Edit User</div>
+		<div class='user_subtitle'>Personal information</div>
 		<div class='btns' id='user_div'>
-			<div class='margin10'>
 				<input type='hidden' name='user_id'>
 				<table>
-					<tr><td>Login</td><td><input type='text' name='user_email'></td></tr>
-					<tr><td>Password</td><td><input type='text' name='user_password'></td></tr>
-					<tr><td>First name</td><td><input type='text' name='user_firstname'></td></tr>
-					<tr><td>Last Name</td><td><input type='text' name='user_lastname'></td></tr>
-					<tr><td>Function</td><td><input type='text' name='user_function'></td></tr>
+					<tr><td><input type='text' name='user_email' placeholder="EMAIL"></td></tr>
+					<tr><td><input type='text' name='user_password' placeholder="PASSWORD"></td></tr>
+					<tr><td><input type='text' name='user_firstname' placeholder="FIRST NAME"></td></tr>
+					<tr><td><input type='text' name='user_lastname' placeholder="LAST NAME"></td></tr>
+					<tr><td><input type='text' name='user_function' placeholder="WORK POSITION"></td></tr>
 				</table>
-			</div>
-			<div class='margin10'>
 				<table>
 					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
 					<tr><td>Dock</td><td><input type='checkbox' name='user_dock'></td></tr>
@@ -161,15 +163,14 @@ function save_user()
 					<tr><td>Plating</td><td><input type='checkbox' name='user_plating'></td></tr>
 					<tr><td>Supervisor</td><td><input type='checkbox' name='user_supervisor'></td></tr>
 				</table>
-			</div>
 		</div>
 		<div class='btns'>
-			<button class='button2' onclick='save_user();'>OK</button>
-			<button class='button2' onclick='hide("show_user_div");'>Cancel</button>
+			<button class='button_main' onclick='save_user();'>Save</button>
+			<button class='button_minor' onclick='hide("show_user_div");'>Cancel</button>
 		</div>
 	</div>
 	<div class='acs_container'>
-		<div id='users_div' class='margin10'>
+		<div id='users_div' class='m-10'>
 		</div>
 	</div>
 </div>

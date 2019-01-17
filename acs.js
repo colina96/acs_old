@@ -1,6 +1,6 @@
 var RESTHOME = 'REST/';
 function openPage(pageName, elmnt, color,content_class,tab_class) {
-//	console.log("opening page ",pageName,content_class);
+    // console.log("opening page ",pageName,content_class);
 
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
@@ -16,7 +16,7 @@ function openPage(pageName, elmnt, color,content_class,tab_class) {
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].style.backgroundColor = "";
     }
-  //  elmnt.style.border-bottom = '1px solid black';
+    //  elmnt.style.border-bottom = '1px solid black';
     // Show the specific tab content
     document.getElementById(pageName).style.display = "block";
 
@@ -78,7 +78,7 @@ function get_comp_by_id(id,fld)
 
 function format_minutes (min)
 {
-	min = Math.abs(min)
+	min = Math.abs(min);
 	 var hours   = Math.floor(min / 60);
 	 var minutes = Math.floor(min - (hours * 60));
 	 if (hours   < 10) {hours   = "0"+hours;}
@@ -95,6 +95,7 @@ function get_preptype_val(id,fld)
 	}
 	return("not found");
 }
+
 function load_preptypes()
 {
 console.log("loading prep types");
@@ -120,7 +121,6 @@ console.log("loading prep types");
 
 function load_menu_items(menu_id)
 {
-	
 	console.log("loading menu items",menu_id);
     $.ajax({
         url: "REST/get_menu_items.php",
@@ -143,7 +143,7 @@ function load_menu_items(menu_id)
                     return false;
                 }
         	
-            })
+            });
             console.log("got " + result.length + " menu itemss");
             
         },

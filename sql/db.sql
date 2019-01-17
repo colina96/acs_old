@@ -4,7 +4,8 @@ use acs;
 /* GRANT ALL PRIVILEGES ON *.* TO 'acs'@'localhost' IDENTIFIED BY 'acs';  */;
 
 drop table if exists USERS;
-CREATE TABLE USERS ( id smallint unsigned not null auto_increment, 
+CREATE TABLE USERS (
+id smallint unsigned not null auto_increment,
 email varchar(50) not null, 
 password varchar(50) not null, 
 firstname varchar(20) not null, 
@@ -17,16 +18,18 @@ plating BOOLEAN,
 supervisor BOOLEAN,
 last_login datetime,
 constraint pk_example primary key (id) );
-INSERT INTO USERS (email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor) VALUES
- ('col','acs','Colin','Atkinson','admin',1,1,1,1,1),
- ('david@qamc.co','acs','David','Cox','admin',1,1,1,1,1),
- ('dock','acs','Dock','One','Dock',0,1,0,0,0),
- ('ds','acs','Dock','Super','super',0,1,0,0,1),
- ('bob','acs','Bob the','Chef','chef',0,0,1,0,1),
- ('plating','acs','Plating','Person','chef',0,0,0,1,0),
- ('PS','acs','Plating','Super','chef',0,0,0,1,1),
- ('kean','acs','Kean','Maizels','guru',1,1,1,1,1),
- ('falk','acs','Falk','Schoenfeld','admin',1,1,1,1,1);
+INSERT INTO USERS (email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+VALUES
+('col','acs','Colin','Atkinson','admin',1,1,1,1,1),
+('david@qamc.co','acs','David','Cox','admin',1,1,1,1,1),
+('dock','acs','Dock','One','Dock',0,1,0,0,0),
+('ds','acs','Dock','Super','super',0,1,0,0,1),
+('bob','acs','Bob the','Chef','chef',0,0,1,0,1),
+('plating','acs','Plating','Person','chef',0,0,0,1,0),
+('PS','acs','Plating','Super','chef',0,0,0,1,1),
+('kean','acs','Kean','Maizels','guru',1,1,1,1,1),
+('falk','acs','Falk','Schoenfeld','admin',1,1,1,1,1),
+('mari','acs','Mari','Scotto','admin',1,1,1,1,1);
 
 select * from USERS;
 
@@ -50,15 +53,16 @@ CREATE table PREP_TYPES (
 	probe_type int,
 	constraint pk_example primary key (id) 
 );
-insert into PREP_TYPES values (1,'CC',	0, 3	,	75,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,6,0);
-insert into PREP_TYPES values (2,'HF',	0, 3 * 7,	80,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,28,0);
-insert into PREP_TYPES values (3,'ESL',	0, 3 * 7,	75,	 1,	120, 20, 21,0, 6 * 60,60,  5   ,0,90,0);
-insert into PREP_TYPES values (4,'LR',	0, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0);
-insert into PREP_TYPES values (5,'AHR' ,	0, 3,		5,   0,	45,  20, 15,0, null  ,null,null,0,6,0);
-insert into PREP_TYPES values (6,'FRESH' ,1, 3,		5,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
-insert into PREP_TYPES values (7,'FROZEN',1, 3,		-5,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
-insert into PREP_TYPES values (8,'DRY'   ,1, 3,		15,   0,	null,  0, 0,0, null  ,null,null,0,6,0);
-insert into PREP_TYPES values (9,'DECANT'   ,2, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0);
+insert into PREP_TYPES values
+(1,'CC',	0, 3	,	75,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,6,0),
+(2,'HF',	0, 3 * 7,	80,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,28,0),
+(3,'ESL',	0, 3 * 7,	75,	 1,	120, 20, 21,0, 6 * 60,60,  5   ,0,90,0),
+(4,'LR',	0, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0),
+(5,'AHR' ,	0, 3,		5,   0,	45,  20, 15,0, null  ,null,null,0,6,0),
+(6,'FRESH' ,1, 3,		5,   0,	null,  0, 0,0, null  ,null,null,0,6,0),
+(7,'FROZEN',1, 3,		-5,   0,	null,  0, 0,0, null  ,null,null,0,6,0),
+(8,'DRY'   ,1, 3,		15,   0,	null,  0, 0,0, null  ,null,null,0,6,0),
+(9,'DECANT'   ,2, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0);
 
 drop table if exists CORRECTIVE_ACTIONS;
 CREATE table CORRECTIVE_ACTIONS
@@ -69,19 +73,20 @@ CREATE table CORRECTIVE_ACTIONS
 	constraint pk_example primary key (id)
 );
 
-insert into CORRECTIVE_ACTIONS values (1,1,'Evacuate Blast Chiller, Hard Chill');
-insert into CORRECTIVE_ACTIONS values (2,1,'Decant Product into Shallow Metal - Continue Chilling');
-insert into CORRECTIVE_ACTIONS values (3,2,'Add more ice to ice bath');
-insert into CORRECTIVE_ACTIONS values (4,3,'Evacuate Blast Chiller, Hard Chill');
-insert into CORRECTIVE_ACTIONS values (5,3,'Decant Product into Shallow Metal - Continue Chilling');
-insert into CORRECTIVE_ACTIONS values (6,5,'Refrigerate Product');
-insert into CORRECTIVE_ACTIONS values (7,5,'Discard Product');
-insert into CORRECTIVE_ACTIONS values (8,5,'Retrain Staff');
-insert into CORRECTIVE_ACTIONS values (9,5,'Low Risk Item, QA Sign-Off');
-insert into CORRECTIVE_ACTIONS values (10,6,'QA Sign-Off');
-insert into CORRECTIVE_ACTIONS values (11,6,'Client Request');
-insert into CORRECTIVE_ACTIONS values (12,7,'QA Sign-Off');
-insert into CORRECTIVE_ACTIONS values (13,8,'QA Sign-Off');
+insert into CORRECTIVE_ACTIONS values
+(1,1,'Evacuate Blast Chiller, Hard Chill'),
+(2,1,'Decant Product into Shallow Metal - Continue Chilling'),
+(3,2,'Add more ice to ice bath'),
+(4,3,'Evacuate Blast Chiller, Hard Chill'),
+(5,3,'Decant Product into Shallow Metal - Continue Chilling'),
+(6,5,'Refrigerate Product'),
+(7,5,'Discard Product'),
+(8,5,'Retrain Staff'),
+(9,5,'Low Risk Item, QA Sign-Off'),
+(10,6,'QA Sign-Off'),
+(11,6,'Client Request'),
+(12,7,'QA Sign-Off'),
+(13,8,'QA Sign-Off');
 
 drop table if exists MENUS;
 CREATE TABLE MENUS (
@@ -95,7 +100,7 @@ CREATE TABLE MENUS (
 	constraint pk_example primary key (id)
 );
 
-insert into MENUS values (1,now(),now(),'INTERNATIONAL','35A',"N/A");
+insert into MENUS values (1,now(),now(),'INTERNATIONAL','35A','N/A');
 
 drop table if exists MENU_ITEMS;
 CREATE TABLE MENU_ITEMS (

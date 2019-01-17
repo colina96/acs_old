@@ -21,7 +21,7 @@
 				<input type='hidden' id='del_comp_miid'>
 				<input type='hidden' id='del_comp_menu_id'>
 				<input type='hidden' id='del_comp_id'>
-				<div class='margin10'>
+				<div class='m-10'>
 					<div class='btn' onclick='do_delete_comp()'>Yes</div>
 					<div class='btn' onclick='dont_delete_comp()'>No</div>
 				</div>
@@ -32,7 +32,7 @@
 				<input type='hidden' id='new_comp_miid'>
 				<input type='hidden' id='new_comp_menu_id'>
 				<input id='new_comp_description'>
-				<div class='margin10'>
+				<div class='m-10'>
 					<div class='btn' onclick='do_new_comp()'>Add</div>
 					<div class='btn' onclick='dont_new_comp()'>Cancel</div>
 				</div>
@@ -40,28 +40,37 @@
 			<div id='add_sub_popup'>
 				<div id='component_title' class='h2'>Add subcomponent</div>
 				<form id='menu_item_component_form'>
-				<table><input name='comp_id' type='hidden'>
-				<tr><td>Description</td><td><input name='description' id='comp_description'></td></tr>
-				<tr><td>Supplier</td><td><input name='comp_supplier'></td></tr>
-				<tr><td>Product</td><td><input name='comp_product'></td></tr>
-				<tr><td>Spec</td><td><input name='comp_spec'></td></tr>
-			<!-- 	<tr><td>PT</td><td>
+                    <input name='comp_id' type='hidden'>
+                    <table>
+				    <tr><td>Description</td><td><input name='description' id='comp_description'></td></tr>
+				    <tr><td>Supplier</td><td><input name='comp_supplier'></td></tr>
+				    <tr><td>Product</td><td><input name='comp_product'></td></tr>
+				    <tr><td>Spec</td><td><input name='comp_spec'></td></tr>
+			    <!--
+			        <tr><td>PT</td><td>
 					<select name='comp_PT_id'>
 						<option value='1'>Fresh</option>
 						<option value='2'>Frozen</option>
 						<option value='3'>Dry</option>
-
-						
 					</select>
-					</td></tr>  -->
-				<tr><td>Shelf life (days)</td><td><input type='number' name='comp_shelf_life_days'></td></tr>
-				<tr><td>Track from dock</td><td><input type='checkbox' name='comp_high_risk' value='1'></td></tr>
-				<tr><td>Prep type</td><td><div id='prep_type_div'><?php select_prep_type(null,'comp_prep_type'); ?></div></td></tr>
-				<tr><td colspan='2'>
-				<div class='btns'>
-					<div class='btn' onclick='new_subcomponent();'>Done</div>
-					<div class='btn' onclick='cancel_add_sub();'>Cancel</div>
-				</div>
+					</td></tr>
+				-->
+				    <tr><td>Shelf life (days)</td><td><input type='number' name='comp_shelf_life_days'></td></tr>
+				    <tr><td>Track from dock</td><td><input type='checkbox' name='comp_high_risk' value='1'></td></tr>
+				    <tr>
+                        <td>Prep type</td>
+                        <td><div id='prep_type_div'>
+                                <?php select_prep_type(null,'comp_prep_type'); ?>
+                        </div></td>
+                    </tr>
+				    <tr>
+                        <td colspan='2'>
+                            <div class='btns'>
+                                <div class='btn' onclick='new_subcomponent();'>Done</div>
+                                <div class='btn' onclick='cancel_add_sub();'>Cancel</div>
+                            </div>
+                        </td>
+                    </tr>
 				</table>
 				</form>
 			</div>
@@ -69,20 +78,43 @@
 				
 				<h1>CREATE NEW MENU</h1>
 				<form id='menuform' method="post" enctype="multipart/form-data">
-				<table><tr><td>OVERALL INFORMATION</td></tr>
-				<tr><td><input name='menu_name'></td>
-					<td><input name='menu_description'></td>
-					<td><input name='menu_comment'></td>
-				<tr><td>DATE RANGE</td></tr>
-				<tr><td><input type="text" id="menu_start" name="menu_start" placeholder='start date' class='datepicker' readonly="readonly"></td>
-				<td><input type="text" id="menu_end" name="menu_end" placeholder='end date' class='datepicker' readonly="readonly"></td></tr>
-				<tr><td colspan='3'>
-    			Select file to upload:
-   				 <input type="file" name="fileToUpload" id="fileToUpload">
-   				 <!--   div class='drop-files-container' id='drop-files-container'></div -->
-   				 <input type='button' name='submit_menu' value='Submit Menu' class='submit' onclick='upload_menu();'>
-   				
-   				 </td></tr></table></form>
+                    <table>
+                        <tr><td>OVERALL INFORMATION</td></tr>
+                        <tr>
+                            <td><input name='menu_name' type="text" class="menu_description" placeholder="Client"></td>
+                            <td><input name='menu_description' type="text" class="menu_description" placeholder="Name"></td>
+                            <td><input name='menu_comment' type="text" placeholder="Description"></td>
+                        </tr>
+                        <tr><td>DATE RANGE</td></tr>
+                        <tr>
+                            <td>
+                                <input type="text"
+                                       id="menu_start"
+                                       name="menu_start"
+                                       placeholder='Start date'
+                                       class='datepicker'
+                                       readonly="readonly">
+                            </td>
+                            <td>
+                                <input type="text"
+                                       id="menu_end"
+                                       name="menu_end"
+                                       placeholder='End date'
+                                       class='datepicker'
+                                       readonly="readonly">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'>
+                                <span id="select_file"> Select file to upload: </span>
+                                <input type="file" name="fileToUpload" id="fileToUpload">
+                                <!--   div class='drop-files-container' id='drop-files-container'></div -->
+                                <input type='button' name='submit_menu'
+                                       value='Submit menu' class='button_main' id="submit_menu" onclick='upload_menu();'>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
 
 		
 			</div>
@@ -93,18 +125,18 @@
 			<div id='expired_menus' class='menu_details'>Expired menu details
 			<?php load_expired_menus(); ?></div>
 			<div id='add_menu_component_modal'>
-				<div class='modal_header'><span>Add menu item component</span>
-				<div id='menu_item_name_div'></div>
-				<div class='close_modal' onclick='close_menu_component_modal("add_menu_component_modal");'>X</div>
+				<div class='modal_header'>
+                    <span>Add menu item component</span>
+				    <div id='menu_item_name_div'></div>
+				    <div class='close_modal' onclick='close_menu_component_modal("add_menu_component_modal");'>X</div>
 				</div>
 			
 				<div id='menu_item_component_div'>
-				<form method='POST' action='acs_menu.php'>
-				<input type='hidden' name='cc_menu_item_id' >
-				<input type='hidden' name='cc_menu_id' >
-				<input name='menu_item_component_description' size='30'>
-				<select name='prep_type'>
-				
+				    <form method='POST' action='acs_menu.php'>
+				        <input type='hidden' name='cc_menu_item_id' >
+                        <input type='hidden' name='cc_menu_id' >
+                        <input name='menu_item_component_description' size='30'>
+                        <select name='prep_type'>
 <?php 
 $sql = "select * from PREP_TYPES order by ID";
 $result = mysql_query($sql);
@@ -114,11 +146,11 @@ if ($result) {
 	}
 }
 ?>
-</select>
-				<input type='submit' name='add_menu_component' value='Add'>
-				</form></div>
-			
-		</div>
+                        </select>
+                        <input type='submit' name='add_menu_component' value='Add'>
+                    </form>
+                </div>
+		    </div>
 		<div id='del_menu_component_modal'>
 			<div class='modal_header'>
 				<span>Delete menu item component</span>
@@ -134,7 +166,7 @@ if ($result) {
 				</form>
 			</div>
 		</div>
-</div>
+    </div>
 </div>
 <script>
 var menus = null;
@@ -214,15 +246,15 @@ function show_menu_details (div)
 {
 	console.log(menu[active_menu_id]);
 	
-	var ret = "<table width=100%><tr><td>OVERALL INFORMATION</td></tr>"
-	ret += "<tr><td>Description</td>";
-	ret += "<td>Code</td>";
-	ret += "<td>Comment</td></tr>";
+	var ret = "<table width=100%><tr><td class='user_subtitle' >OVERALL INFORMATION</td></tr>"
+	ret += "<tr><td>Client</td>";
+	ret += "<td>Name</td>";
+	ret += "<td>Description</td></tr>";
 	ret += "<tr><td>" + menu[active_menu_id]['description'] + "</td>";
 	ret += "<td>" + menu[active_menu_id]['code'] + "</td>";
 	ret += "<td>" + menu[active_menu_id]['comment'] + "</td>";
 	
-	ret += "<tr><td>DATE RANGE</td></tr>";
+	ret += "<tr><td class='user_subtitle'>DATE RANGE</td></tr>";
 	ret += "<tr><td>From: " + menu[active_menu_id]['start_date'];
 	ret += "<td>To: " + menu[active_menu_id]['end_date'];
 	ret += "</table><hr>";
@@ -262,12 +294,12 @@ function show_menu()
     	td.innerHTML = select_plating_team(item.plating_team,item.id);
     	tr.appendChild(td);
     	td = document.createElement('td');
-    	td.innerHTML = "<div class='btn' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
+    	td.innerHTML = "<div class='btn' id='add' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
     	
     	tr.appendChild(td);
 
        	td = document.createElement('td');
-    	td.innerHTML += "<div class='add_subcompdiv red' onclick='del_menuitem("+ item['id'] + ");'>&#x26D4</div>";
+    	td.innerHTML += "<image class='icon' id='delete_dish' src='app/www/img/icon_delete_white.svg' onclick='del_menuitem("+ item['id'] + ");'></image>";
     	td.colSpan = 2;
     	tr.appendChild(td);
         table.appendChild(tr);
@@ -313,14 +345,14 @@ function show_menu()
             	td.innerHTML = innerHTML;
             	tr.appendChild(td);
             	td = document.createElement('td');
-            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>Add HR ingredient</div>";
+            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>+ HR ingredient</div>";
             	td.colSpan = 2;
             	if (menu_item_components[mid].subcomponents) {
                 	// td.innerHTML += 'checked';
             	}
             	tr.appendChild(td);
             	td = document.createElement('td');
-            	td.innerHTML += "<div class='add_subcompdiv red' onclick='del_component(" + mid + ","+ item['id'] + ");'>&#x274c</div>";
+            	td.innerHTML += "<image class='icon' id='delete_component' src='app/www/img/icon_delete.svg' onclick='del_component(" + mid + ","+ item['id'] + ");'></image>";
             	td.colSpan = 2;
             	tr.appendChild(td);
             	table.appendChild(tr);
@@ -334,7 +366,7 @@ function show_menu()
                     	tr.appendChild(td);
                     	tr.appendChild(td);
                 		td = document.createElement('td');
-                    	var innerHTML = "<span class='ingredient small'>Ingredient  - </span>";
+                    	var innerHTML = "<span class='ingredient small'>Ingredient: </span>";
                     	innerHTML += "<div onclick='edit_high_risk_component(" + comp.id + ");'>" + comp.description + "</div>";
                     	td.innerHTML= innerHTML;
                     	tr.appendChild(td);
@@ -902,12 +934,12 @@ function show_menus(active,data)
 	var tab = document.createElement('table');
 	tab.className = 'menu_table';
 	tab.width = '100%';
-	tab.border = '1';
+	tab.border = '0';
 	var tr = document.createElement('tr');
-	tr.appendChild(new_td('Description','comp'));
+	tr.appendChild(new_td('Client','comp'));
 	tr.appendChild(new_td('Start','comp'));
-    tr.appendChild(new_td('End','comp'));   
-    tr.appendChild(new_td('Code','comp'));   
+    tr.appendChild(new_td('End','comp'));
+    tr.appendChild(new_td('Name','comp'));
     tr.appendChild(new_td('Edit','comp'));   
     tr.appendChild(new_td('Delete','comp'));   
    	tab.appendChild(tr);
@@ -922,7 +954,7 @@ function show_menus(active,data)
    		// tr.appendChild(new_td("<a href='acs_menu.php?menu_id=" + data[i]['id'] + "'>edit</a>",'comp'));
    		var btn = "<div class='btn' onclick='load_menu(" + data[i]['id'] + ");'>Edit</div>";
    		tr.appendChild(new_td(btn,'comp'));
-   		var btn = "<div class='btn' onclick='delete_menu(" + data[i]['id'] + ");'>&#x274c</div>";
+   		var btn = "<image class='icon' id='delete_menu' src='app/www/img/icon_delete.svg' onclick='delete_menu(" + data[i]['id'] + ");'></image>";
    		tr.appendChild(new_td(btn,'comp'));
    		//var del = "<a href=acs_menu?delete_menu=" + data[i]['id'] + ">&#x274c</a>";
    		//tr.appendChild(new_td(del,'comp'));
