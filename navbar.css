@@ -278,6 +278,20 @@ background-color: #EEEEEE;
 	border-bottom:2px solid transparent;
 }
 
+#icon_print {
+height: 20px;
+	float: none;
+}
+
+.print {
+	color: #93B3FD;
+	margin-left: 10px;
+}
+
+.ID_print {
+	float:right;
+}
+
 .menu_buttons {
 	display:flex;
 	justify-content: center;

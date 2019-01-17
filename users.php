@@ -61,7 +61,8 @@ function show_users()
 
 	    //h += "<td onclick='edit_user(" + chefs[i]['id'] + ");'>edit</td>";
 		//h += "<td onclick='delete_user(" + chefs[i]['id'] + ");'>del</td>";
-		h += "<td onclick='conf_user_label(" + chefs[i]['id'] + ",\""+ chefs[i]['firstname'] + "\",\""+ chefs[i]['lastname'] +"\");'>Label</td>";
+		h += "<td onclick='conf_user_label(" + chefs[i]['id'] + ",\""+ chefs[i]['firstname'] + "\",\""+ chefs[i]['lastname'] +"\");'>" +
+            "<div class='ID_print'><image src='app/www/img/icon_printID.svg' class='icon' id='icon_print'><span class='print'>Print ID</span></div></td>";
 		h += "</tr>";
 	}
 	h +=  "</table>";
