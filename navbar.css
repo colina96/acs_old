@@ -341,8 +341,8 @@ vertical-align: middle;
     border-bottom: 1px solid lightgrey;
 }
 
-.component_table tr:hover, #settings tr:hover {
-	background-color:lightgrey;
+.component_table tr:hover, #settings tr:hover, #users tr:hover, .menu_table tr:hover {
+	background-color:#ededed;
 }
 #reports th {
     background: #7A0FE7;
