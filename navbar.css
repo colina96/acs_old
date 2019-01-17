@@ -266,7 +266,7 @@ position: relative;
 background-color: #EEEEEE;
 }
 
-#user_cancel, #user_save {
+#user_cancel, #user_save, #cancel_print, #confirm_print {
 	margin:5px
 }
 

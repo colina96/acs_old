@@ -145,8 +145,8 @@ function save_user()
         <div class='center'>Print label for:</div>
 		<div class='center' id='ul1'>Print label for</div>
 		<div class='btns'>
-			<button class='button_main' onclick='print_user_label();'>Confirm</button>
-			<button class='button_minor' onclick='hide("confirm_print_user_label");'>Cancel</button>
+			<button class='button_main' id='confirm_print' onclick='print_user_label();'>Confirm</button>
+			<button class='button_minor' id='cancel_print' onclick='hide("confirm_print_user_label");'>Cancel</button>
 		</div>
 	</div>
 	<div class='popup' id='show_user_div'>
