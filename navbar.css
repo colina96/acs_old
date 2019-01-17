@@ -121,6 +121,7 @@ td { padding: 10px; }
 
 #users tr{
 	cursor:pointer;
+    outline:none;
 }
 
 #ul1 {
@@ -438,6 +439,19 @@ vertical-align: middle;
 
 tabclass a {
 	margin-left:20px;
+}
+
+#user_name a:hover, #user_name a:focus, #user_name.active, #user_name {
+    border-bottom:none;
+    color: #b0cdfc;
+    cursor: default;
+    padding-right: 0;
+
+}
+
+#logout_menu {
+    height:20px;
+    margin-left:10px;
 }
 
 .popup {

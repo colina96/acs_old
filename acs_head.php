@@ -66,7 +66,7 @@ session_start();
             
             </ul>
             <ul class="nav navbar-nav navbar-right">
-            <li><a><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?></a></li>
+            <li><a id="user_name"><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?> <image class="icon_logout" id="logout_menu" src="app/www/img/icon_logout_blue.svg"</a></li>
             </ul>
           
         </div>
