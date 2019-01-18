@@ -1886,12 +1886,8 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 		let m2_temp_div_2a = document.getElementById('m2_temp_div_2a');
 		let m2_temp_div_3a = document.getElementById('m2_temp_div_3a');
 
-		while (m2_temp_div_2a.firstChild) {
-			m2_temp_div_2a.removeChild(m2_temp_div_2a.firstChild);
-		}
-		while (m2_temp_div_3a.firstChild) {
-			m2_temp_div_3a.removeChild(m2_temp_div_3a.firstChild);
-		}
+		clearChildren(m2_temp_div_2a);
+		clearChildren(m2_temp_div_3a);
 
 		if (active_comp.milestone == 'M1' && parseInt(t) > parseInt(temp_target)) {
 			set_barcode_mode('M1');
@@ -1960,6 +1956,12 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 		}
 	}
 	
+}
+
+function clearChildren(elem){
+	while (elem.lastChild) {
+		elem.removeChild(elem.lastChild);
+	}
 }
 
 function milestone_achieved_box(anchor, milestone){
