@@ -2377,10 +2377,10 @@ function m_show_active_components(data,reprint)
 	var thead = new_node('thead');
 	var tr = new_node('tr');
 	
-    tr.appendChild(new_node('th','Description','comp'));
+    tr.appendChild(new_node('th','Description','comp_left'));
     if (!reprint) {
-    	tr.appendChild(new_node('th','M','comp'));
-    	tr.appendChild(new_node('th','TIME','comp'));
+    	tr.appendChild(new_node('th','M','comp_middle'));
+    	tr.appendChild(new_node('th','TIME','comp_left'));
     }
 
    	thead.appendChild(tr);

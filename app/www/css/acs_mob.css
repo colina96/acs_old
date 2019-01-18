@@ -289,6 +289,33 @@
 	margin: 10px auto;
 }
 
+
+.comp_middle, .comp_left {
+padding:20px;
+}
+
+.comp_left {
+	text-align: left;
+	padding-left: 10px;
+	text-transform: uppercase;
+}
+
+
+thead {
+	background: linear-gradient(to right, #93b3fc, #769ffb);
+	color:white;
+	border-spacing: 0;
+	border:none;
+}
+
+table {
+	border-spacing: 0;
+}
+
+td {
+	padding: 0;
+	margin: 0;
+}
 .even_tr {
     color:black;
 }
