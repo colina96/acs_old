@@ -1582,7 +1582,8 @@ function dock_start_component()
 
 function setup_force_M3() // 
 {
-	document.getElementById('m2_temp_div_2a').innerHTML = 'SCAN AUTHORISED ID';
+	document.getElementById('m2_temp_div_2a').innerHTML = '<img src="img/icon_barscan.svg"\n' +
+		'                     class="icon_barscan"><span class="scan_instruction"> SCAN AUTHORISED ID </span>';
 	set_barcode_mode('force_M3');
 }
 function force_M3(uid)

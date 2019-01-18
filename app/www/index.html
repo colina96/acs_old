@@ -433,9 +433,12 @@
         <div class='m_modal2' id='m2_temp_modal2'>
             <div class='center modal_head'>TEMPERATURE</div>
             <div id='m2_temp_div_2' class='temp_reading'></div>
-
-            <div id='m2_temp_div_2a'></div>
-
+            <div class="scan_group">
+          <!--      <img src="img/icon_barscan.svg"
+                     class="icon_barscan">
+                <br> -->
+                <div id='m2_temp_div_2a'></div>
+            </div>
             <div class='btns'>
                 <button type='button' class='m_submit' onclick='continue_chilling();'>Continue Chilling</button>
                 <button type='button' class='m_btn' onclick="setup_force_M3();">Force M3 - Scan ID</button>
@@ -518,7 +521,7 @@
         <div class='m_modal2' id='m2_temp_modal3'>
             <div class='center modal_head'><span>TEMPERATURE</span></div>
             <div id='m2_temp_div_3' class='temp_reading'></div>
-            <div id='m2_temp_div_3a'></div>
+            <div id='m2_temp_div_3a' class='red center'></div>
 
             <div class='btns'>
                 <button type='button' class='m_btn' onclick="goto_m_main();">Move Product to Coolroom</button>
