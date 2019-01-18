@@ -2368,7 +2368,7 @@ function m_show_active_components(data,reprint)
 		return;
 	}
 	if (reprint) {
-		div.innerHTML = "<h1>Reprint Labels</h1>";
+		div.innerHTML = "";
 	} else {
 		div.innerHTML = "";
 	}
