@@ -264,10 +264,29 @@
 	position: relative;
 }
 
+#scan_ca {
+	margin-top: 0;
+}
+
+#m2_temp_overdue_div_2a {
+	text-align: center;
+	color: var(--acs_text_normal_dark);
+	margin: auto;
+}
+
+#m2_temp_overdue_M2B_2a, #M3_ca {
+	color: var(--acs_text_scan);
+}
+
 .topbar {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.red.center {
+	text-transform: uppercase;
+	margin: 10px auto;
 }
 
 .even_tr {

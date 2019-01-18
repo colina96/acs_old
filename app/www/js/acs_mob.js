@@ -1372,6 +1372,7 @@ function checkTempDiv(anchor,comp,onclick,recheck = false) {
 		text = "<b> CHECK THE TEMPERATURE </b></br>";
 
 		text += "USE ";
+		console.log("checkTempDiv: component probe type is:"+comp['probe_type']);
 		if (comp['probe_type'] && comp['probe_type'] == 2) {
 			text += "PROBE";
 		} else {

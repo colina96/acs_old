@@ -452,32 +452,36 @@
                 <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,11);">QA Sign-Off
                     Emergency
                 </button>
-                <button type='button' class='m_btn' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
+                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
             </div>
         </div>
 
         <div class='m_modal2' id='m2_temp_overdue_M2A'><!-- Screen 3.9 or maybe 6.9.1 -->
             <div class='center modal_head'>TEMPERATURE</div>
             <div id='m2_temp_overdue_div_2' class='temp_reading'></div>
-            <div id='m2_temp_overdue_div_2a' class='temp_achieved center red'>CORRECTIVE ACTION REQUIRED</div>
+            <!--  TODO -->
+            <!--    <button type='button' class='m_submit' onclick="read_M2temp();">Re-Check</button>
+            <img class='icon_barscan' id='scan_ca' src="img/icon_barscan.svg" onclick="set_barcode_mode('KQA_override');">
+            <span class="scan_instruction">Scan Authorised Chef ID</span> -->
+
             <div class='btns'>
-                <button type='button' class='m_submit' onclick="read_M2temp();">Re-Check</button><!--  TODO -->
-                <button type='button' class='m_btn' onclick="set_barcode_mode('KQA_override');">Scan Authorised Chef
-                    ID
-                </button>
+                <div id='m2_temp_overdue_div_2a' class='temp_achieved center'>FOR CORRECTIVE ACTION</div>
+                <button type='button' class='m_btn' onclick="set_barcode_mode('KQA_override');">Scan Authorised Chef ID </button>
             </div>
         </div>
 
         <div class='m_modal2' id='m2_temp_overdue_M2B'><!-- Screen 3.10  -->
             <div id='force_M2_overdue_uid' class='center modal_head'></div>
             <div id='m2_temp_overdue_M2B_2' class='temp_reading red'></div>
-            <div id='m2_temp_overdue_M2B_2a' class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
-
+            <div class="red center">Overdue</div>
+            <hr>
+            <div id='m2_temp_overdue_M2B_2a' class='center grey'>CHOOSE CORRECTIVE ACTION</div>
+            <hr>
             <div class='btns'>
                 <button type='button' class='m_submit' onclick="comp_milestone(last_temp,false,4);">Evacuate Blass
                     Chiller<BR>Hard Chill
                 </button><!--  TODO -->
-                <button type='button' class='m_btn' onclick="comp_milestone(last_temp,false,5);">Decant Product into
+                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,false,5);">Decant Product into
                     Shallow Trays<br>Continue Chilling
                 </button>
             </div>
@@ -499,13 +503,15 @@
             <div id='force_M3_overdue_uid' class='center modal_head'></div>
             <div id='m2_temp_overdue_B_temp' class='temp_reading center red'></div>
             <div class='red center'>Overdue</div>
-            <div class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
+            <hr>
+            <div class='center grey' id='M3_ca'>CHOOSE CORRECTIVE ACTION</div>
+            <hr>
             <div class='btns'>
 
                 <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,11);">QA Sign-Off
                     Emergency
                 </button>
-                <button type='button' class='m_btn' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
+                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
             </div>
         </div>
 
