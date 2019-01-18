@@ -2370,21 +2370,25 @@ function m_show_active_components(data,reprint)
 	if (reprint) {
 		div.innerHTML = "<h1>Reprint Labels</h1>";
 	} else {
-		div.innerHTML = "<h1>Active Components</h1>";
+		div.innerHTML = "";
 	}
 
-	var tab = document.createElement('table');
-	tab.className = 'component_table';
-	var tr = document.createElement('tr');
+	var tab = new_node('table','','component_table');
+	var thead = new_node('thead');
+	var tr = new_node('tr');
 	
-    tr.appendChild(new_td('Description','comp'));  
+    tr.appendChild(new_node('th','Description','comp'));
     if (!reprint) {
-    	tr.appendChild(new_td('M','comp'));
-    
-    	tr.appendChild(new_td('TIME','comp'));
+    	tr.appendChild(new_node('th','M','comp'));
+    	tr.appendChild(new_node('th','TIME','comp'));
     }
-   	tab.appendChild(tr);
-   	for (var i=0; i<data.length; ++i) {
+
+   	thead.appendChild(tr);
+	tab.appendChild(thead);
+
+	var tbody = new_node('tbody');
+
+	for (var i=0; i<data.length; ++i) {
    		tr = document.createElement('tr');
 
    		var clickdiv;
@@ -2443,12 +2447,20 @@ function m_show_active_components(data,reprint)
 	   		tr.appendChild(td)
    		}
    		// tr.appendChild(new_td(data[i]['M1_time'],'comp'));
-   		
-		tab.appendChild(tr);
+		tbody.appendChild(tr);
     }
+	tab.appendChild(tbody);
    	div.appendChild(tab);
 }
 
+function new_node(type,content='',classname=''){
+	var node = document.createElement(type);
+	if(content!=='')
+		node.className = classname;
+	if(classname!=='')
+		node.innerHTML = content;
+	return(node);
+}
 
 function goto_select_team()
 {
