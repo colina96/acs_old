@@ -1368,17 +1368,19 @@ function checkTempDiv(anchor,comp,onclick,recheck = false) {
 	let text;
 	if(recheck) {
 		text = "<b> RECHECK POSSIBLE </b></br>";
-	}else{
+	}else {
 		text = "<b> CHECK THE TEMPERATURE </b></br>";
-	}
-	text += "USE ";
-	if(comp['probe_type'] && comp['probe_type'] == 2) {
-		text += "PROBE";
-	}else{
-		text += "IR SENSOR";
+
+		text += "USE ";
+		if (comp['probe_type'] && comp['probe_type'] == 2) {
+			text += "PROBE";
+		} else {
+			text += "IR SENSOR";
+		}
 	}
 	div.innerHTML = text;
 	div.className = "center";
+	div.id = "temp_instruction";
 	anchor.appendChild(div);
 }
 

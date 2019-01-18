@@ -111,8 +111,9 @@
 	font-size:5.5vw;
 	display:flex;
 }
-#m1_temp_div {
+#m1_temp_div, #m2_temp_div {
 	font-size: 20px;
+	margin-top: 60px;
 
 }
 #m1_temp {
@@ -245,7 +246,7 @@
 	text-align: center;
 	color: var(--acs_text_scan);
 	line-height: 1.7em;
-	font-size: larger;
+	font-size: 15px;
 }
 
 #last_item{
