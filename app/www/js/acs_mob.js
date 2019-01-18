@@ -2440,7 +2440,7 @@ function m_show_active_components(data,reprint)
    		// var M1_t = M1_time.getHours() + ":" + M1_time.getMinutes();
    		
 	   		if (remaining > 0) {
-	   			td = new_td(format_minutes(remaining) + " remaining",'comp');
+	   			td = new_td(format_minutes(remaining) + "",'comp');
 	   		} else {
 	   			td = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
 	   		}
