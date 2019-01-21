@@ -220,6 +220,10 @@ function process_barcode(s)
 			set_user('m1_chef_id_LR','m_temp_modal4',uid);
 			barcode_mode = null;
 		}
+		else if (barcode_mode == 'force_M1'  && check_user(user.supervisor)) {
+			force_M1(uid);
+			barcode_mode = null;
+		}
 		else if (barcode_mode == 'force_M3'  && check_user(user.supervisor)) {
 			force_M3(uid);
 			barcode_mode = null;
@@ -278,11 +282,13 @@ function process_barcode(s)
 
 function set_ingredient_temp(s)
 {
+	if (s == null) s = last_temp;
 	var i = new_comp['read_temp'];
 	console.log('set ingredient temp for ',i,s,new_comp['selected_ingredients'][i]['target']);
 	
 	if (parseInt(s * 10) > parseInt(new_comp['selected_ingredients'][i]['target']) * 10) {
-		document.getElementById('m1_temp_div_1a').innerHTML = parseInt(s * 10) / 10 + "&#176C";
+		document.getElementById('m1_temp_div_2a').innerHTML = parseInt(s * 10) / 10 + "&#176C";
+		openPage('m_temp_modal1b', this, 'red','m_modal2','tabclass');
 		console.log("Too high!!!");
 		return;
 	}
@@ -1554,6 +1560,33 @@ function add_chef_select(target_div,input_name)
 function dock_start_component()
 {
 	start_component(true);
+}
+
+function setup_force_M1() // 
+{
+	document.getElementById('m2_temp_div_2b').innerHTML = 'SCAN AUTHORISED ID';
+	set_barcode_mode('force_M1');
+}
+
+function force_M1(uid)
+{
+	console.log('force_M1');
+	var i = new_comp['read_temp'];
+	new_comp['selected_ingredients'][i]['temp'] = last_temp;
+	new_comp.force_M1_uid = uid;
+	if (draw_ingredients()) {
+		// set_barcode_mode('scan_ingredients');
+		// save ingredient - new_comp.php
+		start_component(false,true);
+	}
+	else {
+		set_barcode_mode('scan_ingredients');
+	}
+	console.log(active_comp);
+	new_comp.force_M1_uid = uid;
+	new_comp.force_M1_temp = last_temp;
+	
+
 }
 
 function setup_force_M3() // 

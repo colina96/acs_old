@@ -340,16 +340,43 @@
             <div class='m_label'><span>INGREDIENT TEMP</span></div>
             <div class='center'></div>
             <div id='m1_temp_div_1a' class='temp_reading red'></div>
+            <div id='m2_temp_div_1b' class='temp_achieved center'></div>
             <div class='btns'>
+            	<!--  button type='button' class='m_submit' onclick="setup_force_M1();">FORCE M1 - Scan ID</button -->
                 <button type='button' class='m_submit' onclick="read_temp('M0');">Check Now</button>
-                <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
+                <button type='button' class='m_btn' onclick="draw_ingredients();">RETURN</button>
             </div>
         </div>
+        <div class='m_modal2' id='m_temp_modal1b'>
+            <div class='m_label'><span>INGREDIENT TEMP</span></div>
+            <div class='center'></div>
+            <div id='m1_temp_div_2a' class='temp_reading red'></div>
+            <div id='m2_temp_div_2b' class='temp_achieved center'></div>
+            <div class='btns'>
+            	<button type='button' class='m_submit' onclick="setup_force_M1();">FORCE M1 - Scan ID</button>
+                <button type='button' class='m_submit' onclick="read_temp('M0');">Check Now</button>
+                <button type='button' class='m_btn' onclick="draw_ingredients();">RETURN</button>
+            </div>
+        </div>
+		<div class='m_modal2' id='m1_temp_modal_force_M1'>
+            <div id='force_M1_signoff_uid' class='center modal_head'></div>
+            <div class='center red authorised' id="last_item">Force M1</div>
+            <hr>
+            <div class='center grey' id="choose_ca">CHOOSE CORRECTIVE ACTION</div>
+            <hr>
+            <div class='btns'>
 
+                <button type='button' class='m_submit' onclick="set_ingredient_temp();">QA Sign-Off
+                    Emergency
+                </button>
+                <button type='button' class='m_btn' onclick="set_ingredient_temp();">Client Request</button>
+            </div>
+        </div>
         <div class='m_modal2' id='m_temp_modal2'>
             <div class="center modal_head"><span class='temperature_label'>TEMPERATURE</span></div>
             <div id='m1_temp_div_2' class='temp_reading red'></div>
             <div class='btns'>
+            
                 <button type='button' class='m_btn' onclick='goto_m_main();'>Re-Cook</button>
             </div>
         </div>
