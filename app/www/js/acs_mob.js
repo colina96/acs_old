@@ -1226,8 +1226,9 @@ function goto_dock()
 function goto_m_main(new_mode)
 {
 	if (new_mode) mode = new_mode;
-	load_comps();
+	
 	$('#search').val('');
+	$('#search').focus(function(){load_comps();});
 	switch (mode) {
 		case 'kitchen':
 			openPage('mm2', document.getElementById('m_current_tracking_tab'), 'red','mobile_main','tabclass');
@@ -2361,10 +2362,10 @@ function m_show_active_components(data,reprint)
    		var clickdiv;
    		var span_txt='';
    		if(reprint){
-			tr.setAttribute("onclick","reprint_active_comp_labels(" + data[i]['id'] + ");");
+			if (typeof(serial) == 'undefined') tr.setAttribute("onclick","reprint_active_comp_labels(" + data[i]['id'] + ");");
 			clickdiv = "<div>";
 		}else{
-			tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
+			if (typeof(serial) == 'undefined') tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
 		//	span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
 			clickdiv = "<div class='tooltip'>";
 		}
