@@ -20,6 +20,14 @@ var user_id = -1;
 var user_name = "";
 var USER = null;
 
+function get_user_id()
+{
+	if (USER == null) {
+		console.log("ERROR!!!!!! USER not set");
+		return(null);
+	}
+	return(USER['id']);
+}
 var app = {
     // Application Constructor
     initialize: function () {
@@ -115,7 +123,7 @@ function check_login() {
                 user_id = data['user_id'];
                 user_name = data['user'];
                 USER = data['USER'];
-
+                console.log(USER);
                 if (user_id <= 0) {
                     // load_comps();
                     // load_preptypes();

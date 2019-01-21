@@ -310,7 +310,11 @@ function check_ingredient(cid)
         	console.log(result);
  
             var scanned_ingredient = JSON.parse(result);
-            console.log("got component " + scanned_ingredient[0].description);
+            console.log("got component " + scanned_ingredient[0].description,' expired:' ,scanned_ingredient[0].expired);
+            if (scanned_ingredient[0].expired == 1) {
+				document.getElementById('m1_temp_div_1_error').innerHTML = 'EXPIRED';
+				return;
+			}
             var valid_ingredient = false;
             for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
     			var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
@@ -1437,7 +1441,7 @@ function check_temp_m1_dock(t)
 			alert("incorrect prep type");
 		}
 		else { 
-			if (parseInt(t) > parseInt(M1_temp_target)) {
+			if (parseInt(t * 10 ) > parseInt(M1_temp_target * 10)) { // round to one decimal place
 				console.log("DOCK M1 temp too high");
 				openPage('dock_m_temp_modal_high', this, 'red','m_modal','tabclass');
 			}
@@ -1609,7 +1613,7 @@ function show_temp(t)
 	console.log('show_temp',t);
     tdiv = document.getElementsByClassName('temp_reading');
     for (i = 0; i < tdiv.length; i++) {
-    	console.log("found div ",tdiv[i].id);
+    // 	console.log("found div ",tdiv[i].id);
     	try {
     		tdiv[i].innerHTML= parseInt(t * 10) / 10 + "&#176C";
     	}
@@ -1635,7 +1639,7 @@ function start_component(dock)
 	}
 	var component = new Object();
 	component.description = new_comp['description']; // simplifies display
-	active_comp = copy_object(new_comp);
+	// active_comp = copy_object(new_comp);
 	component.comp_id = new_comp['id'];
 	component.M1_chef_id = new_comp['M1_chef_id'];
 	component.prep_type = new_comp['prep_type'];
@@ -1660,8 +1664,11 @@ function start_component(dock)
 	}
 	if (dock) {
 		
-		component.M1_chef_id = user_id;
+		component.M1_chef_id = get_user_id();
+		console.log('set M1_chef_id to ',component.M1_chef_id);
+		
 	}
+	active_comp = component;
 	var data =  {data: JSON.stringify(component)};
     console.log("start_component Sent Off: ", data);
     var qty_input = (dock)?'dock_m1_label_qty':'m1_label_qty';
@@ -1674,11 +1681,13 @@ function start_component(dock)
         success: function(result) { // need to get the id of the new component back to print labels
             console.log("start_component result ",result);
             var comp = JSON.parse(result);
+            // active_comp = comp;
             console.log("start_component id =  ",comp.id);
             var qty = document.getElementsByName(qty_input)[0].value;
             active_comp.id = comp.id;
             active_comp.expiry_date = comp.expiry_date;
             active_comp.M1_time = comp.M1_time;
+           // active_comp.M1_chef_id = comp.M1_chef_id;
             print_component_labels(qty);
             document.getElementsByName(qty_input)[0].value = 1;
             console.log('comp.dock = ',comp.dock);
@@ -2158,7 +2167,7 @@ function print_component_labels(qty)
 		    comp.preparedBy = chef['label'];
 		}
 		else {
-			comp.preparedBy = 'DOCK';
+			comp.preparedBy = "ERROR" ; // should be set by now
 		}
 	}
 	
@@ -2208,9 +2217,12 @@ function reprint_dock_labels(cid)
         	var comps = JSON.parse(result);
             if (comps) {
             	active_comp = comps[0];
-            	document.getElementById('drl_details_div').innerHTML = active_comp.description;
+            	var h = "<b>" + active_comp.description + "</b><br>";
+            	h += "USE BY: " + active_comp.expiry_date;
+            	document.getElementById('drl_details_div').innerHTML = h;
             	openPage('m_dock_reprint1', document.getElementById('s_reprint_labels_tab'), 'red','m_modal','m_top_menu',null);
             	console.log("got component " + active_comp.description);
+            	set_barcode_mode('dock_reprint');
             }
             else {
             	console.log('could not find incredient')

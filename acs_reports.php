@@ -68,6 +68,7 @@ var dock_report_fmt = {
 		'BATCH CODE':'id',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
+		'Use By':'expiry_date',
 		'Q/A':'M1_action_text',
 		'CHEF':'M1_action'},
 	'FROZEN': {
@@ -75,6 +76,7 @@ var dock_report_fmt = {
 		'BATCH CODE':'id',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
+		'Use By':'expiry_date',
 		'Q/A':'M1_action_text',
 		'CHEF':'M1_action'},
 	'DRY': {
@@ -82,6 +84,7 @@ var dock_report_fmt = {
 		'BATCH CODE':'id',
 		'M1 TIME':'M1_time',
 		'M1 TEMP':'M1_temp',
+		'Use By':'expiry_date',
 		'Q/A':'M1_action_text',
 		'CHEF':'M1_action'}
 }
@@ -236,7 +239,7 @@ function load_plating_data()
 function report_fmt_str(field,value)
 {
 	if (value) {
-		if (field.indexOf('time') >= 0) {
+		if (field.indexOf('time') >= 0 || field.indexOf('date') >= 0) {
 	   	
    			if (value.length > 0) {
    				return(value.substring(11,16) + " " + value.substring(8,10) + '/' + value.substring(5,7)) ;
