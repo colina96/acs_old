@@ -1890,12 +1890,6 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			active_comp.milestone = 'M3';
 		} 
 		console.log('check_temp_m2 target temp',temp_target,t,active_comp.milestone);
-/*		document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
-		document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
-		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
-		document.getElementById('m2_temp_div_3').innerHTML=parseInt(t) + "&#176C"
-	//	document.getElementById('dock_m1_temp_div_3').innerHTML= parseInt(t * 10) / 10 + "&#176C";
-		document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C"; */
 		if (active_comp.milestone == 'M1' && parseInt(t) > parseInt(temp_target)) {
 			set_barcode_mode('M1');
 			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " achieved";
@@ -1906,22 +1900,27 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			// comp_milestone(t);
 		}
 		if (parseInt(t) < parseInt(temp_target)) {
-			console.log("check M3");
+			console.log("check M2");
 			temp_target = get_preptype_val(prep_type_id,'M3_temp');
+			console.log('M3 temp target = ',temp_target);
 			if (active_comp.milestone ==  'M3') {
 				document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " achieved";
 				active_comp.milestone_ok = true;
 				
 				if (active_comp.remaining > 0) comp_milestone(t);
 			}
-			if (active_comp.milestone ==  'M2' && parseInt(t) < parseInt(temp_target)) {
-				console.log("M3 achieved");
+			if (active_comp.milestone ==  'M2' && temp_target != null && parseInt(t) < parseInt(temp_target)) {
+				console.log("M2 achieved");
 				active_comp.milestone = 'M3';
 				active_comp['M2_temp'] = t;
 				active_comp['M3_temp'] = t;
 				active_comp['M3_time'] = 'now';
 				active_comp['M2_time'] = 'now';
 				if (active_comp.remaining > 0) comp_milestone(t);
+			}
+			if (active_comp.milestone ==  'M2' && temp_target == null) { // no M3 so component finished
+				active_comp.finished = 'true';
+				comp_milestone(t);
 			}
 			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " achieved";
 			document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " achieved";
@@ -2044,7 +2043,7 @@ function load_reprint_data()
 	            active_comps = result;
 	           // document.getElementById('active_comps').innerHTML = result;
 	     //        console.log("got " + result.length + " comps");
-	            m_show_active_components(result,true);
+	         //    m_show_active_components(result,true);
 	            
 	        },
 	        done: function(result) {
