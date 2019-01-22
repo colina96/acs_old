@@ -166,7 +166,7 @@ drop table if exists COMPONENT;
 CREATE table COMPONENT (
 	id smallint unsigned not null auto_increment, 
 	comp_id int,
-	description varchar(50),
+	description varchar(100),
 	prep_type_id int,
 	M1_check_id int,
 	M1_temp float,

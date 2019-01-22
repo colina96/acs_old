@@ -443,34 +443,35 @@ function show_plating_items(team_id,tab)
 			// create item entry
 			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
 			console.log(plating_item);
-
-			tr = document.createElement('tr');
-			var td = document.createElement('td');
-			td.innerHTML = menu_items[i]['code'];
-
-			tr.appendChild(td);
-			td = document.createElement('td');
-
-			//figure out color class and link
-			var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>";
-			if (plating_item && plating_item.time_started) {  // check plating_item.checked
-				div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>";
-				if (plating_item.time_completed) {
-					div = "<div class='red'>";
+			if (parseInt(menu_items[i]['current_shift']) > 0) {
+				tr = document.createElement('tr');
+				var td = document.createElement('td');
+				td.innerHTML = menu_items[i]['code'];
+	
+				tr.appendChild(td);
+				td = document.createElement('td');
+	
+				//figure out color class and link
+				var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>";
+				if (plating_item && plating_item.time_started) {  // check plating_item.checked
+					div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>";
+					if (plating_item.time_completed) {
+						div = "<div class='red'>";
+					}
 				}
+				//finish up
+				div += menu_items[i]['dish_name'] + "</div>";
+	
+				td.innerHTML = div;
+				tr.appendChild(td);
+				td = document.createElement('td');
+				//var shift = 's' + menu_items[i]['current_shift'];
+				//console.log('shift ',shift);
+				//console.log(menu_items[i]);
+				td.innerHTML = menu_items[i]['current_shift'];
+				tr.appendChild(td);
+				tab.appendChild(tr);
 			}
-			//finish up
-			div += menu_items[i]['dish_name'] + "</div>";
-
-			td.innerHTML = div;
-			tr.appendChild(td);
-			td = document.createElement('td');
-			//var shift = 's' + menu_items[i]['current_shift'];
-			//console.log('shift ',shift);
-			//console.log(menu_items[i]);
-			td.innerHTML = menu_items[i]['current_shift'];
-			tr.appendChild(td);
-			tab.appendChild(tr);
 		}
 	}
 }
