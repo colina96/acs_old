@@ -1,18 +1,20 @@
+<div class="menu_buttons">
+    <div class="menu_type" id="menu_status">
+        <button type='button' class='acs_menu_btn' href="#" id="active_menu"
+                onclick="show_active_menus()">ACTIVE</button>
+        <button type='button' class='acs_menu_btn' href="#" id="future_menu"
+                onclick="open_future_menus();">FUTURE</button>
+        <button type='button' class='acs_menu_btn' href="#" id="expired_menu"
+                onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
+    </div>
+    <div class="acs_sidebar">
+        <button type='button' class='acs_menu_btn' href="#" id="add_new_menu"
+                onclick="openPage('new_menu', this, 'red','menu_details','acs_menu_btn')">+ Add new menu</button>
+    </div>
+</div>
+
 <div class='acs_main'>
-		
-		<div class="acs_sidebar">
-		  <button type='button' class='acs_menu_btn' href="#" id="add_new_menu"
-		  onclick="openPage('new_menu', this, 'red','menu_details','acs_menu_btn')">Add new</button>
-		  <div class='acs_menu_space' >SELECT A MENU</div>
-		  <button type='button' class='acs_menu_btn' href="#" id="active_menu"  
-		  	onclick="show_active_menus()">ACTIVE</button>
-		  <button type='button' class='acs_menu_btn' href="#" id="future_menu" 
-		  	onclick="open_future_menus();">FUTURE</button>
-		  <button type='button' class='acs_menu_btn' href="#" id="expired_menu" 
-		  	onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
-		  
-		</div>
-	
+
 		<div class="acs_right_content">
 			<!--  popup -->
 			<div class='popup' id='del_comp_popup'>
@@ -118,11 +120,11 @@
 
 		
 			</div>
-			<div id='active_menus' class='menu_details menu_details_active'>Active menu details 
+			<div id='active_menus' class='menu_details menu_details_active'>
 			<?php load_active_menus(); ?></div>
-			<div id='future_menus' class='menu_details'>Future menu details
+			<div id='future_menus' class='menu_details'>
 			</div>
-			<div id='expired_menus' class='menu_details'>Expired menu details
+			<div id='expired_menus' class='menu_details'>
 			<?php load_expired_menus(); ?></div>
 			<div id='add_menu_component_modal'>
 				<div class='modal_header'>
@@ -169,7 +171,8 @@ if ($result) {
     </div>
 </div>
 <script>
-var menus = null;
+
+    var menus = null;
 
 function upload_menu()
 {
@@ -927,10 +930,10 @@ function show_menus(active,data)
 {
 	var div = document.getElementById('active_menus');
 	if (data.length < 1) {
-		div.innerHTML = "<h1>No Active Menus</h1>";
+		div.innerHTML = "<h3>No Active Menus</h3>";
 		return;
 	}
-	div.innerHTML = "<h1>Active Menus</h1>";
+	div.innerHTML = "";
 	var tab = document.createElement('table');
 	tab.className = 'menu_table';
 	tab.width = '100%';
@@ -941,7 +944,7 @@ function show_menus(active,data)
     tr.appendChild(new_td('End','comp'));
     tr.appendChild(new_td('Name','comp'));
     tr.appendChild(new_td('Edit','comp'));   
-    tr.appendChild(new_td('Delete','comp'));   
+    tr.appendChild(new_td('Delete','comp'));
    	tab.appendChild(tr);
    	for (i=0; i<data.length; ++i) {
    		var tr = document.createElement('tr');
@@ -1251,3 +1254,5 @@ function new_menu()
 	test_mysql_query($sql);
 }
 ?>
+<script src="navigation_select.js"></script>
+

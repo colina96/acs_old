@@ -43,20 +43,24 @@ function show_users()
 	var h = "<table class='table' id='users' width='100%' border='0'>";
 	h += "<tr>" +
         "<th>USER</th>" +
+        "<th>ID</th>" +
         "<th>WORK FUNCTION</th>" +
         "<th>LAST ACCESS</th>" +
         "<th colspan=3 class='add_user'>" +
-        "<button onclick='new_user()'>Add new user</button>" +
+        "<button onclick='new_user()' class='add_user_button'>+ Add new user</button>" +
         "</th></tr>";
 	for (var i = 0; i < chefs.length; i++) {
-		
-		h += "<tr><td onclick='edit_user(" + chefs[i]['id'] + ");'>" +  chefs[i]['firstname'] + " " + chefs[i]['lastname'] + "</td>";
-		h += "<td onclick='edit_user(" + chefs[i]['id'] + ");'>" +  sprintf('U01%06d',chefs[i]['id']); + "</td>";
-		h += "<td>" + chefs[i]['function'] + "</td>";
-		h += "<td>" + chefs[i]['last_login'] + "</td>";
-		
-		h += "<td onclick='edit_user(" + chefs[i]['id'] + ");'>edit</td>";
-		// h += "<td onclick='delete_user(" + chefs[i]['id'] + ");'>del</td>";
+		var t = "onclick='edit_user(" + chefs[i]['id'] + ");'";
+
+		h += "<tr>";
+
+        h += "<td " + t +">" + chefs[i]['firstname'] + " " + chefs[i]['lastname'] + "</td>";
+		h += "<td " + t +">" + sprintf('U01%06d',chefs[i]['id']) + "</td>";
+		h += "<td " + t +">" + chefs[i]['function'] + "</td>";
+		h += "<td " + t +">" + chefs[i]['last_login'] + "</td>";
+
+	    //h += "<td onclick='edit_user(" + chefs[i]['id'] + ");'>edit</td>";
+		//h += "<td onclick='delete_user(" + chefs[i]['id'] + ");'>del</td>";
 		h += "<td onclick='conf_user_label(" + chefs[i]['id'] + ",\""+ chefs[i]['firstname'] + "\",\""+ chefs[i]['lastname'] +"\");'>Label</td>";
 		h += "</tr>";
 	}

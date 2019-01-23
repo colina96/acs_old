@@ -37,6 +37,10 @@ session_start();
   <body>
   <?php if (!empty($_SESSION['userID'])) { ?> 
  <nav class="navbar navbar-default">
+
+
+
+
       <div class="container">
  
         <div class="navbar-header">
@@ -49,9 +53,9 @@ session_start();
         </div>
 
         <div class="collapse navbar-collapse" id="codebrainery-toggle-nav">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav" id="navbar_top">
             <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="users();">USERS</a></li>
-            <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a href="">MENU</a></li>
+            <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a>MENU</a></li>
             <li class='tabclass' onclick="daily_orders();"><a>DAILY ORDERS</a></li>
             <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')">PT SETTINGS</a></li>
             <li class='tabclass' onclick="openPage('SUPPLIERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SUPPLIERS', this, 'red')">SUPPLIER LIST</a></li>
@@ -62,7 +66,7 @@ session_start();
             
             </ul>
             <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?></a></li>
+            <li><a id="user_name"><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?> <image class="icon_logout" id="logout_menu" src="app/www/img/icon_logout_blue.svg"</a></li>
             </ul>
           
         </div>
@@ -131,3 +135,4 @@ session_start();
 <script src="acs.js"></script>
 <script src="app/www/js/acs_common.js"></script>
 <script src="app/www/js/sprintf.js"></script>
+  <script src="navigation_select.js"></script>

@@ -331,9 +331,9 @@ function search_report()
 			<div class='top_menu' id='kitchen_report_tab'  onclick="kitchen_reports(kitchen_report_fmt,'kitchen_report_tab','kitchen')">KITCHEN</div>
 			<div class='top_menu' id='plating_report_tab'  onclick="load_plating_data();">PLATING</div>
 			<div class='top_menu' id='report_range_tab'>
-				<input type="text" id="report_start" name="report_start" placeholder='start date' class='datepicker' readonly="readonly"></td>
-				<input type="text" id="report_end" name="report_end" placeholder='end date' class='datepicker' readonly="readonly">
-				<input type="text" id="report_search" name="report_search" placeholder="search" onchange='search_report()';>
+				<input type="text" id="report_start" name="report_start" placeholder='Start date' class='datepicker' readonly="readonly"></td>
+				<input type="text" id="report_end" name="report_end" placeholder='End date' class='datepicker' readonly="readonly">
+				<input type="text" id="report_search" name="report_search" placeholder="Search" onchange='search_report();'>
 				<button class='button_main' id='go' onclick='search_report();'>Go</button>
 			</div>
 			
