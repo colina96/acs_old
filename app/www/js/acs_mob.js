@@ -1380,17 +1380,20 @@ function checkTempDiv(anchor,comp,onclick,recheck = false) {
 	let text;
 	if(recheck) {
 		text = "<b> RECHECK POSSIBLE </b></br>";
-	}else{
+	}else {
 		text = "<b> CHECK THE TEMPERATURE </b></br>";
-	}
-	text += "USE ";
-	if(comp['probe_type'] && comp['probe_type'] == 2) {
-		text += "PROBE";
-	}else{
-		text += "IR SENSOR";
+
+		text += "USE ";
+		console.log("checkTempDiv: component probe type is:"+comp['probe_type']);
+		if (comp['probe_type'] && comp['probe_type'] == 2) {
+			text += "PROBE";
+		} else {
+			text += "IR SENSOR";
+		}
 	}
 	div.innerHTML = text;
 	div.className = "center";
+	div.id = "temp_instruction";
 	anchor.appendChild(div);
 }
 
@@ -1618,7 +1621,8 @@ function force_M1(uid)
 
 function setup_force_M3() //
 {
-	document.getElementById('m2_temp_div_2a').innerHTML = 'SCAN AUTHORISED ID';
+	document.getElementById('m2_temp_div_2a').innerHTML = '<img src="img/icon_barscan.svg"\n' +
+		'                     class="icon_barscan"><span class="scan_instruction"> SCAN AUTHORISED ID </span>';
 	set_barcode_mode('force_M3');
 }
 function force_M3(uid)
@@ -2410,23 +2414,27 @@ function m_show_active_components(data,reprint)
 		return;
 	}
 	if (reprint) {
-		div.innerHTML = "<h1>Reprint Labels</h1>";
+		div.innerHTML = "";
 	} else {
-		div.innerHTML = "<h1>Active Components</h1>";
+		div.innerHTML = "";
 	}
 
-	var tab = document.createElement('table');
-	tab.className = 'component_table';
-	var tr = document.createElement('tr');
+	var tab = new_node('table','','component_table');
+	var thead = new_node('thead');
+	var tr = new_node('tr');
 	
-    tr.appendChild(new_td('Description','comp'));  
+    tr.appendChild(new_node('th','Description','comp_left'));
     if (!reprint) {
-    	tr.appendChild(new_td('M','comp'));
-    
-    	tr.appendChild(new_td('TIME','comp'));
+    	tr.appendChild(new_node('th','M','comp_middle'));
+    	tr.appendChild(new_node('th','TIME','comp_right'));
     }
-   	tab.appendChild(tr);
-   	for (var i=0; i<data.length; ++i) {
+
+   	thead.appendChild(tr);
+	tab.appendChild(thead);
+
+	var tbody = new_node('tbody');
+
+	for (var i=0; i<data.length; ++i) {
    		tr = document.createElement('tr');
 
    		var clickdiv;
@@ -2478,19 +2486,27 @@ function m_show_active_components(data,reprint)
    		// var M1_t = M1_time.getHours() + ":" + M1_time.getMinutes();
    		
 	   		if (remaining > 0) {
-	   			td = new_td(format_minutes(remaining) + " remaining",'comp');
+	   			td = new_td(format_minutes(remaining) + "",'comp');
 	   		} else {
 	   			td = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
 	   		}
 	   		tr.appendChild(td)
    		}
    		// tr.appendChild(new_td(data[i]['M1_time'],'comp'));
-   		
-		tab.appendChild(tr);
+		tbody.appendChild(tr);
     }
+	tab.appendChild(tbody);
    	div.appendChild(tab);
 }
 
+function new_node(type,content='',classname=''){
+	var node = document.createElement(type);
+	if(content!=='')
+		node.className = classname;
+	if(classname!=='')
+		node.innerHTML = content;
+	return(node);
+}
 
 function goto_select_team()
 {

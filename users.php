@@ -61,7 +61,8 @@ function show_users()
 
 	    //h += "<td onclick='edit_user(" + chefs[i]['id'] + ");'>edit</td>";
 		//h += "<td onclick='delete_user(" + chefs[i]['id'] + ");'>del</td>";
-		h += "<td onclick='conf_user_label(" + chefs[i]['id'] + ",\""+ chefs[i]['firstname'] + "\",\""+ chefs[i]['lastname'] +"\");'>Label</td>";
+		h += "<td onclick='conf_user_label(" + chefs[i]['id'] + ",\""+ chefs[i]['firstname'] + "\",\""+ chefs[i]['lastname'] +"\");'>" +
+            "<div class='ID_print'><image src='app/www/img/icon_printID.svg' class='icon' id='icon_print'><span class='print'>Print ID</span></div></td>";
 		h += "</tr>";
 	}
 	h +=  "</table>";
@@ -142,11 +143,12 @@ function save_user()
 </script>
 <div class='acs_main' id="user_table">
 	<div class='popup' id='confirm_print_user_label'>
-        <div class='center'>Print label for:</div>
-		<div class='center' id='ul1'>Print label for</div>
+        <div class='center'>Print ID for:</div>
+		<div class='center' id='ul1'>Print ID for</div>
+        <image src="app/www/img/icon_printID.svg" class="icon" id="icon_print_large"></image>
 		<div class='btns'>
-			<button class='button_main' onclick='print_user_label();'>Confirm</button>
-			<button class='button_minor' onclick='hide("confirm_print_user_label");'>Cancel</button>
+			<button class='button_main' id='confirm_print' onclick='print_user_label();'>Confirm</button>
+			<button class='button_minor' id='cancel_print' onclick='hide("confirm_print_user_label");'>Cancel</button>
 		</div>
 	</div>
 	<div class='popup' id='show_user_div'>
@@ -154,11 +156,11 @@ function save_user()
 		<div class='btns' id='user_div'>
 				<input type='hidden' name='user_id'>
 				<table>
-					<tr><td><input type='text' name='user_email' placeholder="EMAIL"></td></tr>
-					<tr><td><input type='text' name='user_password' placeholder="PASSWORD"></td></tr>
-					<tr><td><input type='text' name='user_firstname' placeholder="FIRST NAME"></td></tr>
-					<tr><td><input type='text' name='user_lastname' placeholder="LAST NAME"></td></tr>
-					<tr><td><input type='text' name='user_function' placeholder="WORK POSITION"></td></tr>
+                    <tr><td><span class="user_description">Email <i>optional</i></span><br><input type='text' name='user_email' placeholder=""></td></tr>
+					<tr><td><span class="user_description">Password <i>optional</i></span><br><input type='text' name='user_password' placeholder=""></td></tr>
+					<tr><td><span class="user_description">First name</span><br><input type='text' name='user_firstname' placeholder=""></td></tr>
+					<tr><td><span class="user_description">Last name</span><br><input type='text' name='user_lastname' placeholder=""></td></tr>
+					<tr><td><span class="user_description">Position</span><br><input type='text' name='user_function' placeholder=""></td></tr>
 				</table>
 				<table>
 					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
@@ -169,8 +171,8 @@ function save_user()
 				</table>
 		</div>
 		<div class='btns'>
-			<button class='button_main' onclick='save_user();'>Save</button>
-			<button class='button_minor' onclick='hide("show_user_div");'>Cancel</button>
+			<button class='button_main' id='user_save' onclick='save_user();'>Save</button>
+			<button class='button_minor' id='user_cancel' onclick='hide("show_user_div");'>Cancel</button>
 		</div>
 	</div>
 	<div class='acs_container'>

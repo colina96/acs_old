@@ -139,6 +139,7 @@ td { padding: 10px; }
 #report_start, #report_end, #report_search{
 	border-radius: 10px;
 	border: 1px solid lightgrey;
+	vertical-align: middle;
 
 }
 
@@ -163,10 +164,13 @@ td { padding: 10px; }
 	width: 50px;
 	padding:0;
 	border-radius:10px;
+	vertical-align: middle;
+	font-size: 16.8px;
 }
 
 .icon  {
     height:15px;
+	float: right;
 }
 
 .add_user_button {
@@ -193,6 +197,10 @@ table input[type=text] {
 	text-transform: uppercase;
 	color: #8f8f8f;
 	font-weight: bold;
+}
+
+.user_description {
+	color: #8f8f8f;
 }
 
 .acs_container {
@@ -261,15 +269,43 @@ position: relative;
 .rightdiv {
 background-color: #EEEEEE;
 }
+
+#user_cancel, #user_save, #cancel_print, #confirm_print {
+	margin:5px
+}
+
+#cancel_print, #confirm_print {
+	padding: 5px 15px;
+}
+
 #add_new_menu {
-	background:#37DD9F;
-	border-radius: 15px;
-	color:white;
-	padding:5px 10px;
+	padding:5px 20px;
 }
 
 #add_new_menu:hover {
 	border-bottom:2px solid transparent;
+}
+
+#icon_print {
+height: 20px;
+	float: none;
+}
+
+#icon_print_large {
+	height: 100px;
+	display: block;
+	margin: 20px auto;
+	float:none;
+
+}
+
+.print {
+	color: #93B3FD;
+	margin-left: 10px;
+}
+
+.ID_print {
+	float:right;
 }
 
 .menu_buttons {
@@ -339,7 +375,8 @@ vertical-align: middle;
 .component_table th {
 	font-size:14px;
 	color:white;
-    padding: 10px;
+	padding:10px
+
 }
 .component_table tr:first-of-type {
     background-image: linear-gradient(to right, #9D2CE3, #9323E4, #7A0FE7);
@@ -354,6 +391,7 @@ vertical-align: middle;
 }
 #reports th {
     background: #7A0FE7;
+	padding:0;
 }
 
 #reports_frame {
@@ -372,7 +410,7 @@ vertical-align: middle;
 
 .menu_table th
 {
-	padding:2px;
+	padding:10px;
 }
 
 .menu_table td
@@ -483,9 +521,9 @@ btns {
     position:relative;
     border:2px #18e0af solid;
     padding: 5px;
-    width: 80%;
-    margin:5px;
-    font-family: "Ubuntu", sans-serif;
+    width: 100%;
+    font-family: "Ubuntu Medium", sans-serif;
+	font-size: larger;
 }
 
 .button_minor {
