@@ -278,6 +278,12 @@
 	color: var(--acs_text_scan);
 }
 
+#topbar_plating {
+    position:absolute;
+    width:100%;
+    top:0;
+}
+
 .topbar {
 	display: flex;
 	justify-content: center;
