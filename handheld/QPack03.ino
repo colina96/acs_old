@@ -187,11 +187,12 @@ void loop() {
 
   charge_v = analogRead(vchg_sense);
   if (!charging && charge_v>CHARGE_THRESHOLD) {
+    Serial.println("+C");
+    delay(50);
     // enable charging
     digitalWrite(usbid_en, LOW);
     delay(50);
     digitalWrite(chg_en, HIGH);
-    Serial.println("+C");
     charging = true;
   } else if (charging && charge_v<CHARGE_LOSS) {
     // disable charging
@@ -329,4 +330,3 @@ void loop() {
     nitenite();
   }
 }
-
