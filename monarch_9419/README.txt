@@ -1,14 +1,8 @@
 print_lbl runs as a service started in /etc/rc.local
 
-The rc.local file looks like
-########
-
-#!/bin/bash
-# start label printer
-cd /home/col/acs/monarch_9419
-./print_lbl settings.txt &
-echo started label print server
-exit 0
+The ./rc.local file should be copied to /etc/rc.local and made executable
+sudo cp rc.local /etc/rc.local
+sudo chmod +x /etc/rc.local
 
 rc.local needs to be enabled
 

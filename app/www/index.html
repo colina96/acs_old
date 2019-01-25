@@ -61,30 +61,7 @@
     <link rel="stylesheet" type="text/css" href="css/acs_mob.css"/>
     <title>ACS</title>
 </head>
-<style>
-    .serial {
-        width: 90vw;
-        height: 50vh;
-        margin: 5vw;
-        position: absolute;
-        top: 0;
-        left: 0;
-        border: 2px solid green;
-        background: darkgrey;
-        color: white;
-        overflow: auto;
-        z-index: 2000;
-        overflow: auto;
-    }
 
-    #status, #log {
-        height: 20vh;
-        width: 100%;
-        background: white;
-        color: black;
-        overflow: auto;
-    }
-</style>
 <script>
 
     var keyboard_str = '';
@@ -118,30 +95,37 @@
 </div>
 <div class='banner'>
     <div class='center'>Advanced Catering Solutions</div>
+    <div id='current_time_kitchen'>TIME</div>
 </div>
 <div class='background_div' tabindex="0" onkeypress='global_key(event);'>
-    <div class='mobile_main' id='splash'>
+    <div class='mobile_main' id='splash'></div>
 
-    </div>
+    <!-- Admin -->
     <div class='mobile_main hidden' id='setup'>
         <div class='center'><input name='resthome' id='resthome'></div>
         <div id='setup_result'></div>
         <div class='btns'>
             <button id='escape_btn' type='button' class='m_btn' onclick="exit_app();">Exit Kiosk Mode</button>
             <button id='plat_btn' type='button' class='m_btn' onclick="save_resthome();">Save</button>
-            <button id='out_btn' type='button' class='m_btn' onclick="logout();">Logout</button>
+            <button id='out_btn' type='button' class='m_btn' onclick="logout();">
+                <img src='img/icon_logout.png' class='icon_logout'>
+            </button>
         </div>
     </div>
 
+    <!-- login -->
     <div class='mobile_main hidden' id='mm1'>
+        <img class="bg-image" src="img/qac_mobile.png">
         <div class='m_main'>
             <div id='m_login'></div>
             <div id='log_div' class='serial hidden' onclick='qpack_init();'>start scan</div>
             <div class='btns' id='front_page_btns'>
-                <button id='dock_btn' type='button' class='m_btn' onclick="goto_dock();">Dock</button>
-                <button id='kit_btn' type='button' class='m_btn' onclick="goto_m_main('kitchen');">Kitchen</button>
-                <button id='plat_btn' type='button' class='m_btn' onclick="goto_plating_teams();">Plating</button>
-                <button id='out_btn' type='button' class='m_btn' onclick="logout();">Logout</button>
+                <button id='dock_btn' type='button' class='m_submit' onclick="goto_dock();">Dock</button>
+                <button id='kit_btn' type='button' class='m_submit' onclick="goto_m_main('kitchen');">Kitchen</button>
+                <button id='plat_btn' type='button' class='m_submit' onclick="goto_plating_teams();">Plating</button>
+                <button id='out_btn' type='button' class='m_btn' onclick="logout();">
+                    <img src='img/icon_logout.png' class='icon_logout'>
+                </button>
                 <!--  button type='button'  class='m_btn' onclick="show_dims();">Dims</button -->
             </div>
         </div>
@@ -150,10 +134,12 @@
     <!--  dock pages -->
     <!--  there is some duplication of kitchen pages and functionality but safer to have copies -->
     <div class='mobile_main hidden' id='dock_main'>
+        <div class='m_modal_shadow'></div>
+        <img class="bg-image" src="img/qac_mobile.png">
+
         <div class='m_main'>
             <div class='m_top_menu_container'>
-
-                <div class='m_top_menu larger left' id='m_home_tab' onclick="goto_home()">X</div>
+                <img class='m_top_menu larger left' id='m_home_tab' src="img/icon_logout.png" onclick="goto_home()">
                 <div class='m_top_menu' id='supplier_list_tab'
                      onclick="openPage('m_dock', this, 'red','m_modal','m_top_menu',goto_dock);">SUPPLIER LIST
                 </div>
@@ -162,16 +148,17 @@
                     RE-PRINT LABELS
                 </div>
             </div>
-            <div class='search' id='dock_search_div'><input placeholder='SEARCH' type="text" id="dock_search"></div>
-            <div class='hidden' id='dock_barcode'><input placeholder='Enter existing barcode' name='dock_manual_code'
-                                                         id='dock_manual_code'
-                                                         onchange='manual_barcode_submit("dock_manual_code")'>
+            <div class='search' id='dock_search_div'><input placeholder='Search' type="text" id="dock_search"></div>
+            <div class='hidden' id='dock_barcode'>
+                <input placeholder='Enter existing barcode'
+                       name='dock_manual_code'
+                       id='dock_manual_code'
+                       onchange='manual_barcode_submit("dock_manual_code")'>
             </div>
             <div class='hidden' id='current_time_dock'></div>
 
             <div class='m_modal' id='m_dock'>
-
-                <div class='margin10'>
+                <div class='m-10'>
                     <div id='dock_display_comp_div'>
                         <div id='dock_display_comp_div1'></div>
                         <div class='btns hidden' id='dock_comp_selected_btns'>
@@ -179,34 +166,54 @@
                             <button type='button' class='m_btn' onclick="goto_dock();">RETURN</button>
                         </div>
                     </div>
-
                 </div>
-
             </div>
+
             <div class='m_modal' id='m_dock_reprint'>
-                <div class='center pad10 larger' id='dock_reprint_title'>Scan barcode
+                <img class="icon_barscan" src="img/icon_barscan.svg">
+                <div class='center pad10 larger' id='dock_reprint_title'>
+                    Scan barcode
                 </div>
             </div>
-            div>
+
             <div class='m_modal' id='m_dock_reprint1'>
                 <div class='center pad10'>
                     <div class='center pad10' id='drl_details_div'></div>
                     <div class='center pad10 grey'>LABEL QUANTITY</div>
-                    <div class='center larger'><input type='number' class='label_num' id='dock_reprint_label_qty' size=3
-                                                      max=200 min=1></div>
+                    <div class='center larger'>
+                        <input type='number'
+                               class='label_num'
+                               id='dock_reprint_label_qty'
+                               size=3
+                               max=200
+                               min=1>
+                    </div>
                 </div>
+
                 <div class='btns'>
                     <button type='button' class='m_btn' onclick="dock_reprint();">Print Labels</button>
                 </div>
             </div>
+
             <div class='m_modal' id='dock_m_temp_modal'>
-                <div class='m_label'><span>CHECK THE TEMPERATURE</span></div>
-                <div id='dock_m1_temp_div' class='center'></div>
+                <div class="temp_scan">
+                    <img src="img/icon_IR.svg" class="icon_IR">
+                    <div class='m_label' id="temp_instruction">
+                        <span>
+                            <b>CHECK THE TEMPERATURE </b><br>
+                            REQUIRED:
+                            <div class="temp_milestone">< 5°C </div><br>
+                            (USE IR SENSOR)
+                        </span>
+                    </div>
+                    <div id='dock_m1_temp_div' class='center'></div>
+                </div>
+
                 <div class='btns'>
-                    <button type='button' class='m_submit' onclick="dock_read_M1temp();">Check Now</button>
                     <button type='button' class='m_btn' onclick="goto_dock();">RETURN</button>
                 </div>
             </div>
+
             <div class='m_modal' id='dock_m_temp_modala'>
                 <div class='m_label'><span>TEMPERATURE</span></div>
                 <div id='dock_m1_temp_div_2' class='temp_reading red'></div>
@@ -217,59 +224,73 @@
                     </button>
                 </div>
             </div>
+
             <div class='m_modal' id='dock_m_temp_modal_labels'>
-                <div class='center modal_head'><span>TEMPERATURE</span></div>
+                <div class='center modal_head'><span class="temperature_label">TEMPERATURE</span></div>
                 <div id='dock_m1_temp_div_4' class='temp_reading'></div>
                 <div id='dock_m1_temp_div_5' class='center'></div>
 
-                <div class='center'><input type='number' class='label_num' name='dock_m1_label_qty' length='3'></div>
-                <div class='center grey'>LABEL QUANTITY</div>
+                <div class='center'>
+                    <div class='center grey'>LABEL QUANTITY</div>
+                    <input type='number' class='label_num' name='dock_m1_label_qty' length='3' value="1">
+                </div>
                 <div class='btns'>
                     <button type='button' class='m_btn' onclick="dock_start_component();">Print Labels</button>
                 </div>
             </div>
+
             <div class='m_modal' id='dock_m_temp_modal_high'>
-                <div class='center modal_head'><span>TEMPERATURE</span></div>
+                <div class='center modal_head'><span class="temperature_label">TEMPERATURE</span></div>
                 <div id='dock_m1_temp_div_6' class='temp_reading red'></div>
+                <img src="img/icon_IR.svg" class="icon_IR" onclick="dock_read_M1temp();">
+                <div class="scan_instruction"> Recheck possible</div>
                 <div class='btns'>
+                    <button type='button' class='m_submit' onclick="dock_qa_override();">QA Override</button>
                     <button type='button' class='m_btn' onclick="goto_dock();">Reject</button>
-                    <button type='button' class='m_btn' onclick="dock_read_M1temp();">Re-check</button>
-                    <button type='button' class='m_btn' onclick="dock_qa_override();">QA Override</button>
                 </div>
             </div>
+
             <div class='m_modal' id='dock_m_temp_modal_qa'>
-                <div class='center modal_head'><span>Scan Head Chef</span></div>
                 <div id='dock_m1_temp_div_7' class='temp_reading'></div>
+                <div class="scan_group">
+                    <img src="img/icon_barscan.svg" class="icon_barscan"><br>
+                    <span class="scan_instruction">SCAN AUTHORISED CHEF ID</span>
+                </div>
                 <div class='btns'>
                     <button type='button' class='m_btn' onclick="goto_dock();">Return</button>
                 </div>
             </div>
             <div class='m_modal' id='dock_m_temp_modal_qa2'>
                 <div class='center modal_head' id='dock_qa_chef_details'></div>
-                <div class='center modal_head'><span>Head Chef Authorised</span></div>
-                <div class='center red'>GOODS ACCEPTED</div>
-                <div class='center grey'>CHOOSE CORRECTIVE ACTION</div>
-                <div id='dock_m1_temp_div_7' class='temp_reading'></div>
+                <div class='center modal_head'><span class="authorised">Head Chef Authorised</span></div>
+                <div class='center red authorised' id="last_item">GOODS ACCEPTED</div>
+                <hr>
+                <div class='center grey' id="choose_ca">CHOOSE CORRECTIVE ACTION</div>
+                <hr>
                 <div class='btns'>
-                    <button type='button' class='m_btn' onclick="dock_qa_signof();">QA SIGN OFF</button>
-                    <button type='button' class='m_btn' onclick="dock_qa_client_request();">EMERGENCY CLIENT REQUEST
+                    <button type='button' class='m_submit' onclick="dock_qa_signof();">QA Sign Off</button>
+                    <button type='button' class='m_submit' onclick="dock_qa_client_request();">Emergency Client Request
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
     <!--  kitchen temp pages -->
     <div class='mobile_main hidden' id='mm2'>
+        <div class='m_modal_shadow'></div>
+        <img class="bg-image" src="img/qac_mobile.png" alt="background-image">
         <div class='m_main'>
             <div class='m_top_menu_container'>
-                <div class='m_top_menu larger' id='m_home_tab' onclick="goto_home()">X</div>
+                <img class='m_top_menu larger left' id='m_home_tab' src="img/icon_logout.png" onclick="goto_home()">
                 <div class='m_top_menu' id='m_current_tracking_tab'
-                     onclick="openPage('m_current_tracking', this, 'red','m_modal','m_top_menu',m_tracking);">CURRENT
-                    TRACKING
+                     onclick="openPage('m_current_tracking', this, 'red','m_modal','m_top_menu',m_tracking);">
+                    CURRENT TRACKING
                 </div>
+
                 <div class='m_top_menu' id='m_reprint_labels_tab'
                      onclick="openPage('m_reprint_labels', this, 'red','m_modal','m_top_menu',reprint_comp_labels);">
-                    RE-PRINT LABELS
+                    <div class='center'>RE-PRINT LABELS</div>
                 </div>
                 <!--  div class='m_top_menu larger' id='m_search_tab'
                      onclick="openPage('m_search', this, 'red','m_modal','m_top_menu',goto_comp_search);">&#x1F50E
@@ -277,17 +298,25 @@
                 <!--  div class='m_top_menu larger' id='m_home_tab'  onclick="goto_home()">&#8962;</div -->
             </div>
             <div id='kitchen_barcode' class='manual_barcode'>
-            <input type="text" id="search" name='new_comp_desc'>
+                <input type="text" id="search" name='new_comp_desc' placeholder="Search">
+
                 <!--  input class='hidden' placeholder='Enter existing barcode' name='kitchen_manual_barcode' id='kitchen_manual_code'
                        onchange='manual_barcode_submit("kitchen_manual_barcode")' -->
             </div>
-            <div id='current_time_kitchen'>TIME</div>
-            <div class='m_modal' id='m_current_tracking'>CURRENT TRACKING</div>
-            <div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS</div>
 
+            <div class='m_modal' id='m_current_tracking'>CURRENT TRACKING</div>
+            <div class='m_modal hidden' id='m_reprint_labels'>RE-PRINT LABELS
+                <!--<div class='center'></div>-->
+                <!--<img  src="img/icon_barscan.svg" class="icon_barscan">-->
+                <!--<div class='center pad10 larger'>-->
+                    <!--Scan barcode-->
+                <!--</div>-->
+            </div>
             <div class='m_modal hidden' id='m_search'>
-                <div class='margin10'>SEARCH</div>
-                <div class='margin10'><input type="text" id="search1" name='new_comp_desc'>
+                <div class='m-10'>SEARCH</div>
+                <div class='m-10'><input type="text" id="search
+1" name='new_comp_desc'>
+
                     <div class='btns hidden' id='new_comp_btns'>
                         <button type='button' class='m_submit' onclick="new_component();">Add New</button>
                     </div>
@@ -297,14 +326,17 @@
     </div>
 
     <div class='mobile_main hidden' id='m_temp'>
-
-        <div class='m_close' onclick="goto_m_main();">&#x02A2F;</div>
-        <div id='chk_temp_pt_div'>CC</div>
+        <div class='topbar'>
+            <img class='m_close' src="img/icon_arrow.png" onclick="goto_m_main();">
+            <img class='m_home' src="img/icon_home.png" onclick="goto_m_main();">
+            <div id='chk_temp_pt_div'>CC</div>
+        </div>
         <div id='chk_temp_item_div'></div>
         <div id='chk_temp_item_time_div'>
             <div id='ms_1'>M1</div>
             <div id='ms_1_text'>1 hour remaining</div>
         </div>
+
         <div id='chk_temp_item_time_div2'>
             <div id='ms_2'>M1</div>
             <div id='ms_2_text'>REQUIRED</div>
@@ -313,10 +345,8 @@
 
         <!--  next four pages are for starting a new component at M1 -->
         <div class='m_modal2' id='m_temp_modal'>
-            <div class='m_label'>CHECK THE TEMPERATURE</div>
-            <div id='m1_temp_div' class='center red'></div>
+            <div id='m1_temp_div'></div>
             <div class='btns'>
-                <button type='button' class='m_submit' onclick="read_M1temp();">Check Now</button>
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
         </div>
@@ -330,58 +360,85 @@
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
         </div>
+
         <div class='m_modal2' id='m_temp_modal1a'>
             <div class='m_label'><span>INGREDIENT TEMP</span></div>
             <div class='center'></div>
             <div id='m1_temp_div_1a' class='temp_reading red'></div>
+            <div id='m2_temp_div_1b' class='temp_achieved center'></div>
             <div class='btns'>
+            	<!--  button type='button' class='m_submit' onclick="setup_force_M1();">FORCE M1 - Scan ID</button -->
                 <button type='button' class='m_submit' onclick="read_temp('M0');">Check Now</button>
+                <button type='button' class='m_btn' onclick="draw_ingredients();">RETURN</button>
+            </div>
+        </div>
+        <div class='m_modal2' id='m_temp_modal1b'>
+            <div class='m_label'><span>INGREDIENT TEMP</span></div>
+            <div class='center'></div>
+            <div id='m1_temp_div_2a' class='temp_reading red'></div>
+            <div id='m2_temp_div_2b' class='temp_achieved center'></div>
+            <div class='btns'>
+            	<button type='button' class='m_submit' onclick="setup_force_M1();">FORCE M1 - Scan ID</button>
+                <button type='button' class='m_submit' onclick="read_temp('M0');">Check Now</button>
+                <button type='button' class='m_btn' onclick="draw_ingredients();">RETURN</button>
+            </div>
+        </div>
+		<div class='m_modal2' id='m1_temp_modal_force_M1'>
+            <div id='force_M1_signoff_uid' class='center modal_head'></div>
+            <div class='center red authorised' id="last_item">Force M1</div>
+            <hr>
+            <div class='center grey' id="choose_ca">CHOOSE CORRECTIVE ACTION</div>
+            <hr>
+            <div class='btns'>
 
-                <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
+                <button type='button' class='m_submit' onclick="set_ingredient_temp();">QA Sign-Off
+                    Emergency
+                </button>
+                <button type='button' class='m_btn' onclick="set_ingredient_temp();">Client Request</button>
             </div>
         </div>
         <div class='m_modal2' id='m_temp_modal2'>
-            <div class='m_label'><span>TEMPERATURE</span></div>
+            <div class="center modal_head"><span class='temperature_label'>TEMPERATURE</span></div>
             <div id='m1_temp_div_2' class='temp_reading red'></div>
+            <div id='m1_temp_div_2a'></div>
             <div class='btns'>
-                <button type='button' class='m_submit' onclick='goto_m_main();'>Re-Cook</button>
-                <button type='button' class='m_btn'
-                        onclick="openPage('m_temp_modal', this, 'red','m_modal2','tabclass');">Re-Check
-                </button>
+                <button type='button' class='m_btn' onclick='goto_m_main();'>Re-Cook</button>
             </div>
         </div>
+
         <div class='m_modal2' id='m_temp_modal3'>
-            <div class='m_label'><span>TEMPERATURE</span></div>
+            <div class="center modal_head">
+                <div class='temperature_label'><span>TEMPERATURE</span></div>
+            </div>
 
             <div id='m1_temp_div_3' class='temp_reading'></div>
             <div id='m1_temp_div_chef' class='hidden'>
                 <!-- input name='m1_chef_id' onchange="set_user('m1_chef_id','m_temp_modal4',0);" --></div>
-            <div class='btns'>
-                <button type='button' onclick="set_barcode_mode('M1');" class='m_btn'>Scan Authorised Chef ID</button>
-                <!--  button type='button'  class='m_btn' <!-- onclick="set_user('m1_chef_id','m_temp_modal4',0);">Scan Authorised Chef ID</button -->
-
-            </div>
+            <img onclick="set_barcode_mode('M1');" src="img/icon_barscan.svg" class="icon_barscan">
+            <span class="scan_instruction">Scan Authorised Chef ID</span>
+            <!--  button type='button' class='m_btn' onclick="set_user('m1_chef_id','m_temp_modal4',0);">Scan Authorised Chef ID</button -->
         </div>
+
         <div class='m_modal2' id='m_temp_modal_LR'>
-
-
             <div id='m1_temp_div_LR_comp' class='LR_description center'></div>
-            <div id='m1_temp_div_LR_comp' class='center modal_head'>PICKED</div>
             <div id='m1_temp_div_chef_LR' class='hidden'><input name='m1_chef_id_LR' size=10></div>
-            <div class='btns'>
-                <!-- button type='button'  class='m_btn' onclick="set_user('m1_chef_id_LR','m_temp_modal4',0);">Scan Authorised Chef ID</button -->
-                <button type='button' class='m_btn'>Scan Authorised Chef ID</button>
-            </div>
+            <!-- button type='button'  class='m_btn' onclick="set_user('m1_chef_id_LR','m_temp_modal4',0);">Scan Authorised Chef ID</button -->
+            <img src="img/icon_barscan.svg" class="icon_barscan">
+            <span class="scan_instruction">Scan Authorised Chef ID</span>
         </div>
+
         <div class='m_modal2' id='m_temp_modal4'>
             <div id='m_temp_modal4a'>
                 <div class='center modal_head'><span>TEMPERATURE</span></div>
                 <div id='m1_temp_div_4' class='temp_reading'></div>
             </div>
+            <hr>
             <div id='m1_temp_div_5' class='centerpad modal_head'></div>
+            <hr>
             <div class='centerpad grey'>LABEL QUANTITY</div>
-            <div class='center'><input type='number' class='label_num' name='m1_label_qty' maxlength='3'
-                                       class='label_num'></div>
+            <div class='center'>
+                <input type='number' class='label_num' name='m1_label_qty' maxlength='3' value="1">
+            </div>
             <div class='btns'>
                 <button type='button' class='m_btn' onclick="start_component();">Print Labels</button>
             </div>
@@ -391,7 +448,8 @@
             <div class='center modal_head'><span>Reprint Labels</span></div>
             <div class='center' id='kitchen_reprint_qty_div'>
                 <div class='center grey'>LABEL QUANTITY</div>
-                <div class='center'><input class='label_num' type='number' name='m1_reprint_label_qty' maxlength='4'>
+                <div class='center'>
+                    <input class='label_num' type='number' name='m1_reprint_label_qty' maxlength='4'>
                 </div>
             </div>
             <div class='btns'>
@@ -400,61 +458,69 @@
         </div>
         <!--  next pages are for recording M2 and M3 -->
         <div class='m_modal2' id='m2_temp_modal'>
-            <div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
             <div id='m2_temp_div'><!--  input type='number' name='m2_temp' size=4 --></div>
+
             <div class='btns'>
-                <button type='button' class='m_submit' onclick="read_M2temp();">Check Now</button>
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
         </div>
         <div class='m_modal2' id='m2_temp_modal2'>
             <div class='center modal_head'>TEMPERATURE</div>
             <div id='m2_temp_div_2' class='temp_reading'></div>
-            <div id='m2_temp_div_2a' class='temp_achieved center'></div>
+            <div class="scan_group">
+                <div id='m2_temp_div_2a'></div>
+            </div>
             <div class='btns'>
-                <button type='button' class='m_submit' onclick='continue_chilling();	'>Continue Chilling</button>
-                <button type='button' class='m_submit' onclick="goto_m_main();">Re-Check</button>
+                <button type='button' class='m_submit' onclick='continue_chilling();'>Continue Chilling</button>
                 <button type='button' class='m_btn' onclick="setup_force_M3();">Force M3 - Scan ID</button>
             </div>
         </div>
 
         <div class='m_modal2' id='m2_temp_modal_force_M3'>
             <div id='force_M3_signoff_uid' class='center modal_head'></div>
-            <div class='temp_achieved red center'>Force M3</div>
-            <div class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
+            <div class='center red authorised' id="last_item">Force M3</div>
+            <hr>
+            <div class='center grey' id="choose_ca">CHOOSE CORRECTIVE ACTION</div>
+            <hr>
             <div class='btns'>
-
                 <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,11);">QA Sign-Off
                     Emergency
                 </button>
-                <button type='button' class='m_btn' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
+                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_overdue_M2A'><!-- Screen 3.9 or maybe 6.9.1 -->
             <div class='center modal_head'>TEMPERATURE</div>
             <div id='m2_temp_overdue_div_2' class='temp_reading'></div>
-            <div id='m2_temp_overdue_div_2a' class='temp_achieved center red'>CORRECTIVE ACTION REQUIRED</div>
+            <!--  TODO -->
+            <!--    <button type='button' class='m_submit' onclick="read_M2temp();">Re-Check</button>
+            <img class='icon_barscan' id='scan_ca' src="img/icon_barscan.svg" onclick="set_barcode_mode('KQA_override');">
+            <span class="scan_instruction">Scan Authorised Chef ID</span> -->
+
             <div class='btns'>
-                <button type='button' class='m_submit' onclick="read_M2temp();">Re-Check</button><!--  TODO -->
-                <button type='button' class='m_btn' onclick="set_barcode_mode('KQA_override');">Scan Authorised Chef
-                    ID
-                </button>
+                <div id='m2_temp_overdue_div_2a' class='temp_achieved center'>FOR CORRECTIVE ACTION</div>
+                <button type='button' class='m_btn' onclick="set_barcode_mode('KQA_override');">Scan Authorised Chef ID </button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_overdue_M2B'><!-- Screen 3.10  -->
             <div id='force_M2_overdue_uid' class='center modal_head'></div>
             <div id='m2_temp_overdue_M2B_2' class='temp_reading red'></div>
-            <div id='m2_temp_overdue_M2B_2a' class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
-
+            <div class="red center">Overdue</div>
+            <hr>
+            <div id='m2_temp_overdue_M2B_2a' class='center grey'>CHOOSE CORRECTIVE ACTION</div>
+            <hr>
             <div class='btns'>
                 <button type='button' class='m_submit' onclick="comp_milestone(last_temp,false,4);">Evacuate Blass
                     Chiller<BR>Hard Chill
                 </button><!--  TODO -->
-                <button type='button' class='m_btn' onclick="comp_milestone(last_temp,false,5);">Decant Product into
+                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,false,5);">Decant Product into
                     Shallow Trays<br>Continue Chilling
                 </button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_overdue_A'>
             <div class='center modal_head'>TEMPERATURE</div>
             <div id='m2_temp_div_overdue_2' class='temp_reading'></div>
@@ -466,28 +532,33 @@
                 </button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_overdue_B'>
             <div id='force_M3_overdue_uid' class='center modal_head'></div>
             <div id='m2_temp_overdue_B_temp' class='temp_reading center red'></div>
             <div class='red center'>Overdue</div>
-            <div class='temp_achieved center'>CHOOSE CORRECTIVE ACTION</div>
+            <hr>
+            <div class='center grey' id='M3_ca'>CHOOSE CORRECTIVE ACTION</div>
+            <hr>
             <div class='btns'>
 
                 <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,11);">QA Sign-Off
                     Emergency
                 </button>
-                <button type='button' class='m_btn' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
+                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_modal3'>
             <div class='center modal_head'><span>TEMPERATURE</span></div>
             <div id='m2_temp_div_3' class='temp_reading'></div>
-            <div id='m2_temp_div_3a' class='temp_achieved center'></div>
+            <div id='m2_temp_div_3a' class='red center'></div>
+
             <div class='btns'>
-                <button type='button' class='m_btn' onclick="goto_m_main();">Re-Check</button>
                 <button type='button' class='m_btn' onclick="goto_m_main();">Move Product to Coolroom</button>
             </div>
         </div>
+
         <div class='m_modal2' id='m2_temp_modal4'>
             <div class='center modal_head'><span>TEMPERATURE</span></div>
             <div id='m2_temp_div_4' class='temp_reading red'></div>
@@ -502,9 +573,13 @@
     <!-- end of kitchen temp pages -->
     <!--  plating -->
     <div class='mobile_main hidden' id='plating_temp_div'>
-        <div class='m_close' onclick="goto_m_main();">&#x02A2F;</div>
-
-        <div class='chk_temp_item' id='chk_plat_temp_item_div'></div>
+        <div class='m_modal_shadow'></div>
+        <img class="bg-image" src="img/qac_mobile.png">
+        <div class='topbar'>
+            <img class='m_close' src="img/icon_arrow.png" onclick="goto_m_main();">
+            <img class='m_home' src="img/icon_home.png" onclick="goto_m_main();">
+            <div class='chk_temp_item' id='chk_plat_temp_item_div'></div>
+        </div>
         <div class='m_modal2' id='m2_sl_plating'> <!-- plating 3.2 & 3.3 -->
             <div class='center modal_head'><span>SHELF LIFE</span></div>
             <div id='m2_pt_sl_div' class='red'>FAIL</div>
@@ -525,20 +600,20 @@
         </div>
     </div>
     <div class='mobile_main hidden' id='plating_div'>
+        <div class='m_modal_shadow'></div>
+        <img class="bg-image" src="img/qac_mobile.png">
         <div class='m_main'>
             <div class='m_top_menu_container'>
-                <div class='m_top_menu larger' id='plating_home_tab' onclick="goto_home()">X</div>
+                <img class='m_top_menu larger ' id='plating_home_tab' src="img/icon_logout.png" onclick="goto_home()">
                 <div class='m_top_menu' id='m_plating_team_tab' onclick="goto_plating_teams();">TEAMS</div>
                 <div class='m_top_menu' id='m_plating_tab' onclick="goto_plating()">PLATING SCHEDULE</div>
-
 
             </div>
             <div id='plating_comment_div'></div>
             <div class='m_modal' id='m_sel_team'>
-                <div class='m_label'><span>Select Plating Team</span></div>
+                <div class='m_label'><span>ASSIGN Q-PACK TO</span></div>
                 <div id='plating_teams_list' class='center'></div>
                 <div class='btns'>
-
                     <button type='button' class='m_btn' onclick="select_plating_team();">Continue</button>
                 </div>
             </div>
@@ -548,21 +623,26 @@
                 <div class='center' id='sel_team_member'></div>
                 <div class='btns'>
                     <button type='button' class='m_btn' onclick="add_team_member(-1);">Add Team Member</button>
-                    <button type='button' class='m_btn' onclick="save_plating_team();">Continue</button>
+                    <button type='button' class='m_btn' onclick="save_plating_team();">Team Complete</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class='mobile_main hidden' id='m_plating'>
 
-        <div class='m_close' onclick="goto_plating_teams();">&#x02A2F;</div>
+    <div class='mobile_main hidden' id='m_plating'>
+        <div class='m_modal_shadow'></div>
+        <img class="bg-image" src="img/qac_mobile.png">
+        <div class='topbar' id="topbar_plating">
+            <img class='m_close' src="img/icon_arrow.png" onclick="goto_plating_teams();">
+            <img class='m_home' src="img/icon_home.png" onclick="goto_plating_teams();">
+        </div>
         <div id='active_plating_team_head'></div>
         <div id='plating_barcode' class='manual_barcode hidden'>
             <input placeholder='Enter existing barcode' name='plating_manual_barcode' id='plating_manual_code'
                    onchange='manual_barcode_submit("plating_manual_barcode")'>
         </div>
-        <div class='m_modal hidden' id='m_plating_sched'>
 
+        <div class='m_modal hidden' id='m_plating_sched'>
             <div id='plating_sched_list'></div>
             <div class='btns' id='plating_return'>
                 <button type='button' class='m_btn' onclick="goto_plating();">Return</button>
@@ -585,10 +665,6 @@
                 </button>
             </div>
             <div class='btns' id='plating_batch_change_btns'>
-                <button type='button' class='m_submit' onclick="set_barcode_mode('plating_batch_change');">SCAN
-                    BARCODE
-                </button>
-                <button type='button' class='m_btn' onclick="goto_plating();">Return</button>
             </div>
         </div>
 
@@ -605,7 +681,7 @@
         </div>
         <div class='m_modal hidden' id='m_plating_temp_decant'>
             <div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
-            <div id='chk_plating_item_temp_divA' class='margin10'></div>
+            <div id='chk_plating_item_temp_divA' class='m-10'></div>
             <div class='btns'>
                 <button type='button' class='m_submit' onclick="show('popup-labels');">Decant</button>
                 <button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
@@ -614,7 +690,7 @@
         </div>
         <div class='m_modal hidden' id='m_plating_options'>
             <div class='center modal_head'><span>PLATING OPTIONS</span></div>
-            <div id='plating_options_item_div' class='center orange margin10'></div>
+            <div id='plating_options_item_div' class='center orange m-10'></div>
             <div class='btns'>
                 <button type='button' class='m_submit' onclick="plating_batch_change();">Batch Change</button>
                 <button type='button' class='m_submit' onclick="reprint_plating_labels();">Re-Print Labels</button>
@@ -640,15 +716,16 @@
     -->
     <!--  end of plating -->
     <div class='mobile_main' id='login_div'>
+        <img class="bg-image" src="img/qac_mobile.png">
         <div id='status' class='hidden' onclick='qpack_start();'>status</div>
 
         <div id='login_div2' class='m_modal2'>
-            <input name='email' placeholder='email' type='text' class='input'
+            <input name='email' placeholder='Email' type='text' class='input'
                    autocapitalize="off"
                    autocomplete="off"
                    spellcheck="false"
                    autocorrect="off">
-            <input name='password' placeholder='password' type='text' class='input'
+            <input name='password' placeholder='Password' type='text' class='input'
                    autocapitalize="off"
                    autocomplete="off"
                    spellcheck="false"
@@ -664,9 +741,7 @@
                 <div id='login_fail' class='hidden'></div>
             </div>
         </div>
-
     </div>
-
 </div>
 
 <div class='popup' id='manual_entry'>

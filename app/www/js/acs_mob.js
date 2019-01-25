@@ -130,7 +130,6 @@ function ioio_start()
 
 function popup_manual_temp()
 {
-	
 	document.getElementsByName('manual_temp')[0].value = '';
 	temp_readings = 0;
 	document.getElementById('manual_entry').style.display = 'block';
@@ -221,6 +220,10 @@ function process_barcode(s)
 			set_user('m1_chef_id_LR','m_temp_modal4',uid);
 			barcode_mode = null;
 		}
+		else if (barcode_mode == 'force_M1'  && check_user(user.supervisor)) {
+			force_M1(uid);
+			barcode_mode = null;
+		}
 		else if (barcode_mode == 'force_M3'  && check_user(user.supervisor)) {
 			force_M3(uid);
 			barcode_mode = null;
@@ -279,11 +282,13 @@ function process_barcode(s)
 
 function set_ingredient_temp(s)
 {
+	if (s == null) s = last_temp;
 	var i = new_comp['read_temp'];
 	console.log('set ingredient temp for ',i,s,new_comp['selected_ingredients'][i]['target']);
 	
 	if (parseInt(s * 10) > parseInt(new_comp['selected_ingredients'][i]['target']) * 10) {
-		document.getElementById('m1_temp_div_1a').innerHTML = parseInt(s * 10) / 10 + "&#176C";
+		document.getElementById('m1_temp_div_2a').innerHTML = parseInt(s * 10) / 10 + "&#176C";
+		openPage('m_temp_modal1b', this, 'red','m_modal2','tabclass');
 		console.log("Too high!!!");
 		return;
 	}
@@ -311,7 +316,11 @@ function check_ingredient(cid)
         	console.log(result);
  
             var scanned_ingredient = JSON.parse(result);
-            console.log("got component " + scanned_ingredient[0].description);
+            console.log("got component " + scanned_ingredient[0].description,' expired:' ,scanned_ingredient[0].expired);
+            if (scanned_ingredient[0].expired == 1) {
+				document.getElementById('m1_temp_div_1_error').innerHTML = 'EXPIRED';
+				return;
+			}
             var valid_ingredient = false;
             for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
     			var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
@@ -377,7 +386,6 @@ function goto_home()
 
 function goto_plating_teams()
 {
-	
 	load_menu_items();
 	load_plating_items();
 	mode = 'plating';
@@ -415,48 +423,61 @@ function show_plating_items(team_id,tab)
 	for (var i = 0; i < menu_items.length; i++) {
 		if (menu_items[i]['plating_team'] == team_id) {
 			if (item_count == 0 && team_id != active_plating_team) {
+				// create row
 				var tr = document.createElement('tr');
 				tr.className = 'plating_tab';
+				// create header with team name
 				var td = document.createElement('th');
 				td.innerHTML = margin('TEAM');
 				tr.appendChild(td);
 				td = document.createElement('th');
 				td.innerHTML = team_id;
 				tr.appendChild(td);
+				td = document.createElement('th');
+				td.innerHTML = ' ';
+				tr.appendChild(td);
 				tab.appendChild(tr);
 			}
 			item_count ++;
-			
+
+			// create item entry
 			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
 			console.log(plating_item);
-			tr = document.createElement('tr');
-			var td = document.createElement('td');
-			td.innerHTML = margin(menu_items[i]['code']);
-			tr.appendChild(td);
-			td = document.createElement('td');
-			var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>" + menu_items[i]['dish_name']; + "</div>"
-			if (plating_item && plating_item.time_started) {  // check plating_item.checked
-				div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>" + menu_items[i]['dish_name']; + "</div>";
-				if (plating_item.time_completed) {
-					div = "<div class='red'>" + menu_items[i]['dish_name']; + "</div>";
-				}
-			}
+			if (parseInt(menu_items[i]['current_shift']) > 0) {
+				tr = document.createElement('tr');
+				var td = document.createElement('td');
+				td.innerHTML = menu_items[i]['code'];
 
-			td.innerHTML = margin(div);
-			tr.appendChild(td);
-			td = document.createElement('td');
-			//var shift = 's' + menu_items[i]['current_shift'];
-			//console.log('shift ',shift);
-			//console.log(menu_items[i]);
-			td.innerHTML = margin(menu_items[i]['current_shift']);
-			tr.appendChild(td);
-			tab.appendChild(tr);
+				tr.appendChild(td);
+				td = document.createElement('td');
+
+				//figure out color class and link
+				var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>";
+				if (plating_item && plating_item.time_started) {  // check plating_item.checked
+					div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>";
+					if (plating_item.time_completed) {
+						div = "<div class='red'>";
+					}
+				}
+				//finish up
+				div += menu_items[i]['dish_name'] + "</div>";
+
+				td.innerHTML = div;
+				tr.appendChild(td);
+				td = document.createElement('td');
+				//var shift = 's' + menu_items[i]['current_shift'];
+				//console.log('shift ',shift);
+				//console.log(menu_items[i]);
+				td.innerHTML = menu_items[i]['current_shift'];
+				tr.appendChild(td);
+				tab.appendChild(tr);
+			}
 		}
 	}
 }
+
 function goto_plating()
 {
-	
 	// ???? load_menu_items();
 	show('plating_return');
 	hide('plating_print_labels');
@@ -471,10 +492,11 @@ function goto_plating()
 	t.innerHTML = '';
 	var tab = document.createElement('table');
 	tab.className = 'plating_tab';
+
 	var tr = document.createElement('tr');
-	tr.className = 'plating_tab';
+
 	var th = document.createElement('th');
-	th.innerHTML = margin('CODE');
+	th.innerHTML = 'CODE';
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML = 'PRODUCT NAME';
@@ -482,14 +504,15 @@ function goto_plating()
 	th = document.createElement('th');
 	th.innerHTML = 'QTY';
 	tr.appendChild(th);
+
 	tab.appendChild(tr);
 	show_plating_items(active_plating_team,tab);
 	
 	// now list all items for other plating teams
 	for (var pti = 1; pti < plating_teams.length; pti++ ) {
-		if (pti != active_plating_team)
+		if (pti != active_plating_team) {
 			show_plating_items(pti,tab);
-		
+		}
 	}
 	t.appendChild(tab);
 }
@@ -516,14 +539,13 @@ function calc_time_remaining(item)
 	var event_time = new Date(item['time_started']);
 	console.log("calc_time_remaining -" + event_time + " - " + item['time_started']);
 	console.log(item);
-	var remaining = 0;
 	var now = new Date();
 	var now_ms = now.getTime();
 	var event_ms = event_time.getTime(); // time in millisecs
 	
 	var due_min = get_preptype_val(plating_prep_type,'M2_time_minutes');
 	var due_ms = event_ms + due_min * 60 * 1000;  			
-	remaining = (due_ms - now_ms) / (60 * 1000);
+	var remaining = (due_ms - now_ms) / (60 * 1000);
 	console.log("M2_due_min M1_ms",due_min,event_ms,due_ms,format_minutes(remaining));
 	return(format_minutes(remaining));
 }
@@ -943,6 +965,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 	active_menu_item_id = menu_item_id; // global - so we can come back to it
 	// var div = document.getElementById('menu_item_components_div');
 	plating_item = find_plating_item(menu_item_id);
+	console.log('do_show_menu_item_components');
 	console.log(plating_item);
 	if (plating_item == null) { // 
 		console.log("ERROR do_show_menu_item_components");
@@ -955,7 +978,8 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 	tab.className = 'item_table';
 	var tr = document.createElement('tr');
 	var th = document.createElement('th');
-	th.innerHTML= margin(plating_item.dish_name + "<br>" + plating_item.code);
+	th.innerHTML= margin(plating_item.dish_name + "<br>" + plating_item.code + "<BR>Required: " + plating_item.current_shift);
+	document.getElementById('pt_description_labels').innerHTML = plating_item.current_shift;
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML=margin('S/L');
@@ -992,7 +1016,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 				td.id = 'plating_item_checked_' + i;
 				td.innerHTML = '-';
 				if (items[i].component_id) {
-					td.innerHTML = '&#x2713;';
+					td.innerHTML = '<image src="img/icon_pass.svg">';
 				}
 				else {
 					all_good = false;
@@ -1074,7 +1098,6 @@ function new_component() {
 
         success: function(result) { 
         	load_comps(component_selected);
-        	// component_selected();
         },
         fail: (function (result) {
             console.log("new _component fail ",result);
@@ -1084,45 +1107,53 @@ function new_component() {
 
 function show_dock_component(cid)
 {
-	show('dock_display_comp_div');
-	var div = document.getElementById('dock_display_comp_div1');
-	div.innerHTML = '';
+	// show('dock_display_comp_div');
+	//
+	// var div = document.getElementById('dock_display_comp_div1');
+	// div.innerHTML = '';
+
+	// TODO check if necessary
 	new_comp = get_component_by_id(cid);
 	if (!new_comp) {
 		alert("ERROR");
 		return;
 	}
 	console.log(new_comp);
-	var flds = ['description','supplier','product','spec','shelf_life_days'];
-	for (var i =0; i < flds.length; i++) {
-		var d = document.createElement('div');
-		d.className = 'smaller';
-		d.innerHTML = flds[i] + ":";
-		div.appendChild(d);
-		var d = document.createElement('div');
-		d.className = 'small';
-		if (new_comp[flds[i]] == null) {
-			d.innerHTML = "NOT SET";
-		}
-		else {
-			d.innerHTML = new_comp[flds[i]];
-		}
-		
-		div.appendChild(d);
-	}
-	// show preptype details
-	var ptid = new_comp['prep_type'];
 
-	var d = document.createElement('div');
-	d.className = 'smaller';
-	d.innerHTML = "Prep Type:";
-	div.appendChild(d);
-	var d = document.createElement('div');
-	d.className = 'small';
-	d.innerHTML = get_preptype_val(ptid,'code');
-	
-	div.appendChild(d);
-	show('dock_comp_selected_btns');
+	// TODO take some to M1?
+	// var flds = ['description','supplier','product','spec','shelf_life_days'];
+	// for (var i =0; i < flds.length; i++) {
+	// 	var d = document.createElement('div');
+	// 	d.className = 'smaller';
+	// 	d.innerHTML = flds[i] + ":";
+	// 	div.appendChild(d);
+	// 	var d = document.createElement('div');
+	// 	d.className = 'small';
+	// 	if (new_comp[flds[i]] == null) {
+	// 		d.innerHTML = "NOT SET";
+	// 	}
+	// 	else {
+	// 		d.innerHTML = new_comp[flds[i]];
+	// 	}
+	//
+	// 	div.appendChild(d);
+	// }
+
+	// show preptype details
+	// var ptid = new_comp['prep_type'];
+	//
+	// var d = document.createElement('div');
+	// d.className = 'smaller';
+	// d.innerHTML = "Prep Type:";
+	// div.appendChild(d);
+	// var d = document.createElement('div');
+	// d.className = 'small';
+	// d.innerHTML = get_preptype_val(ptid,'code');
+	//
+	// div.appendChild(d);
+	// show('dock_comp_selected_btns');
+
+	dock_read_M1temp()
 }
 
 function show_dock()
@@ -1139,12 +1170,16 @@ function show_dock()
 	for (var i = 0; i < comps.length;i++) {
 		if (comps[i].high_risk == 1) {
 			var tr = document.createElement('tr');
+
+			var func = '<div onclick="show_dock_component('+comps[i]['id']+');" >';
+
 			var td = document.createElement('td');
-			var innerHTML = "<div onclick='show_dock_component(" + comps[i]['id'] + ");'>" + comps[i]['description'] + "</div>";
-			td.innerHTML = innerHTML;
+			td.innerHTML = func+comps[i]['description']+'</div>';
 			tr.appendChild(td);
+
 			var td = document.createElement('td');
-			td.innerHTML = comps[i]['supplier'];
+			td.innerHTML = func+comps[i]['supplier']+'</div>';
+
 			comps[i].label = comps[i]['supplier'] + ": " + comps[i]['description'];
 			
 			tr.appendChild(td);
@@ -1188,25 +1223,30 @@ function goto_dock()
 {
 	load_comps(show_dock);
 }
+
 function goto_m_main(new_mode)
 {
 	if (new_mode) mode = new_mode;
-	if (mode == 'kitchen') {
-		openPage('mm2', document.getElementById('m_current_tracking_tab'), 'red','mobile_main','tabclass');
-		m_tracking();
-	}
-	else if (mode == 'dock') {
-		openPage('dock_main', document.getElementById('m_plating_team_tab'), 'red','mobile_main','tabclass');
-		
-	}
-	else {
-		goto_plating();
+
+	$('#search').val('');
+	$('#search').focus(function(){load_comps();});
+	switch (mode) {
+		case 'kitchen':
+			openPage('mm2', document.getElementById('m_current_tracking_tab'), 'red','mobile_main','tabclass');
+			m_tracking();
+			break;
+		case 'dock':
+			openPage('dock_main', document.getElementById('m_plating_team_tab'), 'red','mobile_main','tabclass');
+			break;
+		default:
+			goto_plating();
+			break;
 	}
 }
 
 function get_preptype_val(id,fld)
 {
-	for (var i = 0; i < preptypes.length; i++) {
+	for (let i = 0; i < preptypes.length; i++) {
 		if (preptypes[i].id == id) {
 			return(preptypes[i][fld]);
 		}
@@ -1221,12 +1261,12 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
 	document.getElementById('m1_temp_div_1a').innerHTML = '';
 	div = document.getElementById('m1_temp_div_1');
-	var d = "<div class='margin10'><table width='100%'>";
+	var d = "<div class='m-10'><table width='100%'>";
 	d += "<tr><td>Description</td><td>ID</td><td>Temperature</td></tr>";
 	var prep_type_id = new_comp['prep_type'];
 	console.log(' draw_ingredients prep_type_id',prep_type_id);
 	document.getElementById('ms_2_target').innerHTML = '';
-	;
+
 	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
 		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
 		d += "<tr><td>" + sub['description'] + '</td>';
@@ -1308,8 +1348,7 @@ function component_selected(id)
 		document.getElementById('ms_2_text').innerHTML = ' ';
 		document.getElementById('ms_2_target').innerHTML = "";
 		document.getElementById('chk_temp_item_div').innerHTML = '';
-	}
-	else {
+	} else {
 		set_barcode_mode("M1");
 		set_temp_mode("M1");
 		openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
@@ -1318,15 +1357,11 @@ function component_selected(id)
 		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
 		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 		temp_probe = false;
-		if (new_comp['probe_type'] && new_comp['probe_type'] == 2) {
-			console.log('use probe');
-			temp_probe = true;
-			document.getElementById('m1_temp_div').innerHTML = 'USE PROBE';
-		}
-		else {
-			document.getElementById('m1_temp_div').innerHTML = 'USE IR SENSOR';
-		}
+
+		let temp_div = document.getElementById('m1_temp_div');
+		checkTempDiv(temp_div,new_comp,"read_M1temp();");
 	}
+
 	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
 	// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 	document.getElementById('ms_1').innerHTML = '';
@@ -1334,6 +1369,43 @@ function component_selected(id)
 	
 
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
+}
+
+function checkTempDiv(anchor,comp,onclick,recheck = false) {
+	clearChildren(anchor);
+
+	appendSensorImage(anchor,comp,onclick);
+
+	let div = document.createElement('div');
+	let text;
+	if(recheck) {
+		text = "<b> RECHECK POSSIBLE </b></br>";
+	}else {
+		text = "<b> CHECK THE TEMPERATURE </b></br>";
+
+		text += "USE ";
+		console.log("checkTempDiv: component probe type is:"+comp['probe_type']);
+		if (comp['probe_type'] && comp['probe_type'] == 2) {
+			text += "PROBE";
+		} else {
+			text += "IR SENSOR";
+		}
+	}
+	div.innerHTML = text;
+	div.className = "center";
+	div.id = "temp_instruction";
+	anchor.appendChild(div);
+}
+
+function appendSensorImage(anchor,comp,onclick){
+	let sensor;
+	if (comp['probe_type'] && comp['probe_type'] == 2) {
+		sensor=iconProbe();
+	} else {
+		sensor=iconIR();
+	}
+	sensor.setAttribute("onclick",onclick);
+	anchor.appendChild(sensor);
 }
 
 function dock_read_M1temp(callback)
@@ -1360,11 +1432,13 @@ function read_M2temp(callback){
 	document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M2');
 }
+
 function read_pt_M2temp(callback){
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
 	document.getElementById('m1_temp_div').innerHTML = '';
 	read_temp('M2_plating');
 }
+
 function read_plating_M1temp(callback){
 	
 	// document.getElementById('m1_temp_div').innerHTML = '';
@@ -1395,7 +1469,7 @@ function check_temp_m1_dock(t)
 			alert("incorrect prep type");
 		}
 		else { 
-			if (parseInt(t) > parseInt(M1_temp_target)) {
+			if (parseInt(t * 10 ) > parseInt(M1_temp_target * 10)) { // round to one decimal place
 				console.log("DOCK M1 temp too high");
 				openPage('dock_m_temp_modal_high', this, 'red','m_modal','tabclass');
 			}
@@ -1450,28 +1524,43 @@ function check_temp(t) // start a new component
 	var prep_type_id = new_comp['prep_type'];
 	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
 	var M1_temp_sign = get_preptype_val(prep_type_id,'M1_temp_above');
-	// 
-	document.getElementById('m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
-	document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
-	document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
+	//
+
+	let m1_temp_div_2 = document.getElementById('m1_temp_div_2');
+	m1_temp_div_2.innerHTML=parseInt(t) + "&#176C";
+	document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C";
+	document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C";
+
+	let m1_temp_div_2a = document.getElementById('m1_temp_div_2a');
+
 	console.log("check temp",t,M1_temp_target);
+
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {
 			if (parseInt(t) < parseInt(M1_temp_target)) {
 				console.log("M1 temp too low");
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
-			}
-			else {
+				checkTempDiv(
+					m1_temp_div_2a,
+					new_comp,
+					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass')",
+					true
+				);
+			} else {
 				set_barcode_mode("M1");
 				openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			}
-		}
-		else {
+		} else {
 			if (parseInt(t) > parseInt(M1_temp_target)) {
 				console.log("M1 temp too high");
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
-			}
-			else {
+				checkTempDiv(
+					m1_temp_div_2a,
+					new_comp,
+					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass')",
+					true
+				);
+			} else {
 				set_barcode_mode("M1");
 				openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			}
@@ -1503,9 +1592,37 @@ function dock_start_component()
 	start_component(true);
 }
 
-function setup_force_M3() // 
+function setup_force_M1() //
 {
-	document.getElementById('m2_temp_div_2a').innerHTML = 'SCAN AUTHORISED ID';
+	document.getElementById('m2_temp_div_2b').innerHTML = 'SCAN AUTHORISED ID';
+	set_barcode_mode('force_M1');
+}
+
+function force_M1(uid)
+{
+	console.log('force_M1');
+	var i = new_comp['read_temp'];
+	new_comp['selected_ingredients'][i]['temp'] = last_temp;
+	new_comp.force_M1_uid = uid;
+	if (draw_ingredients()) {
+		// set_barcode_mode('scan_ingredients');
+		// save ingredient - new_comp.php
+		start_component(false,true);
+	}
+	else {
+		set_barcode_mode('scan_ingredients');
+	}
+	console.log(active_comp);
+	new_comp.force_M1_uid = uid;
+	new_comp.force_M1_temp = last_temp;
+
+
+}
+
+function setup_force_M3() //
+{
+	document.getElementById('m2_temp_div_2a').innerHTML = '<img src="img/icon_barscan.svg"\n' +
+		'                     class="icon_barscan"><span class="scan_instruction"> SCAN AUTHORISED ID </span>';
 	set_barcode_mode('force_M3');
 }
 function force_M3(uid)
@@ -1560,7 +1677,7 @@ function show_temp(t)
 	console.log('show_temp',t);
     tdiv = document.getElementsByClassName('temp_reading');
     for (i = 0; i < tdiv.length; i++) {
-    	console.log("found div ",tdiv[i].id);
+    // 	console.log("found div ",tdiv[i].id);
     	try {
     		tdiv[i].innerHTML= parseInt(t * 10) / 10 + "&#176C";
     	}
@@ -1586,7 +1703,7 @@ function start_component(dock)
 	}
 	var component = new Object();
 	component.description = new_comp['description']; // simplifies display
-	active_comp = copy_object(new_comp);
+	// active_comp = copy_object(new_comp);
 	component.comp_id = new_comp['id'];
 	component.M1_chef_id = new_comp['M1_chef_id'];
 	component.prep_type = new_comp['prep_type'];
@@ -1611,8 +1728,11 @@ function start_component(dock)
 	}
 	if (dock) {
 		
-		component.M1_chef_id = user_id;
+		component.M1_chef_id = get_user_id();
+		console.log('set M1_chef_id to ',component.M1_chef_id);
+
 	}
+	active_comp = component;
 	var data =  {data: JSON.stringify(component)};
     console.log("start_component Sent Off: ", data);
     var qty_input = (dock)?'dock_m1_label_qty':'m1_label_qty';
@@ -1625,11 +1745,13 @@ function start_component(dock)
         success: function(result) { // need to get the id of the new component back to print labels
             console.log("start_component result ",result);
             var comp = JSON.parse(result);
+            // active_comp = comp;
             console.log("start_component id =  ",comp.id);
             var qty = document.getElementsByName(qty_input)[0].value;
             active_comp.id = comp.id;
             active_comp.expiry_date = comp.expiry_date;
             active_comp.M1_time = comp.M1_time;
+           // active_comp.M1_chef_id = comp.M1_chef_id;
             print_component_labels(qty);
             document.getElementsByName(qty_input)[0].value = 1;
             console.log('comp.dock = ',comp.dock);
@@ -1798,68 +1920,79 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			active_comp.milestone = 'M3';
 		} 
 		console.log('check_temp_m2 target temp',temp_target,t,active_comp.milestone);
-/*		document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
-		document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C"
-		document.getElementById('m2_temp_div_2').innerHTML=parseInt(t) + "&#176C"
-		document.getElementById('m2_temp_div_3').innerHTML=parseInt(t) + "&#176C"
-	//	document.getElementById('dock_m1_temp_div_3').innerHTML= parseInt(t * 10) / 10 + "&#176C";
-		document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C"; */
+
+		let m2_temp_div_2a = document.getElementById('m2_temp_div_2a');
+		let m2_temp_div_3a = document.getElementById('m2_temp_div_3a');
+
+		clearChildren(m2_temp_div_2a);
+		clearChildren(m2_temp_div_3a);
+
 		if (active_comp.milestone == 'M1' && parseInt(t) > parseInt(temp_target)) {
 			set_barcode_mode('M1');
-			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " achieved";
-			document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " achieved";
+			m2_temp_div_2a.innerHTML= active_comp.milestone + " achieved";
+			m2_temp_div_3a.innerHTML= active_comp.milestone + " achieved";
 			active_comp['M1_temp'] = t;
 			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			return;
 			// comp_milestone(t);
 		}
 		if (parseInt(t) < parseInt(temp_target)) {
-			console.log("check M3");
+			console.log("check M2");
 			temp_target = get_preptype_val(prep_type_id,'M3_temp');
+			console.log('M3 temp target = ',temp_target);
 			if (active_comp.milestone ==  'M3') {
-				document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " achieved";
+				//if M3 achieved
+				// milestone_achieved_box(m2_temp_div_3a,"M3");
 				active_comp.milestone_ok = true;
 				
-				if (active_comp.remaining > 0) comp_milestone(t);
-			}
-			if (active_comp.milestone ==  'M2' && parseInt(t) < parseInt(temp_target)) {
-				console.log("M3 achieved");
+				if (active_comp.remaining > 0) {
+				    comp_milestone(t);
+                }
+			} //else
+			if (active_comp.milestone ==  'M2' && temp_target != null && parseInt(t) < parseInt(temp_target)) {
+				console.log("M2 achieved");
 				active_comp.milestone = 'M3';
 				active_comp['M2_temp'] = t;
 				active_comp['M3_temp'] = t;
 				active_comp['M3_time'] = 'now';
 				active_comp['M2_time'] = 'now';
-				if (active_comp.remaining > 0) comp_milestone(t);
+
+				if (active_comp.remaining > 0) {
+					comp_milestone(t);
+				}
 			}
-			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " achieved";
-			document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " achieved";
-		 	// if (active_comp.remaining > 0) comp_milestone(t);
+            if (active_comp.milestone ==  'M2' && temp_target == null) { // no M3 so component finished
+                active_comp.finished = 'true';
+                comp_milestone(t);
+            }
+			//if M2 achieved
+			milestone_achieved_box(m2_temp_div_2a,"M2");//add if direct skip M1 to M3
+			milestone_achieved_box(m2_temp_div_3a,"M3");
+
+			// if (active_comp.remaining > 0) comp_milestone(t);
 			active_comp.milestone_ok = true;
-			
-		}
-		else {
+		} else {
 			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			// document.getElementById('m2_temp_div_2a').innerHTML= milestone + "";
-			document.getElementById('m2_temp_div_2a').innerHTML= active_comp.milestone + " not achieved";
-			document.getElementById('m2_temp_div_3a').innerHTML= active_comp.milestone + " not achieved";
+
 			document.getElementById('m2_temp_div_2').innerHTML= "<div class='red'>" + parseInt(t) + "&#176C</div>";
 			
 		}
+
 		if (active_comp['M1_time'].length < 1) {
 			openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 		}
 		else if (active_comp.remaining > 0 ) {
 			openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
-		}
-		else {
+			checkTempDiv(document.getElementById('m2_temp_div_2a'),active_comp,"goto_m_main();",true);
+		} else {
 			
 			console.log("overdue - QA");
 			set_barcode_mode('KQA_override');
 			if (active_comp['M2_time'].length > 1) {
 				document.getElementById('m2_temp_div_overdue_2').innerHTML = "<div class='red'>" + parseInt(t) + "&#176C</div>";
 				openPage('m2_temp_overdue_A', this, 'red','m_modal2','tabclass');
-			}
-			else {
+			} else {
 				openPage('m2_temp_overdue_M2A', this, 'red','m_modal2','tabclass');
 			}
 			
@@ -1868,6 +2001,33 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 	
 }
 
+function clearChildren(elem){
+	while (elem.lastChild) {
+		elem.removeChild(elem.lastChild);
+	}
+}
+
+function milestone_achieved_box(anchor, milestone){
+	anchor.appendChild(document.createElement('hr'));
+
+	let div = document.createElement('div');
+	div.className = 'milestone_achieved';
+
+	if(milestone == 'M2') {
+		div.appendChild(iconM2());
+	} else {
+		div.appendChild(iconM3());
+	}
+
+	let txtdiv = document.createElement('div');
+	txtdiv.className = "temp_achieved center";
+	txtdiv.innerText = milestone + ' achieved';
+	div.appendChild(txtdiv);
+
+	anchor.appendChild(div);
+
+	anchor.appendChild(document.createElement('hr'));
+}
 
 function active_comp_selected(id) 
 {
@@ -1875,14 +2035,17 @@ function active_comp_selected(id)
 	load_chefs(null);
 	openPage('m2_temp_modal', this, 'red','m_modal2','tabclass');
 	read_M2temp();
+
 	active_comp = active_comps[id];
-	console.log(active_comp);
+	console.log("active_comp_selected: Listing active components\n",active_comp);
+
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
 	
 	var prep_type_id = active_comp['prep_type_id'];
 	console.log('prep_type_id',prep_type_id);
-	if (prep_type_id < 1) prep_type_id = 1;
-	var prep_type_val = get_preptype_val(prep_type_id,'M2_temp');
+	if (prep_type_id < 1) {prep_type_id = 1}
+	// var prep_type_val = get_preptype_val(prep_type_id,'M2_temp');
+
 	document.getElementById('chk_temp_item_div').innerHTML = active_comp['description'];
 	var milestone_due = 'NA';
 	var remaining = 0;
@@ -1892,23 +2055,21 @@ function active_comp_selected(id)
 	var M2_time = new Date(active_comp['M2_time']);
 
 	console.log("M2 time -",active_comp['M2_time'],"-");
-	var remaining = 0;
+
 	var now = new Date();
 	var now_ms = now.getTime();
 	var M1_ms = M1_time.getTime(); // time in millisecs
 	if (active_comp['M1_time'] == '') {
 		milestone_due = 'M1';
 		target_temp = " > " + get_preptype_val(prep_type_id,'M1_temp');
-	}
-	else if (active_comp['M2_time'] == '') {
+	} else if (active_comp['M2_time'] == '') {
 		milestone_due = 'M2';
 		var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
 		var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
 		remaining = (M2_due_ms - now_ms) / (60 * 1000);
 		console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
 		target_temp = " < " + get_preptype_val(prep_type_id,'M2_temp');
-		}
-	else {
+	} else {
 		milestone_due = 'M3';
 		var M3_due_min = get_preptype_val(prep_type_id,'M3_time_minutes');
 		var M3_due_ms = M1_ms + M3_due_min * 60 * 1000;  			
@@ -1916,17 +2077,13 @@ function active_comp_selected(id)
 		console.log("M3_due_min M1_ms",M3_due_min,M1_ms,M3_due_ms,format_minutes(remaining));
 		target_temp = " < " + get_preptype_val(prep_type_id,'M3_temp');
 	}
+
 	document.getElementById('ms_1').innerHTML = milestone_due;
 	active_comp.remaining = remaining;
 	if (milestone_due != 'M1') {
-		if (remaining >= 0) {
-			document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + " REMAINING";
-		}
-		else {
-			document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + " OVERDUE";
-		}
-	}
-	else {
+		var tt = (remaining >= 0) ? " REMAINING" : " OVERDUE";
+		document.getElementById('ms_1_text').innerHTML = format_minutes(remaining) + tt;
+	} else {
 		document.getElementById('ms_1_text').innerHTML = "";
 	}
 	document.getElementById('ms_2').innerHTML = milestone_due;
@@ -1934,8 +2091,9 @@ function active_comp_selected(id)
 	document.getElementById('ms_2_target').innerHTML = target_temp + "&#176;";
 
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
-}
 
+	checkTempDiv(document.getElementById('m2_temp_div'), active_comp, "read_M2temp()");
+}
 
 function reprint_comp_labels()
 {
@@ -1947,6 +2105,7 @@ function reprint_comp_labels()
 	load_reprint_data();
 	load_chefs();
 }
+
 function load_reprint_data()
 {
 	
@@ -1959,7 +2118,7 @@ function load_reprint_data()
 	            active_comps = result;
 	           // document.getElementById('active_comps').innerHTML = result;
 	     //        console.log("got " + result.length + " comps");
-	            m_show_active_components(result,true);
+	         //    m_show_active_components(result,true);
 	            
 	        },
 	        done: function(result) {
@@ -1975,6 +2134,8 @@ function load_reprint_data()
 function m_tracking()
 {
 	console.log('goto_active_components');
+	load_comps();
+	$('#search').val('');
 	openPage('m_current_tracking', this, 'red','m_modal','tabclass');
 	document.getElementById('m_current_tracking').innerHTML = "loading....";
 	// show('kitchen_manual_code');
@@ -1991,10 +2152,7 @@ function load_tracking_data()
 	        // contentType: "application/json",
 	        success: function(result) {
 	            active_comps = result;
-	           // document.getElementById('active_comps').innerHTML = result;
-	            // console.log("got " + result.length + " comps");
 	            m_show_active_components(result,false);
-	            
 	        },
 	        done: function(result) {
 	            console.log("done load_comps ");
@@ -2117,7 +2275,7 @@ function print_component_labels(qty)
 		    comp.preparedBy = chef['label'];
 		}
 		else {
-			comp.preparedBy = 'DOCK';
+			comp.preparedBy = "ERROR" ; // should be set by now
 		}
 	}
 	
@@ -2167,12 +2325,15 @@ function reprint_dock_labels(cid)
         	var comps = JSON.parse(result);
             if (comps) {
             	active_comp = comps[0];
-            	document.getElementById('drl_details_div').innerHTML = active_comp.description;
+            	var h = "<b>" + active_comp.description + "</b><br>";
+            	h += "USE BY: " + active_comp.expiry_date;
+            	document.getElementById('drl_details_div').innerHTML = h;
             	openPage('m_dock_reprint1', document.getElementById('s_reprint_labels_tab'), 'red','m_modal','m_top_menu',null);
             	console.log("got component " + active_comp.description);
+            	set_barcode_mode('dock_reprint');
             }
             else {
-            	console.log('could not find incredient')
+            	console.log('could not find incredient');
             	set_barcode_mode('dock_reprint');
             }
             
@@ -2247,34 +2408,47 @@ function m_show_active_components(data,reprint)
 	display_real_time();
 	var div = document.getElementById('m_current_tracking');
 	if (reprint) div = document.getElementById('m_reprint_labels');
+
 	if (data.length < 1) {
-		div.innerHTML = "<h1>No Active Components</h1>";
+		div.innerHTML = "<span>No Active Components</span>";
 		return;
 	}
 	if (reprint) {
-		div.innerHTML = "<h1>Reprint Labels</h1>";
+		div.innerHTML = "";
+	} else {
+		div.innerHTML = "";
 	}
-	else {
-		div.innerHTML = "<h1>Active Components</h1>";
-	}
-	var tab = document.createElement('table');
-	tab.className = 'component_table';
-	var tr = document.createElement('tr');
+
+	var tab = new_node('table','','component_table');
+	var thead = new_node('thead');
+	var tr = new_node('tr');
 	
-	
-    tr.appendChild(new_td('Description','comp'));  
+    tr.appendChild(new_node('th','Description','comp_left'));
     if (!reprint) {
-    	tr.appendChild(new_td('M','comp'));
-    
-    	tr.appendChild(new_td('TIME','comp'));
+    	tr.appendChild(new_node('th','M','comp_middle'));
+    	tr.appendChild(new_node('th','TIME','comp_right'));
     }
-   	tab.appendChild(tr);
-   	for (var i=0; i<data.length; ++i) {
-   		var tr = document.createElement('tr');
-   		var span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
-   		var clickdiv = "<div class='tooltip' onclick='active_comp_selected(" + i + ");'>" + data[i]['description'] + span_txt + "</div>";
-   		if (reprint) clickdiv = "<div onclick='reprint_active_comp_labels(" + data[i]['id'] + ");'>" + data[i]['description'] + "</div>";
-   		// tr.appendChild(new_td(data[i]['description'],'comp'));
+
+   	thead.appendChild(tr);
+	tab.appendChild(thead);
+
+	var tbody = new_node('tbody');
+
+	for (var i=0; i<data.length; ++i) {
+   		tr = document.createElement('tr');
+
+   		var clickdiv;
+   		var span_txt='';
+   		if(reprint){
+			if (typeof(serial) == 'undefined') tr.setAttribute("onclick","reprint_active_comp_labels(" + data[i]['id'] + ");");
+			clickdiv = "<div>";
+		}else{
+			if (typeof(serial) == 'undefined') tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
+		//	span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
+			clickdiv = "<div class='tooltip'>";
+		}
+		clickdiv += data[i]['description']+span_txt+ "</div>";
+
    		tr.appendChild(new_td(clickdiv,'comp'));
    		
    		var M1_time = new Date(data[i]['M1_time']);
@@ -2287,46 +2461,52 @@ function m_show_active_components(data,reprint)
 		var M1_ms = M1_time.getTime(); // time in millisecs
 	//	console.log("prep_type_id",prep_type_id);
 		if (reprint) {
-   			
-   		}
-		else if (data[i]['M1_time'] == '') { // M0 - ingredients have been selected
+
+   		}else if (data[i]['M1_time'] == '') { // M0 - ingredients have been selected
 			tr.appendChild(new_td('.','comp'));
 			tr.appendChild(new_td('Cooking','comp'));
-		}
-   		else {
+		}else {
+			var num;
+			var due_min;
 	   		if (data[i]['M2_time'] == '') {
-	   			var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
-	   			var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
-	   			remaining = (M2_due_ms - now_ms) / (60 * 1000);
-	//   			console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
-	   			tr.appendChild(new_td('<div class="m_bluedot">2</div>','comp'));
+				num = '2';
+
+				due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
+				//	console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
+	   		} else {
+				num = '3';
+
+				due_min = get_preptype_val(prep_type_id,'M3_time_minutes');
 	   		}
-	   		else {
-	   			var M3_due_min = get_preptype_val(prep_type_id,'M3_time_minutes');  			
-	   			var M3_due_ms = M1_ms + M3_due_min * 60 * 1000; 			
-	   			remaining = (M3_due_ms - now_ms) / (60 * 1000);
-	   			tr.appendChild(new_td('<div class="m_bluedot">3</div>','comp'));
-	   		}
+
+			var due_ms = M1_ms + due_min * 60 * 1000;
+			remaining = (due_ms - now_ms) / (60 * 1000);
+
+	   		tr.appendChild(new_td('<div class="m_bluedot">'+num+'</div>','comp'));
    		// var M1_t = M1_time.getHours() + ":" + M1_time.getMinutes();
    		
 	   		if (remaining > 0) {
-	   			tr.appendChild(new_td(format_minutes(remaining) + " remaining",'comp'));
+	   			td = new_td(format_minutes(remaining) + "",'comp');
+	   		} else {
+	   			td = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
 	   		}
-	   		else {
-	   			var td = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
-	   			
-	   			tr.appendChild(td);
-	   		}
+	   		tr.appendChild(td)
    		}
    		// tr.appendChild(new_td(data[i]['M1_time'],'comp'));
-   		
-   		  		tab.appendChild(tr);
+		tbody.appendChild(tr);
     }
+	tab.appendChild(tbody);
    	div.appendChild(tab);
 }
 
-
-
+function new_node(type,content='',classname=''){
+	var node = document.createElement(type);
+	if(content!=='')
+		node.className = classname;
+	if(classname!=='')
+		node.innerHTML = content;
+	return(node);
+}
 
 function goto_select_team()
 {
@@ -2428,10 +2608,8 @@ function select_plating_team()
 
 function get_plating_item_by_menu_item_id(menu_item_id)
 {
-	
 	if (typeof(plating_items) == 'undefined') return(null);
 	for (var i = 0; i < plating_items.length; i++) {
-		
 		if (plating_items[i].menu_item_id == menu_item_id) return(plating_items[i]);
 	}
 	return(null);
@@ -2479,6 +2657,7 @@ console.log("loading menu item components");
                     // and place the person.id into the hidden textfield called 'link_origin_id'. 
                  	console.log('selected ',ui.item.value);
                  	component_selected(ui.item.value);
+                 	$('#search').val(''); // this might go wrong
                  	// cordova.plugins.Keyboard.close();
                  	$('#search').blur();
                     return false;
@@ -2499,8 +2678,31 @@ console.log("loading menu item components");
 function new_td(content,classname) {
 	var td = document.createElement('td');
 	td.className = classname;
-	td.innerHTML = "<div class='margin10'>" + content + "</div>";
+	td.innerHTML = "<div class='m-10'>" + content + "</div>";
 	return(td);
+}
+
+function iconM2(){
+	return new_img("img/icon_M2.svg");
+}
+
+function iconM3(){
+	return new_img("img/icon_M3.svg");
+}
+
+function iconProbe(){
+	return new_img("img/icon_Probe.svg","icon_Probe");
+}
+
+function iconIR(){
+	return new_img("img/icon_IR.svg","icon_IR");
+}
+
+function new_img(source,classname = "") {
+	var img = document.createElement('img');
+	img.className = classname;
+	img.src = source;
+	return(img);
 }
 
 var refresh_count = 0;

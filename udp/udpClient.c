@@ -82,13 +82,16 @@ int main(int argc, char *argv[]) {
   cliAddr.sin_family = AF_INET;
   cliAddr.sin_addr.s_addr = htonl(INADDR_ANY);
   cliAddr.sin_port = htons(0);
+  cliAddr.sin_port = htons(1501);
   
   rc = bind(sd, (struct sockaddr *) &cliAddr, sizeof(cliAddr));
   if(rc<0) {
     printf("%s: cannot bind port\n", argv[0]);
     exit(1);
   }
-
+  printf("bound port %s : %u \n",
+   	   inet_ntoa(cliAddr.sin_addr),
+   	   ntohs(cliAddr.sin_port));
 
   /* send data */
   for(i=2;i<argc;i++) {

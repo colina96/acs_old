@@ -25,7 +25,9 @@ function log(t)
 		loglines = 0;
 		document.getElementById('log').innerHTML  = '';
 	}
-    document.getElementById('log').innerHTML += "<br>" + t;
+	d=new Date();
+	logtime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+    document.getElementById('log').innerHTML += "<br>[" + logtime + "] " + t;
     
 }
 
@@ -46,7 +48,8 @@ function qpack_start()
 
     log("starting qpack");
     try {
-        serial.requestPermission(function success(data) {
+        serial.requestPermission(
+            function success(data) {
             log("requestPermission success");
             serial.open({
                 baudRate: 57600,
@@ -218,5 +221,13 @@ function process(text)
 			volts = text.substr(text.indexOf(",") + 1);
 		}
 		document.getElementById('battery_div').innerHTML = " Handset Battery: " + volts + " Volts";
-	}
+	}else if (text=="zzz") {
+	    log ("QPack sleeping");
+	    show('log');
+	    qpack_pause();
+    }else if (text=='+C') {
+	    log ("QPack charging");
+	    show('log');
+	    qpack_pause();
+    }
 }
