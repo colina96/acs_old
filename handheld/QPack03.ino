@@ -129,8 +129,9 @@ void kick() {
 
 void nitenite() {
   kick();
+  Serial.println("Getting coffee instead of getting sleepy");
   if (charging) return;
-  Serial.println("zzz");
+//  Serial.println("zzz");
 
   digitalWrite(scan_trig, LOW);
   scanning = false;
@@ -139,10 +140,11 @@ void nitenite() {
   digitalWrite(laser_en, HIGH);
   digitalWrite(beep_en, HIGH);
   
-  delay(20);
-  digitalWrite(usbid_en, LOW);
+//  Serial.println("zzz");
+//  delay(20);
+// digitalWrite(usbid_en, LOW);
 
-  delay(200);
+// delay(200);
 }
 
 void loop() {
