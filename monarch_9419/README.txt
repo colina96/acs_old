@@ -42,4 +42,5 @@ After that, enable the service on system boot:
 
 sudo systemctl enable rc-local
 
-
+test for correctness using 
+sudo /etc/rc.local start
