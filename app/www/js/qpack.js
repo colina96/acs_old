@@ -25,7 +25,9 @@ function log(t)
 		loglines = 0;
 		document.getElementById('log').innerHTML  = '';
 	}
-    document.getElementById('log').innerHTML += "<br>" + t;
+	d=new Date();
+	logtime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+    document.getElementById('log').innerHTML += "<br>[" + logtime + "] " + t;
     
 }
 
