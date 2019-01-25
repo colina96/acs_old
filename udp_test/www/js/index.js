@@ -153,6 +153,12 @@ function retry_udp()
 	}
 	else log('no socket');
 }
+function onError( error ) {
+	  // Note: onError() will be called when an IP address can't be
+	  // found, e.g. WiFi is disabled, no SIM card, Airplane mode
+	  alert( error );
+	}
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -166,6 +172,11 @@ var app = {
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
 		 listen_in();
+		log('getting ip ' +  typeof(networkinterface.getWiFiIPAddress));
+		log('getting ip fn ' +  typeof(networkinterface));
+		 networkinterface.getWifiIPAddress(function (ip) { 
+			    alert(ip); 
+			},onError);
 		 setTimeout(retry_udp,5 * 1000);
       //  udp.initialize();
     },
