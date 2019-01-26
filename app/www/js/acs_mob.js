@@ -442,8 +442,10 @@ function show_plating_items(team_id,tab)
 
 			// create item entry
 			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
-			console.log(plating_item);
-			if (parseInt(menu_items[i]['current_shift']) > 0) {
+			if (plating_item) console.log(plating_item);
+			var required = parseInt(menu_items[i]['current_shift']) - parseInt(menu_items[i]['current_shift_done']);
+		//	if (parseInt(menu_items[i]['current_shift']) > 0) {
+			if (required > 0) {
 				tr = document.createElement('tr');
 				var td = document.createElement('td');
 				td.innerHTML = menu_items[i]['code'];
@@ -468,7 +470,7 @@ function show_plating_items(team_id,tab)
 				//var shift = 's' + menu_items[i]['current_shift'];
 				//console.log('shift ',shift);
 				//console.log(menu_items[i]);
-				td.innerHTML = menu_items[i]['current_shift'];
+				td.innerHTML = required; //  menu_items[i]['current_shift'];
 				tr.appendChild(td);
 				tab.appendChild(tr);
 			}
