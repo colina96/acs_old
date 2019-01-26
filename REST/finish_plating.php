@@ -12,7 +12,8 @@ if ($userID > 0) {
 	echo "got data ";
 	$id = $d['id'];
 	$M2_temp = $d['M2_temp'];
-		$sql = "update PLATING_ITEM set time_completed = now(),M2_temp=".$M2_temp." where id = ".$id;
+	$num_completed = $d['num_completed'];
+		$sql = "update PLATING_ITEM set time_completed = now(),M2_temp=".$M2_temp.",num_completed=".$num_completed." where id = ".$id;
 		test_mysql_query($sql);
 		echo $sql;
 

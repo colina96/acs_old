@@ -598,6 +598,16 @@
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
         </div>
+        <div class='m_modal2 hidden' id='m_plating_finished'>
+            <div class='center modal_head'><span>ENTER QTY COMPLETE</span></div>
+            <div id='chk_plating_item_qty_div' class='center'></div>
+          
+            <input class='label_num' id='plating_num_completed' length='3' size='3' type='number'>
+            <div class='btns'>
+                
+                <button type='button' class='m_btn' onclick="record_finish_plating();">Finish</button>
+            </div>
+        </div>
     </div>
     <div class='mobile_main hidden' id='plating_div'>
         <div class='m_modal_shadow'></div>
@@ -679,6 +689,7 @@
                 <button type='button' class='m_btn' onclick="goto_active_plating();">Return</button>
             </div>
         </div>
+        
         <div class='m_modal hidden' id='m_plating_temp_decant'>
             <div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
             <div id='chk_plating_item_temp_divA' class='m-10'></div>

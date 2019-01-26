@@ -28,11 +28,19 @@ function show_shift_orders(shift_data) // horrible hack TODO - work out what is 
 	var tab = document.createElement('table');
 	tab.className = 'component_table';
 	var tr = document.createElement('tr');
-	var headings = ['ITEM CODE','ITEM DESCRIPTION','Today, 09:30 AM','Today, 11:00 AM','Tomorrow, 05:00 AM'];
+	var headings = ['ITEM CODE','ITEM DESCRIPTION'];
+	var headings2 = ['Today, 09:30 AM','Today, 11:00 AM','Tomorrow, 05:00 AM'];
 	for (var i = 0; i < headings.length; i++) {
 		
 		var th = document.createElement('th');
 		th.innerHTML = headings[i];
+		tr.appendChild(th);
+	}
+	for (var i = 0; i < headings2.length; i++) {
+		
+		var th = document.createElement('th');
+		th.colSpan = 2;
+		th.innerHTML = headings2[i];
 		tr.appendChild(th);
 	}
 	tab.appendChild(tr);
@@ -50,6 +58,11 @@ function show_shift_orders(shift_data) // horrible hack TODO - work out what is 
 			var td = document.createElement('td');
 			var val = shift_data[i][s] ? shift_data[i][s]: 0;
 			td.innerHTML = "<input type='number' name='" + name + "' value='" + val + "' onchange='set_shift_qty(" + shift_data[i]['id'] + "," + j + ");'>";
+			tr.appendChild(td);
+			var td = document.createElement('td');
+			s = s + "_done";
+			td.innerHTML = shift_data[i][s] ? shift_data[i][s]: 0;
+			
 			tr.appendChild(td);
 		}
 		tab.appendChild(tr);

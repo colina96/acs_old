@@ -455,9 +455,9 @@ function show_plating_items(team_id,tab)
 				var div = "<div onclick='show_menu_item_components(" + menu_items[i]['id'] + ");'>";
 				if (plating_item && plating_item.time_started) {  // check plating_item.checked
 					div = "<div class='orange' onclick='show_plating_options(" + plating_item.id + ");'>";
-					if (plating_item.time_completed) {
-						div = "<div class='red'>";
-					}
+					//if (plating_item.time_completed) {
+					//	div = "<div class='red'>";
+					//}
 				}
 				//finish up
 				div += menu_items[i]['dish_name'] + "</div>";
@@ -567,6 +567,7 @@ function finish_plating()
 	
 
 	document.getElementById('chk_plat_temp_item_div').innerHTML = plating_item.code;
+	document.getElementById('plating_num_completed').value = 99;
 	openPage('plating_temp_div', this, 'red','mobile_main','tabclass');
 	openPage('m2_temp_plating', this, 'red','m_modal2','tabclass');
 	
@@ -574,7 +575,14 @@ function finish_plating()
 function record_finish_plating()
 {
 	console.log("finish_plating");
+	var num_completed = document.getElementById('plating_num_completed').value;
+	if (parseInt(num_completed) <=0) {
+		console.log("invalid number of completed ",num_completed);
+		return;
+	}
+	plating_item.num_completed = num_completed;
 	console.log(plating_item);
+	
 	var data =  {data: JSON.stringify(plating_item)};
     console.log("Sent Off: ", data);
     
@@ -821,12 +829,20 @@ function set_plating_M2_temp(temperature)
 	plating_item.M2_temp = temperature;
 	var temp_target = get_preptype_val(plating_prep_type,'M2_temp');
 	if (parseInt(temperature) <= temp_target) {
-		console.log('record_finish_plating()');
-		record_finish_plating();
+		// console.log('record_finish_plating()');
+		// record_finish_plating();
 	}
 	else {
 		console.log("plating m2 too high");
 	}
+	// record how many meal items were plated
+	document.getElementById('chk_plating_item_qty_div').innerHTML = plating_item.code;
+	document.getElementById('plating_num_completed').value = plating_item.num_labels;
+	console.log('open page m_plating_finished');
+	openPage('m_plating_finished', this, 'red','m_modal2','tabclass');
+
+
+	
 }
 
 function show_menu_item_components(menu_item_id) {

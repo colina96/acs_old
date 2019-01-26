@@ -35,6 +35,9 @@ if ($userID > 0) {
 				$item['s1'] = $sd[0]['s1'];
 				$item['s2'] = $sd[0]['s2'];
 				$item['s3'] = $sd[0]['s3'];
+				$item['s1_done'] = $sd[0]['s1_done'];
+				$item['s2_done'] = $sd[0]['s2_done'];
+				$item['s3_done'] = $sd[0]['s3_done'];
 				$item['current_shift'] = $shift_data['current_shift'];
 				
 			}
