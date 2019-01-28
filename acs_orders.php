@@ -6,6 +6,7 @@ function daily_orders()
 	openPage('ORDERS', this, 'red','tabcontent','tabclass');
 	var div = document.getElementById('daily_orders_div');
 	div.innerHTML = '';
+	
 	$.ajax({
         url:  "REST/get_shifts.php",
         type: "POST",
@@ -25,6 +26,7 @@ function show_shift_orders(shift_data) // horrible hack TODO - work out what is 
 {
 	console.log(shift_data);
 	var div = document.getElementById('daily_orders_div');
+	div.innerHTML = '';
 	var tab = document.createElement('table');
 	tab.className = 'component_table';
 	var tr = document.createElement('tr');
@@ -33,6 +35,7 @@ function show_shift_orders(shift_data) // horrible hack TODO - work out what is 
 	for (var i = 0; i < headings.length; i++) {
 		
 		var th = document.createElement('th');
+		// th.rowSpan = 2;
 		th.innerHTML = headings[i];
 		tr.appendChild(th);
 	}
@@ -44,6 +47,7 @@ function show_shift_orders(shift_data) // horrible hack TODO - work out what is 
 		tr.appendChild(th);
 	}
 	tab.appendChild(tr);
+	
 	for (var i = 0; i < shift_data.length; i++) {
 		var tr = document.createElement('tr');
 		var td = document.createElement('td');
@@ -68,6 +72,9 @@ function show_shift_orders(shift_data) // horrible hack TODO - work out what is 
 		tab.appendChild(tr);
 	}
 	div.appendChild(tab);
+	var btn = document.createElement('button');
+	btn.className= 'button_main';
+	
 	
 }
 
@@ -90,7 +97,36 @@ function set_shift_qty(menu_item_id,shift_id)
 	
 		
 }
+function clear_daily_completed()
+{
+	console.log('clear_daily_completed');
+	var data =  {clear: 'true'};
+	$.ajax({
+        url:  "REST/get_shifts.php",
+        type: "POST",
+        data: data,
+        dataType: 'json',	      
+        success: function(result) {
+            console.log(result);
+            shift_data = result;	          
+            console.log("got " + result.length + " shift items");
+            show_shift_orders(result);	            
+        },
+        fail: (function (result) {
+            console.log("fail shifts",result);
+        })
+    });
+}
 </script>
+<div class="menu_buttons">
+    <div class="menu_type" id="menu_status">
+        
+    </div>
+    <div class="acs_sidebar">
+        <button type='button' class='button_main' href="#" id="clear_qtys_btn"
+                onclick="clear_daily_completed()">Clear completed totals</button>
+    </div>
+</div>
 <div class='acs_main' id="oder_frame">
 <div class="acs_right_content">
 <div id='daily_orders_div' class='overflow'></div>

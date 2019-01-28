@@ -7,6 +7,10 @@ $userID = $_SESSION['userID'];
 // echo "userID ".$userID."\n";
 $table_name = "MENU_ITEMS";
 if ($userID > 0) {
+	if (get_url_token('clear')) {
+		$sql = 'update SHIFT_ORDERS set s1_done=0,s2_done=0,s3_done=0,sdate=now()';
+		test_mysql_query($sql);
+	}
 	$menu_id = get_url_token('menu_id');
 	$shift_data = load_shift_data($menu_id);
 	$fieldnames = get_fieldnames($table_name);
