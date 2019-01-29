@@ -128,6 +128,17 @@ function ioio_start()
 	qpack_start();
 }
 
+function popup_error(head,msg)
+{
+	document.getElementById('popup_error_head').innerHTML = head;
+	document.getElementById('popup_error_msg').innerHTML = msg;
+	document.getElementById('popup_error_div').style.display = 'block';
+}
+
+function close_popup()
+{
+	document.getElementById('popup_error_div').style.display = 'none';
+}
 function popup_manual_temp()
 {
 	document.getElementsByName('manual_temp')[0].value = '';
@@ -318,7 +329,10 @@ function check_ingredient(cid)
             var scanned_ingredient = JSON.parse(result);
             console.log("got component " + scanned_ingredient[0].description,' expired:' ,scanned_ingredient[0].expired);
             if (scanned_ingredient[0].expired == 1) {
+            	console.log('ingredient expired')
 				document.getElementById('m1_temp_div_1_error').innerHTML = 'EXPIRED';
+            	document.getElementById('popup_error_msg').innerHTML = 'EXPIRED';
+            	popup_error(scanned_ingredient[0].description,'EXPIRED<br>' + scanned_ingredient[0].expiry_date);
 				return;
 			}
             var valid_ingredient = false;

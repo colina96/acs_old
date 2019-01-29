@@ -355,7 +355,7 @@
             <div class='m_label'><span>SCAN INGREDIENTS</span></div>
             <!-- div class='center'><input placeholder='Enter existing barcode' name='ingredient_barcode' id='ingredient_barcode' onchange='manual_barcode_submit("ingredient_barcode")'></div -->
             <div id='m1_temp_div_1'></div>
-            <div id='m1_temp_div_1_error'></div>
+            <div id='m1_temp_div_1_error' class='red'></div>
             <div class='btns'>
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
@@ -754,7 +754,16 @@
         </div>
     </div>
 </div>
-
+<div class='popup' id='popup_error_div'>
+    <h2><div class='center' id='popup_error_head'></div></h2>
+    <div class='center'>
+        <div class='center red m-10' id='popup_error_msg'></div>
+        
+    </div>
+  
+    	<button type='button' class='m_btn' onclick='close_popup()'>Close</button>
+   
+</div>
 <div class='popup' id='manual_entry'>
     <div class='center'><h2>Enter Temperature</h2></div>
     <div class='enter_temp center'>
