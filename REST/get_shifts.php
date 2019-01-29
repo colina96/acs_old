@@ -7,6 +7,10 @@ $userID = $_SESSION['userID'];
 // echo "userID ".$userID."\n";
 $table_name = "MENU_ITEMS";
 if ($userID > 0) {
+	if (get_url_token('clear')) {
+		$sql = 'update SHIFT_ORDERS set s1_done=0,s2_done=0,s3_done=0,sdate=now()';
+		test_mysql_query($sql);
+	}
 	$menu_id = get_url_token('menu_id');
 	$shift_data = load_shift_data($menu_id);
 	$fieldnames = get_fieldnames($table_name);
@@ -35,6 +39,9 @@ if ($userID > 0) {
 				$item['s1'] = $sd[0]['s1'];
 				$item['s2'] = $sd[0]['s2'];
 				$item['s3'] = $sd[0]['s3'];
+				$item['s1_done'] = $sd[0]['s1_done'];
+				$item['s2_done'] = $sd[0]['s2_done'];
+				$item['s3_done'] = $sd[0]['s3_done'];
 				$item['current_shift'] = $shift_data['current_shift'];
 				
 			}

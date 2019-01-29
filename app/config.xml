@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget android-packageName="com.ACS" id="co.qamc.qamc" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://qamc.co/ns/1.0">
-    <name>ACS2.0046</name>
+    <name>ACS2.0049</name>
     <description>
         QPack test
     </description>

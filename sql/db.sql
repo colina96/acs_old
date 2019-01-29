@@ -216,6 +216,9 @@ CREATE table PLATING_ITEM
 	expiry_date datetime,
 	M1_temp float,
 	M2_temp float,
+	num_labels smallint unsigned,
+	num_trolley_labels smallint unsigned,
+	num_completed smallint unsigned,
 	corrective_item smallint,
 	constraint pk_example primary key (id) 
 );
@@ -268,9 +271,12 @@ create table SHIFT_ORDERS
 	id smallint unsigned not null auto_increment, 
 	menu_id int,
 	menu_item_id int,
-	s1 int,
-	s2 int,
-	s3 int,
+	s1 int default 0,
+	s1_done int default 0,
+	s2 int default 0,
+	s2_done int default 0,
+	s3 int default 0,
+	s3_done int default 0,
 	sdate datetime,
 	constraint pk_example primary key (id) 
 );

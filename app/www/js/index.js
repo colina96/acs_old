@@ -20,6 +20,37 @@ var user_id = -1;
 var user_name = "";
 var USER = null;
 
+var got_restcall_result = false;
+function resthome_timeout()
+{
+	if (!got_restcall_result) {
+		document.getElementById('setup_result').innerHTML  += "<br>RESTHOME test timed out";
+	}
+}
+
+function test_rest()
+{
+	console.log('testing RESTHOME');
+	RESTHOME = document.getElementsByName('resthome')[0].value;
+	document.getElementById('setup_result').innerHTML = 'NEW RESTHOME<br>' + RESTHOME;
+    var loginString = "";
+    document.getElementById('setup_result').innerHTML  += "<br>checking login";
+    $("#login_fail").text("Checking login ..!" + RESTHOME);
+    got_restcall_result = false;
+    setTimeout(resthome_timeout,10 * 1000); // 10 seconds
+    $.ajax({
+        type: "POST", crossDomain: true, cache: false,
+        url: RESTHOME + "login.php",
+        data: loginString,
+        // dataType: 'json',
+        success: function (data) {
+        	got_restcall_result = true;
+        	document.getElementById('setup_result').innerHTML  += "<br>got login<br>" + data;
+        }
+    });
+	
+	
+}
 function get_user_id()
 {
 	if (USER == null) {
@@ -169,6 +200,7 @@ function save_resthome() {
     var storage = window.localStorage;
 
     storage.setItem('RESTHOME', RESTHOME);
+    test_rest();
 }
 
 function exit_app() {

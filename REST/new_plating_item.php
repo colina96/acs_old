@@ -11,6 +11,8 @@ $d = json_decode($_POST["data"],true);
  
 
 $plating_team = $d['plating_team'];
+$num_labels = $d['description_labels'];
+$num_trolley_labels = $d['trolley_labels'];
 // $shelf_life_days = $d['shelf_life_days'];
 $menu_item_id = $d['menu_item_id'];
 $shelf_life_days = 3; // TODO - where does this come from?????
@@ -18,8 +20,8 @@ $shelf_life_days = 3; // TODO - where does this come from?????
 $userID = $_SESSION['userID'];
 
 	$sql = "insert into PLATING_ITEM ";
-	$sql .= "(id, user_id, team_id, menu_item_id,time_started,expiry_date) ";
-	$sql .= "values (null,".$userID.",".$plating_team.",".$menu_item_id.",now(),DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY))";
+	$sql .= "(id, user_id, team_id, menu_item_id,time_started,expiry_date,num_labels,num_trolley_labels) ";
+	$sql .= "values (null,".$userID.",".$plating_team.",".$menu_item_id.",now(),DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY),".$num_labels.",".$num_trolley_labels.")";
 
 	test_mysql_query($sql);
 	$plating_item_id = mysql_insert_id();
@@ -54,5 +56,8 @@ $json = json_encode($response);
 echo $json;
 // echo $sql."\n\n";
 // 
- 
+function getIntVal($d)
+{
+	return(!empty($d)?$d:0);
+}
 ?>

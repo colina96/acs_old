@@ -189,6 +189,20 @@ table input[type=text] {
 	padding:10px;
 }
 
+table input[type=number] {
+	border-radius: 10px;
+	border: 1px solid lightgrey;
+	padding:10px ;
+	width:50px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+
 #user_id input[type=text]::placeholder {
 	font-size: 8pt;
 }
@@ -382,6 +396,7 @@ vertical-align: middle;
     background-image: linear-gradient(to right, #9D2CE3, #9323E4, #7A0FE7);
 	color:white;
 }
+
 .component_table td {
     border-bottom: 1px solid lightgrey;
 }

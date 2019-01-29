@@ -74,7 +74,7 @@ int send_raw (char *ip, int port, char *data, int data_size, int copies)
         return (0);
     }
     else
-		printf ("obtain socket descriptor successfully.\n");
+	printf ("obtain socket descriptor successfully.\n");
 
     /* Fill the socket address struct */
     remote_addr.sin_family = AF_INET;
@@ -84,18 +84,19 @@ int send_raw (char *ip, int port, char *data, int data_size, int copies)
     /* Try to connect the remote */
     if (connect(sockfd, (struct sockaddr *)&remote_addr, sizeof(struct sockaddr)) == -1)
     {
-        printf ("ERROR: Failed to connect to the printer!\n");
+        printf ("ERROR: Failed to connect to the printer @ %s! %s\n",ip, strerror(errno));
         return (0);
     }
     else
-		printf("connected to printer at port %d...ok!\n", port);
+	printf("connected to printer at port %d...ok!\n", port);
 
 
     for (i = 0; i < copies; i++) {
     	stat = send(sockfd, data, data_size, 0);
     	printf("Sent %d of %d size %d data (%d)\n",i,copies,stat,data_size);
     }
-	if (stat < 0) printf("ERROR: Failed to send %d bytes of LNT data.\n", data_size,errno);
+    if (stat < 0) 
+	printf("ERROR: Failed to send %d bytes of LNT data. %s\n", data_size,strerror(errno));
 
 
 	// data sent, now read any response
@@ -107,7 +108,7 @@ int send_raw (char *ip, int port, char *data, int data_size, int copies)
     printf("connection closed.\n");
     close(sockfd);
 
-	return stat;
+    return stat;
 }
 
 
@@ -117,19 +118,20 @@ int send_raw (char *ip, int port, char *data, int data_size, int copies)
  */
 char *get_input_LNT(char *f_name, int *input_LNT_len, int *fields)
 {
-	char sdbuf[LENGTH]; // Send buffer
+    char sdbuf[LENGTH]; // Send buffer
     FILE *fp = fopen(f_name, "r");
     static char p[2000];
-	*input_LNT_len = 0;
+    *input_LNT_len = 0;
 
     if(fp == NULL)
     {
         printf("ERROR: File %s not found.\n", f_name);
         return 0;
     }
+
     bzero(sdbuf, LENGTH);
     int f_block_sz;
-	int fsize = 0;
+    int fsize = 0;
     while((f_block_sz = fread(&sdbuf[fsize], sizeof(char), LENGTH, fp))>0)
     {
 		// SHOULD REALLY HAVE MAX FILE SIZE CHECKING HERE !!!

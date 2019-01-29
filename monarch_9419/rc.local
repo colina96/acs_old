@@ -1,0 +1,11 @@
+#!/bin/bash
+# this file is supposed to go into /etc/rc.local (see readme)
+# start label printer
+## go to label printer directory
+cd /var/www/html/acs/monarch_9419 
+## compile the newest printer script from source
+gcc -o print_lbl print_lbl.c 
+## run it
+./print_lbl settings.txt &
+echo 'started label print server'
+exit 0
