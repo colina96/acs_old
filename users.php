@@ -139,6 +139,7 @@ function save_user()
         })
     });
 }
+
 function portal_logout() {
     var loginString = "logout=login";
     console.log('logging out');
@@ -190,6 +191,7 @@ function portal_logout() {
 				</table>
 				<table>
 					<tr><td>Active</td><td><input type='checkbox' name='user_active'></td></tr>
+                    <tr><td></td></tr>
 					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
 					<tr><td>Dock</td><td><input type='checkbox' name='user_dock'></td></tr>
 					<tr><td>Kitchen</td><td><input type='checkbox' name='user_kitchen'></td></tr>
