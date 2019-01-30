@@ -77,7 +77,7 @@ function set_user_flds(user)
 			document.getElementsByName('user_' + flds[i])[0].value = user[flds[i]];
 		}
 	}
-	var flds = ['admin','dock','kitchen','plating','supervisor'];
+	var flds = ['active','admin','dock','kitchen','plating','supervisor'];
 	for (var i = 0; i < flds.length; i++ ) {
 		if (document.getElementsByName('user_' + flds[i])) {
 			var checked = (user[flds[i]] == 1) ?true:false;
@@ -104,7 +104,7 @@ function new_user()
 	for (var i = 0; i < flds.length; i++ ) {
 		document.getElementsByName('user_' + flds[i])[0].value = '';
 	}
-	var flds = ['admin','dock','kitchen','plating','supervisor'];
+	var flds = ['active','admin','dock','kitchen','plating','supervisor'];
 	for (var i = 0; i < flds.length; i++ ) {
 		if (document.getElementsByName('user_' + flds[i])) {
 			document.getElementsByName('user_' + flds[i])[0].checked = false;
@@ -116,7 +116,7 @@ function new_user()
 function save_user()
 {
 	var user = new Object();
-	var flds = ['id','email','password','firstname','lastname','function','admin','dock','kitchen','plating','supervisor'];
+	var flds = ['id','email','password','firstname','lastname','function','active','admin','dock','kitchen','plating','supervisor'];
 	for (var i = 0; i < flds.length; i++ ) {
 		user[flds[i]] = inval('user_' + flds[i]);
 	}
@@ -139,6 +139,32 @@ function save_user()
         })
     });
 }
+function portal_logout() {
+    var loginString = "logout=login";
+    console.log('logging out');
+    $.ajax({
+        type: "POST", crossDomain: true, cache: false,
+        url: RESTHOME + "login.php",
+        data: loginString,
+        dataType: 'json',
+        success: function (data) {
+            console.log('logout got', data);
+            if (data['user_id']) {
+                user_id = data['user_id'];
+                if (user_id > 0) {
+                    //openPage('mm2', this, 'red', 'mobile_main', 'tabclass');
+                } else {
+                    // openPage('login_div', this, 'red', 'mobile_main', 'tabclass');
+                }
+                
+                window.location.href = "index.php";
+            } else if (data == "error") {
+                //$("#status").text("Login Failed..!");
+            }
+        }
+    });
+}
+
 
 </script>
 <div class='acs_main' id="user_table">
@@ -163,6 +189,7 @@ function save_user()
 					<tr><td><span class="user_description">Position</span><br><input type='text' name='user_function' placeholder=""></td></tr>
 				</table>
 				<table>
+					<tr><td>Active</td><td><input type='checkbox' name='user_active'></td></tr>
 					<tr><td>Admin</td><td><input type='checkbox' name='user_admin'></td></tr>
 					<tr><td>Dock</td><td><input type='checkbox' name='user_dock'></td></tr>
 					<tr><td>Kitchen</td><td><input type='checkbox' name='user_kitchen'></td></tr>

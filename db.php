@@ -115,10 +115,10 @@ function check_login()
 		$fieldnames = get_fieldnames('USERS');
 		$sql = NULL;
 		if (!empty($email) && !empty($password)) {
-			$sql="SELECT * FROM USERS where LOWER(email)=LOWER('" . $email."') and LOWER(password) = LOWER('".$password."')" ;
+			$sql="SELECT * FROM USERS where active > 0 and LOWER(email)=LOWER('" . $email."') and LOWER(password) = LOWER('".$password."')" ;
 		}
 		if (!empty($uid)) {
-			$sql="SELECT * FROM USERS where id=" . $uid;
+			$sql="SELECT * FROM USERS where active > 0 and id=" . $uid;
 		}
 		if ($sql) {
 	

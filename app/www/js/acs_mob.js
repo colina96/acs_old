@@ -2521,7 +2521,7 @@ function m_show_active_components(data,reprint)
 			if (typeof(serial) == 'undefined') tr.setAttribute("onclick","reprint_active_comp_labels(" + data[i]['id'] + ");");
 			clickdiv = "<div>";
 		}else{
-			if (typeof(serial) == 'undefined') tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
+			/* if (typeof(serial) == 'undefined') */ tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
 		//	span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
 			clickdiv = "<div class='tooltip'>";
 		}

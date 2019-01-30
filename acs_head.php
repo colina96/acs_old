@@ -66,7 +66,7 @@ session_start();
             
             </ul>
             <ul class="nav navbar-nav navbar-right">
-            <li><a id="user_name"><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?> <image class="icon_logout" id="logout_menu" src="app/www/img/icon_logout_blue.svg"</a></li>
+            <li><a id="user_name"><?php if (!empty($_SESSION['userID'])) { echo $_SESSION['user']; } ?> <image onclick='portal_logout();' class="icon_logout" id="logout_menu" src="app/www/img/icon_logout_blue.svg"</a></li>
             </ul>
           
         </div>
@@ -119,6 +119,9 @@ session_start();
         	<input id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
         	<label for="inputPassword" class="sr-only">Password</label>
         	<input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        	<!--div id='login_btn' class='btn btn-lg btn-primary' onclick='login(0)'>
+                    <div class='center'>Sign in</div>
+                </div -->
         	<button class="btn btn-lg btn-primary" type="submit" name="login" value='1'>Sign in</button>
       		</form>
 

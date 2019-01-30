@@ -16,6 +16,7 @@ dock BOOLEAN,
 kitchen BOOLEAN,
 plating BOOLEAN,
 supervisor BOOLEAN,
+active BOOLEAN default true,
 last_login datetime,
 constraint pk_example primary key (id) );
 INSERT INTO USERS (email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
