@@ -2469,14 +2469,14 @@ function display_real_time()
 {
 	//var div = document.getElementById('');
 	var today = new Date();
-	  var h = today.getHours();
-	  var m = today.getMinutes();
-	  
-	  // add a zero in front of numbers<10
-	  m = checkTime(m);
-	  h = checkTime(h);
-	  document.getElementById('current_time_kitchen').innerHTML = h + ":" + m;
-	  document.getElementById('current_time_dock').innerHTML = h + ":" + m;
+	var h = today.getHours();
+	var m = today.getMinutes();
+
+	// add a zero in front of numbers<10
+	m = checkTime(m);
+	h = checkTime(h);
+	document.getElementById('current_time_kitchen').innerHTML = h + ":" + m;
+	document.getElementById('current_time_dock').innerHTML = h + ":" + m;
 }
 function m_show_active_components(data,reprint)
 {
