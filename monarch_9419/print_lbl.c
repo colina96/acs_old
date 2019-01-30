@@ -482,7 +482,7 @@ int main (int argc, char *argv[])
 
 	while (1)
 	{
-		if (!check_jobs_exists(jobdir,labeldir)) sleep(10);
+		if (!check_jobs_exists(jobdir,labeldir)) sleep(2);
 		sleep(2);
 	}
 
