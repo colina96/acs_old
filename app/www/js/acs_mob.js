@@ -127,7 +127,11 @@ function ioio_start()
 	
 	qpack_start();
 }
-
+function popup_timeout(msg)
+{
+	document.getElementById('popup_time_msg').innerHTML = msg;
+	document.getElementById('popup_time_div').style.display = 'block';
+}
 function popup_error(head,msg)
 {
 	document.getElementById('popup_error_head').innerHTML = head;
@@ -135,9 +139,9 @@ function popup_error(head,msg)
 	document.getElementById('popup_error_div').style.display = 'block';
 }
 
-function close_popup()
+function close_popup(div)
 {
-	document.getElementById('popup_error_div').style.display = 'none';
+	document.getElementById(div).style.display = 'none';
 }
 function popup_manual_temp()
 {
@@ -307,7 +311,9 @@ function set_ingredient_temp(s)
 	if (draw_ingredients()) {
 		// set_barcode_mode('scan_ingredients');
 		// save ingredient - new_comp.php
-		start_component(false,true);
+		// show confirm btn
+		document.getElementById('confirm_start_comp_btn').style.display = 'inline-block';
+		// start_component(false,true);
 	}
 	else {
 		set_barcode_mode('scan_ingredients');
@@ -1290,11 +1296,12 @@ function get_preptype_val(id,fld)
 function draw_ingredients() // returns true if all ingredients are selected and have a temperature
 {
 	var finished = true;
+	document.getElementById('confirm_start_comp_btn').style.display = 'none';
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
 	document.getElementById('m1_temp_div_1a').innerHTML = '';
 	div = document.getElementById('m1_temp_div_1');
 	var d = "<div class='m-10'><table width='100%'>";
-	d += "<tr><td>Description</td><td>ID</td><td>Temperature</td></tr>";
+	d += "<tr><td width='200px'>Description</td><td width='40px'>ID</td><td width='40px'>Temp</td></tr>";
 	var prep_type_id = new_comp['prep_type'];
 	console.log(' draw_ingredients prep_type_id',prep_type_id);
 	document.getElementById('ms_2_target').innerHTML = '';
@@ -1380,6 +1387,7 @@ function component_selected(id)
 		document.getElementById('ms_2_text').innerHTML = ' ';
 		document.getElementById('ms_2_target').innerHTML = "";
 		document.getElementById('chk_temp_item_div').innerHTML = '';
+		document.getElementById('chk_temp_item_id_div').innerHTML = '';
 	} else {
 		set_barcode_mode("M1");
 		set_temp_mode("M1");
@@ -1388,6 +1396,8 @@ function component_selected(id)
 		document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
 		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
 		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
+		// document.getElementById('chk_temp_item_id_div').innerHTML = sprintf('C01%06d',new_comp['id']);
+		document.getElementById('chk_temp_item_id_div').innerHTML = 'C01000' + new_comp['id'];
 		temp_probe = false;
 
 		let temp_div = document.getElementById('m1_temp_div');
@@ -1718,7 +1728,35 @@ function show_temp(t)
         }
     }
 }
+function discard_component_popup()
+{
+	console.log('discard component popup');
+	console.log(active_comp);
+	document.getElementById('popup_discard_msg').innerHTML = '<h2>DISCARD</h2>' + active_comp.description;
+	show("popup_discard_div");
+}
+function discard_component()
+{
+	console.log('discard component');
+	console.log(active_comp);
+	close_popup("popup_discard_div");
+	var data =  {data: JSON.stringify(active_comp)};
+    console.log("delete component Sent Off: ", data);
+    $.ajax({
+        url: RESTHOME + "delete_comp.php",
+        type: "POST",
+        data: data,
 
+        success: function(result) { // need to get the id of the new component back to print labels
+            console.log("delete_component result ",result);
+            goto_m_main();
+        },
+        fail: (function (result) {
+            console.log("discard_component fail ",result);
+        })
+    });
+}
+close_popup("popup_discard_div");
 function start_component(dock)
 {
 	// object copy is messy - TODO
@@ -2079,6 +2117,9 @@ function active_comp_selected(id)
 	// var prep_type_val = get_preptype_val(prep_type_id,'M2_temp');
 
 	document.getElementById('chk_temp_item_div').innerHTML = active_comp['description'];
+	// document.getElementById('chk_temp_item_id_div').innerHTML = sprintf('C01%06d',active_comp['id']);
+	document.getElementById('chk_temp_item_id_div').innerHTML = 'C01000' + active_comp['id'];
+	
 	var milestone_due = 'NA';
 	var remaining = 0;
 	var milestone_temp = "NA";
@@ -2411,6 +2452,8 @@ function reprint_active_comp_labels(id)
 	}
 	clear_comp_fields();
 	document.getElementById('chk_temp_item_div').innerHTML = active_comp['description'];
+	//document.getElementById('chk_temp_item_id_div').innerHTML = sprintf('C01%06d',active_comp['id']);
+	document.getElementById('chk_temp_item_id_div').innerHTML = 'C01000' + active_comp['id'];
 	openPage('m_reprint_modal4', this, 'red','m_modal2','tabclass');
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
 }
@@ -2438,6 +2481,7 @@ function display_real_time()
 function m_show_active_components(data,reprint)
 {
 	display_real_time();
+	var timeout_msg = null;
 	var div = document.getElementById('m_current_tracking');
 	if (reprint) div = document.getElementById('m_reprint_labels');
 
@@ -2520,7 +2564,11 @@ function m_show_active_components(data,reprint)
 	   		if (remaining > 0) {
 	   			td = new_td(format_minutes(remaining) + "",'comp');
 	   		} else {
+	   			if (timeout_msg == null) timeout_msg = '<h2>OVERDUE<h2>';
+	   			else timeout_msg += "<br>";
+	   			timeout_msg += data[i]['description'] + " : " + format_minutes(Math.abs(remaining));
 	   			td = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
+	   			
 	   		}
 	   		tr.appendChild(td)
    		}
@@ -2529,6 +2577,7 @@ function m_show_active_components(data,reprint)
     }
 	tab.appendChild(tbody);
    	div.appendChild(tab);
+   	if (timeout_msg != null) popup_timeout(timeout_msg);
 }
 
 function new_node(type,content='',classname=''){

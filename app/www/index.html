@@ -332,6 +332,7 @@
             <div id='chk_temp_pt_div'>CC</div>
         </div>
         <div id='chk_temp_item_div'></div>
+        <div id='chk_temp_item_id_div'></div>
         <div id='chk_temp_item_time_div'>
             <div id='ms_1'>M1</div>
             <div id='ms_1_text'>1 hour remaining</div>
@@ -357,6 +358,7 @@
             <div id='m1_temp_div_1'></div>
             <div id='m1_temp_div_1_error' class='red'></div>
             <div class='btns'>
+            	<button type='button' class='m_btn hidden' id='confirm_start_comp_btn' onclick="start_component(false,true);">CONFIRM</button>
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
         </div>
@@ -461,6 +463,7 @@
             <div id='m2_temp_div'><!--  input type='number' name='m2_temp' size=4 --></div>
 
             <div class='btns'>
+            	<button type='button' class='m_submit' onclick="discard_component_popup();">DISCARD</button>
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
         </div>
@@ -754,15 +757,27 @@
         </div>
     </div>
 </div>
+<div class='popup' id='popup_discard_div'>
+    <h2><div class='center' id='popup_discard_head'></div></h2>
+    <div class='center'>
+        <div class='center red m-10' id='popup_discard_msg'></div>    
+    </div>
+    <button type='button' class='m_btn' onclick='discard_component();'>OK</button>
+   	<button type='button' class='m_btn' onclick='close_popup("popup_discard_div")'>CANCEL</button>
+</div>
 <div class='popup' id='popup_error_div'>
     <h2><div class='center' id='popup_error_head'></div></h2>
     <div class='center'>
-        <div class='center red m-10' id='popup_error_msg'></div>
-        
+        <div class='center red m-10' id='popup_error_msg'></div>    
     </div>
-  
-    	<button type='button' class='m_btn' onclick='close_popup()'>Close</button>
-   
+   	<button type='button' class='m_btn' onclick='close_popup("popup_error_div")'>Close</button>
+</div>
+<div class='popup' id='popup_time_div'>
+    <h2><div class='center' id='popup_time_head'></div></h2>
+    <div class='center'>
+        <div class='center red m-10' id='popup_time_msg'></div>    
+    </div>
+   	<button type='button' class='m_btn' onclick='close_popup("popup_time_div")'>Close</button>
 </div>
 <div class='popup' id='manual_entry'>
     <div class='center'><h2>Enter Temperature</h2></div>

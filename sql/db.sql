@@ -168,6 +168,7 @@ CREATE table COMPONENT (
 	comp_id int,
 	description varchar(100),
 	prep_type_id int,
+	started datetime,
 	M1_check_id int,
 	M1_temp float,
 	M1_time datetime,

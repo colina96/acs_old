@@ -31,20 +31,20 @@ $userID = $_SESSION['userID'];
 if (!empty($comp['M1_temp'])) {
 	$M1_temp = $comp['M1_temp'];
 	$sql = "insert into COMPONENT ";
-	$sql .= "(id, comp_id,description, prep_type_id, M1_check_id, M1_temp, M1_time, M1_chef_id,M1_action_code,M1_action_id,shelf_life_days,expiry_date,finished) ";
-	$sql .= "values (null,".$comp_id.",'".$description."',".$prep_type.",".$userID.",".$M1_temp.",now(),".$M1_chef_id.",".$M1_action_code.",".$M1_action_id.",".$shelf_life_days;
+	$sql .= "(id, comp_id,description, prep_type_id, started, M1_check_id, M1_temp, M1_time, M1_chef_id,M1_action_code,M1_action_id,shelf_life_days,expiry_date,finished) ";
+	$sql .= "values (null,".$comp_id.",'".$description."',".$prep_type.",now(),".$userID.",".$M1_temp.",now(),".$M1_chef_id.",".$M1_action_code.",".$M1_action_id.",".$shelf_life_days;
 	$sql .= ",DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY),".$finished.")";
 }
 else if (!empty($comp['finished'])) {
 	$sql = "insert into COMPONENT ";
-	$sql .= "(id, comp_id,description, prep_type_id, M1_check_id, M1_time, M1_chef_id,M1_action_code,M1_action_id,finished,shelf_life_days,expiry_date) ";
-	$sql .= "values (null,".$comp_id.",'".$description."',".$prep_type.",".$userID.",now(),".$M1_chef_id.",".$M1_action_code.",".$M1_action_id.",now(),".$shelf_life_days;
+	$sql .= "(id, comp_id,description, prep_type_id, started, M1_check_id, M1_time, M1_chef_id,M1_action_code,M1_action_id,finished,shelf_life_days,expiry_date) ";
+	$sql .= "values (null,".$comp_id.",'".$description."',".$prep_type.",now(),".$userID.",now(),".$M1_chef_id.",".$M1_action_code.",".$M1_action_id.",now(),".$shelf_life_days;
 	$sql .= ",DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY))";
 }
 else { // can only be M0 - 
 	$sql = "insert into COMPONENT ";
-	$sql .= "(id, comp_id,description, prep_type_id,M1_check_id) ";
-	$sql .= "values (null,".$comp_id.",'".$description."',".$prep_type.",".$userID.")";
+	$sql .= "(id, comp_id,description, prep_type_id,started, M1_check_id) ";
+	$sql .= "values (null,".$comp_id.",'".$description."',".$prep_type.",now(),".$userID.")";
 	$M0 = true;
 }
 test_mysql_query($sql);

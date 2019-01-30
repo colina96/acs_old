@@ -83,10 +83,19 @@
 
 #chk_temp_item_div, .chk_temp_item{
 	position:absolute;
-	top: 8vh;
+	top: 6vh;
 	left: 6vw;
 	color:var(--acs_text_normal_light);
 	font-size:6vw;
+	font-weight: bold;
+
+}
+#chk_temp_item_id_div{
+	position:absolute;
+	top: 15vh;
+	left: 6vw;
+	color:var(--acs_text_normal_light);
+	font-size:4vw;
 	font-weight: bold;
 
 }
