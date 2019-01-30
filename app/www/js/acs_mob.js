@@ -1299,6 +1299,8 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 	document.getElementById('confirm_start_comp_btn').style.display = 'none';
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
 	document.getElementById('m1_temp_div_1a').innerHTML = '';
+	document.getElementById('chk_temp_item_div').innerHTML = new_comp.description;
+	document.getElementById('chk_temp_item_id_div').innerHTML = '';
 	div = document.getElementById('m1_temp_div_1');
 	var d = "<div class='m-10'><table width='100%'>";
 	d += "<tr><td width='200px'>Description</td><td width='40px'>ID</td><td width='40px'>Temp</td></tr>";
