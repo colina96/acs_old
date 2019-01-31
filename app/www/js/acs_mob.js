@@ -260,7 +260,7 @@ function process_barcode(s)
 			plating_comp_barcode_scanned(cid,true);
 		}
 		else if (barcode_mode == 'active_comp') {
-			console.log('loogin for ' + cid);
+			console.log('login for ' + cid);
 			for (var i = 0; i < active_comps.length; i++) {
 				if (active_comps[i].id == cid) {
 					active_comp_selected(i);
@@ -1616,7 +1616,8 @@ function check_temp(t) // start a new component
 function add_chef_select(target_div,input_name) 
 {
 	var s = document.getElementById(target_div);
-	s.innerHTML = null;
+	clearChildren(s);
+
 	var select = document.createElement('select');
 	select.name = input_name;
 	// console.log('found plating teams ',plating_teams.length);
@@ -1706,12 +1707,13 @@ function k_qa_override(uid)
 function clear_temps()
 {
     tdiv = document.getElementsByClassName('temp_reading');
+    console.log("clear_temps: Clearing "+tdiv.length+" temperature divs");
     for (i = 0; i < tdiv.length; i++) {
-    	console.log("found div ",tdiv[i].id);
+    	//console.log("found div ",tdiv[i].id);
     	try {
-    		tdiv[i].innerHTML= "";
+    		clearChildren(tdiv[i]);
     	}
-        catch (e) {
+	catch (e) {
         	console.log("who knows.....");
         }
     }
@@ -1758,24 +1760,29 @@ function discard_component()
         })
     });
 }
+
 close_popup("popup_discard_div");
+
 function start_component(dock)
 {
 	// object copy is messy - TODO
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
+
 	console.log('start component');
-	console.log(active_comp);
-	console.log(new_comp);
+	console.log('active component', active_comp);
+	console.log('new component', new_comp);
+
 	// check if component at M0 - has ingredients
-	if ((active_comp && !active_comp['M1_time']) || (active_comp && active_comp['selected_ingredients'])) {
+	if ( active_comp && ( !active_comp['M1_time'] || active_comp['selected_ingredients'] )) {
 		console.log('component start - need to print labels');
 		comp_milestone(active_comp['M1_temp']);
-        goto_m_main();
+        	goto_m_main();
 		return;
 	}
+
 	var component = new Object();
+
 	component.description = new_comp['description']; // simplifies display
-	// active_comp = copy_object(new_comp);
 	component.comp_id = new_comp['id'];
 	component.M1_chef_id = new_comp['M1_chef_id'];
 	component.prep_type = new_comp['prep_type'];
@@ -1785,60 +1792,66 @@ function start_component(dock)
 	component.items = new_comp.selected_ingredients;
 	component.dock = dock;
 	prep_type_id = component.prep_type;
-	console.log("start compontent " + component.description + " prep_type" + component.prep_type);
+
+	console.log("start component " + component.description + " prep_type " + component.prep_type);
 	// component.M1_temp = document.getElementsByName('m1_temp')[0].value;
 	var M2_time = get_preptype_val(prep_type_id,'M2_time_minutes');
-	console.log("At M1, M2 time = " + M2_time);
-	console.log("At M1, M3 time = " + get_preptype_val(prep_type_id,'M3_time_minutes'));
-	if (new_comp['M1_temp']) component.M1_temp = new_comp['M1_temp'];
+	console.log("At M1, M2 time = " + M2_time 
+		+ ", M3 time = " + get_preptype_val(prep_type_id,'M3_time_minutes'));
+	if (new_comp['M1_temp']) {
+		component.M1_temp = new_comp['M1_temp'];
+	}
 	if (M2_time == null) {
 		component.finished = 'true';
-		
-	}
-	else {
+	} else {
 		component.M1_temp = new_comp['M1_temp'];
 	}
 	if (dock) {
-		
 		component.M1_chef_id = get_user_id();
 		console.log('set M1_chef_id to ',component.M1_chef_id);
-
 	}
+
 	active_comp = component;
 	var data =  {data: JSON.stringify(component)};
-    console.log("start_component Sent Off: ", data);
-    var qty_input = (dock)?'dock_m1_label_qty':'m1_label_qty';
-   //  document.getElementsByName('m1_temp')[0].value = '';
-    $.ajax({
-        url: RESTHOME + "new_comp.php",
-        type: "POST",
-        data: data,
 
-        success: function(result) { // need to get the id of the new component back to print labels
-            console.log("start_component result ",result);
-            var comp = JSON.parse(result);
-            // active_comp = comp;
-            console.log("start_component id =  ",comp.id);
-            var qty = document.getElementsByName(qty_input)[0].value;
-            active_comp.id = comp.id;
-            active_comp.expiry_date = comp.expiry_date;
-            active_comp.M1_time = comp.M1_time;
-           // active_comp.M1_chef_id = comp.M1_chef_id;
-            print_component_labels(qty);
-            document.getElementsByName(qty_input)[0].value = 1;
-            console.log('comp.dock = ',comp.dock);
-            if (comp.dock == true) goto_dock()
-            else goto_m_main();
-            new_comp = null;
-        },
-        done: function(result) {
-            console.log("done start_component result ",result);
-        },
-        fail: (function (result) {
-            console.log("start_component fail ",result);
-        })
-    });
-    
+    	console.log("start_component Sent Off: ", data);
+    	var qty_input = (dock)?'dock_m1_label_qty':'m1_label_qty';
+
+    	$.ajax({
+		url: RESTHOME + "new_comp.php",
+		type: "POST",
+		data: data,
+
+		success: function(result) { // need to get the id of the new component back to print labels
+		    console.log("start_component succes ",result);
+		    var comp = JSON.parse(result);
+
+		    console.log("start_component id =  ",comp.id);
+		    var qty = document.getElementsByName(qty_input)[0].value;
+
+		    active_comp.id = comp.id;
+		    active_comp.expiry_date = comp.expiry_date;
+		    active_comp.M1_time = comp.M1_time;
+
+		   // active_comp.M1_chef_id = comp.M1_chef_id;
+		    print_component_labels(qty);
+
+		    // reset default value TODO should that not be done on popup?
+		    document.getElementsByName(qty_input)[0].value = 1;
+
+		    console.log('comp.dock = ',comp.dock);
+
+		    if (comp.dock == true) goto_dock()
+		    else goto_m_main();
+		    new_comp = null;
+		},
+		done: function(result) {
+		    console.log("start_component done ",result);
+		},
+		fail: function (result) {
+		    console.log("start_component fail ",result);
+		}
+    	});
 }
 
 function set_user(input_name,next_page,uid) {
@@ -2346,33 +2359,30 @@ function print_component_labels(qty)
 		console.log(comp);
 		var chef = get_chef_by_id(comp['M1_chef_id']);
 		if (chef) {
-		    console.log("found chef ",chef['label']); 
-		    comp.preparedBy = chef['label'];
-		}
-		else {
+		        comp.preparedBy = chef['label'];
+		} else {
+			console.log("print_component_labels found no chef");
 			comp.preparedBy = "ERROR" ; // should be set by now
 		}
 	}
 	
 	var data =  {data: JSON.stringify(comp)};
-    console.log("Sent Off: ", data);
-    console.log(comp);
-    
-    $.ajax({
-        url: RESTHOME + "comp_label.php",
-        type: "POST",
-        data: data,
+	console.log("print_component_labels sent off: ", data);
+	console.log(comp);
 
-        success: function(result) {
-            console.log("comp_label result ",result);
-            
-        },
-        
-        fail: (function (result) {
-            console.log("comp_label fail ",result);
-        })
-    });
-	// goto_m_main();
+	$.ajax({
+		url: RESTHOME + "comp_label.php",
+		type: "POST",
+		data: data,
+
+		success: function(result) {
+		    console.log("comp_label result ",result);
+		},
+
+		fail: (function (result) {
+		    console.log("comp_label fail ",result);
+		})
+	});
 }
 
 // TODO - come up with a sensible naming system for groups of functions
@@ -2480,6 +2490,7 @@ function display_real_time()
 	document.getElementById('current_time_kitchen').innerHTML = h + ":" + m;
 	document.getElementById('current_time_dock').innerHTML = h + ":" + m;
 }
+
 function m_show_active_components(data,reprint)
 {
 	display_real_time();
@@ -2491,25 +2502,25 @@ function m_show_active_components(data,reprint)
 		div.innerHTML = "<span>No Active Components</span>";
 		return;
 	}
-	if (reprint) {
-		div.innerHTML = "";
-	} else {
-		div.innerHTML = "";
-	}
 
+	clearChildren(div);
+
+	//build table
 	var tab = new_node('table','','component_table');
+	//build head
 	var thead = new_node('thead');
 	var tr = new_node('tr');
 	
-    tr.appendChild(new_node('th','Description','comp_left'));
-    if (!reprint) {
-    	tr.appendChild(new_node('th','M','comp_middle'));
-    	tr.appendChild(new_node('th','TIME','comp_right'));
-    }
+        tr.appendChild(new_node('th','Description','comp_left'));
+        if (!reprint) {
+        	tr.appendChild(new_node('th','M','comp_middle'));
+        	tr.appendChild(new_node('th','TIME','comp_right'));
+        }
 
    	thead.appendChild(tr);
 	tab.appendChild(thead);
 
+	//body
 	var tbody = new_node('tbody');
 
 	for (var i=0; i<data.length; ++i) {
@@ -2518,10 +2529,16 @@ function m_show_active_components(data,reprint)
    		var clickdiv;
    		var span_txt='';
    		if(reprint){
-			if (typeof(serial) == 'undefined') tr.setAttribute("onclick","reprint_active_comp_labels(" + data[i]['id'] + ");");
+			if (typeof(serial) == 'undefined'){
+				tr.setAttribute(
+					"onclick",
+					"reprint_active_comp_labels(" + data[i]['id'] + ");"
+				);
+			}
 			clickdiv = "<div>";
 		}else{
-			/* if (typeof(serial) == 'undefined') */ tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
+			/* if (typeof(serial) == 'undefined') */ 
+			tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
 		//	span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
 			clickdiv = "<div class='tooltip'>";
 		}
@@ -2541,7 +2558,7 @@ function m_show_active_components(data,reprint)
 		if (reprint) {
 
    		}else if (data[i]['M1_time'] == '') { // M0 - ingredients have been selected
-			tr.appendChild(new_td('.','comp'));
+			tr.appendChild(new_td('.','comp center'));
 			tr.appendChild(new_td('Cooking','comp'));
 		}else {
 			var num;
