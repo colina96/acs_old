@@ -1904,20 +1904,21 @@ function set_user(input_name,next_page,uid) {
 	
 }
 
+
 function comp_milestone(temp_reading,force,qa_code)
 {
+	let tag = 'comp_milestone: ';
 	// send data to REST interface
-	console.log('comp_milestone');
-	console.log(active_comp);
+	console.log(tag, 'active_comp: ',active_comp);
 	var prep_type_id = active_comp['prep_type_id'];
-	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(temp_reading * 10) / 10 + "&#176C"
+	document.getElementById('dock_m1_temp_div_4').innerHTML=parseInt(temp_reading * 10) / 10 + "&#176C"
 	var temp_target = get_preptype_val(prep_type_id,'M2_temp');
 		
 	var component = new Object();
 	component.id = active_comp['id'];
 	var url = '';
 	if (force && qa_code) {
-		console.log('comp_milestone forced by QA');
+		console.log(tag,'forced by QA');
 		component.M3_temp = temp_reading;
 		component['M2_time'] = 'now';
 		component['M3_time'] = 'now';
@@ -1927,35 +1928,37 @@ function comp_milestone(temp_reading,force,qa_code)
 		component.M3_chef_id = 0;
 		url = RESTHOME + 'M3_comp.php';
 	}
-	else if (active_comp['M1_time'] == '') { // M1
-		console.log('comp_milestone M1');
+	else if (active_comp['M1_time'] == '') { 
+		// M1
+		console.log(tag,'M1');
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M1_temp = last_temp;
 		component.M1_chef_id = active_comp['M1_chef_id']; // TODO
 		
 		url = RESTHOME + 'M1_comp.php';
 	}
-	else if (active_comp['M2_time'] == '') { // M2
-		console.log('comp_milestone M2');
+	else if (active_comp['M2_time'] == '') { 
+		// M2
+		console.log(tag,'M2');
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M2_temp = last_temp;
 		active_comp['M2_time'] = 'now';
 		component.M2_chef_id = 0;
 		if (qa_code) {
-			console.log('setting action code');
+			console.log(tag,'setting action code');
 			component['M2_action_code'] = qa_code;
 			component['M2_action_id'] = active_comp.qa_override_uid ;
 		}
 		var M3_time_minutes = get_preptype_val(prep_type_id,'M3_time_minutes');
-		console.log("At M2, M3 time = " + M3_time_minutes + " ->" + typeof(M3_time_minutes));
+		console.log(tag,"At M2, M3 time = " + M3_time_minutes + " ->" + typeof(M3_time_minutes));
 		if (M3_time_minutes == null) {
-			console.log("component finished");
+			console.log(tag,"component finished");
 			component.finished = 'true';
 		}
 		url = RESTHOME + 'M2_comp.php';
 	}
 	else {
-		console.log('comp_milestone M3');
+		console.log(tag,'M3');
 		//component.M3_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M3_temp = temp_reading;
 		active_comp['M3_time'] = 'now';
@@ -1963,44 +1966,44 @@ function comp_milestone(temp_reading,force,qa_code)
 		url = RESTHOME + 'M3_comp.php';
 	}
 	var data =  {data: JSON.stringify(component)};
-    console.log("Sent Off: ", data);
-    console.log('to ' + url);
-    $.ajax({
-        url: url,
-        type: "POST",
-        data: data,
+	console.log("Sent Off: ", data);
+	console.log('to ' + url);
+	$.ajax({
+		url: url,
+		type: "POST",
+		data: data,
 
-        success: function(result) {
-            console.log("comp_milestone result ",result);
-            console.log(active_comp);
-            if (active_comp['M2_time'] == '' && !force) { 
-            	// at M1 - component has tracked ingredients
-            	// get chef id and print labels
-            	var qty = document.getElementsByName('m1_label_qty')[0].value;
-            	console.log("At M1: printing "+qty+" labels");
-                print_component_labels(qty);
-                document.getElementsByName('m1_label_qty')[0].value = 1;
-          //  	openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
-            } else {
-            	console.log("At M2/3: not printing labels");
-            	if (component['M3_temp'] && component['M3_temp'] != '') {
-            		console.log('M3 finished',component['M3_temp']);
-            		if (force) document.getElementById('m2_temp_div_3a').innerHTML= "M3 FORCED";
-            		openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
-            	} else {
-            		console.log('at M2');
-            		goto_m_main();
-            		// openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
-            	}
-            }
-        },
-        done: function(result) {
-            console.log("done start_component result ",result);
-        },
-        fail: (function (result) {
-            console.log("start_componentfail ",result);
-	        })
-    });
+		success: function(result) {
+			console.log(tag,"result: ",result);
+			console.log(tag,"component: ",component);
+			if (component['M2_time'] == '' && !force) { 
+				// at M1 - component has tracked ingredients
+				// get chef id and print labels
+				var qty = document.getElementsByName('m1_label_qty')[0].value;
+				console.log(tag,"At M1: printing "+qty+" labels");
+				print_component_labels(qty);
+				document.getElementsByName('m1_label_qty')[0].value = 1;
+				//  	openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
+			} else {
+				console.log(tag,"At M2/3: not printing labels");
+				if (component['M3_temp'] && component['M3_temp'] != '') {
+					console.log(tag,'M3 finished',component['M3_temp']);
+					if (force) document.getElementById('m2_temp_div_3a').innerHTML= "M3 FORCED";
+					openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
+				} else {
+					console.log(tag,'at M2');
+					goto_m_main();
+					// openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
+				}
+			}
+		},
+		done: function(result) {
+			console.log(tag, "done result ",result);
+		},
+		fail: (function (result) {
+			console.log(tag, "fail ",result);
+		})
+	});
 }
 
 function continue_chilling()
@@ -2008,6 +2011,7 @@ function continue_chilling()
 	if (active_comp.milestone_ok) comp_milestone();
 	else goto_m_main();
 }
+
 function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 {
 	// TODO - rewrite this as a state machine. It's far to complex as it is.
