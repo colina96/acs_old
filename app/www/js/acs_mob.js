@@ -201,11 +201,11 @@ function check_user(user_flag)
 	return false;
 }
 
-function process_barcode(s)
-{ 
-	console.log("process_barcode " + s + " mode " + barcode_mode);
+function process_barcode(s) { 
+	let tag = "process_barcode: ";
+	console.log(tag, s + " mode " + barcode_mode);
 	if (s == 'setup1') {
-		console.log('setup');
+		console.log(tag,'setup');
 	}
 	if (user_id <= 0) {
 		barcode_mode = 'login';
@@ -260,7 +260,7 @@ function process_barcode(s)
 			plating_comp_barcode_scanned(cid,true);
 		}
 		else if (barcode_mode == 'active_comp') {
-			console.log('login for ' + cid);
+			console.log(tag,'login for ' + cid);
 			for (var i = 0; i < active_comps.length; i++) {
 				if (active_comps[i].id == cid) {
 					active_comp_selected(i);
@@ -281,11 +281,11 @@ function process_barcode(s)
 			barcode_mode = null;
 		}
 		else if (barcode_mode == 'scan_ingredients') {
-			console.log('read ingredient ' + cid);
+			console.log(tag,'read ingredient ' + cid);
 			check_ingredient(cid);
 		}
 		else { // barcode mode null
-			console.log('barcode_mode not set',barcode_mode,mode);
+			console.log(tag,'barcode_mode not set',barcode_mode,mode);
 			if (mode == 'plating') {
 				// maybe decant?
 				plating_comp_barcode_scanned(cid,false);
@@ -322,56 +322,59 @@ function set_ingredient_temp(s)
 
 function check_ingredient(cid)
 {
-	
-	console.log('check ingredient'  + cid);
-	document.getElementById('m1_temp_div_1_error').innerHTML = '';
+	let tag = 'check_ingredient: ';
+	console.log(tag, cid);
+	clearChildren(document.getElementById('m1_temp_div_1_error'));
 	$.ajax({
-        url: RESTHOME + "get_active_comps.php?cid=" + cid,
-        type: "POST",
+		url: RESTHOME + "get_active_comps.php?cid=" + cid,
+		type: "POST",
 
-        success: function(result) {
-        	console.log(result);
- 
-            var scanned_ingredient = JSON.parse(result);
-            console.log("got component " + scanned_ingredient[0].description,' expired:' ,scanned_ingredient[0].expired);
-            if (scanned_ingredient[0].expired == 1) {
-            	console.log('ingredient expired')
+		success: function(result) {
+			console.log(tag,"result: ",result);
+
+			var scanned_ingredient = JSON.parse(result);
+			console.log(
+				tag,
+				"got component " + scanned_ingredient[0].description,
+				' expired:' ,scanned_ingredient[0].expired);
+			if (scanned_ingredient[0].expired == 1) {
+				console.log('ingredient expired');
 				document.getElementById('m1_temp_div_1_error').innerHTML = 'EXPIRED';
-            	document.getElementById('popup_error_msg').innerHTML = 'EXPIRED';
-            	popup_error(scanned_ingredient[0].description,'EXPIRED<br>' + scanned_ingredient[0].expiry_date);
+				document.getElementById('popup_error_msg').innerHTML = 'EXPIRED';
+				popup_error(
+					scanned_ingredient[0].description,
+					'EXPIRED<br>' + scanned_ingredient[0].expiry_date);
 				return;
 			}
-            var valid_ingredient = false;
-            for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
-    			var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
-    			if (sub['description'] == scanned_ingredient[0].description) {
-    				console.log("found ingredient");
-    				valid_ingredient = true;
-    				new_comp['selected_ingredients'][i]['cid'] = scanned_ingredient[0].id;
-    				// attach to new_comp and record temperature
-    				draw_ingredients();
-    				new_comp['read_temp'] = i;
-    				read_temp('M0');
-    				openPage('m_temp_modal1a', this, 'red','m_modal2','tabclass');
-    				var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
-    				// d += "<tr><td>" + sub['description'] + '</td>';
-    				document.getElementById('ms_1_text').innerHTML = sub['description'];
-    				document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
-    				new_comp['selected_ingredients'][i]['target'] = get_preptype_val(sub['prep_type'],'M1_temp');
-    				console.log(new_comp);
-    				read_temp('M0');
-    			}
-    			
-    		}
-            if (!valid_ingredient) {
+			var valid_ingredient = false;
+			for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
+				var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+				if (sub['description'] == scanned_ingredient[0].description) {
+					console.log(tag,"found ingredient");
+					valid_ingredient = true;
+					new_comp['selected_ingredients'][i]['cid'] = scanned_ingredient[0].id;
+					// attach to new_comp and record temperature
+					draw_ingredients();
+					new_comp['read_temp'] = i;
+					read_temp('M0');
+					openPage('m_temp_modal1a', this, 'red','m_modal2','tabclass');
+					var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+					// d += "<tr><td>" + sub['description'] + '</td>';
+					document.getElementById('ms_1_text').innerHTML = sub['description'];
+					document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
+					new_comp['selected_ingredients'][i]['target'] = get_preptype_val(sub['prep_type'],'M1_temp');
+					console.log(tag, "new_comp", new_comp);
+					read_temp('M0');
+				}
+			}
+			if (!valid_ingredient) {
 				document.getElementById('m1_temp_div_1_error').innerHTML = 'invalid component';
 			}
-            
-        },
-        fail: (function (result) {
-            console.log("fail check_ingredient ",result);
-        })
-    });
+		},
+		fail: (function (result) {
+			console.log("fail check_ingredient ",result);
+		})
+	});
 }
 
 function load_preptypes()
@@ -1294,33 +1297,36 @@ function get_preptype_val(id,fld)
 
 function draw_ingredients() // returns true if all ingredients are selected and have a temperature
 {
+	let tag = "draw_ingredients: ";
 	var finished = true;
 	document.getElementById('confirm_start_comp_btn').style.display = 'none';
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
-	document.getElementById('m1_temp_div_1a').innerHTML = '';
+
+	clearChildren(document.getElementById('m1_temp_div_1a'));
+	clearChildren(document.getElementById('chk_temp_item_id_div'));
 	document.getElementById('chk_temp_item_div').innerHTML = new_comp.description;
-	document.getElementById('chk_temp_item_id_div').innerHTML = '';
+
 	div = document.getElementById('m1_temp_div_1');
 	var d = "<div class='m-10'><table width='100%'>";
-	d += "<tr><td width='200px'>Description</td><td width='40px'>ID</td><td width='40px'>Temp</td></tr>";
+	d += "<tr><td width='200px'>Description</td>" +
+		"<td width='40px'>ID</td><td width='40px'>Temp</td></tr>";
+
 	var prep_type_id = new_comp['prep_type'];
-	console.log(' draw_ingredients prep_type_id',prep_type_id);
-	document.getElementById('ms_2_target').innerHTML = '';
+	console.log(tag,' draw_ingredients prep_type_id',prep_type_id);
+	clearChildren(document.getElementById('ms_2_target'));
 
 	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
 		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
 		d += "<tr><td>" + sub['description'] + '</td>';
 		if (new_comp['selected_ingredients'][i]['cid']) {
 			d += "<td>" + new_comp['selected_ingredients'][i]['cid'] + "</td>";
-		}
-		else {
-			finished = false;
+		} else {
 			d += "<td>-</td>";
+			finished = false;
 		}
 		if (new_comp['selected_ingredients'][i]['temp']) {
 			d += "<td>" + new_comp['selected_ingredients'][i]['temp'] + "</td>";
-		}
-		else {
+		} else {
 			d += "<td>-</td>";
 			finished = false;
 		}
@@ -1333,19 +1339,21 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 }
 // called when user searchs for and selects a component - M1 only 
 
-
 function component_selected(id)
 {
-	console.log("component selected - loading chefs");
+	let tag="component_selected: "
+
+	console.log(tag,"loading chefs");
 	load_chefs(null);
-	new_comp = null;
+
 	active_comp = null;
-	if (id) {
-		new_comp = get_component_by_id(id);
-	}
-	console.log(new_comp);
+
+	new_comp =id?get_component_by_id(id):null;
+
+	console.log(tag,"new_comp: ",new_comp);
+
 	if (!new_comp) {
-		console.log("can't find component - search for " + $('#search').val());
+		console.log(tag,"can't find component - search for " + $('#search').val());
 		new_comp = get_component_by_description($('#search').val());
 	}
 	if (new_comp['prep_type'] < 1) new_comp['prep_type'] = 1;
@@ -1367,6 +1375,7 @@ function component_selected(id)
 	// subcomponents is an array of ids - needs to become an array of objects to store temperature and used id
 	
 	if (new_comp['subcomponents']) {
+		console.log(tag,'has ingredients');
 		if (!new_comp['selected_ingredients']) {
 			new_comp['selected_ingredients'] = new Array();
 			for (var i = 0; i < new_comp['subcomponents'].length; i++) {
@@ -1374,20 +1383,20 @@ function component_selected(id)
 				new_comp['selected_ingredients'][i]['id'] = new_comp['subcomponents'][i];
 			}
 		}
-		console.log('has ingredients');
 		set_barcode_mode('scan_ingredients');
 		draw_ingredients();
 	} else if (M1_temp == null) { // low risk. No temp required
-		console.log("LOW RISK");
+		console.log(tag,"LOW RISK");
 		set_barcode_mode("M1_LR");
 		openPage('m_temp_modal_LR', this, 'red','m_modal2','tabclass');
 		document.getElementById('m1_temp_div_LR_comp').innerHTML = new_comp['description'];
-		document.getElementById('ms_2').innerHTML = ' ';
-		document.getElementById('ms_2_text').innerHTML = ' ';
-		document.getElementById('ms_2_target').innerHTML = "";
-		document.getElementById('chk_temp_item_div').innerHTML = '';
-		document.getElementById('chk_temp_item_id_div').innerHTML = '';
+		clearChildren(document.getElementById('ms_2'));
+		clearChildren(document.getElementById('ms_2_text'));
+		clearChildren(document.getElementById('ms_2_target'));
+		clearChildren(document.getElementById('chk_temp_item_div'));
+		clearChildren(document.getElementById('chk_temp_item_id_div'));
 	} else {
+		console.log(tag,"everything else, going for M1");
 		set_barcode_mode("M1");
 		set_temp_mode("M1");
 		openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
@@ -1405,8 +1414,8 @@ function component_selected(id)
 
 	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
 	// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
-	document.getElementById('ms_1').innerHTML = '';
-	document.getElementById('ms_1_text').innerHTML = '';
+	clearChildren(document.getElementById('ms_1'));
+	clearChildren(document.getElementById('ms_1_text'));
 	
 
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
@@ -1519,7 +1528,6 @@ function check_temp_m1_dock(t)
 			}
 		}
 	}
-	
 }
 
 function dock_QA_scan(uid)
@@ -1649,7 +1657,7 @@ function force_M1(uid)
 	if (draw_ingredients()) {
 		// set_barcode_mode('scan_ingredients');
 		// save ingredient - new_comp.php
-		start_component(false,true);
+		start_component(false);
 	}
 	else {
 		set_barcode_mode('scan_ingredients');
@@ -1762,16 +1770,25 @@ close_popup("popup_discard_div");
 
 function start_component(dock)
 {
+	let tag='start_component: ';
 	// object copy is messy - TODO
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
 
 	console.log('start component');
-	console.log('active component', active_comp);
-	console.log('new component', new_comp);
+	console.log(tag,'active component', active_comp,'new component', new_comp);
 
 	// check if component at M0 - has ingredients
+	console.log(tag,'active component', active_comp)
+	if (active_comp){
+		console.log(tag,'active_comp exists:',
+		'\n  !active_comp["M1_time"]=',!active_comp['M1_time'],
+		'\n  active_comp["selected_ingredients"]=',active_comp['selected_ingredients']
+		);
+	} else {
+		console.log(tag, 'active_comp does not exist');
+	}
 	if ( active_comp && ( !active_comp['M1_time'] || active_comp['selected_ingredients'] )) {
-		console.log('component start - need to print labels');
+		console.log(tag,' need to print labels');
 		comp_milestone(active_comp['M1_temp']);
         	goto_m_main();
 		return;
@@ -1790,10 +1807,10 @@ function start_component(dock)
 	component.dock = dock;
 	prep_type_id = component.prep_type;
 
-	console.log("start component " + component.description + " prep_type " + component.prep_type);
+	console.log(tag, component.description + " prep_type " + component.prep_type);
 	// component.M1_temp = document.getElementsByName('m1_temp')[0].value;
 	var M2_time = get_preptype_val(prep_type_id,'M2_time_minutes');
-	console.log("At M1, M2 time = " + M2_time 
+	console.log(tag,"At M1, M2 time = " + M2_time 
 		+ ", M3 time = " + get_preptype_val(prep_type_id,'M3_time_minutes'));
 	if (new_comp['M1_temp']) {
 		component.M1_temp = new_comp['M1_temp'];
@@ -1811,7 +1828,7 @@ function start_component(dock)
 	active_comp = component;
 	var data =  {data: JSON.stringify(component)};
 
-    	console.log("start_component Sent Off: ", data);
+    	console.log(tag," Sent Off: ", data);
     	var qty_input = (dock)?'dock_m1_label_qty':'m1_label_qty';
 
     	$.ajax({
@@ -1820,33 +1837,35 @@ function start_component(dock)
 		data: data,
 
 		success: function(result) { // need to get the id of the new component back to print labels
-		    console.log("start_component succes ",result);
+		    console.log(tag,"success ",result);
 		    var comp = JSON.parse(result);
 
-		    console.log("start_component id =  ",comp.id);
+		    console.log(tag,"id = ",comp.id);
 		    var qty = document.getElementsByName(qty_input)[0].value;
 
 		    active_comp.id = comp.id;
 		    active_comp.expiry_date = comp.expiry_date;
 		    active_comp.M1_time = comp.M1_time;
 
-		   // active_comp.M1_chef_id = comp.M1_chef_id;
-		    print_component_labels(qty);
+		    if(dock){
+		   	// active_comp.M1_chef_id = comp.M1_chef_id;
+		        print_component_labels(qty);
+		    }
 
 		    // reset default value TODO should that not be done on popup?
 		    document.getElementsByName(qty_input)[0].value = 1;
 
-		    console.log('comp.dock = ',comp.dock);
+		    console.log(tag,'comp.dock = ',comp.dock);
 
 		    if (comp.dock == true) goto_dock()
 		    else goto_m_main();
 		    new_comp = null;
 		},
 		done: function(result) {
-		    console.log("start_component done ",result);
+		    console.log(tag,"done ",result);
 		},
 		fail: function (result) {
-		    console.log("start_component fail ",result);
+		    console.log(tag,"fail ",result);
 		}
     	});
 }
