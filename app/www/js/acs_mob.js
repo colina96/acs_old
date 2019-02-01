@@ -1129,20 +1129,20 @@ function new_component() {
 	// component.prep_type = new_comp['prep_type'];
 	
 	var data =  {data: JSON.stringify(component)};
-    console.log("Sent Off: ", data);
-    console.log(component);
-    $.ajax({
-        url: RESTHOME + "new_component.php",
-        type: "POST",
-        data: data,
+	console.log("Sent Off: ", data);
+	console.log(component);
+	$.ajax({
+		url: RESTHOME + "new_component.php",
+		type: "POST",
+		data: data,
 
-        success: function(result) { 
-        	load_comps(component_selected);
-        },
-        fail: (function (result) {
-            console.log("new _component fail ",result);
-        })
-    });
+		success: function(result) { 
+			load_comps(component_selected);
+		},
+		fail: (function (result) {
+			console.log("new _component fail ",result);
+		})
+	});
 }
 
 function show_dock_component(cid)
@@ -1350,8 +1350,7 @@ function component_selected(id)
 
 	new_comp =id?get_component_by_id(id):null;
 
-	console.log(tag,"new_comp: ",new_comp);
-
+	console.log(tag,"new_comp: ",new_comp); 
 	if (!new_comp) {
 		console.log(tag,"can't find component - search for " + $('#search').val());
 		new_comp = get_component_by_description($('#search').val());
@@ -1397,19 +1396,20 @@ function component_selected(id)
 		clearChildren(document.getElementById('chk_temp_item_id_div'));
 	} else {
 		console.log(tag,"everything else, going for M1");
+		start_component(false);
 		set_barcode_mode("M1");
 		set_temp_mode("M1");
-		openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
-		document.getElementById('ms_2').innerHTML = 'M1';
-		document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
-		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
-		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
-		// document.getElementById('chk_temp_item_id_div').innerHTML = sprintf('C01%06d',new_comp['id']);
-		document.getElementById('chk_temp_item_id_div').innerHTML = 'C01000' + new_comp['id'];
-		temp_probe = false;
-
-		let temp_div = document.getElementById('m1_temp_div');
-		checkTempDiv(temp_div,new_comp,"read_M1temp();");
+//		openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
+//		document.getElementById('ms_2').innerHTML = 'M1';
+//		document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
+//		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
+//		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
+//		// document.getElementById('chk_temp_item_id_div').innerHTML = sprintf('C01%06d',new_comp['id']);
+//		document.getElementById('chk_temp_item_id_div').innerHTML = 'C01000' + new_comp['id'];
+//		temp_probe = false;
+//
+//		let temp_div = document.getElementById('m1_temp_div');
+//		checkTempDiv(temp_div,new_comp,"read_M1temp();");
 	}
 
 	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
@@ -1871,25 +1871,25 @@ function start_component(dock)
 }
 
 function set_user(input_name,next_page,uid) {
+	let tag = "set_user: ";
 	if (uid == 0) {
 		uid = document.getElementsByName(input_name)[0].value;
-	}
-	else {
+	} else {
 		document.getElementsByName(input_name)[0].value = uid;
 	}
-	console.log("got user id ",uid);
+	console.log(tag,"got user id ",uid);
 
 	var chef = get_chef_by_id(uid);
 	if (new_comp == null && active_comp != null) new_comp = active_comp;
 	if (chef) {
-	    console.log("found chef ",chef['label']); 
-	    console.log(new_comp);
+	    console.log(tag,"found chef ",chef['label']); 
+	    console.log(tag,"new_comp: ",new_comp);
 	    document.getElementById('m1_temp_div_5').innerHTML = chef['label'];
 	    if (new_comp['M1_temp']) show('m_temp_modal4a');
 	    else hide ('m_temp_modal4a');
 	    openPage(next_page, this, 'red','m_modal2','tabclass');
 	    new_comp['M1_chef_id'] = uid;
-	    console.log(new_comp);
+	    console.log(tag,"new_comp: ",new_comp);
 	}
 		
 	
