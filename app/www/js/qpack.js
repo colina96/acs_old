@@ -8,6 +8,7 @@ document.getElementById("readbarcode").addEventListener("touchstart", read_barco
 var text = "";
 var temp_timer = null;
 var loglines = 0;
+var serial_connected = false;
 
 function status(t)
 {
@@ -51,6 +52,7 @@ function qpack_start()
         serial.requestPermission(
             function success(data) {
             log("requestPermission success");
+            serial_connected = false;
             serial.open({
                 baudRate: 57600,
                 dataBits: 8,
@@ -61,6 +63,7 @@ function qpack_start()
                 sleepOnPause: true
             }, function success() {
                 log("serial open success");
+                serial_connected = true;
                 hide('log');
                 serial.registerReadCallback(
                     function success(data2) {

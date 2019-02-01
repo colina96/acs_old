@@ -46,6 +46,9 @@ $user = json_decode($_POST["data"],true);
 			$flds .= ",".$fieldname;
 		
 		}
+		else {
+			echo "unknown fieldtype ".$types[$fieldname];
+		}
 	}
 	$sql .= $flds.$vals.')';
 	// $sql .= " where ID=".$user['id'];
