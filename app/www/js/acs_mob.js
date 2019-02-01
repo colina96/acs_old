@@ -1881,6 +1881,7 @@ function comp_milestone(temp_reading,force,qa_code)
 {
 	let tag = 'comp_milestone: ';
 	// send data to REST interface
+	console.log(tag, 'temp_reading: ',temp_reading,' | force: ',force,' | qa_code: ',qa_code);
 	console.log(tag, 'active_comp: ',active_comp);
 	var prep_type_id = active_comp['prep_type_id'];
 	document.getElementById('dock_m1_temp_div_4').innerHTML=parseInt(temp_reading * 10) / 10 + "&#176C"
@@ -1938,8 +1939,7 @@ function comp_milestone(temp_reading,force,qa_code)
 		url = RESTHOME + 'M3_comp.php';
 	}
 	var data =  {data: JSON.stringify(component)};
-	console.log("Sent Off: ", data);
-	console.log('to ' + url);
+	console.log("Sent off to ", url, data);
 	$.ajax({
 		url: url,
 		type: "POST",
@@ -1948,22 +1948,29 @@ function comp_milestone(temp_reading,force,qa_code)
 		success: function(result) {
 			console.log(tag,"result: ",result);
 			console.log(tag,"component: ",component);
-			if (component['M2_time'] == '' && !force) { 
+			// TODO for debugging only, remove log
+			console.log(
+				tag,
+				"component[M2_time]==null ",component['M2_time']==null,
+				"active_comp[M2_time]==null ",active_comp['M2_time']==null,
+				"active_comp[M2_time]=='' ",active_comp['M2_time']=='',
+				' | !force: ',!force);
+			if (active_comp['M2_time'] == '' && !force) { 
 				// at M1 - component has tracked ingredients
 				// get chef id and print labels
 				var qty = document.getElementsByName('m1_label_qty')[0].value;
-				console.log("At M1: printing "+qty+" labels");
+				console.log(tag,"At M1: printing "+qty+" labels");
 				print_component_labels(qty);
 				document.getElementsByName('m1_label_qty')[0].value = 1;
 				//  	openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			} else {
-				console.log("At M2/3: not printing labels");
+				console.log(tag,"At M2/3: not printing labels");
 				if (component['M3_temp'] && component['M3_temp'] != '') {
-					console.log('M3 finished',component['M3_temp']);
+					console.log(tag,'M3 finished',component['M3_temp']);
 					if (force) document.getElementById('m2_temp_div_3a').innerHTML= "M3 FORCED";
 					openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
 				} else {
-					console.log('at M2');
+					console.log(tag,'at M2');
 					goto_m_main();
 					// openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
 				}
