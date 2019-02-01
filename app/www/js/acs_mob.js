@@ -558,7 +558,6 @@ function show_plating_options(id)
 
 function calc_time_remaining(item)
 {
-	
 	var event_time = new Date(item['time_started']);
 	console.log("calc_time_remaining -" + event_time + " - " + item['time_started']);
 	console.log(item);
@@ -1157,7 +1156,7 @@ function show_dock_component(cid)
 		alert("ERROR");
 		return;
 	}
-	console.log(new_comp);
+	console.log('show_dock_component: ',new_comp);
 
 	// TODO take some to M1?
 	// var flds = ['description','supplier','product','spec','shelf_life_days'];
@@ -1377,12 +1376,10 @@ function component_selected(id)
 				new_comp['selected_ingredients'][i]['id'] = new_comp['subcomponents'][i];
 			}
 		}
-		console.log('ingredients');
+		console.log('has ingredients');
 		set_barcode_mode('scan_ingredients');
 		draw_ingredients();
-		
-	}
-	else if (M1_temp == null) { // low risk. No temp required
+	} else if (M1_temp == null) { // low risk. No temp required
 		console.log("LOW RISK");
 		set_barcode_mode("M1_LR");
 		openPage('m_temp_modal_LR', this, 'red','m_modal2','tabclass');
@@ -1906,6 +1903,7 @@ function set_user(input_name,next_page,uid) {
 		
 	
 }
+
 function comp_milestone(temp_reading,force,qa_code)
 {
 	// send data to REST interface
@@ -1919,6 +1917,7 @@ function comp_milestone(temp_reading,force,qa_code)
 	component.id = active_comp['id'];
 	var url = '';
 	if (force && qa_code) {
+		console.log('comp_milestone forced by QA');
 		component.M3_temp = temp_reading;
 		component['M2_time'] = 'now';
 		component['M3_time'] = 'now';
@@ -1929,6 +1928,7 @@ function comp_milestone(temp_reading,force,qa_code)
 		url = RESTHOME + 'M3_comp.php';
 	}
 	else if (active_comp['M1_time'] == '') { // M1
+		console.log('comp_milestone M1');
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M1_temp = last_temp;
 		component.M1_chef_id = active_comp['M1_chef_id']; // TODO
@@ -1936,6 +1936,7 @@ function comp_milestone(temp_reading,force,qa_code)
 		url = RESTHOME + 'M1_comp.php';
 	}
 	else if (active_comp['M2_time'] == '') { // M2
+		console.log('comp_milestone M2');
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M2_temp = last_temp;
 		active_comp['M2_time'] = 'now';
@@ -1954,6 +1955,7 @@ function comp_milestone(temp_reading,force,qa_code)
 		url = RESTHOME + 'M2_comp.php';
 	}
 	else {
+		console.log('comp_milestone M3');
 		//component.M3_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M3_temp = temp_reading;
 		active_comp['M3_time'] = 'now';
@@ -1974,19 +1976,18 @@ function comp_milestone(temp_reading,force,qa_code)
             if (active_comp['M2_time'] == '' && !force) { 
             	// at M1 - component has tracked ingredients
             	// get chef id and print labels
-            	console.log("At M1");
             	var qty = document.getElementsByName('m1_label_qty')[0].value;
+            	console.log("At M1: printing "+qty+" labels");
                 print_component_labels(qty);
                 document.getElementsByName('m1_label_qty')[0].value = 1;
           //  	openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
-            }
-            else {
+            } else {
+            	console.log("At M2/3: not printing labels");
             	if (component['M3_temp'] && component['M3_temp'] != '') {
             		console.log('M3 finished',component['M3_temp']);
             		if (force) document.getElementById('m2_temp_div_3a').innerHTML= "M3 FORCED";
             		openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
-            	}
-            	else {
+            	} else {
             		console.log('at M2');
             		goto_m_main();
             		// openPage('m2_temp_modal3', this, 'red','m_modal2','tabclass');
@@ -2182,23 +2183,21 @@ function active_comp_selected(id)
 	var now = new Date();
 	var now_ms = now.getTime();
 	var M1_ms = M1_time.getTime(); // time in millisecs
+
 	if (active_comp['M1_time'] == '') {
 		milestone_due = 'M1';
 		target_temp = " > " + get_preptype_val(prep_type_id,'M1_temp');
-	} else if (active_comp['M2_time'] == '') {
-		milestone_due = 'M2';
-		var M2_due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
-		var M2_due_ms = M1_ms + M2_due_min * 60 * 1000;  			
-		remaining = (M2_due_ms - now_ms) / (60 * 1000);
-		console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
-		target_temp = " < " + get_preptype_val(prep_type_id,'M2_temp');
 	} else {
-		milestone_due = 'M3';
-		var M3_due_min = get_preptype_val(prep_type_id,'M3_time_minutes');
-		var M3_due_ms = M1_ms + M3_due_min * 60 * 1000;  			
-		remaining = (M3_due_ms - now_ms) / (60 * 1000);
-		console.log("M3_due_min M1_ms",M3_due_min,M1_ms,M3_due_ms,format_minutes(remaining));
-		target_temp = " < " + get_preptype_val(prep_type_id,'M3_temp');
+		if (active_comp['M2_time'] == '') {
+			milestone_due = 'M2';
+		} else {
+			milestone_due = 'M3';
+		}
+		var due_min = get_preptype_val(prep_type_id,milestone_due+'_time_minutes');
+		var due_ms = M1_ms + due_min * 60 * 1000;  			
+		remaining = (due_ms - now_ms) / (60 * 1000);
+		console.log(milestone_due+"_due_min M1_ms",due_min,M1_ms,due_ms,format_minutes(remaining));
+		target_temp = " < " + get_preptype_val(prep_type_id,milestone_due+'_temp');
 	}
 
 	document.getElementById('ms_1').innerHTML = milestone_due;
@@ -2528,6 +2527,7 @@ function display_real_time()
 
 function m_show_active_components(data,reprint)
 {
+	console.log("m_show_active_components");
 	display_real_time();
 	var timeout_msg = null;
 	var div = document.getElementById('m_current_tracking');
