@@ -2593,43 +2593,42 @@ function m_show_active_components(data,reprint)
 		console.log('checking ',data[i].description,data[i].state);
 		if (reprint) {
 
-   		}else if (data[i]['M1_time'] == '') { // M0 - ingredients have been selected
-			tr.appendChild(new_td('.','comp center'));
-			tr.appendChild(new_td('Cooking','comp'));
-		}else {
-			var num;
-			var due_min;
-	   		if (data[i]['M2_time'] == '') {
-				num = '2';
+   		}else{
+			let num;
+			let status_msg;
+			if (data[i]['M1_time'] == '') { 
+				// M0 - ingredients have been selected
+				num = '1';
+				status_msg = new_td('Cooking','comp');
+			}else {
+				var due_min;
+				if (data[i]['M2_time'] == '') {
+					num = '2';
+					due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
+				} else {
+					num = '3';
+					due_min = get_preptype_val(prep_type_id,'M3_time_minutes');
+				}
 
-				due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
-				//	console.log("M2_due_min M1_ms",M2_due_min,M1_ms,M2_due_ms,format_minutes(remaining));
-	   		} else {
-				num = '3';
+				var due_ms = M1_ms + due_min * 60 * 1000;
+				remaining = (due_ms - now_ms) / (60 * 1000);
 
-				due_min = get_preptype_val(prep_type_id,'M3_time_minutes');
-	   		}
 
-			var due_ms = M1_ms + due_min * 60 * 1000;
-			remaining = (due_ms - now_ms) / (60 * 1000);
+				if (remaining > 0) {
+					status_msg = new_td(format_minutes(remaining) + "",'comp');
+				} else {
+					if (timeout_msg == null) timeout_msg = '<h2>OVERDUE<h2>';
+					else timeout_msg += "<br>";
+					timeout_msg += data[i]['description'] + " : " + format_minutes(Math.abs(remaining));
+					status_msg = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
 
-	   		tr.appendChild(new_td('<div class="m_bluedot">'+num+'</div>','comp'));
-   		// var M1_t = M1_time.getHours() + ":" + M1_time.getMinutes();
-   		
-	   		if (remaining > 0) {
-	   			td = new_td(format_minutes(remaining) + "",'comp');
-	   		} else {
-	   			if (timeout_msg == null) timeout_msg = '<h2>OVERDUE<h2>';
-	   			else timeout_msg += "<br>";
-	   			timeout_msg += data[i]['description'] + " : " + format_minutes(Math.abs(remaining));
-	   			td = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
-	   			
-	   		}
-	   		tr.appendChild(td)
-   		}
-   		// tr.appendChild(new_td(data[i]['M1_time'],'comp'));
+				}
+			}
+			tr.appendChild(new_td('<div class="m_bluedot">'+num+'</div>','comp'));
+	   		tr.appendChild(status_msg)
+		}
 		tbody.appendChild(tr);
-    }
+	}
 	tab.appendChild(tbody);
    	div.appendChild(tab);
    	if (timeout_msg != null && mode == 'kitchen') popup_timeout(timeout_msg);
