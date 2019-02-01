@@ -1260,6 +1260,7 @@ function setup_dock_search(dock_items)
 function goto_dock()
 {
 	load_comps(show_dock);
+	mode = 'dock';
 }
 
 function goto_m_main(new_mode)
@@ -2596,7 +2597,7 @@ function m_show_active_components(data,reprint)
     }
 	tab.appendChild(tbody);
    	div.appendChild(tab);
-   	if (timeout_msg != null) popup_timeout(timeout_msg);
+   	if (timeout_msg != null && mode == 'kitchen') popup_timeout(timeout_msg);
 }
 
 function new_node(type,content='',classname=''){

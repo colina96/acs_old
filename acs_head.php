@@ -58,9 +58,12 @@ session_start();
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a>MENU</a></li>
             <li class='tabclass' onclick="daily_orders();"><a>DAILY ORDERS</a></li>
             <li class='tabclass' onclick="openPage('SETTINGS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SETTINGS', this, 'red')">PT SETTINGS</a></li>
-            <li class='tabclass' onclick="openPage('SUPPLIERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SUPPLIERS', this, 'red')">SUPPLIER LIST</a></li>
+            <!--  li class='tabclass' onclick="openPage('SUPPLIERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SUPPLIERS', this, 'red')">SUPPLIER LIST</a></li -->
             <li class='tabclass' onclick="openPage('APP', this, 'red','tabcontent','tabclass')"><a>APP</a></li>
             <li class='tabclass' onclick="reports();"><a>REPORTS</a></li>
+ <?php 		if ($_SESSION['userID'] == 1) { ?>
+ 			<li class='tabclass' onclick="settings();"><a>SETTINGS</a></li>		
+ <?php  	} ?>
             <!--  li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="">KITCHEN</a></li>
             <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="">ASSEMBLY</a></li -->
             
@@ -92,8 +95,8 @@ session_start();
 </div>
 </div>
 <div id="REPORTS" class="tabcontent"><?php include 'acs_reports.php' ?></div>
-<div id="KITCHEN" class="tabcontent">
-  <!--  ?php include 'kitchen.php' ? -->
+<div id="PARAMS" class="tabcontent">
+  <?php include 'settings.php' ?>
 </div>
 <div id="ASSEMBLY" class="tabcontent">
   <!--  ?php include 'assembly.php' ? -->
