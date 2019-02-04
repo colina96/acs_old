@@ -196,7 +196,8 @@ function get_user(id)
 
 function check_user(user_flag)
 {
-	if (user_flag && user_flag) return true;
+	console.log('check_user ' + user_flag);
+	if (user_flag && user_flag == 1) return true;
 	set_info('INVALID USER');
 	return false;
 }
