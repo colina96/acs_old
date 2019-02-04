@@ -1400,7 +1400,7 @@ function component_selected(id)
 		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
 		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 		// document.getElementById('chk_temp_item_id_div').innerHTML = sprintf('C01%06d',new_comp['id']);
-		document.getElementById('chk_temp_item_id_div').innerHTML = 'C01000' + new_comp['id'];
+		document.getElementById('chk_temp_item_id_div').innerHTML = '';
 		temp_probe = false;
 
 		let temp_div = document.getElementById('m1_temp_div');
@@ -1635,7 +1635,7 @@ function add_chef_select(target_div,input_name)
 
 function dock_start_component()
 {
-	start_component(true);
+	start_component(true,false);
 }
 
 function setup_force_M1() //
@@ -1764,7 +1764,7 @@ function discard_component()
 
 close_popup("popup_discard_div");
 
-function start_component(dock)
+function start_component(dock,at_M0)
 {
 	// object copy is messy - TODO
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
@@ -1815,7 +1815,8 @@ function start_component(dock)
 	active_comp = component;
 	var data =  {data: JSON.stringify(component)};
 
-    	console.log("start_component Sent Off: ", data);
+    	console.log("start_component Sent Off: ");
+    	console.log(data);
     	var qty_input = (dock)?'dock_m1_label_qty':'m1_label_qty';
 
     	$.ajax({
@@ -1994,7 +1995,14 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 	if (t.length > 0) {
 		openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
 		var prep_type_id = active_comp['prep_type_id'];
-		
+		console.log('prep_type ' + prep_type_id);
+		if (prep_type_id == 2)  // disable force M3 for HF - no idea why. Ordained by higher authority
+		{
+			document.getElementById('force_m3_btn').style.display = 'none';
+		}
+		else {
+			document.getElementById('force_m3_btn').style.display = 'inline-block';
+		}
 		var temp_target = get_preptype_val(prep_type_id,'M1_temp');
 		active_comp.milestone = 'M1';
 		if (active_comp['M1_time'].length > 1) {
