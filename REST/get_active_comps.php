@@ -96,6 +96,10 @@ if ($userID > 0) {
 			$comp['M1_action_text'] = (!empty($qa[$M1_action_code]))?$qa[$M1_action_code]['action_text']:'-';
 			$comp['M2_action_text'] = (!empty($qa[$M2_action_code]))?$qa[$M2_action_code]['action_text']:'-';
 			$comp['M3_action_text'] = (!empty($qa[$M3_action_code]))?$qa[$M3_action_code]['action_text']:'-';
+			$comp['state'] = 'M1';
+			if ($row['M1_time']) $comp['state'] = 'M2';
+			if ($row['M2_time']) $comp['state'] = 'M3';
+			if ($row['finished']) $comp['state'] = 'finished';
 			$comps[] = $comp;
 			
 		}

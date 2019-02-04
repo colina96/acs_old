@@ -2564,6 +2564,7 @@ function m_show_active_components(data,reprint)
 		var now_ms = now.getTime();
 		var M1_ms = M1_time.getTime(); // time in millisecs
 	//	console.log("prep_type_id",prep_type_id);
+		console.log('checking ',data[i].description,data[i].state);
 		if (reprint) {
 
    		}else if (data[i]['M1_time'] == '') { // M0 - ingredients have been selected

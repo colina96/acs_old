@@ -11,7 +11,9 @@ $data = array();
 if ($userID > 0) {
 	$data['menu'] = get_table("MENUS"," where id = ".$menu_id);
 	$menu_items = get_table("MENU_ITEMS"," where menu_id = ".$menu_id);
-	$menu_item_components = get_table("MENU_ITEM_COMPONENTS"," where menu_id = ".$menu_id);
+	// $menu_item_components = get_table("MENU_ITEM_COMPONENTS"," where menu_id = ".$menu_id);
+	$menu_item_components = get_table("MENU_ITEM_COMPONENTS",""); 
+	// get everything - this will have to be fixed at some point when we know more about how often componets show up
 	$menu_item_link = get_table("MENU_ITEM_LINK"," where menu_id = ".$menu_id);
 	$component_links = get_table("COMPONENT_LINK"," where menu_id = ".$menu_id);
 	// add components to menu_item_components

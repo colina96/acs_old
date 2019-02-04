@@ -117,14 +117,17 @@ function upload_menu()
 }
 function get_component_id($description,$menu_id,$supplier,$product,$spec,$shelflife,$preptype,$track)
 {
-	$sql = "select * from MENU_ITEM_COMPONENTS where description='".$description."' and menu_id=".$menu_id; 
+	$sql = "select * from MENU_ITEM_COMPONENTS where UPPER(description)=UPPER('".$description."')"; // and menu_id=".$menu_id; 
 	$result = mysql_query($sql);
 	$comp_id = -1;
 	while ($row = mysql_fetch_array($result) ) {
 		$comp_id = $row['id'];
+		echo "found ".$description;
 		// insert new component
 	}
+	
 	if ($comp_id == -1) {
+		echo "new component ".$description;
 		$shelflife = intval($shelflife);
 		$preptype = intval($preptype);
 		$sql = "insert into MENU_ITEM_COMPONENTS ";
