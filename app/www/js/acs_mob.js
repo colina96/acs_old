@@ -1776,6 +1776,7 @@ function start_component(dock,at_M0)
 	// check if component at M0 - has ingredients
 	if ( active_comp && ( !active_comp['M1_time'] || active_comp['selected_ingredients'] )) {
 		console.log('component start - need to print labels');
+		active_comp.label_qty = document.getElementsByName('m1_label_qty')[0].value;
 		comp_milestone(active_comp['M1_temp']);
         	goto_m_main();
 		return;
@@ -1836,7 +1837,7 @@ function start_component(dock,at_M0)
 		    active_comp.M1_time = comp.M1_time;
 
 		   // active_comp.M1_chef_id = comp.M1_chef_id;
-		    print_component_labels(qty);
+		    if (!at_M0) print_component_labels(qty);
 
 		    // reset default value TODO should that not be done on popup?
 		    document.getElementsByName(qty_input)[0].value = 1;
@@ -1905,7 +1906,7 @@ function comp_milestone(temp_reading,force,qa_code)
 	else if (active_comp['M1_time'] == '') { // M1
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M1_temp = last_temp;
-		component.M1_chef_id = 0; // TODO
+		component.M1_chef_id = active_comp['M1_chef_id']; // TODO
 		
 		url = RESTHOME + 'M1_comp.php';
 	}
@@ -1944,8 +1945,8 @@ function comp_milestone(temp_reading,force,qa_code)
 
         success: function(result) {
             console.log("comp_milestone result ",result);
-            console.log(component);
-            if (component['M2_time'] == '' && !force) { 
+            console.log(active_comp);
+            if (active_comp['M2_time'] == '' && !force) { 
             	// at M1 - component has tracked ingredients
             	// get chef id and print labels
             	console.log("At M1");
