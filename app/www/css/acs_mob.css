@@ -232,9 +232,8 @@
 }
 
 #sel_team_member { margin-top:10px;}
-.m-10 {
-	margin:10px;
-}
+.m-5 { margin:5px; }
+.m-10 { margin:10px; }
 
 #status, #log {
     height: 20vh;
@@ -688,6 +687,7 @@ td {
 
 .left {
 	margin :1px;
+	text-align:left;
 }
 
 .label_num {

@@ -1454,6 +1454,24 @@ function appendSensorImage(anchor,comp,onclick){
 	anchor.appendChild(sensor);
 }
 
+function show_product_details(comp) 
+{
+	// rewrite using array of objects - or table builder......
+	var flds = ['description','product','shelf_life_days','spec','supplier'];
+	var hds = ['Description','Product','Shelf life','Spec','Supplier'];
+	var tab = document.createElement('table');
+	tab.style.position = 'absolute';
+	tab.style.left = '30px';
+	for (var i = 0; i < flds.length; i++) {
+		var tr = document.createElement('tr');
+		tr.appendChild(new_td(hds[i],'comp','m-5'));
+		tr.appendChild(new_td(comp[flds[i]],'comp','m-5'));
+		tab.appendChild(tr);
+	}
+	return(tab);
+	
+}
+
 function dock_read_M1temp(callback)
 {
 	console.log('dock_read_M1temp');
@@ -1461,7 +1479,9 @@ function dock_read_M1temp(callback)
 	load_chefs(null);
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
 	
-	document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
+	//document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
+	document.getElementById('dock_m1_temp_div').innerHTML = null;
+	document.getElementById('dock_m1_temp_div').appendChild(show_product_details(new_comp));
 	show('dock_m_temp_modal');
 	read_temp('M1_dock');
 }
@@ -1503,7 +1523,11 @@ function check_temp_m1_dock(t)
 	var prep_type_id = new_comp['prep_type']; // should always be 6,7 or 8 (DOCK)
 	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
 	var M1_temp_sign = get_preptype_val(prep_type_id,'M1_temp_above');
-	document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
+	// document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
+	document.getElementById('dock_m1_temp_div').innerHTML = '';
+	document.getElementById('dock_m1_temp_div').appendChild(show_product_details(new_comp));
+	show_product_details(comp) 
+	
 // 	document.getElementById('dock_m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 	//document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
 /*	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C";
@@ -2787,10 +2811,10 @@ console.log("loading menu item components");
     });
 }
 
-function new_td(content,classname) {
+function new_td(content,classname,inner_class = 'm-10') {
 	var td = document.createElement('td');
 	td.className = classname;
-	td.innerHTML = "<div class='m-10'>" + content + "</div>";
+	td.innerHTML = "<div class='" + inner_class + "'>" + content + "</div>";
 	return(td);
 }
 
