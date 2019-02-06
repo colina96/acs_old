@@ -1526,7 +1526,7 @@ function check_temp_m1_dock(t)
 	// document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
 	document.getElementById('dock_m1_temp_div').innerHTML = '';
 	document.getElementById('dock_m1_temp_div').appendChild(show_product_details(new_comp));
-	show_product_details(comp) 
+	show_product_details(new_comp) 
 	
 // 	document.getElementById('dock_m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
 	//document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
