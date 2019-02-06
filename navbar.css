@@ -156,6 +156,17 @@ td { padding: 10px; }
 	border: 1px solid lightgrey;
 }
 
+#search_menu_div {
+	position:absolute;
+	left: -180px;
+	display:none;
+}
+#menu_search {
+	background-image: url('app/www/img/icon_search.png');
+	background-size: 25px;
+	background-repeat: no-repeat;
+	background-position: right 20px center;
+}
 #report_start::placeholder, #report_end::placeholder, #report_search::placeholder{
 	padding:5px;
 }
@@ -183,6 +194,11 @@ td { padding: 10px; }
 	cursor: pointer;
 }
 
+input[type=text] {
+	border-radius: 10px;
+	border: 1px solid lightgrey;
+	padding:10px;
+}
 table input[type=text] {
 	border-radius: 10px;
 	border: 1px solid lightgrey;

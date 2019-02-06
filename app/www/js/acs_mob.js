@@ -482,6 +482,9 @@ function show_plating_items(team_id,tab)
 					//	div = "<div class='red'>";
 					//}
 				}
+				else if (parseInt(menu_items[i]['current_shift_done'] > 0)) {
+					div = "<div class='red' onclick='show_plating_options(" + plating_item.id + ");'>";
+				}
 				//finish up
 				div += menu_items[i]['dish_name'] + "</div>";
 

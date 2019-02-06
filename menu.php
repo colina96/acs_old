@@ -7,7 +7,10 @@
         <button type='button' class='acs_menu_btn' href="#" id="expired_menu"
                 onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
     </div>
+    
     <div class="acs_sidebar">
+    <div id='search_menu_div'><input type='text' id='menu_search' onkeyup='filter_menu(this)'  placeholder="Search"></div>
+	
         <button type='button' class='button_main' href="#" id="add_new_menu"
                 onclick="openPage('new_menu', this, 'red','menu_details','acs_menu_btn')">+ Add new menu</button>
     </div>
@@ -245,6 +248,10 @@ function select_probe_type(probe_type_id,comp_id)
 	return (ret);
 }
 
+function format_date(date)
+{
+	return(date.substring(0,10));
+}
 function show_menu_details (div)
 {
 	console.log(menu[active_menu_id]);
@@ -258,14 +265,40 @@ function show_menu_details (div)
 	ret += "<td>" + menu[active_menu_id]['comment'] + "</td>";
 	
 	ret += "<tr><td class='user_subtitle'>DATE RANGE</td></tr>";
-	ret += "<tr><td>From: " + menu[active_menu_id]['start_date'];
-	ret += "<td>To: " + menu[active_menu_id]['end_date'];
+	ret += "<tr><td>From: " + format_date(menu[active_menu_id]['start_date']);
+	ret += "<td>To: " + format_date(menu[active_menu_id]['end_date']);
 	ret += "</table><hr>";
 	return ret;
 }
 
-function show_menu()
+function filter_menu(search_fld)
 {
+	//console.log("menu search string ",search_fld.value.toUpperCase());
+	// if (search_fld.value.length > 2) 
+	show_menu(search_fld.value.toUpperCase());
+}
+
+function filter_menu_item(item,filter)
+{
+	if (!filter) return true;
+	if (filter.length == 0) return true;
+//	console.log('filter_menu_item ',filter.toUpperCase());
+//	console.log(item);
+	
+	if (item['code'].toUpperCase().indexOf(filter) >= 0) return(true);
+	if (item['dish_name'].toUpperCase().indexOf(filter) >= 0) return(true);
+    if (item['components']) {
+    	var components = item['components'];
+        for (var c in components) {
+           	var mid = components[c];
+           	if (menu_item_components[mid].description.toUpperCase().indexOf(filter) >= 0) return(true);
+        }
+    }
+	return (false);
+}
+function show_menu(filter)
+{
+	show('search_menu_div');
 	var div = document.getElementById('future_menus');
 	div.innerHTML = show_menu_details(div);
     var table = document.createElement('table');
@@ -286,109 +319,111 @@ function show_menu()
     	var tr = document.createElement('tr');
     	tr.className = 'menu_item_row';
         var item = menu_items[k];
-        for (var f in menu_fields) {
-        	var th = document.createElement('td');
-        	var fld = item[menu_fields[f]];
-        	if (!fld) fld = '';
-        	th.innerHTML = fld;
-        	tr.appendChild(th);
+        if (filter_menu_item(item,filter)) {
+	        for (var f in menu_fields) {
+	        	var th = document.createElement('td');
+	        	var fld = item[menu_fields[f]];
+	        	if (!fld) fld = '';
+	        	th.innerHTML = fld;
+	        	tr.appendChild(th);
+	        }
+	        td = document.createElement('td');
+	    	td.innerHTML = select_plating_team(item.plating_team,item.id);
+	    	tr.appendChild(td);
+	    	td = document.createElement('td');
+	    	td.innerHTML = "<div class='btn' id='add' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
+	    	
+	    	tr.appendChild(td);
+	
+	       	td = document.createElement('td');
+	    	td.innerHTML += "<image class='icon' id='delete_dish' src='app/www/img/icon_delete_white.svg' onclick='del_menuitem("+ item['id'] + ");'></image>";
+	    	td.colSpan = 2;
+	    	tr.appendChild(td);
+	        table.appendChild(tr);
+	        if (item['components']) {
+	         //   console.log(item['components']);
+	            var components = item['components'];
+	            for (var c in components) {
+	            	var tr = document.createElement('tr');
+	            	var td = document.createElement('td');
+	            	td.innerHTML = '';
+	            	tr.appendChild(td);
+	            	var td = document.createElement('td');
+	            	var mid = components[c];
+	            	if (!menu_item_components[mid])  {
+	                	alert("cannot find component "  + mid + " " + item['dish_name']);
+	            	}
+	            	var innerHTML = "<div";
+	            	if (menu_item_components[mid].high_risk == 1) {
+	            		innerHTML += " onclick='edit_high_risk_component(" + mid + ");'";
+	            		
+	            	}
+	            	innerHTML += ">" + menu_item_components[mid].description + "</div>";
+	            	td.innerHTML = innerHTML;
+	            	td.width='50%';
+	            	tr.appendChild(td);
+	            	/* location */
+	            	td = document.createElement('td');
+	            	td.innerHTML = "<input type='text' maxlength='3' size='3' class='edit_location' name='location_" + mid + "'value='" +  menu_item_components[mid].location + "' onchange='set_location(this," + mid + ");'>";
+	           		// td.innerHTML += 'location';
+	            	tr.appendChild(td);
+	            	td = document.createElement('td');
+	            	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,false);
+	            	tr.appendChild(td);
+	            	td = document.createElement('td');
+	            	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
+	            	tr.appendChild(td);
+	            	td = document.createElement('td');
+	            	var innerHTML = "<input type='checkbox' name='high_risk_" + mid + "' onclick='set_high_risk(this," + mid + ");'";
+	            	if (menu_item_components[mid].high_risk == 1) {
+	                	innerHTML += ' checked';
+	            	}
+	            	innerHTML += '>';
+	            	td.innerHTML = innerHTML;
+	            	tr.appendChild(td);
+	            	td = document.createElement('td');
+	            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>+ HR ingredient</div>";
+	            	td.colSpan = 2;
+	            	if (menu_item_components[mid].subcomponents) {
+	                	// td.innerHTML += 'checked';
+	            	}
+	            	tr.appendChild(td);
+	            	td = document.createElement('td');
+	            	td.innerHTML += "<image class='icon' id='delete_component' src='app/www/img/icon_delete.svg' onclick='del_component(" + mid + ","+ item['id'] + ");'></image>";
+	            	td.colSpan = 2;
+	            	tr.appendChild(td);
+	            	table.appendChild(tr);
+	            	if (menu_item_components[mid].subcomponents) {
+	                	var subs = menu_item_components[mid].subcomponents;
+	                	for (var s in subs) {
+	                    	var comp = menu_item_components[subs[s]];
+	                		var tr = document.createElement('tr');
+	                    	var td = document.createElement('td');
+	                    	td.innerHTML = '';
+	                    	tr.appendChild(td);
+	                    	tr.appendChild(td);
+	                		td = document.createElement('td');
+	                    	var innerHTML = "<span class='ingredient small'>Ingredient: </span>";
+	                    	innerHTML += "<div onclick='edit_high_risk_component(" + comp.id + ");'>" + comp.description + "</div>";
+	                    	td.innerHTML= innerHTML;
+	                    	tr.appendChild(td);
+	                    	td = document.createElement('td');
+	                    	td.innerHTML= '-';
+	                    	tr.appendChild(td); // blank
+	                    	td = document.createElement('td');
+	                    	td.innerHTML += "<div class='add_subcompdiv' onclick='remove_subcomponent(" + mid + "," + comp.id + ");'>Remove</div>";
+	                    	tr.appendChild(td);
+	                    	table.appendChild(tr);
+	                	}
+	            	}
+	            	
+	            }
+	        }
+	        else {
+	            console.log('no components');
+	        }
+	        table.appendChild(tr);
         }
-        td = document.createElement('td');
-    	td.innerHTML = select_plating_team(item.plating_team,item.id);
-    	tr.appendChild(td);
-    	td = document.createElement('td');
-    	td.innerHTML = "<div class='btn' id='add' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
-    	
-    	tr.appendChild(td);
-
-       	td = document.createElement('td');
-    	td.innerHTML += "<image class='icon' id='delete_dish' src='app/www/img/icon_delete_white.svg' onclick='del_menuitem("+ item['id'] + ");'></image>";
-    	td.colSpan = 2;
-    	tr.appendChild(td);
-        table.appendChild(tr);
-        if (item['components']) {
-         //   console.log(item['components']);
-            var components = item['components'];
-            for (var c in components) {
-            	var tr = document.createElement('tr');
-            	var td = document.createElement('td');
-            	td.innerHTML = '';
-            	tr.appendChild(td);
-            	var td = document.createElement('td');
-            	var mid = components[c];
-            	if (!menu_item_components[mid])  {
-                	alert("cannot find component "  + mid + " " + item['dish_name']);
-            	}
-            	var innerHTML = "<div";
-            	if (menu_item_components[mid].high_risk == 1) {
-            		innerHTML += " onclick='edit_high_risk_component(" + mid + ");'";
-            		
-            	}
-            	innerHTML += ">" + menu_item_components[mid].description + "</div>";
-            	td.innerHTML = innerHTML;
-            	td.width='50%';
-            	tr.appendChild(td);
-            	/* location */
-            	td = document.createElement('td');
-            	td.innerHTML = "<input type='text' maxlength='3' size='3' class='edit_location' name='location_" + mid + "'value='" +  menu_item_components[mid].location + "' onchange='set_location(this," + mid + ");'>";
-           		// td.innerHTML += 'location';
-            	tr.appendChild(td);
-            	td = document.createElement('td');
-            	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,false);
-            	tr.appendChild(td);
-            	td = document.createElement('td');
-            	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
-            	tr.appendChild(td);
-            	td = document.createElement('td');
-            	var innerHTML = "<input type='checkbox' name='high_risk_" + mid + "' onclick='set_high_risk(this," + mid + ");'";
-            	if (menu_item_components[mid].high_risk == 1) {
-                	innerHTML += ' checked';
-            	}
-            	innerHTML += '>';
-            	td.innerHTML = innerHTML;
-            	tr.appendChild(td);
-            	td = document.createElement('td');
-            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>+ HR ingredient</div>";
-            	td.colSpan = 2;
-            	if (menu_item_components[mid].subcomponents) {
-                	// td.innerHTML += 'checked';
-            	}
-            	tr.appendChild(td);
-            	td = document.createElement('td');
-            	td.innerHTML += "<image class='icon' id='delete_component' src='app/www/img/icon_delete.svg' onclick='del_component(" + mid + ","+ item['id'] + ");'></image>";
-            	td.colSpan = 2;
-            	tr.appendChild(td);
-            	table.appendChild(tr);
-            	if (menu_item_components[mid].subcomponents) {
-                	var subs = menu_item_components[mid].subcomponents;
-                	for (var s in subs) {
-                    	var comp = menu_item_components[subs[s]];
-                		var tr = document.createElement('tr');
-                    	var td = document.createElement('td');
-                    	td.innerHTML = '';
-                    	tr.appendChild(td);
-                    	tr.appendChild(td);
-                		td = document.createElement('td');
-                    	var innerHTML = "<span class='ingredient small'>Ingredient: </span>";
-                    	innerHTML += "<div onclick='edit_high_risk_component(" + comp.id + ");'>" + comp.description + "</div>";
-                    	td.innerHTML= innerHTML;
-                    	tr.appendChild(td);
-                    	td = document.createElement('td');
-                    	td.innerHTML= '-';
-                    	tr.appendChild(td); // blank
-                    	td = document.createElement('td');
-                    	td.innerHTML += "<div class='add_subcompdiv' onclick='remove_subcomponent(" + mid + "," + comp.id + ");'>Remove</div>";
-                    	tr.appendChild(td);
-                    	table.appendChild(tr);
-                	}
-            	}
-            	
-            }
-        }
-        else {
-            console.log('no components');
-        }
-        table.appendChild(tr);
       //   console.log(k);
     }  
     div.appendChild(table);
@@ -889,6 +924,8 @@ function update_prep_type(s,comp_id)
 
 function show_active_menus()
 {
+	hide('search_menu_div');
+	document.getElementById('menu_search').value = '';
 	openPage('active_menus', this, 'red','menu_details','acs_menu_btn');
 	$.ajax({
         url: "REST/get_menus.php",
