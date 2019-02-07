@@ -328,22 +328,24 @@ function set_ingredient_temp(s)
 
 function check_ingredient(cid)
 {
-	
-	console.log('check ingredient'  + cid);
-	document.getElementById('m1_temp_div_1_error').innerHTML = '';
+	let tag = "check_ingredient: ";
+	console.log(tag, cid);
+	let error_node=document.getElementById('m1_temp_div_1_error');
+	clearChildren(error_node);
 	$.ajax({
         url: RESTHOME + "get_active_comps.php?cid=" + cid,
         type: "POST",
 
         success: function(result) {
-        	console.log(result);
+        	console.log(tag,"result: ",result);
  
             var scanned_ingredient = JSON.parse(result);
-            console.log("got component " + scanned_ingredient[0].description,' expired:' ,scanned_ingredient[0].expired);
+            console.log(tag,"got component " + scanned_ingredient[0].description,' expired:' ,scanned_ingredient[0].expired);
             if (scanned_ingredient[0].expired == 1) {
-            	console.log('ingredient expired')
-				document.getElementById('m1_temp_div_1_error').innerHTML = 'EXPIRED';
-            	document.getElementById('popup_error_msg').innerHTML = 'EXPIRED';
+            	console.log(tag,'ingredient expired');
+
+				error_node = 'EXPIRED';
+
             	popup_error(scanned_ingredient[0].description,'EXPIRED<br>' + scanned_ingredient[0].expiry_date);
 				return;
 			}
@@ -351,7 +353,7 @@ function check_ingredient(cid)
             for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
     			var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
     			if (sub['description'] == scanned_ingredient[0].description) {
-    				console.log("found ingredient");
+    				console.log(tag,"found ingredient");
     				valid_ingredient = true;
     				new_comp['selected_ingredients'][i]['cid'] = scanned_ingredient[0].id;
     				// attach to new_comp and record temperature
@@ -364,7 +366,7 @@ function check_ingredient(cid)
     				document.getElementById('ms_1_text').innerHTML = sub['description'];
     				document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
     				new_comp['selected_ingredients'][i]['target'] = get_preptype_val(sub['prep_type'],'M1_temp');
-    				console.log(new_comp);
+    				console.log(tag,'new_comp: ',new_comp);
     				read_temp('M0');
     			}
     		}
@@ -1303,34 +1305,39 @@ function get_preptype_val(id,fld)
 
 function draw_ingredients() // returns true if all ingredients are selected and have a temperature
 {
+	let tag = 'draw_ingredients: ';
 	var finished = true;
 	document.getElementById('confirm_start_comp_btn').style.display = 'none';
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
-	document.getElementById('ms_1_text').innerHTML = '';
-	document.getElementById('m1_temp_div_1a').innerHTML = '';
+
+	clearChildren(document.getElementById('ms_1_text'));
+	clearChildren(document.getElementById('m1_temp_div_1a'));
+	clearChildren(document.getElementById('chk_temp_item_id_div'));
+
 	document.getElementById('chk_temp_item_div').innerHTML = new_comp.description;
-	document.getElementById('chk_temp_item_id_div').innerHTML = '';
-	div = document.getElementById('m1_temp_div_1');
-	var d = "<div class='m-10'><table width='100%'>";
+	let div = document.getElementById('m1_temp_div_1');
+	var d = "<div class='m-10'><table id='comp_ingredients_table'>";
+
 	d += "<tr><td width='200px'>Description</td><td width='40px'>ID</td><td width='40px'>Temp</td></tr>";
 	var prep_type_id = new_comp['prep_type'];
-	console.log(' draw_ingredients prep_type_id',prep_type_id);
-	document.getElementById('ms_2_target').innerHTML = '';
+	console.log(tag,'prep_type_id',prep_type_id);
+
+	clearChildren(document.getElementById('ms_2_target'));
 
 	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
 		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
 		d += "<tr><td>" + sub['description'] + '</td>';
+
 		if (new_comp['selected_ingredients'][i]['cid']) {
 			d += "<td>" + new_comp['selected_ingredients'][i]['cid'] + "</td>";
-		}
-		else {
+		} else {
 			finished = false;
 			d += "<td>-</td>";
 		}
+
 		if (new_comp['selected_ingredients'][i]['temp']) {
 			d += "<td>" + new_comp['selected_ingredients'][i]['temp'] + "</td>";
-		}
-		else {
+		} else {
 			d += "<td>-</td>";
 			finished = false;
 		}
