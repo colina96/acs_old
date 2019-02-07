@@ -364,7 +364,6 @@ function check_ingredient(cid)
     				console.log(new_comp);
     				read_temp('M0');
     			}
-    			
     		}
             if (!valid_ingredient) {
 				document.getElementById('m1_temp_div_1_error').innerHTML = 'invalid component';
@@ -1612,11 +1611,11 @@ function check_temp(t) // start a new component
 
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {
-			if (parseInt(t) < parseInt(M1_temp_target)) {
-				console.log("M1 temp too low");
+			if (parseFloat(t) < parseFloat(M1_temp_target)) {
+				console.log(tag,"M1 temp too low: ",parseFloat(t)," < ",parseFloat(M1_temp_target));
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 				checkTempDiv(
-					m1_temp_div_2a,
+					m1_temp_div_2icon,
 					new_comp,
 					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass')",
 					true
@@ -1626,11 +1625,11 @@ function check_temp(t) // start a new component
 				openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			}
 		} else {
-			if (parseInt(t) > parseInt(M1_temp_target)) {
-				console.log("M1 temp too high");
+			if (parseFloat(t) > parseFloat(M1_temp_target)) {
+				console.log(tag,"M1 temp too high: ", parseFloat(t)," > ", parseFloat(M1_temp_target));
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 				checkTempDiv(
-					m1_temp_div_2a,
+					m1_temp_div_2icon,
 					new_comp,
 					"openPage('m_temp_modal', this, 'red','m_modal2','tabclass')",
 					true
