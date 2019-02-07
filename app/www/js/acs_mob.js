@@ -1747,6 +1747,7 @@ function setup_force_M3() //
 		'                     class="icon_barscan"><span class="scan_instruction"> SCAN AUTHORISED ID </span>';
 	set_barcode_mode('force_M3');
 }
+
 function force_M3(uid)
 {
 	console.log('force_M3');
@@ -1759,6 +1760,7 @@ function force_M3(uid)
 	openPage('m2_temp_modal_force_M3', null, 'red','m_modal2','tabclass');
 
 }
+
 function k_qa_override(uid)
 {
 	console.log('k_qa_override');
@@ -2052,15 +2054,16 @@ function continue_chilling()
 
 function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 {
+	let tag = "check_temp_m2: ";
 	// TODO - rewrite this as a state machine. It's far to complex as it is.
 	// if M1 then need to print labels and log temperature to existing record TODO
-	console.log("check temp M2/3");
+	console.log(tag,"check temp M2/3");
 	active_comp.milestone = '';
 	active_comp.milestone_ok = false;
-	console.log(active_comp);
+	console.log(tag,"active_comp: ",active_comp);
 	
 	// var t = document.getElementsByName('m2_temp')[0].value;
-	console.log("check temp",t);
+	console.log(tag,"value of first m2_temp: ",t);
 	if (t.length > 0) {
 		openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
 		var prep_type_id = active_comp['prep_type_id'];
@@ -2068,8 +2071,7 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 		if (prep_type_id == 2)  // disable force M3 for HF - no idea why. Ordained by higher authority
 		{
 			document.getElementById('force_m3_btn').style.display = 'none';
-		}
-		else {
+		} else {
 			document.getElementById('force_m3_btn').style.display = 'inline-block';
 		}
 		var temp_target = get_preptype_val(prep_type_id,'M1_temp');
@@ -2082,7 +2084,7 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			temp_target = get_preptype_val(prep_type_id,'M3_temp');
 			active_comp.milestone = 'M3';
 		} 
-		console.log('check_temp_m2 target temp',temp_target,t,active_comp.milestone);
+		console.log(tag,'target temp: ',temp_target,t,active_comp.milestone);
 
 		let m2_temp_div_2a = document.getElementById('m2_temp_div_2a');
 		let m2_temp_div_3a = document.getElementById('m2_temp_div_3a');
@@ -2100,9 +2102,9 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			// comp_milestone(t);
 		}
 		if (parseInt(t) < parseInt(temp_target)) {
-			console.log("check M2");
+			console.log(tag,"check M2");
 			temp_target = get_preptype_val(prep_type_id,'M3_temp');
-			console.log('M3 temp target = ',temp_target);
+			console.log(tag,'M3 temp target = ',temp_target);
 			if (active_comp.milestone ==  'M3') {
 				//if M3 achieved
 				// milestone_achieved_box(m2_temp_div_3a,"M3");
@@ -2113,7 +2115,7 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
                 }
 			} //else
 			if (active_comp.milestone ==  'M2' && temp_target != null && parseInt(t) < parseInt(temp_target)) {
-				console.log("M2 achieved");
+				console.log(tag,"M2 achieved");
 				active_comp.milestone = 'M3';
 				active_comp['M2_temp'] = t;
 				active_comp['M3_temp'] = t;
@@ -2129,6 +2131,7 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
                 comp_milestone(t);
             }
 			//if M2 achieved
+			// TODO does not work
 			milestone_achieved_box(m2_temp_div_2a,"M2");//add if direct skip M1 to M3
 			milestone_achieved_box(m2_temp_div_3a,"M3");
 
@@ -2136,20 +2139,16 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			active_comp.milestone_ok = true;
 		} else {
 			openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
-			// document.getElementById('m2_temp_div_2a').innerHTML= milestone + "";
 
-			document.getElementById('m2_temp_div_2').innerHTML= "<div class='red'>" + parseInt(t) + "&#176C</div>";
-			
+			document.getElementById('m2_temp_div_2').innerHTML= "<div class='orange'>" + parseInt(t) + "&#176C</div>";
 		}
 
 		if (active_comp['M1_time'].length < 1) {
 			openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
-		}
-		else if (active_comp.remaining > 0 ) {
+		} else if (active_comp.remaining > 0 ) {
 			openPage('m2_temp_modal2', this, 'red','m_modal2','tabclass');
 			checkTempDiv(document.getElementById('m2_temp_div_2a'),active_comp,"goto_m_main();",true);
 		} else {
-			
 			console.log("overdue - QA");
 			set_barcode_mode('KQA_override');
 			if (active_comp['M2_time'].length > 1) {
@@ -2158,10 +2157,8 @@ function check_temp_m2(t) // M2 or M3 .... or M1 if component has ingredients.
 			} else {
 				openPage('m2_temp_overdue_M2A', this, 'red','m_modal2','tabclass');
 			}
-			
 		}
 	}
-	
 }
 
 function clearChildren(elem){

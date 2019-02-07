@@ -293,6 +293,8 @@ function logout() {
 }
 
 function openPage(pageName, elmnt, color, content_class, tab_class, callback) {
+    let tag = "openPage: ";
+    console.log(tag,pageName, elmnt, color, content_class, tab_class);
     var popups = document.getElementsByClassName('popup');
     for (i = 0; i < popups.length; i++) {
         popups[i].style.display = "none";
@@ -300,10 +302,11 @@ function openPage(pageName, elmnt, color, content_class, tab_class, callback) {
 //	var parent = document.getElementById(pageName).parentElement;
 //	console.log("opening page ",pageName,content_class);
 //	console.log('parent ',parent.id,parent.className);
+
     var d = document.getElementById(pageName);
-    console.log(d);
-    // console.log(elmnt.id);
-    // Hide all elements with class="tabcontent" by default */
+    console.log(tag,"page found: ",d);
+
+    /* Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName(content_class);
     for (i = 0; i < tabcontent.length; i++) {
@@ -311,7 +314,7 @@ function openPage(pageName, elmnt, color, content_class, tab_class, callback) {
         try {
             tabcontent[i].style.display = "none";
         } catch (e) {
-            console.log("who knows.....");
+            console.log(tag,"who knows.....");
         }
     }
 
