@@ -210,6 +210,9 @@ function process_barcode(s)
 	}
 	if (user_id <= 0) {
 		barcode_mode = 'login';
+		if (s.indexOf('acsadmin') >= 0) {
+			set_admin();
+		}
 	}
 	if ((s.indexOf('u') >= 0) || (s.indexOf('U') >= 0)) { // user barcode scanned
 		
