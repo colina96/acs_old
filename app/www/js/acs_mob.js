@@ -2026,7 +2026,7 @@ function comp_milestone(temp_reading,force,qa_code)
 		success: function(result) {
 			console.log(tag,"result: ",result);
 			console.log(tag,"component: ",component);
-			if (component['M2_time'] == '' && !force) { 
+			if (active_comp['M2_time'] == '' && !force) { 
 				// at M1 - component has tracked ingredients
 				// get chef id and print labels
 				var qty = document.getElementsByName('m1_label_qty')[0].value;
