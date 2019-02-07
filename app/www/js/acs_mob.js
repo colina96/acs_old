@@ -1212,7 +1212,7 @@ function show_dock()
 		if (comps[i].high_risk == 1) {
 			var tr = document.createElement('tr');
 
-			var func = '<div onclick="show_dock_component('+comps[i]['id']+');" >';
+			var func = '<div class="m-5" onclick="show_dock_component('+comps[i]['id']+');" >';
 
 			var td = document.createElement('td');
 			td.innerHTML = func+comps[i]['description']+'</div>';
@@ -1302,6 +1302,7 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 	var finished = true;
 	document.getElementById('confirm_start_comp_btn').style.display = 'none';
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
+	document.getElementById('ms_1_text').innerHTML = '';
 	document.getElementById('m1_temp_div_1a').innerHTML = '';
 	document.getElementById('chk_temp_item_div').innerHTML = new_comp.description;
 	document.getElementById('chk_temp_item_id_div').innerHTML = '';
@@ -1516,6 +1517,7 @@ function check_temp_m1_dock(t)
 {
 	console.log("check temp dock",t);
 	new_comp.M1_temp = t; // 
+	active_comp = new_comp;
 	
 	console.log(new_comp);
 	
@@ -1660,7 +1662,51 @@ function add_chef_select(target_div,input_name)
 
 function dock_start_component()
 {
-	start_component(true,false);
+	console.log('dock_start_component');
+	console.log(new_comp);
+	console.log(active_comp);
+
+	active_comp.dock = true;
+	active_comp.comp_id = new_comp['id'];
+	
+	active_comp.finished = 'true';
+	active_comp.M1_chef_id = get_user_id();
+
+	active_comp;
+	var data =  {data: JSON.stringify(active_comp)};
+
+    	console.log("dock_start_component Sent Off: ");
+    	console.log(active_comp);
+    	var qty_input = 'dock_m1_label_qty';
+
+    	$.ajax({
+		url: RESTHOME + "new_comp.php",
+		type: "POST",
+		data: data,
+
+		success: function(result) { // need to get the id of the new component back to print labels
+		    console.log("dock__start_component success ",result);
+		    var comp = JSON.parse(result);
+
+		    console.log("start_component id =  ",comp.id);
+		    var qty = document.getElementsByName(qty_input)[0].value;
+
+		    active_comp.id = comp.id;
+		    active_comp.expiry_date = comp.expiry_date;
+		    active_comp.M1_time = comp.M1_time;
+
+		   // active_comp.M1_chef_id = comp.M1_chef_id;
+		    print_component_labels(qty);
+
+		    // reset default value TODO should that not be done on popup?
+		    document.getElementsByName(qty_input)[0].value = 1;
+		    goto_dock();
+
+		},
+		fail: function (result) {
+		    console.log("dock_start_component fail ",result);
+		}
+    	});
 }
 
 function setup_force_M1() //
@@ -1889,18 +1935,19 @@ function set_user(input_name,next_page,uid) {
 	else {
 		document.getElementsByName(input_name)[0].value = uid;
 	}
-	console.log("got user id ",uid);
+	console.log("set user got user id ",uid);
 
 	var chef = get_chef_by_id(uid);
 	if (new_comp == null && active_comp != null) new_comp = active_comp;
 	if (chef) {
-	    console.log("found chef ",chef['label']); 
+	    console.log("set_user found chef ",chef['label']); 
 	    console.log(new_comp);
 	    document.getElementById('m1_temp_div_5').innerHTML = chef['label'];
 	    if (new_comp['M1_temp']) show('m_temp_modal4a');
 	    else hide ('m_temp_modal4a');
 	    openPage(next_page, this, 'red','m_modal2','tabclass');
 	    new_comp['M1_chef_id'] = uid;
+	    if (active_comp) active_comp['M1_chef_id'] = uid;
 	    console.log(new_comp);
 	}
 		
