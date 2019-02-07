@@ -312,6 +312,8 @@ function show_menu(filter)
     	th.innerHTML = header[i];
     	tr.appendChild(th);
     } 
+    tr.appendChild(document.createElement('th'));
+    tr.appendChild(document.createElement('th'));
     table.appendChild(tr);
     
     var menu_fields = ['code','dish_name','','','',''];
