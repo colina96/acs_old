@@ -212,6 +212,9 @@ function process_barcode(s)
 	}
 	if (user_id <= 0) {
 		barcode_mode = 'login';
+		if (s.indexOf('acsadmin') >= 0) {
+			set_admin();
+		}
 	}
 	if ((s.indexOf('u') >= 0) || (s.indexOf('U') >= 0)) { // user barcode scanned
 		
@@ -1687,7 +1690,7 @@ function dock_start_component()
 		data: data,
 
 		success: function(result) { // need to get the id of the new component back to print labels
-		    console.log("dock__start_component success ",result);
+		    console.log("dock_start_component success ",result);
 		    var comp = JSON.parse(result);
 
 		    console.log("start_component id =  ",comp.id);
@@ -1857,37 +1860,27 @@ function start_component(dock,at_M0)
 
 	var component = new Object();
 
-	component.description = new_comp['description']; // simplifies display
-	component.comp_id = new_comp['id'];
-	component.M1_chef_id = new_comp['M1_chef_id'];
-	component.prep_type = new_comp['prep_type'];
-	component.M1_action_code = new_comp['M1_action_code'];
-	component.M1_action_id = new_comp['M1_action_id'];
-	component.shelf_life_days = new_comp.shelf_life_days;
-	component.items = new_comp.selected_ingredients;
-	component.dock = dock;
-	prep_type_id = component.prep_type;
-
-	console.log("start component " + component.description + " prep_type " + component.prep_type);
+	//component.description = new_comp['description']; // simplifies display
+	new_comp.comp_id = new_comp['id'];
+//	component.M1_chef_id = new_comp['M1_chef_id'];
+//	component.prep_type = new_comp['prep_type'];
+//	component.M1_action_code = new_comp['M1_action_code'];
+//	component.M1_action_id = new_comp['M1_action_id'];
+//	component.shelf_life_days = new_comp.shelf_life_days;
+	new_comp.items = new_comp.selected_ingredients;
 	// component.M1_temp = document.getElementsByName('m1_temp')[0].value;
-	var M2_time = get_preptype_val(prep_type_id,'M2_time_minutes');
+	var M2_time = get_preptype_val(new_comp.prep_type,'M2_time_minutes');
 	console.log("At M1, M2 time = " + M2_time 
-		+ ", M3 time = " + get_preptype_val(prep_type_id,'M3_time_minutes'));
-	if (new_comp['M1_temp']) {
-		component.M1_temp = new_comp['M1_temp'];
-	}
+		+ ", M3 time = " + get_preptype_val(new_comp.prep_type,'M3_time_minutes'));
+	
 	if (M2_time == null) {
-		component.finished = 'true';
+		new_comp.finished = 'true';
 	} else {
-		component.M1_temp = new_comp['M1_temp'];
+		new_comp.M1_temp = new_comp['M1_temp'];
 	}
-	if (dock) {
-		component.M1_chef_id = get_user_id();
-		console.log('set M1_chef_id to ',component.M1_chef_id);
-	}
-
-	active_comp = component;
-	var data =  {data: JSON.stringify(component)};
+	
+	active_comp = new_comp;
+	var data =  {data: JSON.stringify(active_comp)};
 
     	console.log("start_component Sent Off: ");
     	console.log(data);
@@ -1914,15 +1907,8 @@ function start_component(dock,at_M0)
 
 		    // reset default value TODO should that not be done on popup?
 		    document.getElementsByName(qty_input)[0].value = 1;
-
-		    console.log('comp.dock = ',comp.dock);
-
-		    if (comp.dock == true) goto_dock()
-		    else goto_m_main();
+		    goto_m_main();
 		    new_comp = null;
-		},
-		done: function(result) {
-		    console.log("start_component done ",result);
 		},
 		fail: function (result) {
 		    console.log("start_component fail ",result);
