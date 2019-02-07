@@ -1275,7 +1275,7 @@ function goto_dock()
 function goto_m_main(new_mode)
 {
 	if (new_mode) mode = new_mode;
-
+	load_preptypes(); // try to keep up to date. should be smarter
 	$('#search').val('');
 	$('#search').focus(function(){load_comps();});
 	switch (mode) {
