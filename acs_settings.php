@@ -1,5 +1,3 @@
-<div class='acs_main'>
-<div class='acs_container' id='pt_settings' >
 <script>
 function set_pt_val(inp,code,fld)
 {
@@ -13,6 +11,7 @@ function set_pt_val(inp,code,fld)
 		    },
 		    function(data, status){
 		        console.log("Data: " + data + "\nStatus: " + status);
+		        load_show_preptypes();
 		    });
 }
 
@@ -75,19 +74,23 @@ function show_preptypes()
 			// console.log(pp);
 			if (rows[row].indexOf("TIME") > 0) {
 				var min = parseInt(val);
+				var content = '';
+				
 				if (!min || min < 1) {
 					html += "<td>-</td>";
 				}
 				else if (min < 60) {
-					html += "<td>" + val + " minutes</td>";
+					html += "<td onclick=\"set_pt_time(" + min + ",'" + pp['code'] + "','" + flds[row] + "');\">";
+					html +=  val + " minutes</td>";
 				}
 				else {
 					var hrs = min / 60;
+					html += "<td onclick=\"set_pt_time(" + min + ",'" + pp['code'] + "','" + flds[row] +"','" + rows[row] + "');\">";
 					if (hrs > 1) {
-						html += "<td>" + hrs + " hours</td>";
+						html +=  hrs + " hours</td>";
 					}
 					else {
-						html += "<td>" + hrs + " hour</td>";
+						html +=  hrs + " hour</td>";
 					}
 				}
 			}
@@ -113,82 +116,56 @@ function show_preptypes()
 	document.getElementById('pt_settings').innerHTML = html;		
 	
 }
-
-</script>
-<div onclick='load_show_preptypes();'>LOAD</div>
-<?php
-
-//show_prep_types();
-?>
-</div>
-</div>
-<?php 
-function show_prep_types()
+// globals :-(
+var pt_time_fld = null;
+var pt_time_code = null;
+function set_pt_time(def,code,fld,hd)
 {
-	$sql = "select * from PREP_TYPES order by ID";
-	$rows = array (
-			"PREP TYPE" => "code",
-			"Q-Pack DATA<br>RANGE OFFSET" => "days_offset",
-			"MILESTONE 1<br>(TEMPERATURE)" => "M1_temp",
-			"MILESTONE 2<br>(TIME)" => "M2_time_minutes",
-			"MILESTONE 2<br>(TEMPERATURE)" => "M2_temp",
-			"MILESTONE 3<br>(TIME)" => "M3_time_minutes",
-			"MILESTONE 3<br>(TEMPERATURE)" => "M3_temp",
-			"SHELF LIFE" => "shelf_life_days",
-			"SENSOR" => "probe_type",
-			"ALARM TIME M2" => "M2_alarm_min",
-			"ALARM TIME M3" => "M3_alarm_min",
-	);
-	$prep_types = array();
-	$result = mysql_query($sql);
-	if ($result) {
-		while($data = mysql_fetch_array($result))
-		{
-			$prep_types[] = $data;
-		}
-		echo ("<div class='m-10'>");
-		echo ("<table border=0 width='100%' class='table' id='settings'>");
-		$rownum = 1;
-		foreach ($rows as $row => $fieldname) {
-			// $row_class = ($rownum%2)?'even_tr':'odd_tr';
-			
-			// echo ("<tr class='".$row_class."'><th>".$row."</th>");
-            echo ("<tr><th>".$row."</th>");
-			foreach ($prep_types as $prep => $val) {
-				if (strpos($row,"TIME") > 0) {
-					$min = $val[$rows[$row]];
-					if ($min < 1) {
-						echo ("<td>-</td>");
-					}
-					else if ($min < 60) {
-						echo ("<td>".$val[$rows[$row]]." minutes</td>");
-					}
-					else {
-						$hrs = $min / 60;
-						if ($hrs > 1) {
-							echo ("<td>".$hrs." hours</td>");
-						}
-						else {
-							echo ("<td>".$hrs." hour</td>");
-						}
-					}
-				}
-				else {
-					if ($rownum == 1) {
-						echo ("<th>".$val[$rows[$row]]."</th>");
-					}
-					else {
-						print "<th><input class='pt_edit' onchange='set_pt_val(this,'";
-						print $fieldname."','".$val['code']."');' value='".$val[$rows[$row]]."'></th>";
-						//echo ("<td>".$fieldname.'-'.$val['code']." - ".$val[$rows[$row]]."</td>");
-					}
-				}
-			}
-			echo "</tr>\n";
-			$rownum++;
-		}
-		echo ("</table></div>");
-	}
+	console.log('set time def = ' + def + ' pt:' + code + ' fld:' + fld);
+	pt_time_fld = fld;
+	pt_time_code = code;
+	document.getElementById('pt_time_hd').innerHTML = hd;
+	document.getElementById('pt_time_code').innerHTML = code;
+	var hours = def / 60;
+	var minutes = def % 60;
+	document.getElementById('pt_time_hours').value = hours;
+	document.getElementById('pt_time_minutes').value = minutes;
+	show ('edit_pt_time_div');
 }
+
+function save_pt_time()
+{
+	hide('edit_pt_time_div');
+	var minutes = parseInt(document.getElementById('pt_time_minutes').value) + 60 * parseInt(document.getElementById('pt_time_hours').value);
+	$.post("REST/update_pt.php",
+		    {
+		        code: pt_time_code,
+		        fld: pt_time_fld,
+		        value: minutes
+		    },
+		    function(data, status){
+		        console.log("Data: " + data + "\nStatus: " + status);
+		        load_show_preptypes();
+		    });
+}
+</script>
+
+<div class='acs_main'>
+<div class='popup' id='edit_pt_time_div'>
+<h2 id='pt_time_hd'></h2>
+<div>Preptype: <div id='pt_time_code'></div></div>
+<input type='number' id='pt_time_hours'>:<input type='number' id='pt_time_minutes'>
+<table width='100%'>
+	<tr><td><button type='button' class='button_main' onclick="hide('edit_pt_time_div');">Cancel</button>
+	<td><button type='button' class='button_main' onclick="save_pt_time();">Save</button></td>
+	</tr>
+</table>
+</div>
+<div class='acs_container' id='pt_settings' >
+
+
+
+</div>
+</div>
+
 			
-?>

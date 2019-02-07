@@ -1553,6 +1553,7 @@ function check_temp_m1_dock(t)
 		}
 		else { 
 			if (parseInt(t * 10 ) > parseInt(M1_temp_target * 10)) { // round to one decimal place
+				show_temp(t,true);
 				console.log("DOCK M1 temp too high");
 				openPage('dock_m_temp_modal_high', this, 'red','m_modal','tabclass');
 			}
@@ -1623,6 +1624,7 @@ function check_temp(t) // start a new component
 		if (M1_temp_sign == 1) {
 			if (parseFloat(t) < parseFloat(M1_temp_target)) {
 				console.log(tag,"M1 temp too low: ",parseFloat(t)," < ",parseFloat(M1_temp_target));
+				show_temp(t,true);
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 				checkTempDiv(
 					m1_temp_div_2icon,
@@ -1637,6 +1639,7 @@ function check_temp(t) // start a new component
 		} else {
 			if (parseFloat(t) > parseFloat(M1_temp_target)) {
 				console.log(tag,"M1 temp too high: ", parseFloat(t)," > ", parseFloat(M1_temp_target));
+				show_temp(t,true);
 				openPage('m_temp_modal2', this, 'red','m_modal2','tabclass');
 				checkTempDiv(
 					m1_temp_div_2icon,
@@ -1804,20 +1807,23 @@ function clear_temps()
         }
     }
 }
-function show_temp(t)
+function show_temp(t,overtemp = false)
 {
-	console.log('show_temp',t);
+	console.log('show_temp',t,overtemp);
     tdiv = document.getElementsByClassName('temp_reading');
     for (i = 0; i < tdiv.length; i++) {
     // 	console.log("found div ",tdiv[i].id);
-    	try {
+    //	try {
     		tdiv[i].innerHTML= parseInt(t * 10) / 10 + "&#176C";
-    	}
-        catch (e) {
-        	console.log("who knows.....");
-        }
+    		if (overtemp == true) tdiv[i].style.color = 'var(--acs_red)';
+    		else tdiv[i].style.color = 'var(--acs_green)';
+   // 	}
+   //     catch (e) {
+   //     	console.log("show_temp who knows.....");
+  //      }
     }
 }
+
 function discard_component_popup()
 {
 	console.log('discard component popup');
