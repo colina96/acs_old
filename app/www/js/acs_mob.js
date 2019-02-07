@@ -59,6 +59,7 @@ function set_info(msg)
 	last_error_msg = msg;
 	document.getElementById('error_msg_div').innerHTML = last_error_msg;
 }
+
 function set_temp_mode(new_mode)
 {
 	temp_mode = new_mode;
@@ -68,6 +69,7 @@ function set_temp_mode(new_mode)
 	clear_temps();
 	qpack_resume();
 }
+
 // var temp_callback = null;
 function temp_callback(s) // works out where to send the temperature reading
 {
@@ -1590,10 +1592,11 @@ function dock_qa_override()
 
 function check_temp(t) // start a new component
 {
-	console.log("check temp",t);
-	new_comp.M1_temp = t; // 
+	let tag = "check_temp: ";
+	console.log(tag, "t: ", t);
+	new_comp.M1_temp = t;
 	
-	console.log(new_comp);
+	console.log(tag, "new_comp: ", new_comp);
 	
 	// var t = document.getElementsByName('m1_temp')[0].value;
 	var prep_type_id = new_comp['prep_type'];
@@ -1608,7 +1611,7 @@ function check_temp(t) // start a new component
 
 	let m1_temp_div_2a = document.getElementById('m1_temp_div_2a');
 
-	console.log("check temp",t,M1_temp_target);
+	console.log(tag,"t: ",t," target: ",M1_temp_target);
 
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {
