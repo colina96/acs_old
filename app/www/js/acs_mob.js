@@ -1373,7 +1373,7 @@ function component_selected(id)
 	let prep_type_sign = get_preptype_val(prep_type_id,'M1_temp_above');
 	new_comp.shelf_life_days = get_preptype_val(prep_type_id,'shelf_life_days');
 
-	let sign = (prep_type_sign == 0)?' > ':' < ';
+	let sign = (prep_type_sign == 0)?' < ':' > ';
 
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
 
@@ -1684,41 +1684,40 @@ function dock_start_component()
 	active_comp.finished = 'true';
 	active_comp.M1_chef_id = get_user_id();
 
-	active_comp;
-	var data =  {data: JSON.stringify(active_comp)};
+	let data = {data: JSON.stringify(active_comp)};
 
-    	console.log("dock_start_component Sent Off: ");
-    	console.log(active_comp);
-    	var qty_input = 'dock_m1_label_qty';
+	console.log("dock_start_component Sent Off: ");
+	console.log(active_comp);
+	let qty_input = 'dock_m1_label_qty';
 
-    	$.ajax({
+	$.ajax({
 		url: RESTHOME + "new_comp.php",
 		type: "POST",
 		data: data,
 
-		success: function(result) { // need to get the id of the new component back to print labels
-		    console.log("dock_start_component success ",result);
-		    var comp = JSON.parse(result);
+		success: function (result) { // need to get the id of the new component back to print labels
+			console.log("dock_start_component success ", result);
+			var comp = JSON.parse(result);
 
-		    console.log("start_component id =  ",comp.id);
-		    var qty = document.getElementsByName(qty_input)[0].value;
+			console.log("start_component id =  ", comp.id);
+			var qty = document.getElementsByName(qty_input)[0].value;
 
-		    active_comp.id = comp.id;
-		    active_comp.expiry_date = comp.expiry_date;
-		    active_comp.M1_time = comp.M1_time;
+			active_comp.id = comp.id;
+			active_comp.expiry_date = comp.expiry_date;
+			active_comp.M1_time = comp.M1_time;
 
-		   // active_comp.M1_chef_id = comp.M1_chef_id;
-		    print_component_labels(qty);
+			// active_comp.M1_chef_id = comp.M1_chef_id;
+			print_component_labels(qty);
 
-		    // reset default value TODO should that not be done on popup?
-		    document.getElementsByName(qty_input)[0].value = 1;
-		    goto_dock();
+			// reset default value TODO should that not be done on popup?
+			document.getElementsByName(qty_input)[0].value = 1;
+			goto_dock();
 
 		},
 		fail: function (result) {
-		    console.log("dock_start_component fail ",result);
+			console.log("dock_start_component fail ", result);
 		}
-    	});
+	});
 }
 
 function setup_force_M1() //
