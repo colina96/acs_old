@@ -4,14 +4,14 @@
     --acs_lightpurple: #93b3fd;
     --acs_red: #ed165d;
     --acs_orange: #e9ab17;
-	--acs_green:#18e0af;
+    --acs_green:#18e0af;
     --acs_blue: #2e6af2;
     --acs_purple: #882cdf;
     --acs_darkblue: #1543ab;
     --acs_darkpurple: #4f198d;
 
-	--acs_modal_radius: 15px;
-	--acs_button_radius: 10px;
+    --acs_modal_radius: 15px;
+    --acs_button_radius: 10px;
 
     --acs_background_light: var(--acs_white);
     --acs_background_dark: var(--acs_blue);
@@ -324,8 +324,18 @@
 	width:100px;
 }
 
+#comp_ingredients_table{
+	width:100%;
+}
+
+#comp_ingredients_table thead tr td,
 #comp_ingredients_table tbody tr td{
 	padding: 3px 0;
+	width: 40px;
+}
+#comp_ingredients_table thead tr td:first-of-type,
+#comp_ingredients_table tbody tr td:first-of-type{
+	width: 160px;
 }
 
 thead {

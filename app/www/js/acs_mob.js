@@ -1312,14 +1312,25 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 
 	let div = document.getElementById('m1_temp_div_1');
 	var d = "<div class='m-10'><table id='comp_ingredients_table'>";
-
-	d += "<tr><td width='200px'>Description</td><td width='40px'>ID</td><td width='40px'>Temp</td></tr>";
+        d += "<thead><tr>";
+	d += "<td>Description</td>";
+	d += "<td>ID</td>";
+	d += "<td>S/L</td>";
+	d += "<td>Temp</td>";
+	d += "</tr></thead><tbody>";
 	var prep_type_id = new_comp['prep_type'];
 	console.log(tag,'prep_type_id',prep_type_id);
 
 	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
 		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
 		d += "<tr><td>" + sub['description'] + '</td>';
+
+		if (new_comp['selected_ingredients'][i]['cid']) {
+			d += "<td>" + new_comp['selected_ingredients'][i]['cid'] + "</td>";
+		} else {
+			finished = false;
+			d += "<td>-</td>";
+		}
 
 		if (new_comp['selected_ingredients'][i]['cid']) {
 			d += "<td>" + new_comp['selected_ingredients'][i]['cid'] + "</td>";
@@ -1336,7 +1347,7 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 		}
 		d += "</tr>";
 	}
-	d += '</table></div>';
+	d += '</tbody></table></div>';
 	div.innerHTML = d;
 	return(finished);
 }
