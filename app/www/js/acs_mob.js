@@ -320,8 +320,7 @@ function set_ingredient_temp(s)
 		// show confirm btn
 		document.getElementById('confirm_start_comp_btn').style.display = 'inline-block';
 		// start_component(false,true);
-	}
-	else {
+	} else {
 		set_barcode_mode('scan_ingredients');
 	}
 }
@@ -361,6 +360,7 @@ function check_ingredient(cid)
 						return; 
 					} 
 
+
 					var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
 					// d += "<tr><td>" + sub['description'] + '</td>';
 					//
@@ -394,6 +394,7 @@ function sl_expired(expiry_cond){
 		console.log(tag,'shelf life expired');
 		sl.appendChild(iconFail());
 		// show button to force SL
+		// TODO set functions
 		show_button(page,'Force S/L','');
 		show_button(page,'Reject ingredient','',true);
 		// set scanner mode (or just keep it?)
@@ -1375,8 +1376,10 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 			d += "<td>-</td>";
 		}
 
-		if (new_comp['selected_ingredients'][i]['cid']) {
-			d += "<td>" + new_comp['selected_ingredients'][i]['expired'] + "</td>";
+		if (new_comp['selected_ingredients'][i]['expired']==false) {
+			d += "<td>OK</td>";
+		} else if (new_comp['selected_ingredients'][i]['expired']==true) {
+			d += "<td>Fail</td>";
 		} else {
 			finished = false;
 			d += "<td>-</td>";
