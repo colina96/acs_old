@@ -55,7 +55,7 @@ var last_error_msg = '';
 
 function set_info(msg)
 {
-	console.log('set info',msg);
+	console.log('set_info',msg);
 	last_error_msg = msg;
 	document.getElementById('error_msg_div').innerHTML = last_error_msg;
 }
@@ -183,7 +183,6 @@ function set_barcode_mode(mode)
 	keyboard_str = '';
 	// document.getElementsByName('kitchen_manual_barcode')[0].value = '';
 	qpack_resume();
-	
 }
 
 function get_user(id)
@@ -1049,9 +1048,9 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 				// item already used - what to do?
 			}
 			else {
-				var tr = document.createElement('tr');
+				tr = document.createElement('tr');
 				// tr.appendChild(new_td(line++,'item'));
-				var clickdiv = "<div onclick='XXplating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
+				var clickdiv = "<div onclick='plating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
 				// show items in coolroom ready to be plated
 			 	//clickdiv += show_plating_comps(items[i].description);
 			//	tr.appendChild(new_td(items[i].description,'item'));
@@ -1071,14 +1070,12 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 				td.innerHTML = '-';
 				if (items[i].M1_temp) {
 					td.innerHTML = items[i].M1_temp;
-				}
-				else {
+				} else {
 					all_good = false;
 				}
 				tr.appendChild(td);
 				tab.appendChild(tr);
 			}
-			
 		}
 		div.appendChild(tab);
 		
@@ -1303,23 +1300,21 @@ function get_preptype_val(id,fld)
 function draw_ingredients() // returns true if all ingredients are selected and have a temperature
 {
 	let tag = 'draw_ingredients: ';
-	var finished = true;
+	let finished = true;
 	document.getElementById('confirm_start_comp_btn').style.display = 'none';
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
 
-	clearChildren(document.getElementById('ms_1_text'));
 	clearChildren(document.getElementById('m1_temp_div_1a'));
-	clearChildren(document.getElementById('chk_temp_item_id_div'));
+	// clearChildren(document.getElementById('chk_temp_item_id_div'));
 
 	document.getElementById('chk_temp_item_div').innerHTML = new_comp.description;
+
 	let div = document.getElementById('m1_temp_div_1');
 	var d = "<div class='m-10'><table id='comp_ingredients_table'>";
 
 	d += "<tr><td width='200px'>Description</td><td width='40px'>ID</td><td width='40px'>Temp</td></tr>";
 	var prep_type_id = new_comp['prep_type'];
 	console.log(tag,'prep_type_id',prep_type_id);
-
-	clearChildren(document.getElementById('ms_2_target'));
 
 	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
 		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
@@ -1338,7 +1333,6 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 			d += "<td>-</td>";
 			finished = false;
 		}
-		
 		d += "</tr>";
 	}
 	d += '</table></div>';
@@ -1350,7 +1344,7 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 
 function component_selected(id)
 {
-	var tag = "component_selected: ";
+	let tag = "component_selected: ";
 
 	console.log(tag,"loading chefs");
 	load_chefs(null);
@@ -1387,6 +1381,8 @@ function component_selected(id)
 
 	clear_comp_fields();
 
+	// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
+
 	if (new_comp['subcomponents']) {
 
 		if (!new_comp['selected_ingredients']) {
@@ -1399,7 +1395,6 @@ function component_selected(id)
 		console.log(tag,'has ingredients');
 		set_barcode_mode('scan_ingredients');
 		draw_ingredients();
-
 	} else if (M1_temp == null) {
 		// low risk. No temp required
 		console.log(tag,"LOW RISK");
@@ -1416,7 +1411,7 @@ function component_selected(id)
 		document.getElementById('ms_2').innerHTML = 'M1';
 		document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
 		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
-		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
+		// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 		// document.getElementById('chk_temp_item_id_div').innerHTML = sprintf('C01%06d',new_comp['id']);
 
 		clearChildren(document.getElementById('chk_temp_item_id_div'));
@@ -1426,12 +1421,6 @@ function component_selected(id)
 		let temp_div = document.getElementById('m1_temp_div');
 		checkTempDiv(temp_div,new_comp,"read_M1temp();");
 	}
-
-	// openPage('m_temp_modal', this, 'red','m_modal2','tabclass');
-	// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
-	document.getElementById('ms_1').innerHTML = '';
-	document.getElementById('ms_1_text').innerHTML = '';
-	
 
 	document.getElementById('chk_temp_pt_div').innerHTML = get_preptype_val(prep_type_id,'code');
 }
