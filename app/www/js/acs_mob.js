@@ -652,9 +652,6 @@ function decant_labels()
 
 function decant_item_labels(item) 
 {
-	
-
-
 	var data =  {data: JSON.stringify(item)};
 	$.ajax({
 	    url: RESTHOME + "decant.php",
@@ -681,8 +678,7 @@ function plating_comp_selected(i,batch_change)
 	plating_item.batch_change = batch_change;
 	var items = menu_item.items;
 	if (i >= 0 && i < items.length) {
-		console.log("selected " + items[i].description);
-		console.log(items[i]);
+		console.log("plating_comp_selected: selected ",items[i].description,' item:',items[i]);
 	}
 	if (items[i].prep_type_id == 2) { // HF decant?
 		openPage('m_plating_temp_decant', this, 'red','m_modal','tabclass');
@@ -1241,30 +1237,30 @@ function show_dock()
 }
 function setup_dock_search(dock_items)
 {
-	 $('#dock_search').autocomplete({
-         // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
-         minLength: 2,
- 		source: dock_items,
- 		response: function( event, ui ) { 
- 			// console.log("search response found " + ui.content.length); console.log(ui);
- 			/*
- 			if (ui.content.length == 0) {
- 				document.getElementById('new_comp_btns').style.display = 'block';
- 			}
- 			else {
- 				document.getElementById('new_comp_btns').style.display = 'none';
- 			} */
- 		},
- 		select: function(event, ui) {
-             // place the person.given_name value into the textfield called 'select_origin'...
-             $('#dock_search').val(ui.item.label);
-             // and place the person.id into the hidden textfield called 'link_origin_id'. 
-          	console.log('selected ',ui.item.value);
-          	show_dock_component(ui.item.value);
-          	// cordova.plugins.Keyboard.close();
-             return false;
-         }  
-     })
+	$('#dock_search').autocomplete({
+		// This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+		minLength: 2,
+		source: dock_items,
+		response: function (event, ui) {
+			// console.log("search response found " + ui.content.length); console.log(ui);
+			/*
+            if (ui.content.length == 0) {
+                document.getElementById('new_comp_btns').style.display = 'block';
+            }
+            else {
+                document.getElementById('new_comp_btns').style.display = 'none';
+            } */
+		},
+		select: function (event, ui) {
+			// place the person.given_name value into the textfield called 'select_origin'...
+			$('#dock_search').val(ui.item.label);
+			// and place the person.id into the hidden textfield called 'link_origin_id'.
+			console.log('setup_dock_search: selected ', ui.item.value);
+			show_dock_component(ui.item.value);
+			// cordova.plugins.Keyboard.close();
+			return false;
+		}
+	})
 }
 
 function goto_dock()
@@ -1354,57 +1350,67 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 
 function component_selected(id)
 {
-	console.log("component selected - loading chefs");
+	var tag = "component_selected: ";
+
+	console.log(tag,"loading chefs");
 	load_chefs(null);
+
 	new_comp = null;
 	active_comp = null;
+
 	if (id) {
 		new_comp = get_component_by_id(id);
 	}
-	console.log(new_comp);
+	console.log(tag, 'new_comp: ', new_comp);
 	if (!new_comp) {
-		console.log("can't find component - search for " + $('#search').val());
+		console.log(tag,"can't find component - search for " + $('#search').val());
 		new_comp = get_component_by_description($('#search').val());
 	}
 	if (new_comp['prep_type'] < 1) new_comp['prep_type'] = 1;
-	console.log(new_comp);
-	var prep_type_id = new_comp['prep_type'];
-	console.log('prep_type_id',prep_type_id);
+	console.log(tag, 'updated new_comp', new_comp);
+
+	let prep_type_id = new_comp['prep_type'];
+	console.log(tag,'prep_type_id: ',prep_type_id);
+
 	if (prep_type_id < 1) prep_type_id = 1;
 	
-	var M1_temp = get_preptype_val(prep_type_id,'M1_temp');
-	var prep_type_sign = get_preptype_val(prep_type_id,'M1_temp_above');
+	let M1_temp = get_preptype_val(prep_type_id,'M1_temp');
+	let prep_type_sign = get_preptype_val(prep_type_id,'M1_temp_above');
 	new_comp.shelf_life_days = get_preptype_val(prep_type_id,'shelf_life_days');
-	var sign = ' > ';
+
+	let sign = (prep_type_sign == 0)?' > ':' < ';
+
 	openPage('m_temp', this, 'red','mobile_main','tabclass');
-	if (prep_type_sign == 0) {
-		sign = ' < ';
-	}
-	console.log(new_comp);
-	console.log(new_comp['subcomponents']);
+
+	console.log(tag,"new_comp: ",new_comp," subcomponents: ", new_comp['subcomponents']);
 	// subcomponents is an array of ids - needs to become an array of objects to store temperature and used id
-	
+
+	clearChildren(document.getElementById('ms_2'));
+	clearChildren(document.getElementById('ms_2_text'));
+
 	if (new_comp['subcomponents']) {
+
 		if (!new_comp['selected_ingredients']) {
 			new_comp['selected_ingredients'] = new Array();
-			for (var i = 0; i < new_comp['subcomponents'].length; i++) {
+			for (let i = 0; i < new_comp['subcomponents'].length; i++) {
 				new_comp['selected_ingredients'][i] = new Object();
 				new_comp['selected_ingredients'][i]['id'] = new_comp['subcomponents'][i];
 			}
 		}
-		console.log('has ingredients');
+		console.log(tag,'has ingredients');
 		set_barcode_mode('scan_ingredients');
 		draw_ingredients();
-	} else if (M1_temp == null) { // low risk. No temp required
-		console.log("LOW RISK");
+
+	} else if (M1_temp == null) {
+		// low risk. No temp required
+		console.log(tag,"LOW RISK");
 		set_barcode_mode("M1_LR");
 		openPage('m_temp_modal_LR', this, 'red','m_modal2','tabclass');
 		document.getElementById('m1_temp_div_LR_comp').innerHTML = new_comp['description'];
-		document.getElementById('ms_2').innerHTML = ' ';
-		document.getElementById('ms_2_text').innerHTML = ' ';
-		document.getElementById('ms_2_target').innerHTML = "";
-		document.getElementById('chk_temp_item_div').innerHTML = '';
-		document.getElementById('chk_temp_item_id_div').innerHTML = '';
+
+		clearChildren(document.getElementById('ms_2_target'));
+		clearChildren(document.getElementById('chk_temp_item_div'));
+		clearChildren(document.getElementById('chk_temp_item_id_div'));
 	} else {
 		set_barcode_mode("M1");
 		set_temp_mode("M1");
@@ -1414,7 +1420,9 @@ function component_selected(id)
 		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
 		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 		// document.getElementById('chk_temp_item_id_div').innerHTML = sprintf('C01%06d',new_comp['id']);
-		document.getElementById('chk_temp_item_id_div').innerHTML = '';
+
+		clearChildren(document.getElementById('chk_temp_item_id_div'));
+
 		temp_probe = false;
 
 		let temp_div = document.getElementById('m1_temp_div');
@@ -2283,26 +2291,25 @@ function reprint_comp_labels()
 
 function load_reprint_data()
 {
-	
-	 $.ajax({
-	        url: RESTHOME + "get_active_comps.php?all=true",
-	        type: "POST",
-	        dataType: 'json',
-	        // contentType: "application/json",
-	        success: function(result) {
-	            active_comps = result;
-	           // document.getElementById('active_comps').innerHTML = result;
-	     //        console.log("got " + result.length + " comps");
-	         //    m_show_active_components(result,true);
-	            
-	        },
-	        done: function(result) {
-	            console.log("done load_comps ");
-	        },
-	        fail: (function (result) {
-	            console.log("fail load_comps",result);
-	        })
-	    });
+	$.ajax({
+		url: RESTHOME + "get_active_comps.php?all=true",
+		type: "POST",
+		dataType: 'json',
+		// contentType: "application/json",
+		success: function (result) {
+			active_comps = result;
+			// document.getElementById('active_comps').innerHTML = result;
+			//        console.log("got " + result.length + " comps");
+			//    m_show_active_components(result,true);
+
+		},
+		done: function (result) {
+			console.log("done load_comps ");
+		},
+		fail: (function (result) {
+			console.log("fail load_comps", result);
+		})
+	});
 }
 
 
@@ -2320,90 +2327,88 @@ function m_tracking()
 
 function load_tracking_data()
 {
-	 $.ajax({
-	        url: RESTHOME + "get_active_comps.php",
-	        type: "POST",
-	        dataType: 'json',
-	        // contentType: "application/json",
-	        success: function(result) {
-	            active_comps = result;
-	            m_show_active_components(result,false);
-	        },
-	        done: function(result) {
-	            console.log("done load_comps ");
-	        },
-	        fail: (function (result) {
-	            console.log("fail load_comps",result);
-	        })
-	    });
+	$.ajax({
+		url: RESTHOME + "get_active_comps.php",
+		type: "POST",
+		dataType: 'json',
+		// contentType: "application/json",
+		success: function (result) {
+			active_comps = result;
+			m_show_active_components(result, false);
+		},
+		done: function (result) {
+			console.log("done load_comps ");
+		},
+		fail: (function (result) {
+			console.log("fail load_comps", result);
+		})
+	});
 }
 
 function get_comps_for_plating(item)
 {
 	console.log('get_comps_for_plating',item);
-	 $.ajax({
-	        url: RESTHOME + "get_active_comps.php?finished=true",
-	        type: "POST",
-	        dataType: 'json',
-	        // contentType: "application/json",
-	        success: function(result) {
-	            plating_comps = result;
-	           // document.getElementById('active_comps').innerHTML = result;
-	            console.log("got " + result.length + " comps for plating");
-	            // m_show_active_components(result);
-	            do_show_menu_item_components(item);
-	        },
-	        done: function(result) {
-	            console.log("done get_comps_for_plating");
-	        },
-	        fail: (function (result) {
-	            console.log("fail get_comps_for_plating",result);
-	        })
-	    });
+	$.ajax({
+		url: RESTHOME + "get_active_comps.php?finished=true",
+		type: "POST",
+		dataType: 'json',
+		// contentType: "application/json",
+		success: function (result) {
+			plating_comps = result;
+			// document.getElementById('active_comps').innerHTML = result;
+			console.log("got " + result.length + " comps for plating");
+			// m_show_active_components(result);
+			do_show_menu_item_components(item);
+		},
+		done: function (result) {
+			console.log("done get_comps_for_plating");
+		},
+		fail: (function (result) {
+			console.log("fail get_comps_for_plating", result);
+		})
+	});
 }
 
 
 function load_plating_teams()
 {
-	
-	 $.ajax({
-	        url: RESTHOME + "get_plating_teams.php",
-	        type: "POST",
-	        dataType: 'json',
-	        // contentType: "application/json",
-	        success: function(result) {
-	           //  active_comps = result;
-	           // clear plating teams;
-	        	if (plating_teams != null) {
-		        	for (var i = 0; i < plating_teams.length; i++ ) {
-		        		if (plating_teams[i] != null) plating_teams[i] = [];
-		        	}
-	        	
-		            console.log("got " + result.length + " plating_teams");
-		            for (var i = 0; i < result.length;i++) {
-		            	console.log("pt",result[i].user_id,result[i].team_id);
-		            	var chef = get_chef_by_id(result[i].user_id);
-		            	if (chef) {
-		            		console.log("found chef ",chef['label']);
-		            		if (plating_teams[result[i].team_id] == null) {
-		            			plating_teams[result[i].team_id] = [];
-		            		}
-		            		plating_teams[result[i].team_id].push(chef);
-		            	}
-		            	else {
-		            		console.log("could not find chef");
-		            	}
-		            	//plating_teams[result[i].team_id].push(get_chef_by_id(result[i].user_id));
-		            	// plating_teams[active_plating_team].push(chefs[idx]);
-		            }
-	        	}
-	       
-	            
-	        },
-	        fail: (function (result) {
-	            console.log("fail load_comps",result);
-	        })
-	    });
+	$.ajax({
+		url: RESTHOME + "get_plating_teams.php",
+		type: "POST",
+		dataType: 'json',
+		// contentType: "application/json",
+		success: function (result) {
+			//  active_comps = result;
+			// clear plating teams;
+			if (plating_teams != null) {
+				for (var i = 0; i < plating_teams.length; i++) {
+					if (plating_teams[i] != null) plating_teams[i] = [];
+				}
+
+				console.log("got " + result.length + " plating_teams");
+				for (var i = 0; i < result.length; i++) {
+					console.log("pt", result[i].user_id, result[i].team_id);
+					var chef = get_chef_by_id(result[i].user_id);
+					if (chef) {
+						console.log("found chef ", chef['label']);
+						if (plating_teams[result[i].team_id] == null) {
+							plating_teams[result[i].team_id] = [];
+						}
+						plating_teams[result[i].team_id].push(chef);
+					} else {
+						console.log("could not find chef");
+					}
+					//plating_teams[result[i].team_id].push(get_chef_by_id(result[i].user_id));
+					// plating_teams[active_plating_team].push(chefs[idx]);
+				}
+			}
+
+
+		},
+		fail: (function (result) {
+			console.log("fail load_comps", result);
+		})
+	});
 }
 
 function format_minutes (min)
@@ -2837,7 +2842,8 @@ function get_plating_item_by_id(id)
 
 function load_comps(fn)
 {
-console.log("loading menu item components");
+	let tag = 'load_comps: ';
+	console.log(tag,"loading menu item components");
     $.ajax({
         url: RESTHOME + "get_comps.php",
         type: "POST",
@@ -2855,31 +2861,30 @@ console.log("loading menu item components");
         			// console.log("search response found " + ui.content.length); console.log(ui);
         			if (ui.content.length == 0) {
         				document.getElementById('new_comp_btns').style.display = 'block';
-        			}
-        			else {
+        			} else {
         				document.getElementById('new_comp_btns').style.display = 'none';
         			}
         		},
         		select: function(event, ui) {
-                    // place the person.given_name value into the textfield called 'select_origin'...
+                    // place the person.given_name value into the text field called 'select_origin'...
                     $('#search').val(ui.item.label);
-                    // and place the person.id into the hidden textfield called 'link_origin_id'. 
-                 	console.log('selected ',ui.item.value);
+                    // and place the person.id into the hidden text field called 'link_origin_id'.
+                 	console.log(tag,'selected ',ui.item.value);
                  	component_selected(ui.item.value);
                  	$('#search').val(''); // this might go wrong
                  	// cordova.plugins.Keyboard.close();
                  	$('#search').blur();
                     return false;
                 }  
-            })
-            console.log("got " + result.length + " comps");
+            });
+            console.log(tag,"got " + result.length + " comps");
             if (typeof(fn) == 'function') fn();
         },
         done: function(result) {
-            console.log("done load_comps ");
+            console.log(tag,"done ",result);
         },
         fail: (function (result) {
-            console.log("fail load_comps",result);
+            console.log(tag,"fail ",result);
         })
     });
 }
