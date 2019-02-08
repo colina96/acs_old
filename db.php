@@ -40,7 +40,8 @@ function get_url_token($tok)
 function dblog($s)
 {
 	// stub
-	file_put_contents('dblog.log', $s.PHP_EOL , FILE_APPEND | LOCK_EX);
+	$Dt = date('Y-m-d');
+	file_put_contents('dblog_'.$Dt.'.log', $s.PHP_EOL , FILE_APPEND | LOCK_EX);
 	/*
 	$myfile = fopen("dblog.log", "ar");
 	if ($myfile) {
