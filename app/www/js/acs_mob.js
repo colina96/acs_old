@@ -2659,7 +2659,7 @@ function m_show_active_components(data,reprint)
 			let num;
 			let status_msg;
 
-			let push_to_top;
+			let push_to_top = false;
 			if (data[i]['M1_time'] == '') { 
 				// M0 - ingredients have been selected
 				num = '1';
@@ -2679,13 +2679,16 @@ function m_show_active_components(data,reprint)
 				remaining = (due_ms - now_ms) / 60000;
 
 				if (remaining > 0) {
-					// time is left? append to end of list
 					status_msg = new_td(format_minutes(remaining) + "",'comp');
 				} else {
+					push_to_top = true;
+
+					//set popup
 					if (timeout_msg == null) {timeout_msg = '<h2>OVERDUE</h2>';}
 					else {timeout_msg += "<br>";}
 					timeout_msg += data[i]['description'] + ' : ' + format_minutes(Math.abs(remaining));
 
+					//set line message
 					status_msg = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
 				}
 			}
