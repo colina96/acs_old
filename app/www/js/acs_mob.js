@@ -205,10 +205,11 @@ function check_user(user_flag)
 }
 
 function process_barcode(s)
-{ 
-	console.log("process_barcode " + s + " mode " + barcode_mode);
+{
+	let tag = 'process_barcode: ';
+	console.log(tag,"process_barcode " + s + " mode " + barcode_mode);
 	if (s == 'setup1') {
-		console.log('setup');
+		console.log(tag,'setup');
 	}
 	if (user_id <= 0) {
 		barcode_mode = 'login';
@@ -287,11 +288,11 @@ function process_barcode(s)
 			barcode_mode = null;
 		}
 		else if (barcode_mode == 'scan_ingredients') {
-			console.log('read ingredient ' + cid);
+			console.log(tag,'read ingredient ' + cid);
 			check_ingredient(cid);
 		}
 		else { // barcode mode null
-			console.log('barcode_mode not set',barcode_mode,mode);
+			console.log(tag,'barcode_mode not set',barcode_mode,mode);
 			if (mode == 'plating') {
 				// maybe decant?
 				plating_comp_barcode_scanned(cid,false);
@@ -2573,9 +2574,12 @@ function display_real_time()
 
 function m_show_active_components(data,reprint)
 {
-	console.log("m_show_active_components");
+	let tag = "m_show_active_components: ";
+	console.log(tag);
+
 	display_real_time();
 	var timeout_msg = null;
+
 	var div = document.getElementById('m_current_tracking');
 	if (reprint) div = document.getElementById('m_reprint_labels');
 
@@ -2591,12 +2595,12 @@ function m_show_active_components(data,reprint)
 	//build head
 	var thead = new_node('thead');
 	var tr = new_node('tr');
-	
-        tr.appendChild(new_node('th','Description','comp_left'));
-        if (!reprint) {
-        	tr.appendChild(new_node('th','M','comp_middle'));
-        	tr.appendChild(new_node('th','TIME','comp_right'));
-        }
+
+	tr.appendChild(new_node('th', 'Description', 'comp_left'));
+	if (!reprint) {
+		tr.appendChild(new_node('th', 'M', 'comp_middle'));
+		tr.appendChild(new_node('th', 'TIME', 'comp_right'));
+	}
 
    	thead.appendChild(tr);
 	tab.appendChild(thead);
@@ -2604,42 +2608,48 @@ function m_show_active_components(data,reprint)
 	//body
 	var tbody = new_node('tbody');
 
-	for (var i=0; i<data.length; ++i) {
+	for (let i=0; i<data.length; ++i) {
    		tr = document.createElement('tr');
 
    		var clickdiv;
    		var span_txt='';
+
    		if(reprint){
+   			// online version
 			if (typeof(serial) == 'undefined'){
 				tr.setAttribute(
 					"onclick",
 					"reprint_active_comp_labels(" + data[i]['id'] + ");"
 				);
 			}
+
 			clickdiv = "<div>";
 		}else{
 			/* if (typeof(serial) == 'undefined') */ 
 			tr.setAttribute("onclick",'active_comp_selected(' + i + ');');
 		//	span_txt = "<span class='hidden'>" + data[i]['id'] + "</span>";
+
 			clickdiv = "<div class='tooltip'>";
 		}
+
 		clickdiv += data[i]['description']+span_txt+ "</div>";
 
    		tr.appendChild(new_td(clickdiv,'comp'));
-   		
-   		var M1_time = new Date(data[i]['M1_time']);
-   		var M2_time = new Date(data[i]['M2_time']);
-   		var prep_type_id = data[i]['prep_type_id'];
-   	//	console.log("M2 time -",data[i]['M2_time'],"-");
-   		var remaining = 0;
-   		var now = new Date();
-		var now_ms = now.getTime();
-		var M1_ms = M1_time.getTime(); // time in millisecs
-	//	console.log("prep_type_id",prep_type_id);
-		console.log('checking ',data[i].description,data[i].state);
-		if (reprint) {
 
+	//	console.log("prep_type_id",prep_type_id);
+		console.log(tag, 'checking ',data[i].description,data[i].state);
+		if (reprint) {
+			tbody.appendChild(tr);
    		}else{
+			var M1_time = new Date(data[i]['M1_time']);
+			var M2_time = new Date(data[i]['M2_time']);
+			var prep_type_id = data[i]['prep_type_id'];
+			//	console.log("M2 time -",data[i]['M2_time'],"-");
+			var remaining = 0;
+			var now = new Date();
+			var now_ms = now.getTime();
+			var M1_ms = M1_time.getTime(); // time in millisecs
+
 			let num;
 			let status_msg;
 			if (data[i]['M1_time'] == '') { 
@@ -2647,7 +2657,7 @@ function m_show_active_components(data,reprint)
 				num = '1';
 				status_msg = new_td('Cooking','comp');
 			}else {
-				var due_min;
+				let due_min;
 				if (data[i]['M2_time'] == '') {
 					num = '2';
 					due_min = get_preptype_val(prep_type_id,'M2_time_minutes');
@@ -2656,24 +2666,27 @@ function m_show_active_components(data,reprint)
 					due_min = get_preptype_val(prep_type_id,'M3_time_minutes');
 				}
 
-				var due_ms = M1_ms + due_min * 60 * 1000;
-				remaining = (due_ms - now_ms) / (60 * 1000);
-
+				// 60000 = 60 (seconds in minute) * (1000 ms in sec)
+				let due_ms = M1_ms + due_min * 60000;
+				remaining = (due_ms - now_ms) / 60000;
 
 				if (remaining > 0) {
+					// time is left? append to end of list
 					status_msg = new_td(format_minutes(remaining) + "",'comp');
+					tbody.appendChild(tr);
 				} else {
-					if (timeout_msg == null) timeout_msg = '<h2>OVERDUE<h2>';
-					else timeout_msg += "<br>";
-					timeout_msg += data[i]['description'] + " : " + format_minutes(Math.abs(remaining));
-					status_msg = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
+					if (timeout_msg == null) {timeout_msg = '<h2>OVERDUE</h2>';}
+					else {timeout_msg += "<br>";}
+					timeout_msg += data[i]['description'] + ' : ' + format_minutes(Math.abs(remaining));
 
+					status_msg = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
+					// overdue? push to beginning of list
+					tbody.insertBefore(tr, tbody.childNodes[0]);
 				}
 			}
 			tr.appendChild(new_td('<div class="m_bluedot">'+num+'</div>','comp'));
 	   		tr.appendChild(status_msg)
 		}
-		tbody.appendChild(tr);
 	}
 	tab.appendChild(tbody);
    	div.appendChild(tab);
