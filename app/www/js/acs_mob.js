@@ -2685,8 +2685,7 @@ function m_show_active_components(data,reprint)
 
 					//set popup
 					if (timeout_msg == null) {timeout_msg = '<h2>OVERDUE</h2>';}
-					else {timeout_msg += "<br>";}
-					timeout_msg += data[i]['description'] + ' : ' + format_minutes(Math.abs(remaining));
+					timeout_msg += data[i]['description'] + ' : ' + format_minutes(Math.abs(remaining))+'<br />';
 
 					//set line message
 					status_msg = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
