@@ -20,6 +20,21 @@
 
 		<div class="acs_right_content">
 			<!--  popup -->
+			<div class='popup' id='del_item_popup'>
+				<div class='h3'>Delete Item from Menu?</div>
+				<table>
+					<tr><td>Dish name</td><td><div id='del_item_dish_name'></div></td></tr>
+					<tr><td>Code</td><td><div id='del_item_code'</div></td></tr>
+				
+				</table>
+				<input type='hidden' id='del_item_id'>
+				<input type='hidden' id='del_item_menu_id'>
+				
+				<div class='m-10'>
+					<div class='btn' onclick='do_delete_item()'>Yes</div>
+					<div class='btn' onclick="hide('del_item_popup');">No</div>
+				</div>
+			</div>
 			<div class='popup' id='del_comp_popup'>
 				<div class='h3'>Delete component?</div>
 				<div id='del_comp_description'></div>
@@ -139,11 +154,11 @@
 		
 			</div>
 			<div id='active_menus' class='menu_details menu_details_active'>
-			<?php load_active_menus(); ?></div>
+			<!--  ?php load_active_menus(); ? --></div>
 			<div id='future_menus' class='menu_details'>
 			</div>
 			<div id='expired_menus' class='menu_details'>
-			<?php load_expired_menus(); ?></div>
+			</div>
 			<div id='add_menu_component_modal'>
 				<div class='modal_header'>
                     <span>Add menu item component</span>
@@ -355,7 +370,7 @@ function show_menu(filter)
 	    	tr.appendChild(td);
 	
 	       	td = document.createElement('td');
-	    	td.innerHTML += "<image class='icon' id='delete_dish' src='app/www/img/icon_delete_white.svg' onclick='del_menuitem("+ item['id'] + ");'></image>";
+	    	td.innerHTML += "<image class='icon' id='delete_dish' src='app/www/img/icon_delete_white.svg' onclick='del_menuitem("+ item['id'] + "," + k + ");'></image>";
 	    	td.colSpan = 2;
 	    	tr.appendChild(td);
 	        table.appendChild(tr);
@@ -521,6 +536,42 @@ function insert_ingredient(menu_id,component_id,subcomponent_id)
         })
     });
 }
+
+function do_delete_item()
+{
+	hide('del_item_popup');
+	var component = new Object();
+	component['menu_id'] = active_menu_id;
+	component['id'] = document.getElementById('del_item_id').value;
+	
+	var data =  {data: JSON.stringify(component)};
+    console.log("Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "delete_menu_item.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { 
+            console.log("insert_ingredient result ",result);
+            load_menu(active_menu_id);
+ 
+        },
+        fail: (function (result) {
+            console.log("start_componentfail ",result);
+        })
+    });
+	
+}
+function del_menuitem(item_id,idx)
+{
+	console.log('del_menuitem ',item_id);
+	console.log(menu_items[item_id]);
+	document.getElementById('del_item_id').value = item_id;
+	document.getElementById('del_item_dish_name').innerHTML = menu_items[item_id].dish_name;
+	document.getElementById('del_item_code').innerHTML = menu_items[item_id].code;
+	show('del_item_popup');
+}
 function remove_ingredient(menu_id,component_id,subcomponent_id)
 {
 	
@@ -623,12 +674,19 @@ function dont_new_comp()
 
 function do_new_item()
 {
-	hide('new_comp_popup');
+	
 	var component = new Object();
 	component['menu_id'] = active_menu_id;
 	component['dish_name'] = document.getElementById('new_item_dish_name').value;
 	component['code'] = document.getElementById('new_item_code').value;
-
+	if (component['dish_name'] && component['dish_name'].length > 2 && component['code'] && component['code'].length > 2) {
+		hide('new_item_popup');
+	}
+	else {
+		// error or warning message????? TODO
+		console.log('invalid values for new menu item');
+		return;
+	}
 	var data =  {data: JSON.stringify(component)};
     console.log("do_new_comp Sent Off: %j", data);
  
@@ -1089,108 +1147,6 @@ function select_chef($s_name)
 }
 
 
-
-
-function load_active_menus()
-{
-	load_menus();
-}
-function load_future_menus()
-{
- //	var RESTHOME = 'REST/';
-	console.log("loading menu" + RESTHOME + "get_menu.php");
-/*	$.ajax({
-		url: RESTHOME + "get_menu.php",
-		type: "POST",
-		// data: data,
-		//  data: {points: JSON.stringify(points)},
-		dataType: 'json',
-		// contentType: "application/json",
-		success: function(result) {
-			
-			console.log("got menu" + result.menu_items.length);
-			
-	
-		},
-		done: function(result) {
-			console.log("load_menu_items");
-		},
-		fail: (function (result) {
-			console.log("fail load_menu_items",result);
-		}
-	}); */
-	
-	
-}
-
-function load_expired_menus()
-{
-	echo "active menus";
-}
-function load_menus()
-{
-	// echo "load menus";
-	if( !empty($_SESSION['userID'])) { // logged in
-		if (!empty($_POST['delete_menu'])) { delete_menu(); }
-		if (!empty($_POST['update_menu'])) { update_menu(); }
-		if (!empty($_POST['new_menu_item'])) { new_menu_item(); }
-		if (!empty($_POST['add_menu_component'])) { add_menu_component(); }
-		if (!empty($_POST['del_menu_component'])) { del_menu_component(); }
-		/*
-		$menu_id = get_url_token('menu_id'); //  || get_url_token('cc_menu_id');
-		// echo "menu id $menu_id   ";
-		if (!empty($menu_id)) {		
-			//echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
-			show_menu($menu_id);
-			//echo "<div class='draw_screen_btn'><a class='users_link' href='acs_menu.php'>Back</a></div>";
-		}
-		else { */
-
-			//  show_menus();
-			
-		/* } */
-	}
-}
-
-function show_menus()
-{
-	$sql = "select * from MENUS order by ID";
-	$result = mysql_query($sql);
-	if ($result) {
-
-		echo "<table class='menus_table' width='100%' border='1'>";
-		echo "<tr><td>Description</td><td>Start Date</td><td>End Date</td><td>Code</td>";
-		echo "<td>Edit</td><td>Delete</td></tr>";
-		while($row = mysql_fetch_array($result))
-		{
-//			echo "<tr class='users'><td><a href='?edit=".$row['id']."'>".$row['id']."</a></td>";
-//			echo "<td>".$row['username']."</td><td>".$row['password']."</td>";
-			echo "<tr><td>".$row['description']."</td>";
-			echo "<td>".$row['start_date']."</td>";
-			echo "<td>".$row['end_date']."</td>";
-			echo "<td>".$row['code']."</td>";
-			// echo "<td>".$row['comment']."</td>";
-			//echo "<td><a href='acs_menu.php?menu_id=".$row['id']."'>edit</a></td>";
-			echo "<td><div class='btn' onclick='load_menu(".$row['id'].");'>Edit</div></td>";
-			echo "<td><A href='acs_menu.php?delete_menu=".$row['id']."'>del</a></td>";
-			echo "</tr>";
-		}
-		echo "</table>";
-	}
-}
-
-
-function select_plating_team($plating_team,$menu_item_id)
-{
-	echo "<select name='plating_team_".$menu_item_id."' onchange='update_plating_team(this,".$menu_item_id.");'>";
-	echo "<option value='0'>-</option>";
-	for ($i = 1; $i < 11; $i++) {
-		echo "<option value='".$i."'";
-		if ($i == $plating_team) { echo " selected"; }
-		echo ">".$i."</option>";
-	}
-	echo "</select>";
-}
 function select_prep_type($prep_type_id,$comp_id)
 {
 	$sql = "select * from PREP_TYPES order by ID";
@@ -1227,128 +1183,8 @@ function select_probe_type($probe_type_id,$comp_id)
 	}
 	echo "</select>";
 }
-function delete_menu()
-{
-	$del_id = $_POST['delete'];
-	if ($del_id < 0) return;
-	$sql = "delete from MENUS where ID=".$del_id;
-	test_mysql_query($sql);
-}
-function update_menu()
-{
-	$menu_id = $_POST['menu_id'];
-	if ($menu_id < 0) {
-		return(new_user());
-	}
-	// $fieldnames = ["username","password","organisation","email","firstname","lastname"];
-	$fieldnames = array();
-	$types = array();
-	$result = mysql_query("show columns from "."MENUS");
-	while ($row = mysql_fetch_assoc($result)) {
-
-		$fieldname = $row['Field'];
-		$fieldnames[] = $fieldname;
-		$types[$fieldname] = $row['Type'];
-	}
-
-	
-	$sql = "update  MENUS set ";
-	$n = 0;
-	foreach ($fieldnames as $i => $fieldname) {
-		if ($fieldname == "id") {
-				
-		}
-		else if (substr($types[$fieldname],0,7) == "varchar" )
-		{
-			if ($n++ > 0) $sql .= ", ";
-			$sql .= $fieldname."='".mysql_escape_string( $_POST[$fieldname])."'";
-		}
-	}
-
-	$sql .= " where ID=".$menu_id;
-	test_mysql_query($sql); 
-}
-
-function new_menu_item()
-{
-	$menu_id = $_POST['menu_id'];
-	$sql = "insert into MENU_ITEMS ";
-	$flds = "(id,menu_id,code,dish_name,plating_team)";
-	$vals = " values (null,".$menu_id.",";
-	$vals .= "'".mysql_escape_string( $_POST['menu_item_code'])."',";
-	$vals .= "'".mysql_escape_string( $_POST['menu_item_dish_name'])."',";
-	$vals .= "".mysql_escape_string( $_POST['menu_item_plating_team']).")";
-	$sql .= $flds.$vals;
-	// echo $sql;
-	test_mysql_query($sql);
-}
-
-function add_menu_component()
-{
-	$menu_id = get_url_token('cc_menu_id');
-	$menu_item_id = get_url_token('cc_menu_item_id');
-	$prep_type = get_url_token('prep_type');
-	$probe_type = get_url_token('probe_type');
-	$sql = "insert into MENU_ITEM_COMPONENTS ";
-	$flds = "(id,menu_item_id,description,prep_type,probe_type)";
-	$vals = " values (null,".$menu_item_id.",";
-	$vals .= "'".mysql_escape_string( get_url_token('menu_item_component_description'))."',".$prep_type.",".$probe_type.")";
-	
-	$sql .= $flds.$vals;
-	// echo $sql;
-	test_mysql_query($sql);
-}
-
-function del_menu_component()
-{
-	$menu_id = get_url_token('cc_menu_id');
-	$mid = get_url_token('cc_menu_item_component_id');
-	$prep_type = get_url_token('prep_type');
-	$sql = "delete from MENU_ITEM_COMPONENTS where id=".$mid;
-	
-	// echo $sql;
-	test_mysql_query($sql);
-}
-
-function new_menu()
-{
-	$fieldnames = array();
-	$types = array();
-	$result = mysql_query("show columns from "."MENUS");
-	while ($row = mysql_fetch_assoc($result)) {
-
-		$fieldname = $row['Field'];
-		$fieldnames[] = $fieldname;
-		$types[$fieldname] = $row['Type'];
-	}
 
 
-	$sql = "insert into MENUS ";
-	$flds = "(id,";
-	$vals = " values (null,";
-	$n = 0;
-	foreach ($fieldnames as $i => $fieldname) {
-		if ($fieldname == "id") {
-			// ignore - use autoincrement to assign an id
-		}
-		else if (substr($types[$fieldname],0,7) == "varchar" )
-		{
-		if ($n > 0) {
-				$flds .= ",";
-				$vals .= ",";
-			}
-			$flds .= $fieldname;
-			
-			$vals .= "\"".mysql_escape_string( $_POST[$fieldname])."\"";
-		}
-		$n++;
-	}
-	$flds .= ")";
-	$vals .= ")";
-	
-	$sql .= $flds.$vals;
-	test_mysql_query($sql);
-}
 ?>
 <script src="navigation_select.js"></script>
 
