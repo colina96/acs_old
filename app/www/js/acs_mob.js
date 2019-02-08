@@ -1001,6 +1001,7 @@ function reprint_plating_labels()
 	console.log(plating_item);
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 }
+
 function do_show_menu_item_components(menu_item_id,batch_change)
 {
 	set_barcode_mode("PT_comp");
@@ -1065,7 +1066,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 					all_good = false;
 				}
 				tr.appendChild(td);
-				var td = document.createElement('td');
+				td = document.createElement('td');
 				td.id = 'plating_item_temp_' + i;
 				td.innerHTML = '-';
 				if (items[i].M1_temp) {
@@ -1411,7 +1412,7 @@ function component_selected(id)
 		document.getElementById('ms_2').innerHTML = 'M1';
 		document.getElementById('ms_2_text').innerHTML = 'REQUIRED ';
 		document.getElementById('ms_2_target').innerHTML = sign + get_preptype_val(prep_type_id,'M1_temp') + "&#176";
-		// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
+		document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 		// document.getElementById('chk_temp_item_id_div').innerHTML = sprintf('C01%06d',new_comp['id']);
 
 		clearChildren(document.getElementById('chk_temp_item_id_div'));
