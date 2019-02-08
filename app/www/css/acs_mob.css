@@ -613,6 +613,9 @@ td {
 	display: block;
 }
 
+.icon_Fail, .icon_Pass{
+}
+
 .hidden {
 	display:none;
 }

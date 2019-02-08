@@ -336,50 +336,93 @@ function check_ingredient(cid)
         url: RESTHOME + "get_active_comps.php?cid=" + cid,
         type: "POST",
 
-        success: function(result) {
-        	console.log(tag,"result: ",result);
- 
-            var scanned_ingredient = JSON.parse(result);
-            console.log(tag,"got component " + scanned_ingredient[0].description,' expired:' ,scanned_ingredient[0].expired);
-            if (scanned_ingredient[0].expired == 1) {
-            	console.log(tag,'ingredient expired');
+		success: function(result) {
+			console.log(tag,"result: ",result);
 
-				error_node = 'EXPIRED';
+			var scanned_ingredient = JSON.parse(result);
+			console.log(tag,"got component " + scanned_ingredient[0].description,' expired:' ,scanned_ingredient[0].expired);
+			var valid_ingredient = false;
+			for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
+				var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+				if (sub['description'] == scanned_ingredient[0].description) {
+					console.log(tag,"found ingredient");
 
-            	popup_error(scanned_ingredient[0].description,'EXPIRED<br>' + scanned_ingredient[0].expiry_date);
-				return;
+					valid_ingredient = true;
+					new_comp['selected_ingredients'][i]['cid'] = scanned_ingredient[0].id;
+
+					// attach to new_comp and record temperature
+					new_comp['read_temp'] = i;
+
+					openPage('m_ingredient_check', this, 'red','m_modal2','tabclass');
+
+					// Check shelf life
+					if(sl_expired(scanned_ingredient[0].expired == 1)){ 
+						// return for now to give options to press buttons
+						return; 
+					} 
+
+					var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+					// d += "<tr><td>" + sub['description'] + '</td>';
+					//
+					document.getElementById('ms_1_text').innerHTML = sub['description'];
+					document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
+
+					new_comp['selected_ingredients'][i]['target'] = get_preptype_val(sub['prep_type'],'M1_temp');
+					console.log(tag,'new_comp: ',new_comp);
+					read_temp('M0');
+				}
 			}
-            var valid_ingredient = false;
-            for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
-    			var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
-    			if (sub['description'] == scanned_ingredient[0].description) {
-    				console.log(tag,"found ingredient");
-    				valid_ingredient = true;
-    				new_comp['selected_ingredients'][i]['cid'] = scanned_ingredient[0].id;
-    				// attach to new_comp and record temperature
-    				draw_ingredients();
-    				new_comp['read_temp'] = i;
-    				read_temp('M0');
-    				openPage('m_temp_modal1a', this, 'red','m_modal2','tabclass');
-    				var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
-    				// d += "<tr><td>" + sub['description'] + '</td>';
-    				document.getElementById('ms_1_text').innerHTML = sub['description'];
-    				document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
-    				new_comp['selected_ingredients'][i]['target'] = get_preptype_val(sub['prep_type'],'M1_temp');
-    				console.log(tag,'new_comp: ',new_comp);
-    				read_temp('M0');
-    			}
-    		}
-            if (!valid_ingredient) {
+			if (!valid_ingredient) {
 				document.getElementById('m1_temp_div_1_error').innerHTML = 'invalid component';
 			}
-            
-        },
-        fail: (function (result) {
-            console.log("fail check_ingredient ",result);
-        })
-    });
+		},
+		fail: (function (result) {
+			console.log("fail check_ingredient ",result);
+		})
+	});
 }
+
+function sl_expired(expiry_cond){
+	let page = 'm_ingredient_check';
+	clear_btns(page);
+	let tag = 'sl_expired: ';
+	let sl=document.getElementById('sl_check');
+	clearChildren(sl);
+	sl.appendChild(new_node('div','S/L','red center'));
+	if (expiry_cond){
+		// show icon SL is over
+		console.log(tag,'shelf life expired');
+		sl.appendChild(iconFail());
+		// show button to force SL
+		show_button(page,'Force S/L','');
+		show_button(page,'Reject ingredient','',true);
+		// set scanner mode (or just keep it?)
+		return true;
+	}else{
+		console.log(tag,'shelf life ok');
+		// show sl ok icon
+		sl.appendChild(iconPass());
+		return false;
+	}
+}
+
+function show_button(onpage,name,onclick,highlighted=false){
+	let b = new_node('button',name,highlighted?'m_btn':'m_submit');
+	b.setAttribute("type","button");
+	b.setAttribute("onclick",onclick);
+	let btns=find_btns(onpage);
+	//assume buttons always come last
+	//let btns=document.getElementById(onpage).lastChild;
+        console.log('show_button: appending button ',b,' to ',btns);
+	btns.appendChild(b);
+}
+
+function clear_btns(onpage){
+	clearChildren(find_btns(onpage));
+};
+function find_btns(onpage){
+	return document.querySelector("#"+onpage+" div[class='btns']");
+};
 
 function load_preptypes()
 {
@@ -1305,7 +1348,7 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 	document.getElementById('confirm_start_comp_btn').style.display = 'none';
 	openPage('m_temp_modal1', this, 'red','m_modal2','tabclass');
 
-	clearChildren(document.getElementById('m1_temp_div_1a'));
+	//clearChildren(document.getElementById('m1_temp_div_1a'));
 	// clearChildren(document.getElementById('chk_temp_item_id_div'));
 
 	document.getElementById('chk_temp_item_div').innerHTML = new_comp.description;
@@ -1333,7 +1376,7 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 		}
 
 		if (new_comp['selected_ingredients'][i]['cid']) {
-			d += "<td>" + new_comp['selected_ingredients'][i]['cid'] + "</td>";
+			d += "<td>" + new_comp['selected_ingredients'][i]['expired'] + "</td>";
 		} else {
 			finished = false;
 			d += "<td>-</td>";
@@ -2908,6 +2951,14 @@ function iconProbe(){
 
 function iconIR(){
 	return new_img("img/icon_IR.svg","icon_IR");
+}
+
+function iconPass(){
+	return new_img("img/icon_pass.svg","icon_Pass");
+}
+
+function iconFail(){
+	return new_img("img/icon_fail.svg","icon_Fail");
 }
 
 function new_img(source,classname = "") {
