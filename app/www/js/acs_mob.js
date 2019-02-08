@@ -1385,8 +1385,7 @@ function component_selected(id)
 	console.log(tag,"new_comp: ",new_comp," subcomponents: ", new_comp['subcomponents']);
 	// subcomponents is an array of ids - needs to become an array of objects to store temperature and used id
 
-	clearChildren(document.getElementById('ms_2'));
-	clearChildren(document.getElementById('ms_2_text'));
+	clear_comp_fields();
 
 	if (new_comp['subcomponents']) {
 
@@ -1408,7 +1407,6 @@ function component_selected(id)
 		openPage('m_temp_modal_LR', this, 'red','m_modal2','tabclass');
 		document.getElementById('m1_temp_div_LR_comp').innerHTML = new_comp['description'];
 
-		clearChildren(document.getElementById('ms_2_target'));
 		clearChildren(document.getElementById('chk_temp_item_div'));
 		clearChildren(document.getElementById('chk_temp_item_id_div'));
 	} else {
@@ -2424,11 +2422,11 @@ function format_minutes (min)
 
 function clear_comp_fields ()
 {
-	document.getElementById('ms_1').innerHTML = '';
-	document.getElementById('ms_1_text').innerHTML = '';
-	document.getElementById('ms_2').innerHTML = '';
-	document.getElementById('ms_2_text').innerHTML = '';
-	document.getElementById('ms_2_target').innerHTML = '';
+	clearChildren(document.getElementById('ms_1'));
+	clearChildren(document.getElementById('ms_1_text'));
+	clearChildren(document.getElementById('ms_2'));
+	clearChildren(document.getElementById('ms_2_text'));
+	clearChildren(document.getElementById('ms_2_target'));
 }
 
 function reprint_labels()
@@ -2458,7 +2456,7 @@ function print_component_labels(qty)
 		}
 	}
 	
-	var data =  {data: JSON.stringify(comp)};
+	var data = {data: JSON.stringify(comp)};
 	console.log("print_component_labels sent off: ", data);
 	console.log(comp);
 
@@ -2483,12 +2481,12 @@ function reprint_supplier_labels()
 	console.log('reprint_supplier_labels');
 	set_barcode_mode('dock_reprint'); // callback to reprint_doc_labels
 	hide('dock_search_div');
-	
 }
 
 function reprint_dock_labels(cid)
 {
-	console.log('reprint_dock_labels',cid);
+	let tag = 'reprint_dock_labels: ';
+	console.log(tag,cid);
 	load_chefs(null);
 	document.getElementById('drl_details_div').innerHTML = cid;
 	// set_barcode_mode('dock_reprint');
@@ -2497,26 +2495,26 @@ function reprint_dock_labels(cid)
         type: "POST",
 
         success: function(result) {
-        	console.log(result);
+        	console.log(tag,result);
         	
         	var comps = JSON.parse(result);
             if (comps) {
             	active_comp = comps[0];
-            	var h = "<b>" + active_comp.description + "</b><br>";
+            	let h = "<b>" + active_comp.description + "</b><br>";
             	h += "USE BY: " + active_comp.expiry_date;
             	document.getElementById('drl_details_div').innerHTML = h;
             	openPage('m_dock_reprint1', document.getElementById('s_reprint_labels_tab'), 'red','m_modal','m_top_menu',null);
-            	console.log("got component " + active_comp.description);
+            	console.log(tag,"got component " + active_comp.description);
             	set_barcode_mode('dock_reprint');
             }
             else {
-            	console.log('could not find incredient');
+            	console.log(tag,'could not find incredient');
             	set_barcode_mode('dock_reprint');
             }
             
         },
         fail: (function (result) {
-            console.log("fail check_ingredient ",result);
+            console.log(tag,"fail ",result);
         })
     });
 	// dock_start_component
