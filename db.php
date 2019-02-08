@@ -37,7 +37,30 @@ function get_url_token($tok)
 	return(NULL);
 }
 
-function mysql_query($sql) { return(mysqli_query($GLOBALS['con'],$sql)); }
+function dblog($s)
+{
+	// stub
+	file_put_contents('dblog.log', $s.PHP_EOL , FILE_APPEND | LOCK_EX);
+	/*
+	$myfile = fopen("dblog.log", "ar");
+	if ($myfile) {
+		fwrite($myfile, $s);
+		fclose($myfile);
+	} */
+}
+
+function mysql_query($sql) 
+{ 
+	if (stristr($sql,'insert') || stristr($sql,'update') || stristr($sql,'delete')) {
+		dblog($sql);
+	}
+	$ret = mysqli_query($GLOBALS['con'],$sql);
+	if (stristr($sql,'insert')) {
+		dblog('insert id:'.mysql_insert_id());
+	}
+	// dblog($ret);
+	return($ret); 
+}
 function mysql_errno() { return(mysqli_errno($GLOBALS['con'])); }
 function mysql_error() { return(mysqli_error($GLOBALS['con'])); }
 function mysql_insert_id() { return(mysqli_insert_id ( $GLOBALS['con'] )); }
