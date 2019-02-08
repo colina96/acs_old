@@ -42,6 +42,21 @@
 					<div class='btn' onclick='dont_new_comp()'>Cancel</div>
 				</div>
 			</div>
+			<div class='popup' id='new_item_popup'>
+				<div class='h3'>New Menu Item?</div>
+				
+				<input type='hidden' id='new_item_menu_id'>
+				<table>
+					<tr><td>Dish name</td><td><input id='new_item_dish_name'></td></tr>
+					<tr><td>Code</td><td><input id='new_item_code'></td></tr>
+				
+				</table>
+				
+				<div class='m-10'>
+					<div class='btn' onclick='do_new_item()'>Add</div>
+					<div class='btn' onclick='dont_new_item()'>Cancel</div>
+				</div>
+			</div>
 			<div id='add_sub_popup'>
 				<div id='component_title' class='h2'>Add subcomponent</div>
 				<form id='menu_item_component_form'>
@@ -312,7 +327,9 @@ function show_menu(filter)
     	th.innerHTML = header[i];
     	tr.appendChild(th);
     } 
-    tr.appendChild(document.createElement('th'));
+    var th = document.createElement('th')
+    th.innerHTML = "<div class='btn' id='add' onclick='new_menu_item();'>+</div>";
+    tr.appendChild(th);
     tr.appendChild(document.createElement('th'));
     table.appendChild(tr);
     
@@ -581,7 +598,6 @@ function do_new_comp()
 	component['menu_id'] = document.getElementById('new_comp_menu_id').value;
 	component['description'] = document.getElementById('new_comp_description').value;
 
-	
 	var data =  {data: JSON.stringify(component)};
     console.log("do_new_comp Sent Off: %j", data);
  
@@ -604,6 +620,37 @@ function dont_new_comp()
 {
 	hide('new_comp_popup');
 }
+
+function do_new_item()
+{
+	hide('new_comp_popup');
+	var component = new Object();
+	component['menu_id'] = active_menu_id;
+	component['dish_name'] = document.getElementById('new_item_dish_name').value;
+	component['code'] = document.getElementById('new_item_code').value;
+
+	var data =  {data: JSON.stringify(component)};
+    console.log("do_new_comp Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "new_menu_item.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { 
+            console.log("do_new_item result ",result);
+            load_menu(active_menu_id);
+        },
+        fail: (function (result) {
+            console.log("do_new_item fail ",result);
+        })
+    });
+}
+
+function dont_new_item()
+{
+	hide('new_item_popup');
+}
 function new_menu_item_component(menu_item_id)
 {
 	console.log('new component',menu_item_id,active_menu_id);
@@ -615,6 +662,16 @@ function new_menu_item_component(menu_item_id)
 	show('new_comp_popup');
 }
 
+function new_menu_item()
+{
+	console.log('new menu item',active_menu_id);
+	
+	document.getElementById('new_item_dish_name').value = '';
+	document.getElementById('new_item_code').value = '';
+	document.getElementById('new_item_menu_id').value = active_menu_id;
+	
+	show('new_item_popup');
+}
 function set_high_risk(checkbox,menu_item_component_id) 
 {
 	var component = new Object();

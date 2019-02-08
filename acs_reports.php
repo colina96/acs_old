@@ -125,6 +125,7 @@ function reports()
 	load_menu_items();
 	// load_qa();
 	openPage('REPORTS', this, 'red','tabcontent','tabclass');
+	load_plating_data();
 }
 function report_components(data,format)
 {
