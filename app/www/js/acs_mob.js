@@ -2658,11 +2658,13 @@ function m_show_active_components(data,reprint)
 
 			let num;
 			let status_msg;
+
+			let push_to_top;
 			if (data[i]['M1_time'] == '') { 
 				// M0 - ingredients have been selected
 				num = '1';
 				status_msg = new_td('Cooking','comp');
-			}else {
+			} else {
 				let due_min;
 				if (data[i]['M2_time'] == '') {
 					num = '2';
@@ -2679,19 +2681,24 @@ function m_show_active_components(data,reprint)
 				if (remaining > 0) {
 					// time is left? append to end of list
 					status_msg = new_td(format_minutes(remaining) + "",'comp');
-					tbody.appendChild(tr);
 				} else {
 					if (timeout_msg == null) {timeout_msg = '<h2>OVERDUE</h2>';}
 					else {timeout_msg += "<br>";}
 					timeout_msg += data[i]['description'] + ' : ' + format_minutes(Math.abs(remaining));
 
 					status_msg = new_td(format_minutes(Math.abs(remaining)) + " overdue",'comp red');
-					// overdue? push to beginning of list
-					tbody.insertBefore(tr, tbody.childNodes[0]);
 				}
 			}
+
 			tr.appendChild(new_td('<div class="m_bluedot">'+num+'</div>','comp'));
-	   		tr.appendChild(status_msg)
+	   		tr.appendChild(status_msg);
+
+			if(push_to_top){
+				// overdue? push to beginning of list
+				tbody.insertBefore(tr, tbody.childNodes[0]);
+			}else{
+				tbody.appendChild(tr);
+			}
 		}
 	}
 	tab.appendChild(tbody);
