@@ -2697,7 +2697,11 @@ function m_show_active_components(data,reprint)
 	}
 	tab.appendChild(tbody);
    	div.appendChild(tab);
-   	if (timeout_msg != null && mode == 'kitchen') popup_timeout(timeout_msg);
+   	if (timeout_msg != null && mode == 'kitchen' && document.getElementById('m_current_tracking').style.display == 'block') {
+   		console.log('timeout ' + timeout_msg);
+   		console.log('active items',document.getElementById('m_current_tracking').style.display);
+   		popup_timeout(timeout_msg);
+   	}
 }
 
 function new_node(type,content='',classname=''){
