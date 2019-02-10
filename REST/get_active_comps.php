@@ -109,20 +109,55 @@ if ($userID > 0) {
 		$ret = array();
 		$ret['log'] = $log;
 		$ret['sql'] = $sql;
+		// instead of join a join here, get a list of ingredient ids then add them later
+		$ingredient_ids = null;
 		foreach ($comps as $i => $comp) {
 			$sql = 'select * from INGREDIENTS where component_id='.$comp['id'];
 			$result = mysql_query($sql);
 			
-			if ($result) {
-				
-			
+			if ($result) {		
 				while($row = mysql_fetch_array($result)) {
 					if (empty ($comps[$i]['ingredients'])) $comps[$i]['ingredients'] = array();
 					$comps[$i]['ingredients'][] = $row['subcomponent_id'];
+					if (empty($ingredient_ids)) $ingredient_ids = '';
+					else $ingredient_ids .= ',';
+					$ingredient_ids .= $row['subcomponent_id'];
 				}
 			}
 			
 		}
+		$ingredients = array();
+		if (!empty($ingredient_ids)) {
+			$sql = "select * from COMPONENT where id in (".$ingredient_ids.")";
+			// echo $sql;
+			$result = mysql_query($sql);
+			if ($result) {
+				
+				while($row = mysql_fetch_array($result)) {
+					$id = $row['id'];
+				//	echo "found ingredient ".$id;
+					$ingredients[$id] = $row;
+				}
+			}
+			else {
+			//	echo "no result for ".$sql;
+			}
+		}
+		else {
+		//	echo "NO INGREDIENTS";
+		}
+		foreach ($comps as $i => $comp) {
+			
+			if (!empty ($comps[$i]['ingredients'])) {
+				$comps[$i]['subs'] = array();
+				foreach ($comps[$i]['ingredients'] as $ing_id) {
+					$comps[$i]['subs'][] = $ingredients[$ing_id];
+				}
+			}
+				
+		}
+		// now insert ingredient details
+		
 		$ret['comps'] = $comps;
 		$ret['qa'] = $qa;
 		

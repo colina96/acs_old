@@ -1022,6 +1022,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 	tab.className = 'item_table';
 	var tr = document.createElement('tr');
 	var th = document.createElement('th');
+	th.width = '70%';
 	th.innerHTML= margin(plating_item.dish_name + "<br>" + plating_item.code + "<BR>Required: " + plating_item.current_shift);
 	document.getElementById('pt_description_labels').innerHTML = plating_item.current_shift;
 	tr.appendChild(th);

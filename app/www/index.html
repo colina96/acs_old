@@ -684,11 +684,18 @@
         </div>
 
         <div class='m_modal hidden' id='m_plating_temp'>
-            <div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
-            <div id='chk_plating_item_temp_div' class='center'></div>
-            <div id='chk_plating_item_exp_div' class='center'></div>
-            <div id='chk_plating_item_overtemp' class='temp_reading red'></div>
-            <div id='chk_plating_item_undertemp' class='temp_reading'></div>
+        	<div class="temp_scan">
+                <img src="img/icon_IR.svg" class="icon_IR">
+            	<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
+            	<div id='chk_plating_item_temp_div' class='center'></div>
+            	<div id='chk_plating_item_exp_div' class='center'></div>
+            
+                   
+                    
+            
+            	<div id='chk_plating_item_overtemp' class='temp_reading red'></div>
+            	<div id='chk_plating_item_undertemp' class='temp_reading'></div>
+           	</div>
             <div class='btns'>
                 <button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
                 <button type='button' class='m_btn' onclick="goto_active_plating();">Return</button>

@@ -182,12 +182,36 @@ function report_components(data,format)
 			   			var e = format[preptype][j];
 			   			if (j === 'BATCH CODE') {
 			   				// td.innerHTML = 'c01' + zeropad(data[i][e],6);
+			   				
 			   				td.innerHTML = sprintf('C01%06d',data[i][e]);
+			   				
 			   				td.setAttribute("onclick","kitchen_details(" + data[i][e] + ");");
 			   			}
-			   			else 
+			   			else {
+				   			
 			   				td.innerHTML = report_fmt_str(e,data[i][e]);
-		   				
+			   				if (j === 'COMPONENT NAME') {
+			   					if (data[i]['subs']) {
+					   				td.style.color = 'green';
+					   				td.innerHTML += " (";
+					   				for (var jj = 0; jj < data[i]['subs'].length; jj++) {
+						   				if (jj > 0) td.innerHTML += ", ";
+					   					td.innerHTML += data[i]['subs'][jj]['description'];
+					   				}
+					   				td.innerHTML += ")";
+				   				}
+				   				/*
+				   				if (data[i]['ingredients']) {
+					   				td.style.color = 'green';
+					   				td.innerHTML += " (";
+					   				td.innerHTML += data[i]['ingredients'];
+					   				
+					   				td.innerHTML += ")";
+				   				}
+				   				*/
+				   			}
+				   			
+			   			}
 			   			tr.appendChild(td);   
 			   		}
 			   		tab.appendChild(tr);
