@@ -183,6 +183,7 @@ function report_components(data,format)
 			   			if (j === 'BATCH CODE') {
 			   				// td.innerHTML = 'c01' + zeropad(data[i][e],6);
 			   				td.innerHTML = sprintf('C01%06d',data[i][e]);
+			   				td.setAttribute("onclick","kitchen_details(" + data[i][e] + ");");
 			   			}
 			   			else 
 			   				td.innerHTML = report_fmt_str(e,data[i][e]);
@@ -197,6 +198,11 @@ function report_components(data,format)
    	div.appendChild(tab);
 }
 
+function kitchen_details(id,rownum)
+{
+	console.log("show details for component " + id);
+	
+}
 
 function kitchen_reports(format,tab,mode)
 {

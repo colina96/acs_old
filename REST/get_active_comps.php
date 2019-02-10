@@ -66,6 +66,7 @@ if ($userID > 0) {
 		$sql .= " where id=".get_url_token('cid');
 
 	}
+	$sql .= " order by id";
 	$result = mysql_query($sql);
 	$comps = array();
 	if ($result) {
@@ -96,6 +97,8 @@ if ($userID > 0) {
 			$comp['M1_action_text'] = (!empty($qa[$M1_action_code]))?$qa[$M1_action_code]['action_text']:'-';
 			$comp['M2_action_text'] = (!empty($qa[$M2_action_code]))?$qa[$M2_action_code]['action_text']:'-';
 			$comp['M3_action_text'] = (!empty($qa[$M3_action_code]))?$qa[$M3_action_code]['action_text']:'-';
+		//	$comp['ingredients'] = array();
+		//	$comp['ingredients'][] = $comp['id'] + 1;
 			$comp['state'] = 'M1';
 			if ($row['M1_time']) $comp['state'] = 'M2';
 			if ($row['M2_time']) $comp['state'] = 'M3';
@@ -105,13 +108,28 @@ if ($userID > 0) {
 		}
 		$ret = array();
 		$ret['log'] = $log;
+		$ret['sql'] = $sql;
+		foreach ($comps as $i => $comp) {
+			$sql = 'select * from INGREDIENTS where component_id='.$comp['id'];
+			$result = mysql_query($sql);
+			
+			if ($result) {
+				
+			
+				while($row = mysql_fetch_array($result)) {
+					if (empty ($comps[$i]['ingredients'])) $comps[$i]['ingredients'] = array();
+					$comps[$i]['ingredients'][] = $row['subcomponent_id'];
+				}
+			}
+			
+		}
 		$ret['comps'] = $comps;
 		$ret['qa'] = $qa;
-		$ret['sql'] = $sql;
+		
 		$ret['search'] = $search_terms;
 		
 		$json = json_encode($comps);
-		//$json = json_encode($ret);
+		// $json = json_encode($ret);
 		if ($json) {
 			echo $json;
 		//	error_log($json,0);
