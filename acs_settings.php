@@ -1,4 +1,19 @@
 <script>
+
+function set_probe(code,value)
+{
+	var fld = 'probe_type'
+	$.post("REST/update_pt.php",
+		    {
+		        code: code,
+		        fld: fld,
+		        value: value
+		    },
+		    function(data, status){
+		        console.log("Data: " + data + "\nStatus: " + status);
+		        load_show_preptypes();
+		    });
+}
 function set_pt_val(inp,code,fld)
 {
 	console.log(inp.value,code,fld);
@@ -92,6 +107,14 @@ function show_preptypes()
 					else {
 						html +=  hrs + " hour</td>";
 					}
+				}
+			}
+			else if (rows[row].indexOf('SENSOR') >= 0) {
+				if (val == 0) {
+					html += "<td onclick=\"set_probe('" + pp['code'] + "',1);\">" + 'IR' + "</td>";
+				}
+				else {
+					html += "<td onclick=\"set_probe('" + pp['code'] + "',0);\">" + 'PROBE' + "</td>";
 				}
 			}
 			else {
