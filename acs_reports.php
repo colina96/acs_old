@@ -127,11 +127,14 @@ function reports()
 	openPage('REPORTS', this, 'red','tabcontent','tabclass');
 	load_plating_data();
 }
-function report_components(data,format)
+function report_components(data,format,target)
 {
-	// console.log(data);
-	var div = document.getElementById('report_container');
 	
+	console.log('report_components',data.length);
+	console.log(data);
+	// var div = document.getElementById('report_container');
+	var div = document.getElementById(target);
+	div.innerHTML = '';
 	if (data.length < 1) {
 		div.innerHTML = "<span class='reports_message' >No Active Components</span>";
 		return;
@@ -143,8 +146,10 @@ function report_components(data,format)
 		console.log(preptypes[preptype_idx]['code']);
 		
 		var preptype = preptypes[preptype_idx]['code'];
+		var preptype_id = preptypes[preptype_idx]['id'];
+		console.log(preptypes[preptype_idx]['code'],preptype_id);
 		if (format[preptype]) {
-			var preptype_id = preptypes[preptype_idx]['id'];
+			//var preptype_id = preptypes[preptype_idx]['id'];
 			var tr1 = document.createElement('tr');
 			var th = document.createElement('th');
 			th.rowspan = 5;
@@ -174,6 +179,7 @@ function report_components(data,format)
 				   	var chef = get_chef_by_id(data[i]['M1_chef_id']);
 				   	if (chef) data[i]['chef'] = chef['label'];
 			   		var tr = document.createElement('tr');
+			   		
 			   		// for (var j in kitchen_report_fmt[preptype]) {
 			   		for (var j in format[preptype]) {
 				   		
@@ -185,13 +191,14 @@ function report_components(data,format)
 			   				
 			   				td.innerHTML = sprintf('C01%06d',data[i][e]);
 			   				
-			   				td.setAttribute("onclick","kitchen_details(" + data[i][e] + ");");
+			   				
 			   			}
 			   			else {
 				   			
 			   				td.innerHTML = report_fmt_str(e,data[i][e]);
 			   				if (j === 'COMPONENT NAME') {
 			   					if (data[i]['subs']) {
+			   						tr.setAttribute("onclick","kitchen_details(" + data[i]['id'] + ");");
 					   				td.style.color = 'green';
 					   				td.innerHTML += " (";
 					   				for (var jj = 0; jj < data[i]['subs'].length; jj++) {
@@ -222,10 +229,24 @@ function report_components(data,format)
    	div.appendChild(tab);
 }
 
+function get_active_comp_by_id(cid)
+{
+	for (var i = 0; i < active_comps.length; i++) {
+		if (active_comps[i].id == cid) {
+			return (active_comps[i]);
+		}
+	}
+}
+
 function kitchen_details(id,rownum)
 {
 	console.log("show details for component " + id);
-	
+	var comp = get_active_comp_by_id(id);
+	show ('ingredients_div');
+	if (comp['subs'] && comp['subs'].length > 0) {
+		console.log(comp);
+		report_components(comp['subs'],dock_report_fmt,'ingredients_table');	 
+	}
 }
 
 function kitchen_reports(format,tab,mode)
@@ -256,7 +277,7 @@ function kitchen_reports(format,tab,mode)
 		        console.log(result);
 	            active_comps = result;	          
 	            console.log("REPORTS got " + active_comps.length + " comps");
-	            report_components(active_comps,format);	            
+	            report_components(active_comps,format,'report_container');	            
 	        },
 	        fail: (function (result) {
 	            console.log("fail load_comps",result);
@@ -371,7 +392,12 @@ function search_report()
 			
 </div>
 <div class='acs_main' id="reports_frame">
+<div class='popup' id='ingredients_div'>
 
+	<h1>Ingredients</h1>
+	<div id='ingredients_table'></div>
+	<button class='button' onclick='hide("ingredients_div");'>Close</button>
+</div>
 <div id='report_container' class='acs_container'>
     <span class="reports_message">Select a date range and click 'Go' </span>
 </div>
