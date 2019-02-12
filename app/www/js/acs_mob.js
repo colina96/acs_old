@@ -423,24 +423,24 @@ function goto_plating_teams()
 
 function save_plating_team()
 {
+	let tag = 'save_plating_team: ';
 	var data =  {data: JSON.stringify(plating_teams)};
-	console.log("Sent Off: ", data);
+	console.log(tag,"Sent Off: ", data);
 	set_barcode_mode (null);
 	goto_plating();
-    $.ajax({
-        url: RESTHOME + "save_plating_teams.php",
-        type: "POST",
-        data: data,
+	$.ajax({
+		url: RESTHOME + "save_plating_teams.php",
+		type: "POST",
+		data: data,
 
-        success: function(result) {
-            console.log('save_plating_team',result);
-           //  goto_m_main();
-        },
-        fail: (function (result) {
-            console.log('save_plating_team',result);
-        })
-    });
-    
+		success: function(result) {
+			console.log(tag,'success: ',result);
+			//  goto_m_main();
+		},
+		fail: (function (result) {
+			console.log(tag,'fail: ',result);
+		})
+	});
 }
 
 function show_plating_items(team_id,tab)

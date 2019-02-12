@@ -964,7 +964,7 @@ table.plating_tab tr th, table.item_table th {
 	color:var(--acs_text_normal_light);
 	height:45px;
 	background: var(--acs_background_dark);
-    border-spacing: 0;
+	border-spacing: 0;
 	text-align: left;
 }
 
@@ -976,7 +976,7 @@ table.plating_tab tr td, table.item_table td {
 }
 
 table.item_table td img {
-    height:20px;
+	height:20px;
 }
 
 table.plating_tab tr th:first-of-type,
@@ -984,6 +984,15 @@ table.plating_tab tr th:last-of-type,
 table.plating_tab tr td:first-of-type,
 table.plating_tab tr td:last-of-type{
 	padding: 0 var(--acs_modal_radius);
+}
+table.plating_tab tr th:first-of-type,
+table.plating_tab tr td:first-of-type{
+	width: 50px;
+}
+
+table.plating_tab tr th:last-of-type,
+table.plating_tab tr td:last-of-type{
+	width: 30px;
 }
 
 table.plating_tab tr td{
