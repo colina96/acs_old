@@ -313,6 +313,7 @@ function set_ingredient_temp(s)
 		console.log("Too high!!!");
 		return;
 	}
+
 	new_comp['selected_ingredients'][i]['temp'] = s;
 	if (draw_ingredients()) {
 		// set_barcode_mode('scan_ingredients');
@@ -355,15 +356,13 @@ function check_ingredient(cid)
 					openPage('m_ingredient_check', this, 'red','m_modal2','tabclass');
 
 					// Check shelf life
-					if(sl_expired(scanned_ingredient[0].expired == 1)){ 
+					if(sl_expired(scanned_ingredient[0].expired == 1,new_comp['selected_ingredients'][i])){ 
 						// return for now to give options to press buttons
 						return; 
 					} 
 
-
 					var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
 					// d += "<tr><td>" + sub['description'] + '</td>';
-					//
 					document.getElementById('ms_1_text').innerHTML = sub['description'];
 					document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
 
@@ -382,13 +381,14 @@ function check_ingredient(cid)
 	});
 }
 
-function sl_expired(expiry_cond){
+function sl_expired(expiry_cond, ingredient_in_new_comp){
 	let page = 'm_ingredient_check';
 	clear_btns(page);
 	let tag = 'sl_expired: ';
 	let sl=document.getElementById('sl_check');
 	clearChildren(sl);
 	sl.appendChild(new_node('div','S/L','red center'));
+
 	if (expiry_cond){
 		// show icon SL is over
 		console.log(tag,'shelf life expired');
@@ -396,7 +396,7 @@ function sl_expired(expiry_cond){
 		// show button to force SL
 		// TODO set functions
 		show_button(page,'Force S/L','');
-		show_button(page,'Reject ingredient','',true);
+		show_button(page,'Reject ingredient','draw_ingredients();',true);
 		// set scanner mode (or just keep it?)
 		return true;
 	}else{
