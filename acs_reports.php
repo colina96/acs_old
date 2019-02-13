@@ -347,13 +347,47 @@ function report_fmt_str(field,value)
 function plating_comp_details(plating_item_id,item_id,comp_id)
 {
 	console.log('plating_comp_details',plating_item_id,item_id,comp_id);
+	document.getElementById('component_detail_table').innerHTML = '';
 	console.log(plating_items);
 	show ('component_div');
 	let comp = plating_items[plating_item_id].items[item_id].comp;
 	if (comp) {
 		console.log(comp);
-		document.getElementById('component_detail_table').innerHTML = JSON.stringify(comp);
-		report_components(comp,dock_report_fmt,'ingredients_table');	 
+		// document.getElementById('component_detail_table').innerHTML = JSON.stringify(comp);
+		var tab = document.createElement('table');
+		var tr2 = document.createElement('tr');
+		let preptype = comp.prep_type;
+		// headings
+		for (var i in kitchen_report_fmt[preptype]) {
+	//	for (var i in format[comp.preptype]) {
+			var th = document.createElement('th');
+			th.innerHTML = margin(i);
+			tr2.appendChild(th);   
+			
+		}
+		tab.appendChild(tr2);
+		var tr2 = document.createElement('tr');
+		for (var j in kitchen_report_fmt[preptype]) {
+	   		
+   			var td = document.createElement('td');
+   			// var e = kitchen_report_fmt[preptype][j];
+   			var e = kitchen_report_fmt[preptype][j];
+   			if (j === 'BATCH CODE') {
+   				// td.innerHTML = 'c01' + zeropad(data[i][e],6);
+   				
+   				td.innerHTML = sprintf('C01%06d',comp[e]);
+   				
+   				
+   			}
+   			else {
+	   			
+   				td.innerHTML = report_fmt_str(e,comp[e]);
+   			}
+   			tr2.appendChild(td); 
+		}
+		tab.appendChild(tr2);
+		document.getElementById('component_detail_table').appendChild(tab);
+		// report_components(comp,dock_report_fmt,'ingredients_table');	 
 	}
 }
 function plating_reports()
@@ -441,6 +475,7 @@ function search_report()
 			
 </div>
 <div class='acs_main' id="reports_frame">
+
 <div class='popup' id='ingredients_div'>
 
 	<h1>Ingredients</h1>

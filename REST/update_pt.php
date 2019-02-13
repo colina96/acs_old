@@ -10,7 +10,12 @@ if ($userID > 0) {
 	$code = $_POST['code'];
 	$fld = $_POST['fld'];
 	$value = $_POST['value'];
-	$sql = "update PREP_TYPES set ".$fld." = ".$value." where code = '".$code."'";
+	if ($value == '') {
+		$sql = "update PREP_TYPES set ".$fld." = null where code = '".$code."'";
+	}
+	else {
+		$sql = "update PREP_TYPES set ".$fld." = ".$value." where code = '".$code."'";
+	}
 	test_mysql_query($sql);
 echo $sql;
 	

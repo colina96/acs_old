@@ -2,6 +2,7 @@
 session_start();
 
 include '../db.php';
+include 'rest_common.php';
 
 $userID = $_SESSION['userID'];
 // echo "userID ".$userID."\n";
@@ -9,7 +10,12 @@ $table_name = "PLATING_ITEM";
 $sql = "select * from ".$table_name;
 $log = 'LOG: ';
 $search_terms = null;
+$prep_types = get_prep_types();
 if ($userID > 0) {
+	$comp_fieldnames = get_fieldnames("COMPONENT");
+	$qa = get_qa();
+	$users = get_users();
+	$prep_types = get_prep_types();
 	$menu_id = get_url_token('menu_id');
 	$fieldnames = get_fieldnames($table_name);
 	$plating_item_component_flds = get_fieldnames('PLATING_ITEM_COMPONENT');
@@ -81,13 +87,14 @@ if ($userID > 0) {
 					// $pc[$n] = $n;
 					$pc[$f] = utf8_encode($row[$n]);
 				}
-				$comp = array();
+				/*$comp = array();
 				foreach ($component_flds as $m => $f) {
 					// echo $f."=>".$row[$f]."<br>\n";
 					// $pc[$n] = $n;
 					$comp[$f] = utf8_encode($row[$n + $m + 1]);
 				}
-				$pc['comp'] = $comp;
+				$pc['comp'] = $comp; */
+				$pc['comp'] = get_comp_details($row,$comp_fieldnames,$qa,$users,$prep_types) ;
 				$items[$i]['items'][] = $pc;
 			}
 			// echo json_encode($pc)."<br><hr>";
