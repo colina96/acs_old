@@ -13,6 +13,7 @@ if ($userID > 0) {
 	$menu_id = get_url_token('menu_id');
 	$fieldnames = get_fieldnames($table_name);
 	$plating_item_component_flds = get_fieldnames('PLATING_ITEM_COMPONENT');
+	$component_flds = get_fieldnames('COMPONENT');
 	if (!empty($_POST["data"])) {
 		
 		$search_terms = json_decode($_POST["data"],true);
@@ -49,10 +50,7 @@ if ($userID > 0) {
 			$log .= " no search terms";
 		} 
 	}
-	else {
-		$sql .= " where user_id = ".$userID;
-    	$sql.= " and DATE(time_started) = CURDATE()";
-	}
+	
 	// echo $sql;
 	$log .= ' sql= '.$sql;
 	$result = mysql_query($sql);
@@ -73,13 +71,23 @@ if ($userID > 0) {
 			$items[$i]['items'] = array();
 			$pc = array();
 			//echo "get components for ".$items[$i]['id'];
-			$sql = "select * from PLATING_ITEM_COMPONENT where plating_item_id = ".$items[$i]['id'];
+			$sql = "select * from PLATING_ITEM_COMPONENT,COMPONENT where plating_item_id = ".$items[$i]['id'];
+			$sql .= ' and PLATING_ITEM_COMPONENT.component_id = COMPONENT.id';
 			$result = mysql_query($sql);
 			while($row = mysql_fetch_array($result)) {
-				foreach ($plating_item_component_flds as $f) {
+				$n = 0;
+				foreach ($plating_item_component_flds as $n => $f) {
 					// echo $f."=>".$row[$f]."<br>\n";
-					$pc[$f] = utf8_encode($row[$f]);
+					// $pc[$n] = $n;
+					$pc[$f] = utf8_encode($row[$n]);
 				}
+				$comp = array();
+				foreach ($component_flds as $m => $f) {
+					// echo $f."=>".$row[$f]."<br>\n";
+					// $pc[$n] = $n;
+					$comp[$f] = utf8_encode($row[$n + $m + 1]);
+				}
+				$pc['comp'] = $comp;
 				$items[$i]['items'][] = $pc;
 			}
 			// echo json_encode($pc)."<br><hr>";

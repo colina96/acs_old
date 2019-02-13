@@ -289,7 +289,43 @@ function kitchen_reports(format,tab,mode)
 function load_plating_data()
 {
 	report_mode = 'plating'
-	load_plating_items(plating_reports);
+	// load_plating_items(plating_reports);
+	console.log('load_plating_data');
+	var data = get_search_terms();
+	console.log(data);
+	$.ajax({
+    	url: RESTHOME + "get_plating_report.php",
+        type: "POST",
+        dataType: 'json',
+        data: data,
+        success: function(result) {
+            plating_items = result; // need to populate with descritions
+            console.log('load_plating_items got result');
+            console.log(result);
+            if (!result || result.error ) {
+            	console.log('forcing reload');
+            	location.reload(true);
+            }
+            for (var i = 0; i < plating_items.length; i++) {
+            	
+            	var menu_item = get_menu_item_by_id(plating_items[i].menu_item_id);
+            	plating_items[i].dish_name = menu_item.dish_name;
+            	plating_items[i].code = menu_item.code;
+            	console.log('loading plating item ' + menu_item.dish_name);
+            	for (var j = 0; j < plating_items[i].items.length; j++) {
+            		console.log('loading plating item ' + j, plating_items[i].items[j].menu_item_component_id);
+            		// var comp = get_component_by_id(plating_items[i].items[j].menu_item_component_id);
+            		let comp = plating_items[i].items[j]['comp'];
+            		plating_items[i].items[j].description = comp.description;
+            	}
+            }
+            plating_reports();
+            console.log("got " + result.length + " plating items");           
+        },
+        fail: (function (result) {
+            console.log("fail load_plating_items",result);
+        })
+    });
 }
 
 function report_fmt_str(field,value)
@@ -308,6 +344,18 @@ function report_fmt_str(field,value)
 	return('-');
 }
 
+function plating_comp_details(plating_item_id,item_id,comp_id)
+{
+	console.log('plating_comp_details',plating_item_id,item_id,comp_id);
+	console.log(plating_items);
+	show ('component_div');
+	let comp = plating_items[plating_item_id].items[item_id].comp;
+	if (comp) {
+		console.log(comp);
+		document.getElementById('component_detail_table').innerHTML = JSON.stringify(comp);
+		report_components(comp,dock_report_fmt,'ingredients_table');	 
+	}
+}
 function plating_reports()
 {
 	var div = document.getElementById('report_container');
@@ -348,8 +396,9 @@ function plating_reports()
     			var td = document.createElement('td');
     	   		var field = plating_item_report_fmt[ii];
     	   		var value = plating_items[i].items[j][plating_item_report_fmt[ii]];
-    	   		td.innerHTML = report_fmt_str(field,value);
-    	   		
+    	   		td.innerHTML = report_fmt_str(field,value); // + field + ":" + value;
+    	   		td.setAttribute("onclick","plating_comp_details(" + i + "," + j + "," +  plating_items[i].items[j]['component_id'] + ");");
+    	   		// td.setAttribute("onclick","kitchen_details(" + data[i]['id'] + ");");
     	   		tr.appendChild(td);    
     	   		tab.appendChild(tr);
     		}
@@ -397,6 +446,12 @@ function search_report()
 	<h1>Ingredients</h1>
 	<div id='ingredients_table'></div>
 	<button class='button' onclick='hide("ingredients_div");'>Close</button>
+</div>
+<div class='popup' id='component_div'>
+
+	<h1>Component details</h1>
+	<div id='component_detail_table'></div>
+	<button class='button' onclick='hide("component_div");'>Close</button>
 </div>
 <div id='report_container' class='acs_container'>
     <span class="reports_message">Select a date range and click 'Go' </span>
