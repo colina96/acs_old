@@ -475,7 +475,7 @@ function search_report()
 			
 </div>
 <div class='acs_main' id="reports_frame">
-<div class='shield' id='shield' onclick='close_popups()'></div>
+
 <div class='popup' id='ingredients_div'>
 
 	<h1>Ingredients</h1>

@@ -36,6 +36,7 @@ session_start();
   </head>
   <body>
   <?php if (!empty($_SESSION['userID'])) { ?> 
+  <div class='shield' id='shield' onclick='close_popups()'>XXXXXXXXX</div>
  <nav class="navbar navbar-default">
 
 

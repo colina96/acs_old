@@ -235,9 +235,19 @@ function load_chefs(fn)
 function show(div_id) 
 {
 	document.getElementById(div_id).style.display='block';
+	console.log('show ' + div_id);
+	if (document.getElementById('shield')) {
+		console.log('showing shield');
+		document.getElementById('shield').style.display='block';
+	}
 }
 
 function hide(div_id) 
 {
 	document.getElementById(div_id).style.display='none';
+	if (document.getElementById('shield')) {
+		document.getElementById('shield').style.display='none';
+	}
 }
+
+

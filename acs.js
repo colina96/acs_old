@@ -1,5 +1,19 @@
 var RESTHOME = 'REST/';
+
+function close_popups()
+{
+	tabcontent = document.getElementsByClassName('popup');
+    for (i = 0; i < tabcontent.length; i++) {
+    	// console.log("found tab ",tabcontent[i].id);
+        tabcontent[i].style.display = "none";
+    }
+    if (document.getElementById('shield')) {
+		document.getElementById('shield').style.display='none';
+	}
+}
+
 function openPage(pageName, elmnt, color,content_class,tab_class) {
+	close_popups();
     // console.log("opening page ",pageName,content_class);
 
     // Hide all elements with class="tabcontent" by default */
