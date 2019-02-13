@@ -3,7 +3,7 @@ session_start();
 
 include '../db.php';
 $con = $GLOBALS['con'];
-echo "new_comp.php";
+echo "new_comp.php ";
 // $pt is an array of plating teams
 $pt = json_decode($_POST["data"],true);
 $i = 0;
@@ -16,23 +16,20 @@ while ($row = mysql_fetch_array($result)) {
 }
 
  
- foreach ($pt as $p) {
-	
+foreach ($pt as $p) {
 	if ($p != null ) {
 		echo "$i---\n";
-		echo $p[0]['email'];
-		//var_dump($p[0]['email']);
-		// echo "XXXXXXXXXXXXXXXXX\n\n";
 		foreach ($p as $j) {
 			$user_id = $j['id'];
+			$sql = "INSERT INTO PLATING_TEAM_MEMBER (team_id,user_id,time_added) VALUES ";
+			echo "\n".$j['email'].": ";
 			if (!check_if_exists($existing,$i,$user_id)) {
-				$sql = "insert into plating_team_member (id,team_id,user_id,time_added) values (null,";
-				$sql .= $i .",".$user_id.",now())";
-				echo $sql."\n\n";
+				$sql .= "(".$i .",".$user_id.",now());";
+				echo $sql."\n";
 				test_mysql_query($sql);
 			}
-			// echo $j['id']."\n";
 		}
+
 	}
 	$i++;
 }
