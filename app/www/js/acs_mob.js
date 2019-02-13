@@ -521,7 +521,8 @@ function goto_plating()
 	var hd = document.getElementById('active_plating_team_head');
 	hd.innerHTML = "Plating Team " + active_plating_team;
 	var t = document.getElementById('plating_sched_list');
-	t.innerHTML = '';
+	clearChildren(t);
+
 	var tab = document.createElement('table');
 	tab.className = 'plating_tab';
 
@@ -530,9 +531,11 @@ function goto_plating()
 	var th = document.createElement('th');
 	th.innerHTML = 'CODE';
 	tr.appendChild(th);
+
 	th = document.createElement('th');
 	th.innerHTML = 'PRODUCT NAME';
 	tr.appendChild(th);
+
 	th = document.createElement('th');
 	th.innerHTML = 'QTY';
 	tr.appendChild(th);
@@ -1834,20 +1837,20 @@ function discard_component()
 	console.log(active_comp);
 	close_popup("popup_discard_div");
 	var data =  {data: JSON.stringify(active_comp)};
-    console.log("delete component Sent Off: ", data);
-    $.ajax({
-        url: RESTHOME + "delete_comp.php",
-        type: "POST",
-        data: data,
+	console.log("delete component Sent Off: ", data);
+	$.ajax({
+		url: RESTHOME + "delete_comp.php",
+		type: "POST",
+		data: data,
 
-        success: function(result) { // need to get the id of the new component back to print labels
-            console.log("delete_component result ",result);
-            goto_m_main();
-        },
-        fail: (function (result) {
-            console.log("discard_component fail ",result);
-        })
-    });
+		success: function(result) { // need to get the id of the new component back to print labels
+			console.log("discard_component result ",result);
+			goto_m_main();
+		},
+		fail: (function (result) {
+			console.log("discard_component fail ",result);
+		})
+	});
 }
 
 close_popup("popup_discard_div");

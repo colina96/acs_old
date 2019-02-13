@@ -10,8 +10,8 @@
     --acs_darkblue: #1543ab;
     --acs_darkpurple: #4f198d;
 
-	--acs_modal_radius: 15px;
-	--acs_button_radius: 10px;
+    --acs_modal_radius: 15px;
+    --acs_button_radius: 10px;
 
     --acs_background_light: var(--acs_white);
     --acs_background_dark: var(--acs_blue);
@@ -191,8 +191,8 @@
 
 #active_plating_team_head {
 	position:absolute;
-	top:2vh;
-	left:16vw;
+	top:6vh;
+	left:8vw;
 	font-size:18px;
 	color:var(--acs_text_normal_light);
 }
