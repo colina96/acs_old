@@ -121,10 +121,11 @@ function show_preptypes()
 				if (row == 0) {
 					html += "<td>" + val + "</td>";
 				}
-				else if (!val) {
-					html += "<td>-</td>";
-				}
 				else {
+					if (!val) {
+						val = '';
+					}
+				
 				//	html += "<td>" + val + "</td>";
 					html += "<td><input type='number' class='pt_edit' value='" + val + "'";
 					html += " onchange=\"set_pt_val(this,'" + pp['code'] + "','" + flds[row] + "');\">";

@@ -44,7 +44,7 @@ function dblog($s)
 	$t = date("D M d y h:i A");
 	$u = ' UID:'.(empty($_SESSION['userID'])? 0:$_SESSION['userID']);
 	$txt = $t.$u.' : '.$s;
-	file_put_contents('dblog_'.$Dt.'.log', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
+	file_put_contents('logs/dblog_'.$Dt.'.log', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
 	/*
 	$myfile = fopen("dblog.log", "ar");
 	if ($myfile) {
