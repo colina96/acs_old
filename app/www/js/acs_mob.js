@@ -511,7 +511,6 @@ function show_plating_items(team_id,tab)
 function goto_plating()
 {
 	// ???? load_menu_items();
-	show('plating_return');
 	hide('plating_print_labels');
 	if (active_plating_team == null) {
 		goto_plating_teams();
