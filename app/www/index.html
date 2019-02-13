@@ -196,7 +196,7 @@
             </div>
 
             <div class='m_modal' id='dock_m_temp_modal'>
-            	
+
                 <div class="temp_scan">
                     <img src="img/icon_IR.svg" class="icon_IR">
                     <div class='m_label' id="temp_instruction">
@@ -207,11 +207,15 @@
                             (USE IR SENSOR)
                         </span>
                     </div>
-                    
+
                 </div>
-				<div class='center'><div class='left'><div id='dock_m1_temp_div'></div></div></div>
+                <div class='center'>
+                    <div class='left'>
+                        <div id='dock_m1_temp_div'></div>
+                    </div>
+                </div>
                 <div class='btns'>
-                	
+
                     <button type='button' class='m_btn' onclick="goto_dock();">RETURN</button>
                 </div>
             </div>
@@ -311,7 +315,7 @@
                 <!--<div class='center'></div>-->
                 <!--<img  src="img/icon_barscan.svg" class="icon_barscan">-->
                 <!--<div class='center pad10 larger'>-->
-                    <!--Scan barcode-->
+                <!--Scan barcode-->
                 <!--</div>-->
             </div>
             <div class='m_modal hidden' id='m_search'>
@@ -360,7 +364,9 @@
             <div id='m1_temp_div_1'></div>
             <div id='m1_temp_div_1_error' class='red'></div>
             <div class='btns'>
-            	<button type='button' class='m_btn hidden' id='confirm_start_comp_btn' onclick="start_component(false,true);">CONFIRM</button>
+                <button type='button' class='m_btn hidden' id='confirm_start_comp_btn'
+                        onclick="start_component(false,true);">CONFIRM
+                </button>
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
         </div>
@@ -371,7 +377,7 @@
             <div id='m1_temp_div_1a' class='temp_reading red'></div>
             <div id='m2_temp_div_1b' class='temp_achieved center'></div>
             <div class='btns'>
-            	<!--  button type='button' class='m_submit' onclick="setup_force_M1();">FORCE M1 - Scan ID</button -->
+                <!--  button type='button' class='m_submit' onclick="setup_force_M1();">FORCE M1 - Scan ID</button -->
                 <button type='button' class='m_submit' onclick="read_temp('M0');">Check Now</button>
                 <button type='button' class='m_btn' onclick="draw_ingredients();">RETURN</button>
             </div>
@@ -382,12 +388,12 @@
             <div id='m1_temp_div_2a' class='temp_reading red'></div>
             <div id='m2_temp_div_2b' class='temp_achieved center'></div>
             <div class='btns'>
-            	<button type='button' class='m_submit' onclick="setup_force_M1();">FORCE M1 - Scan ID</button>
+                <button type='button' class='m_submit' onclick="setup_force_M1();">FORCE M1 - Scan ID</button>
                 <button type='button' class='m_submit' onclick="read_temp('M0');">Check Now</button>
                 <button type='button' class='m_btn' onclick="draw_ingredients();">RETURN</button>
             </div>
         </div>
-		<div class='m_modal2' id='m1_temp_modal_force_M1'>
+        <div class='m_modal2' id='m1_temp_modal_force_M1'>
             <div id='force_M1_signoff_uid' class='center modal_head'></div>
             <div class='center red authorised' id="last_item">Force M1</div>
             <hr>
@@ -465,7 +471,7 @@
             <div id='m2_temp_div'><!--  input type='number' name='m2_temp' size=4 --></div>
 
             <div class='btns'>
-            	<button type='button' class='m_submit' onclick="discard_component_popup();">DISCARD</button>
+                <button type='button' class='m_submit' onclick="discard_component_popup();">DISCARD</button>
                 <button type='button' class='m_btn' onclick="goto_m_main();">RETURN</button>
             </div>
         </div>
@@ -477,7 +483,8 @@
             </div>
             <div class='btns'>
                 <button type='button' class='m_submit' onclick='continue_chilling();'>Continue Chilling</button>
-                <button type='button' id='force_m3_btn' class='m_btn' onclick="setup_force_M3();">Force M3 - Scan ID</button>
+                <button type='button' id='force_m3_btn' class='m_btn' onclick="setup_force_M3();">Force M3 - Scan ID
+                </button>
             </div>
         </div>
 
@@ -491,7 +498,8 @@
                 <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,11);">QA Sign-Off
                     Emergency
                 </button>
-                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
+                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,12);">Client Request
+                </button>
             </div>
         </div>
 
@@ -505,7 +513,9 @@
 
             <div class='btns'>
                 <div id='m2_temp_overdue_div_2a' class='temp_achieved center'>FOR CORRECTIVE ACTION</div>
-                <button type='button' class='m_btn' onclick="set_barcode_mode('KQA_override');">Scan Authorised Chef ID </button>
+                <button type='button' class='m_btn' onclick="set_barcode_mode('KQA_override');">Scan Authorised Chef
+                    ID
+                </button>
             </div>
         </div>
 
@@ -550,7 +560,8 @@
                 <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,11);">QA Sign-Off
                     Emergency
                 </button>
-                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,12);">Client Request</button>
+                <button type='button' class='m_submit' onclick="comp_milestone(last_temp,true,12);">Client Request
+                </button>
             </div>
         </div>
 
@@ -606,10 +617,10 @@
         <div class='m_modal2 hidden' id='m_plating_finished'>
             <div class='center modal_head'><span>ENTER QTY COMPLETE</span></div>
             <div id='chk_plating_item_qty_div' class='center'></div>
-          
+
             <input class='label_num' id='plating_num_completed' length='3' size='3' type='number'>
             <div class='btns'>
-                
+
                 <button type='button' class='m_btn' onclick="record_finish_plating();">Finish</button>
             </div>
         </div>
@@ -659,6 +670,10 @@
 
         <div class='m_modal hidden' id='m_plating_sched'>
             <div id='plating_sched_list'></div>
+            <div class='btns' id='plating_return'>
+                <button type='button' class='m_btn' onclick="goto_plating();">Return</button>
+            </div>
+
             <div id='plating_print_labels' class='btns hidden'>
                 <div class='label_qty_cont'>
                     <div class='label_txt'>TROLLEY LABELS</div>
@@ -681,24 +696,22 @@
         </div>
 
         <div class='m_modal hidden' id='m_plating_temp'>
-        	<div class="temp_scan">
+            <div class="temp_scan">
                 <img src="img/icon_IR.svg" class="icon_IR">
-            	<div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
-            	<div id='chk_plating_item_temp_div' class='center'></div>
-            	<div id='chk_plating_item_exp_div' class='center'></div>
-            
-                   
-                    
-            
-            	<div id='chk_plating_item_overtemp' class='temp_reading red'></div>
-            	<div id='chk_plating_item_undertemp' class='temp_reading'></div>
-           	</div>
+                <div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
+                <div id='chk_plating_item_temp_div' class='center'></div>
+                <div id='chk_plating_item_exp_div' class='center'></div>
+
+
+                <div id='chk_plating_item_overtemp' class='temp_reading red'></div>
+                <div id='chk_plating_item_undertemp' class='temp_reading'></div>
+            </div>
             <div class='btns'>
                 <button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
                 <button type='button' class='m_btn' onclick="goto_active_plating();">Return</button>
             </div>
         </div>
-        
+
         <div class='m_modal hidden' id='m_plating_temp_decant'>
             <div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
             <div id='chk_plating_item_temp_divA' class='m-10'></div>
@@ -764,26 +777,32 @@
     </div>
 </div>
 <div class='popup' id='popup_discard_div'>
-    <h2><div class='center' id='popup_discard_head'></div></h2>
+    <h2>
+        <div class='center' id='popup_discard_head'></div>
+    </h2>
     <div class='center'>
-        <div class='center red m-10' id='popup_discard_msg'></div>    
+        <div class='center red m-10' id='popup_discard_msg'></div>
     </div>
     <button type='button' class='m_btn' onclick='discard_component();'>OK</button>
-   	<button type='button' class='m_btn' onclick='close_popup("popup_discard_div")'>CANCEL</button>
+    <button type='button' class='m_btn' onclick='close_popup("popup_discard_div")'>CANCEL</button>
 </div>
 <div class='popup' id='popup_error_div'>
-    <h2><div class='center' id='popup_error_head'></div></h2>
+    <h2>
+        <div class='center' id='popup_error_head'></div>
+    </h2>
     <div class='center'>
-        <div class='center red m-10' id='popup_error_msg'></div>    
+        <div class='center red m-10' id='popup_error_msg'></div>
     </div>
-   	<button type='button' class='m_btn' onclick='close_popup("popup_error_div")'>Close</button>
+    <button type='button' class='m_btn' onclick='close_popup("popup_error_div")'>Close</button>
 </div>
 <div class='popup' id='popup_time_div'>
-    <h2><div class='center' id='popup_time_head'></div></h2>
+    <h2>
+        <div class='center' id='popup_time_head'></div>
+    </h2>
     <div class='center'>
-        <div class='center red m-10' id='popup_time_msg'></div>    
+        <div class='center red m-10' id='popup_time_msg'></div>
     </div>
-   	<button type='button' class='m_btn' onclick='close_popup("popup_time_div")'>Close</button>
+    <button type='button' class='m_btn' onclick='close_popup("popup_time_div")'>Close</button>
 </div>
 <div class='popup' id='manual_entry'>
     <div class='center'><h2>Enter Temperature</h2></div>

@@ -511,6 +511,7 @@ function show_plating_items(team_id,tab)
 function goto_plating()
 {
 	// ???? load_menu_items();
+	hide('plating_return');
 	hide('plating_print_labels');
 	if (active_plating_team == null) {
 		goto_plating_teams();
@@ -1006,20 +1007,19 @@ function reprint_plating_labels()
 
 function do_show_menu_item_components(menu_item_id,batch_change)
 {
+	let tag = 'do_show_menu_item_components: ';
 	set_barcode_mode("PT_comp");
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 	active_menu_item_id = menu_item_id; // global - so we can come back to it
 	// var div = document.getElementById('menu_item_components_div');
 	plating_item = find_plating_item(menu_item_id);
-	console.log('do_show_menu_item_components');
-	console.log(plating_item);
+	console.log(tag,"plating_item: ",plating_item);
 	if (plating_item == null) { // 
-		console.log("ERROR do_show_menu_item_components");
+		console.log(tag, "ERROR plating item is null");
 		// plating_item = Object.create(get_menu_item_by_id(menu_item_id)); // possibly dangerous .....
-
 	}
 	var div = document.getElementById('plating_sched_list');
-	div.innerHTML = '';
+	clearChildren=(div);
 	var tab = document.createElement('table');
 	tab.className = 'item_table';
 	var tr = document.createElement('tr');
@@ -1038,11 +1038,10 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 	var line = 1;
 	var all_good = true; // check before useby date and temp measured ok
 	if (plating_item != null) {
-		console.log("found menu_item ",plating_item.dish_name,plating_item.items.length);
-		console.log(plating_item);
-		console.log(JSON.stringify(plating_item));
+		console.log(tag,"found menu_item ",plating_item.dish_name,plating_item.items.length);
+		console.log(tag, 'plating_item: ', plating_item, JSON.stringify(plating_item));
 		var items = plating_item.items;	
-		for (var i = 0; i < items.length; i++) {
+		for (let i = 0; i < items.length; i++) {
 			if (!items[i].M1_temp) {
 				console.log('clearing id ',items[i].component_id);
 				items[i].component_id = null;
