@@ -1019,7 +1019,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 		// plating_item = Object.create(get_menu_item_by_id(menu_item_id)); // possibly dangerous .....
 	}
 	var div = document.getElementById('plating_sched_list');
-	clearChildren=(div);
+	clearChildren(div);
 	var tab = document.createElement('table');
 	tab.className = 'item_table';
 	var tr = document.createElement('tr');
@@ -2575,7 +2575,6 @@ function display_real_time()
 function m_show_active_components(data,reprint)
 {
 	let tag = "m_show_active_components: ";
-	console.log(tag);
 
 	display_real_time();
 	var timeout_msg = null;
