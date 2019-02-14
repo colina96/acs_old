@@ -14,6 +14,10 @@ function status(t)
 {
     document.getElementById('status').innerHTML += "<br>" + t;
 }
+function show_readout(readout)
+{
+    document.getElementById('readout').innerHTML = readout;
+}
 
 function statusclear()
 {
@@ -204,8 +208,9 @@ function process(text)
 		var j = text.indexOf(']');
 		var s = text.substring(i + 1, j);
 		log("barcode " + s);
-		serial.write('!')
+		serial.write('!');
 		process_barcode(s);
+		show_readout(s);
 		// serial_write('?');
 	}
 	else if (text.indexOf('T') == 0) {
