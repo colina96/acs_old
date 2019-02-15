@@ -107,9 +107,14 @@ function temp_callback(s) // works out where to send the temperature reading
 	}
 }
 
-function manual_temp_submit()
+function manual_temp_submit(t)
 {
-	var t = document.getElementsByName('manual_temp')[0].value;
+	let tag = 'manual_temp_submit: ';
+	if (t == null) {
+		t = document.getElementsByName('manual_temp')[0].value;
+		console.log(tag,'reading temp div ',t);
+	}
+	console.log(tag, 'working with temp ',t);
 	document.getElementById('manual_entry').style.display = 'none';
 	temp_callback(t);
 }
