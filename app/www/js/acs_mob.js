@@ -680,19 +680,29 @@ function decant_item_labels(item)
 
 function plating_comp_selected(i,batch_change)
 {
+	let tag = "plating_comp_selected: ";
 	var menu_item = plating_item; // get_menu_item_by_id(active_menu_item_id);
 	plating_item.active_item = i;
 	plating_item.batch_change = batch_change;
 	var items = menu_item.items;
 	if (i >= 0 && i < items.length) {
-		console.log("plating_comp_selected: selected ",items[i].description,' item:',items[i]);
+		console.log(tag,"selected ",items[i].description,' item:',items[i]);
 	}
 	if (items[i].prep_type_id == 2) { // HF decant?
+		console.log(tag,'Prep type 2: HF decant?');
+
 		openPage('m_plating_temp_decant', this, 'red','m_modal','tabclass');
 		document.getElementById('chk_plating_item_temp_divA').innerHTML = items[i].description;
-	}
-	else {
+	} else {
+		console.log(tag,'normal prep types not HF');
+		// called here because it clears temperature fields and stuff
 		read_plating_M1temp();
+		let icon_anchor = document.getElementById('m_plating_temp').children[0].getElementsByClassName('temp_icon_anchor')[0];
+		console.log(tag,'icon_anchor: ',icon_anchor);
+		checkTempDiv(
+			icon_anchor,
+			plating_item,
+			"read_plating_M1temp()");
 		openPage('m_plating_temp', this, 'red','m_modal','tabclass');
 	}
 	
@@ -826,35 +836,40 @@ function batch_change_component(comp)
 
 function set_plating_M1_temp(temperature) 
 {
-	console.log("set_plating_M1_temp " + plating_item.description + " -> " + 
+	let tag = "set_plating_M1_temp: ";
+	console.log(tag, plating_item.description, " -> ",
 			plating_item.items[plating_item.active_item].description);
+
+	let tempdiv = document.getElementById('chk_plating_item_temp');
+
 	// check temp is below M1_temp
-	
-	var temp_target = PLATING_M1_TEMP;
-	if (parseInt(temperature) < temp_target) {
+	if (parseInt(temperature) < PLATING_M1_TEMP) {
+		console.log(tag, 'temp low enough');
 		plating_item.items[plating_item.active_item].M1_temp = temperature;
 		plating_item.items[plating_item.active_item].M1_time = null;
 		if (plating_item.batch_change) {
-			console.log('batch change temp',temperature);
+			console.log(tag,'batch change temp',temperature);
 			plating_item.items[plating_item.active_item].replace = plating_item.items[plating_item.active_item].id;
 			plating_item.items[plating_item.active_item].plating_team_id = plating_item.team_id;
 			console.log(plating_item);
 			console.log(plating_item.items[plating_item.active_item]);
 			batch_change_component(plating_item.items[plating_item.active_item]);
-			document.getElementById('chk_plating_item_overtemp').innerHTML = '';
-			
 			// record new component and got back to main plaing screeen
-		}
-		else {
-			
+		} else {
 			goto_active_plating();
 		}
+	} else {
+		//set red
+		show_temp(temperature,true);
+		let icon_anchor = document.getElementById('m_plating_temp').children[0].getElementsByClassName('temp_icon_anchor')[0];
+		console.log(tag,'icon_anchor: ',icon_anchor);
+		checkTempDiv(
+			icon_anchor,
+			plating_item,
+			"read_plating_M1temp()",
+			true);
+		console.log(tag, 'temp too high');
 	}
-	else {
-		
-		document.getElementById('chk_plating_item_undertemp').innerHTML = '';
-	}
-	
 }
 
 function set_plating_M2_temp(temperature) 
@@ -1505,26 +1520,26 @@ function dock_read_M1temp(callback)
 function read_M1temp(callback){
 	load_chefs(null);
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
-	// document.getElementById('m1_temp_div').innerHTML = '';
+	// clearChildren(document.getElementById('m1_temp_div'));
 	read_temp('M1');
 }
 
 function read_M2temp(callback){
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
-	document.getElementById('m1_temp_div').innerHTML = '';
+	clearChildren(document.getElementById('m1_temp_div'));
 	read_temp('M2');
 }
 
 function read_pt_M2temp(callback){
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
-	document.getElementById('m1_temp_div').innerHTML = '';
+	clearChildren(document.getElementById('m1_temp_div'));
 	read_temp('M2_plating');
 }
 
 function read_plating_M1temp(callback){
 	
 	// document.getElementById('m1_temp_div').innerHTML = '';
-	document.getElementById('chk_plating_item_overtemp').innerHTML= '';
+	clearChildren(document.getElementById('chk_plating_item_temp'));
 	read_temp('M1_plating');
 }
 

@@ -526,6 +526,22 @@ td {
 	font-family: "Ubuntu Medium", sans-serif;
 }
 
+.btn_preset_temp{
+	position: relative;
+	left: 3%;
+	margin: 5px 5%;
+	width: 20%;
+
+	background: var(--acs_button_background_main);
+	color:var(--acs_button_text_main);
+	border-radius: var(--acs_button_radius);
+	border:2px var(--acs_button_border) solid;
+	padding: 10px;
+
+	font-size:larger;
+	font-family: "Ubuntu Medium", sans-serif;
+}
+
 .btn_top {
 	position:absolute;
 	bottom:40vh;

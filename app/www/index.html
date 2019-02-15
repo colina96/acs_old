@@ -698,17 +698,14 @@
 
         <div class='m_modal hidden' id='m_plating_temp'>
             <div class="temp_scan">
-                <img src="img/icon_IR.svg" class="icon_IR">
-                <div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
+                <div class="temp_icon_anchor center"></div>
                 <div id='chk_plating_item_temp_div' class='center'></div>
                 <div id='chk_plating_item_exp_div' class='center'></div>
 
 
-                <div id='chk_plating_item_overtemp' class='temp_reading red'></div>
-                <div id='chk_plating_item_undertemp' class='temp_reading'></div>
+                <div id='chk_plating_item_temp' class='temp_reading red'></div>
             </div>
             <div class='btns'>
-                <button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
                 <button type='button' class='m_btn' onclick="goto_active_plating();">Return</button>
             </div>
         </div>
@@ -807,14 +804,14 @@
     <button type='button' class='m_btn' onclick='close_popup("popup_time_div")'>Close</button>
 </div>
 <div class='popup' id='manual_entry'>
-    <div class='center'><h2>Enter Temperature</h2></div>
+    <div class='center'><h2>DEV: Enter Temperature</h2></div>
     <div class='enter_temp center'>
         <input name='manual_temp' id='manual_temp' length='3' size='3' type='number'>
         <button type='button' class='m_btn' onclick='manual_temp_submit()'>Submit</button>
     </div>
-    <button type='button' class='m_btn' onclick='manual_temp_submit("3");'>3</button>
-    <button type='button' class='m_btn' onclick='manual_temp_submit("20");'>20</button>
-    <button type='button' class='m_btn' onclick='manual_temp_submit("78");'>78</button>
+    <button type='button' class='btn_preset_temp' onclick='manual_temp_submit("3");'>3</button>
+    <button type='button' class='btn_preset_temp' onclick='manual_temp_submit("20");'>20</button>
+    <button type='button' class='btn_preset_temp' onclick='manual_temp_submit("78");'>78</button>
 </div>
 
 <div class='popup' id='popup-labels'>
