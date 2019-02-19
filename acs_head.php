@@ -63,7 +63,8 @@ session_start();
             <li class='tabclass' onclick="openPage('APP', this, 'red','tabcontent','tabclass')"><a>APP</a></li>
             <li class='tabclass' onclick="reports();"><a>REPORTS</a></li>
  <?php 		if ($_SESSION['userID'] == 1) { ?>
- 			<li class='tabclass' onclick="settings();"><a>SETTINGS</a></li>		
+ 			<li class='tabclass' onclick="settings();"><a>SETTINGS</a></li>
+ 			<li class='tabclass' onclick="uploads();"><a>UPLOADS</a></li>		
  <?php  	} ?>
             <!--  li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="">KITCHEN</a></li>
             <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="">ASSEMBLY</a></li -->
@@ -99,6 +100,7 @@ session_start();
 <div id="PARAMS" class="tabcontent">
   <?php include 'settings.php' ?>
 </div>
+<div id="UPLOADS" class="tabcontent"><!--   ?php include 'uploads.php' ?--></div>
 <div id="ASSEMBLY" class="tabcontent">
   <!--  ?php include 'assembly.php' ? -->
 </div>

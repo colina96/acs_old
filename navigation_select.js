@@ -1,6 +1,6 @@
 // Get the container element
 var btnContainer = document.getElementById("menu_status");
-console.log(btnContainer);
+// console.log(btnContainer);
 // Get all buttons with class="btn" inside the container
 var btns = btnContainer.getElementsByClassName("acs_menu_btn");
 
@@ -21,7 +21,7 @@ for (var i = 0; i < btns.length; i++) {
 
 // Get the container element
 var btnContainer = document.getElementById("navbar_top");
-console.log(btnContainer);
+// console.log(btnContainer);
 // Get all buttons with class="btn" inside the container
 var btns = btnContainer.getElementsByClassName("tabclass");
 
