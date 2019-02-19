@@ -59,11 +59,11 @@ function dblog($s)
 
 function mysql_query($sql) 
 { 
-	if (stristr($sql,'insert') || stristr($sql,'update') || stristr($sql,'delete')) {
+	if (stristr($sql,'replace') || stristr($sql,'insert') || stristr($sql,'update') || stristr($sql,'delete')) {
 		dblog($sql);
 	}
 	$ret = mysqli_query($GLOBALS['con'],$sql);
-	if (stristr($sql,'insert')) {
+	if (stristr($sql,'replace') || stristr($sql,'insert')) {
 		dblog('insert id:'.mysql_insert_id());
 	}
 	// dblog($ret);

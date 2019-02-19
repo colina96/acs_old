@@ -23,6 +23,36 @@ function settings()
     });
 }
 
+function acs_get_data(tablename,conditions)
+{
+	console.log('acs_get_data',tablename);
+	var ret = Object();
+	ret.TABLENAME = tablename;
+	
+	ret.action = 'GET';
+	if (conditions) ret.conditions = conditions;
+	// ret.conditions = 'id=4';
+	console.log(ret);
+	var postdata =  {data: JSON.stringify(ret)};
+	$.ajax({
+    	url: RESTHOME + "replace.php",
+        type: "POST",
+        dataType: 'json',
+        data: postdata,
+        success: function(result) {
+            console.log('got result');
+            console.log(result);    
+         //   document.getElementById('settings_div').innerHTML = result;
+            if (result.data && result.data.length == 1) build_form(result);
+            if (result.data && result.data.length > 1) table_results(result);
+        },
+        fail: (function (result) {
+            console.log("fail ",result);
+        })
+    });
+	return(false);
+}
+
 function acs_submit_form(formid)
 {
 	console.log('acs_submit_form',formid);
@@ -51,7 +81,8 @@ function acs_submit_form(formid)
         success: function(result) {
             console.log('got result');
             console.log(result);    
-            document.getElementById('settings_div').innerHTML = result;
+           //  document.getElementById('settings_div').innerHTML = result;
+            
         },
         fail: (function (result) {
             console.log("fail ",result);
@@ -60,18 +91,74 @@ function acs_submit_form(formid)
 	return(false);
 }
 
-var form_layout = { 'USERS': 
+var form_layout = { 
+	'USERS': 
 	{ 
 		'fields' : {
 			'email' : { 'Title':'Login'  },
 			'password' : { 'Title':'Password'  }
 		}
+	},
+	'PARAMS':
+	{
+		'fields' : {
+			'pkey' : { 'Title':'KEY' },
+			'pvalue' : { 'Title':'VALUE' },
+		}
 	}
+}
+
+
+function table_results(data)
+{
+	var div = document.getElementById('settings_div');
+	div.innerHTML = '';
+	var h1 = document.createElement('H1');
+	h1.innerHTML = data.TABLENAME;
+	div.appendChild(h1);
+	fields = data.fields;
+	// headings
+	var tab = document.createElement('table');
+	var tr = document.createElement('tr');
+	for (let i = 0; i < fields.length; i++) { 
+		var td = document.createElement('td');
+		if (form_layout[data.TABLENAME] && 
+				form_layout[data.TABLENAME].fields && 
+				form_layout[data.TABLENAME].fields[fields[i].Field] &&
+				form_layout[data.TABLENAME].fields[fields[i].Field]['Title'])
+			td.innerHTML = form_layout[data.TABLENAME].fields[fields[i].Field]['Title'];
+		else 
+			td.innerHTML = fields[i].Field;
+		
+		tr.appendChild(td);
+	}
+	tab.appendChild(tr);
+	
+	for (let i = 0; i < data.data.length; i++) { 
+		var tr = document.createElement('tr');
+		tr.setAttribute(
+				"onclick",
+				"acs_get_data('" + data.TABLENAME + "','id=" +  data.data[i]['id'] + "');"
+			);
+		for (let j = 0; j < fields.length; j++) { 
+			var td = document.createElement('td');
+			if (data.data && data.data[i][fields[j].Field] ){
+				td.innerHTML = data.data[i][fields[j].Field];
+			}
+			tr.appendChild(td);
+		}
+		tab.appendChild(tr);
+	}
+	div.appendChild(tab);
+			
 }
 
 function build_form(data)
 {
+	console.log('build_form');
+	console.log(data);
 	var div = document.getElementById('settings_div');
+	div.innerHTML = '';
 	var h1 = document.createElement('H1');
 	h1.innerHTML = data.TABLENAME;
 	div.appendChild(h1);
@@ -80,7 +167,7 @@ function build_form(data)
 	
 	fields = data.fields;
 	var tab = document.createElement('table');
-	for (let i = 1; i < fields.length; i++) { // ignore id
+	for (let i = 0; i < fields.length; i++) { // ignore id
 		var tr = document.createElement('tr');
 		var td = document.createElement('td');
 		if (form_layout[data.TABLENAME] && 
@@ -92,25 +179,40 @@ function build_form(data)
 			td.innerHTML = fields[i].Field;
 		tr.appendChild(td);
 		var td = document.createElement('td');
-		if (fields[i].Type.indexOf('varchar') == 0) {
-			td.innerHTML = "<input id='" + fields[i].Field + "' type='text'>";
+		let value = '';
+		if (data.data && data.data[0][fields[i].Field] ){
+			value = data.data[0][fields[i].Field];
+		}
+		if (fields[i].Field == 'id' && value > 0) {
+			td.innerHTML = value + "<input id='" + fields[i].Field + "' type='hidden' value='" + value + "'>";
+		}
+		else if (fields[i].Type.indexOf('varchar') == 0) {
+			td.innerHTML = "<input id='" + fields[i].Field + "' type='text' value='" + value + "'>";
 		}
 		else if (fields[i].Type == 'tinyint(1)') {
-			td.innerHTML = "<input id='" + fields[i].Field + "' type='checkbox' value='1'>";
+			if (value > 0) value = 'checked'
+			td.innerHTML = "<input id='" + fields[i].Field + "' type='checkbox' value='1' " + value + ">";
+		}
+		else if (fields[i].Type.indexOf('int') >= 0) {
+			td.innerHTML = "<input id='" + fields[i].Field + "' type='number' value='" + value + "'>";
 		}
 		else {
-			td.innerHTML = fields[i].Field;
+			td.innerHTML = value;// fields[i].Field;
 		}
 		tr.appendChild(td);
-		tab.appendChild(tr);
+		if (fields[i].Field != 'id' || value > 0) tab.appendChild(tr);
 	}
 	form.appendChild(tab);
 	var submit = document.createElement('div');
-	submit.innerHTML = '<div onclick="acs_submit_form(\'' + data.TABLENAME + '\');">Submit</div>';
+	submit.innerHTML = '<div class="btn" onclick="acs_submit_form(\'' + data.TABLENAME + '\');">Submit</div>';
 	// submit.setAttribute("onclick",acs_submit_form);
 	
 	div.appendChild(form);	
 	div.appendChild(submit);
+	var get = document.createElement('div');
+	get.innerHTML = '<div class="btn" onclick="acs_get_data(\'' + data.TABLENAME + '\');">Get All</div>';
+	div.appendChild(get);
+	
 }
 
 function uploads() 
@@ -120,7 +222,7 @@ function uploads()
 	var div = document.getElementById('settings_div');
 	div.innerHTML = '';
 	var q = new Object();
-	q.TABLENAME = 'USERS';
+	q.TABLENAME = 'PARAMS';
 	
 	var data =  {data: JSON.stringify(q)};
 	
