@@ -1,9 +1,19 @@
 # QPACK Handheld
 
 Due to the nature of this project the app relies heavily on a PCB attached to the phone with a microUSB cable, acting as a USB Host over OTG (On the go).
+The device is basically an ATmega, a serial communication chip (to make it programmable by the Arduino Suite), and attachment points for:
+* 3 buttons (2 for the trigger, 1 thumbbutton)
+* 1 Thermocouple (Probe)
+* IR sensor
+* Barcode Scanner
+* Laser pointer (to indicate where the IR sensor is pointing)
+It also incorporates a charging system for a 18650 Lithium cell and and a socket for a microUSB charger.
+Once the cable is attached, the PCB charges both the attached phone and its own battery.
 The PCB was developed by Kean Maizels for ACS.
 
-## Version 3.2
+## Versions
+
+### Version 3.2
 
 Schematics are in `QPack R3.2.pdf`. The following mail should explain some specifics in more detail
 
@@ -73,3 +83,6 @@ Schematics are in `QPack R3.2.pdf`. The following mail should explain some speci
 > Kean Electronics - IT Consulting & Embedded Systems Design
 >
 > Ph: 02 9457-0346   Mob: 0414 245 326
+
+### Earlier versions
+Previous attempts used an IOIO chip and Bluetooth for communication. Some references to these will still be visible in parts of code and documentation.
