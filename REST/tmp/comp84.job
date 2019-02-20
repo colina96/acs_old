@@ -1,0 +1,12 @@
+Jobname:user 84
+Printer:10.0.0.99
+Port:9100
+Label:ACS_COMP.LBL
+Endheader
+Copies:1
+NAME:Braised STEAK in CREAMY S
+PREPAREDBY:Colin Atkinson
+BARCODE:c01000084
+EXPIRYDATE:01 Jan 70 01:00
+PREPPED:01 Jan 70 01:00
+Endlabel

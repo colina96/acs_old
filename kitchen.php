@@ -250,10 +250,10 @@ function comp_M2()
 }
 function delete_comp()
 {
-	var component = new Object();
+	let component = new Object();
 	component.id = active_comps[active_component_index]['id'];
 
-	var data =  {data: JSON.stringify(component)};
+	let data =  {data: JSON.stringify(component)};
     console.log("Sent Off: %j", data);
     
     $.ajax({
@@ -276,22 +276,23 @@ function delete_comp()
 
 function comp_M3()
 {
-	var M3_temp_reading = parseInt(document.getElementsByName('M3_temp')[0].value);
-	var M3_temp_limit = parseInt(get_preptype_val(active_comps[active_component_index]['prep_type_id'],'M3_temp'));
+    let tag = 'comp_M3: ';
+
+    let M3_temp_reading = parseInt(document.getElementsByName('M3_temp')[0].value);
+	let M3_temp_limit = parseInt(get_preptype_val(active_comps[active_component_index]['prep_type_id'],'M3_temp'));
 	
 	if (M3_temp_reading > M3_temp_limit) {
 		console.log("M3 temp " + M3_temp_reading + " over limit " + M3_temp_limit);
-		document.getElementById('comp_M3_correct').innerHTML = "M3 temp " + M3_temp_reading + " over limit " + M3_temp_limit;
-		document.getElementById('comp_M3_correct').innerHTML += "<br>Take corrective action";
-	}
-	else {
+		document.getElementById('comp_M3_correct').innerHTML =
+            "M3 temp " + M3_temp_reading + " over limit " + M3_temp_limit + "<br>Take corrective action";
+	} else {
 		// send data to REST interface
 		document.getElementById('comp_action_modal_M3').style.display = 'none';
-		var component = new Object();
+		let component = new Object();
 		component.id = active_comps[active_component_index]['id'];
 		component.M3_temp = document.getElementsByName('M3_temp')[0].value;
 		component.M3_chef_id = document.getElementsByName('M3_chef_id')[0].value;
-		var data =  {data: JSON.stringify(component)};
+		let data =  {data: JSON.stringify(component)};
 	    console.log("Sent Off: %j", data);
 	    
 	    $.ajax({
@@ -299,16 +300,16 @@ function comp_M3()
 	        type: "POST",
 	        data: data,
 
-	        success: function(result) {
-	            console.log("start_component result ",result);
-	            goto_active_components();
-	        },
-	        done: function(result) {
-	            console.log("done start_component result ",result);
-	        },
-	        fail: (function (result) {
-	            console.log("start_componentfail ",result);
-	        })
+            success: function(result) {
+                console.log(tag,"success: ",result);
+                goto_active_components();
+            },
+            done: function(result) {
+                console.log(tag,"done: ",result);
+            },
+            fail: function (result) {
+                console.log(tag,'fail: ',result);
+            }
 	    });
 	    
 	}
@@ -316,12 +317,13 @@ function comp_M3()
 }
 function start_component()
 {
-	var component = new Object();
+    let tag = 'start_component: ';
+	let component = new Object();
 	component.description = document.getElementsByName('new_comp_desc')[0].value;
 	component.prep_type = document.getElementsByName('new_comp_prep_type')[0].value;
 	component.M1_temp = document.getElementsByName('M1_temp')[0].value;
 	component.M1_chef_id = document.getElementsByName('M1_chef_id')[0].value;
-	var data =  {data: JSON.stringify(component)};
+	let data =  {data: JSON.stringify(component)};
     console.log("Sent Off: %j", data);
     document.getElementsByName('new_comp_desc')[0].value = '';
     document.getElementsByName('M1_temp')[0].value = '';
@@ -331,16 +333,15 @@ function start_component()
         data: data,
 
         success: function(result) {
-            console.log("start_component result ",result);
+            console.log(tag,"success: ",result);
             goto_active_components();
         },
         done: function(result) {
-            console.log("done start_component result ",result);
+            console.log(tag,"done: ",result);
         },
-        fail: (function (result) {
-            console.log("start_componentfail ",result);
-        })
+        fail: function (result) {
+            console.log(tag,'fail: ',result);
+        }
     });
-    
 }
 </script>

@@ -15,10 +15,10 @@ $M1_chef_id = $comp['M1_chef_id'];
 
 $userID = $_SESSION['userID'];
 
-$sql = "update COMPONENT ";
-$sql .= "set M1_temp = " . $M1_temp . ", M1_chef_id=".$M1_chef_id;
-$sql .= ",M1_check_id = ".$_SESSION['userID'];
-$sql .= ",M1_time = now()";
+$sql = "update COMPONENT "
+	. "set M1_temp = " . $M1_temp . ", M1_chef_id=".$M1_chef_id
+	. ",M1_check_id = ".$_SESSION['userID']
+	. ",M1_time = now()";
 if (!empty($comp['finished'])) {
 	$sql .= ",finished = now()";
 }

@@ -129,35 +129,31 @@ function manual_barcode_submit(input_name)
 
 
 var temp_readings = 0;
-function ioio_start()
-{
-	
+function ioio_start() {
 	qpack_start();
 }
-function popup_timeout(msg)
-{
+
+function popup_timeout(msg) {
 	document.getElementById('popup_time_msg').innerHTML = msg;
 	document.getElementById('popup_time_div').style.display = 'block';
 }
-function popup_error(head,msg)
-{
+
+function popup_error(head,msg) {
 	document.getElementById('popup_error_head').innerHTML = head;
 	document.getElementById('popup_error_msg').innerHTML = msg;
 	document.getElementById('popup_error_div').style.display = 'block';
 }
 
-function close_popup(div)
-{
+function close_popup(div) {
 	document.getElementById(div).style.display = 'none';
 }
-function popup_manual_temp()
-{
+
+function popup_manual_temp() {
 	document.getElementsByName('manual_temp')[0].value = '';
 	temp_readings = 0;
 	document.getElementById('manual_entry').style.display = 'block';
 }
 
-var p37 = 0;
 function read_temp(m)
 {
 	set_temp_mode(m);
@@ -171,7 +167,7 @@ function read_temp(m)
 	}
 /*	else {
 		// serial.write('R'); arduino
-		var t = parseInt(100.0 * p37);
+		var t = parseInt(100.0 * p37); //p37 = 0
 		log('read temp ' + t);
 		temp_callback(t);
 	} */
@@ -1662,8 +1658,11 @@ function check_temp(t) // start a new component
 	document.getElementById('m1_temp_div_4').innerHTML=parseInt(t) + "&#176C";
 
 	let m1_temp_div_2a = document.getElementById('m1_temp_div_2a');
+	let m1_temp_div_2icon = document.getElementById('m1_temp_div_2icon');
 
 	console.log(tag,"t: ",t," target: ",M1_temp_target);
+
+
 
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {
@@ -1717,7 +1716,6 @@ function add_chef_select(target_div,input_name)
 		// console.log(i);
 	}
 	s.appendChild(select);
-	
 }
 
 function dock_start_component()
@@ -1784,15 +1782,12 @@ function force_M1(uid)
 		// set_barcode_mode('scan_ingredients');
 		// save ingredient - new_comp.php
 		start_component(false,true);
-	}
-	else {
+	} else {
 		set_barcode_mode('scan_ingredients');
 	}
 	console.log(active_comp);
 	new_comp.force_M1_uid = uid;
 	new_comp.force_M1_temp = last_temp;
-
-
 }
 
 function setup_force_M3() //
@@ -1833,8 +1828,6 @@ function k_qa_override(uid)
 		show_temp(last_temp);
 		openPage('m2_temp_overdue_M2B', null, 'red','m_modal2','tabclass');
 	}
-	
-
 }
 
 function clear_temps()
@@ -1901,23 +1894,22 @@ close_popup("popup_discard_div");
 
 function start_component(dock,at_M0)
 {
+	let tag = 'start_component: ';
 	// object copy is messy - TODO
 	load_chefs(add_chef_select('m1_temp_div_chef','m1_chef_id'));
 
-	console.log('start component');
-	console.log('active component', active_comp);
-	console.log('new component', new_comp);
+	console.log(tag,'active component', active_comp,'new component', new_comp);
 
 	// check if component at M0 - has ingredients
 	if ( active_comp && ( !active_comp['M1_time'] || active_comp['selected_ingredients'] )) {
-		console.log('component start - need to print labels');
+		console.log(tag,'need to print labels');
 		active_comp.label_qty = document.getElementsByName('m1_label_qty')[0].value;
 		comp_milestone(active_comp['M1_temp']);
-        	goto_m_main();
+		goto_m_main();
 		return;
 	}
 
-	var component = new Object();
+	// let component = new Object();
 
 	//component.description = new_comp['description']; // simplifies display
 	new_comp.comp_id = new_comp['id'];
@@ -1928,92 +1920,101 @@ function start_component(dock,at_M0)
 //	component.shelf_life_days = new_comp.shelf_life_days;
 	new_comp.items = new_comp.selected_ingredients;
 	// component.M1_temp = document.getElementsByName('m1_temp')[0].value;
-	var M2_time = get_preptype_val(new_comp.prep_type,'M2_time_minutes');
-	console.log("At M1, M2 time = " + M2_time 
+	let M2_time = get_preptype_val(new_comp.prep_type,'M2_time_minutes');
+	console.log(tag, "At M1, M2 time = " + M2_time
 		+ ", M3 time = " + get_preptype_val(new_comp.prep_type,'M3_time_minutes'));
 	
 	if (M2_time == null) {
 		new_comp.finished = 'true';
 	} else {
 		new_comp.M1_temp = new_comp['M1_temp'];
+		console.log(tag, 'setting M1_temp to ', new_comp.M1_temp);
 	}
 	
 	active_comp = new_comp;
-	var data =  {data: JSON.stringify(active_comp)};
+	let data = {data: JSON.stringify(active_comp)};
 
-    	console.log("start_component Sent Off: ");
-    	console.log(data);
-    	var qty_input = (dock)?'dock_m1_label_qty':'m1_label_qty';
+	console.log(tag, 'sent off:', data);
+	let qty_input = (dock) ? 'dock_m1_label_qty' : 'm1_label_qty';
 
-    	$.ajax({
+	$.ajax({
 		url: RESTHOME + "new_comp.php",
 		type: "POST",
 		data: data,
 
-		success: function(result) { // need to get the id of the new component back to print labels
-		    console.log("start_component succes ",result);
-		    var comp = JSON.parse(result);
+		success: function (result) {
+			// need to get the id of the new component back to print labels
+			console.log(tag,"success ", result);
+			let comp = JSON.parse(result);
 
-		    console.log("start_component id =  ",comp.id);
-		    var qty = document.getElementsByName(qty_input)[0].value;
+			console.log(tag,"returned id ", comp.id);
+			let qty = document.getElementsByName(qty_input)[0].value;
 
-		    active_comp.id = comp.id;
-		    active_comp.expiry_date = comp.expiry_date;
-		    active_comp.M1_time = comp.M1_time;
+			active_comp.id = comp.id;
+			active_comp.expiry_date = comp.expiry_date;
+			active_comp.M1_time = comp.M1_time;
 
-		   // active_comp.M1_chef_id = comp.M1_chef_id;
-		    if (!at_M0) print_component_labels(qty);
+			// active_comp.M1_chef_id = comp.M1_chef_id;
+			if (!at_M0) {
+				console.log(tag,"not at M0, printing ",qty, " labels");
+				print_component_labels(qty);
+			}
 
-		    // reset default value TODO should that not be done on popup?
-		    document.getElementsByName(qty_input)[0].value = 1;
-		    goto_m_main();
-		    new_comp = null;
+			// reset default value TODO should that not be done on popup?
+			document.getElementsByName(qty_input)[0].value = 1;
+			goto_m_main();
+			new_comp = null;
 		},
 		fail: function (result) {
-		    console.log("start_component fail ",result);
+			console.log(tag, "fail ", result);
 		}
-    	});
+	});
 }
 
 function set_user(input_name,next_page,uid) {
+	let tag = 'set_user: ';
+
 	if (uid == 0) {
 		uid = document.getElementsByName(input_name)[0].value;
-	}
-	else {
+	} else {
 		document.getElementsByName(input_name)[0].value = uid;
 	}
-	console.log("set user got user id ",uid);
+	console.log(tag,"got user id ",uid);
 
-	var chef = get_chef_by_id(uid);
-	if (new_comp == null && active_comp != null) new_comp = active_comp;
+	let chef = get_chef_by_id(uid);
+	if (new_comp == null && active_comp != null){
+		new_comp = active_comp;
+	}
 	if (chef) {
-	    console.log("set_user found chef ",chef['label']); 
-	    console.log(new_comp);
+	    console.log(tag,"found chef ",chef['label']);
+	    console.log(tag,"new_comp", new_comp);
 	    document.getElementById('m1_temp_div_5').innerHTML = chef['label'];
-	    if (new_comp['M1_temp']) show('m_temp_modal4a');
-	    else hide ('m_temp_modal4a');
+	    if (new_comp['M1_temp']){
+			show('m_temp_modal4a');
+		} else {
+	    	hide('m_temp_modal4a');
+		}
 	    openPage(next_page, this, 'red','m_modal2','tabclass');
 	    new_comp['M1_chef_id'] = uid;
-	    if (active_comp) active_comp['M1_chef_id'] = uid;
-	    console.log(new_comp);
+	    if (active_comp) {
+	    	active_comp['M1_chef_id'] = uid;
+		}
+		console.log(tag,"new_comp", new_comp);
 	}
-		
-	
 }
 
-
-function comp_milestone(temp_reading,force,qa_code)
-{
+function comp_milestone(temp_reading,force,qa_code) {
 	let tag = 'comp_milestone: ';
 	// send data to REST interface
 	console.log(tag, 'active_comp: ',active_comp);
-	var prep_type_id = active_comp['prep_type_id'];
+	let prep_type_id = active_comp['prep_type_id'];
+
 	document.getElementById('dock_m1_temp_div_4').innerHTML=parseInt(temp_reading * 10) / 10 + "&#176C"
-	var temp_target = get_preptype_val(prep_type_id,'M2_temp');
+	let temp_target = get_preptype_val(prep_type_id,'M2_temp');
 		
-	var component = new Object();
+	let component = new Object();
 	component.id = active_comp['id'];
-	var url = '';
+	let url = '';
 	if (force && qa_code) {
 		console.log(tag,'forced by QA');
 		component.M3_temp = temp_reading;
@@ -2024,17 +2025,16 @@ function comp_milestone(temp_reading,force,qa_code)
 		component['M3_temp'] = last_temp ;
 		component.M3_chef_id = 0;
 		url = RESTHOME + 'M3_comp.php';
-	}
-	else if (active_comp['M1_time'] == '') { 
+	} else if (active_comp['M1_time'] == '') {
 		// M1
-		console.log(tag,'M1');
+		console.log(tag,'M1: component:', component, 'active_comp:',active_comp);
+
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M1_temp = last_temp;
-		component.M1_chef_id = active_comp['M1_chef_id']; // TODO
+		component.M1_chef_id = active_comp['M1_chef_id']; //
 
 		url = RESTHOME + 'M1_comp.php';
-	}
-	else if (active_comp['M2_time'] == '') { 
+	} else if (active_comp['M2_time'] == '') {
 		// M2
 		console.log(tag,'M2');
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
@@ -2053,8 +2053,7 @@ function comp_milestone(temp_reading,force,qa_code)
 			component.finished = 'true';
 		}
 		url = RESTHOME + 'M2_comp.php';
-	}
-	else {
+	} else {
 		console.log(tag,'M3');
 		//component.M3_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M3_temp = temp_reading;
@@ -2062,7 +2061,7 @@ function comp_milestone(temp_reading,force,qa_code)
 		component.M3_chef_id = 0;
 		url = RESTHOME + 'M3_comp.php';
 	}
-	var data = { data: JSON.stringify(component) };
+	let data = { data: JSON.stringify(component) };
 	console.log(tag,"sent off: ", data,' to ', url);
 	$.ajax({
 		url: url,
@@ -2076,10 +2075,9 @@ function comp_milestone(temp_reading,force,qa_code)
 				// at M1 - component has tracked ingredients
 				// get chef id and print labels
 				var qty = document.getElementsByName('m1_label_qty')[0].value;
-				console.log(tag,"At M1: printing "+qty+" labels");
+				console.log(tag,"At M1: printing "+qty+" labels for active_comp:", active_comp);
 				print_component_labels(qty);
 				document.getElementsByName('m1_label_qty')[0].value = 1;
-				//  	openPage('m_temp_modal3', this, 'red','m_modal2','tabclass');
 			} else {
 				console.log(tag,"At M2/3: not printing labels");
 				if (component['M3_temp'] && component['M3_temp'] != '') {
@@ -2094,11 +2092,11 @@ function comp_milestone(temp_reading,force,qa_code)
 			}
 		},
 		done: function(result) {
-			console.log(tag, "done result ",result);
+			console.log(tag, "done ",result);
 		},
-		fail: (function (result) {
+		fail: function (result) {
 			console.log(tag, "fail ",result);
-		})
+		}
 	});
 }
 
@@ -2491,8 +2489,7 @@ function print_component_labels(qty)
 	}
 	
 	let data = {data: JSON.stringify(comp)};
-	console.log(tag, "sent off: ", data);
-	console.log(tag, "comp: ".comp);
+	console.log(tag, "sent off: ", data, "comp: ",comp);
 
 	$.ajax({
 		url: RESTHOME + "comp_label.php",
@@ -2859,18 +2856,21 @@ function get_plating_item_by_menu_item_id(menu_item_id)
 {
 	if (typeof(plating_items) == 'undefined') return(null);
 	for (var i = 0; i < plating_items.length; i++) {
-		if (plating_items[i].menu_item_id == menu_item_id) return(plating_items[i]);
+		if (plating_items[i].menu_item_id == menu_item_id) {
+			return (plating_items[i]);
+		}
 	}
 	return(null);
 }
 
 function get_plating_item_by_id(id)
 {
-	
-	if (typeof(plating_items) == 'undefined') return(null);
-	for (var i = 0; i < plating_items.length; i++) {
-		
-		if (plating_items[i].id == id) return(plating_items[i]);
+	if (typeof(plating_items) != 'undefined') {
+		for (var i = 0; i < plating_items.length; i++) {
+			if (plating_items[i].id == id) {
+				return (plating_items[i]);
+			}
+		}
 	}
 	return(null);
 }
@@ -2977,3 +2977,4 @@ function search_suppliers()
 {
 	console.log('search_suppliers');
 }
+

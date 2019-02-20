@@ -1,0 +1,12 @@
+Jobname:user 83
+Printer:10.0.0.99
+Port:9100
+Label:ACS_COMP.LBL
+Endheader
+Copies:1
+NAME:THYME AND ROSEMARY
+PREPAREDBY:Colin Atkinson
+BARCODE:c01000083
+EXPIRYDATE:27 Feb 19 10:37
+PREPPED:21 Feb 19 10:37
+Endlabel
