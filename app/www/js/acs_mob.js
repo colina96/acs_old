@@ -1703,14 +1703,14 @@ function check_temp(t) // start a new component
 
 function add_chef_select(target_div,input_name) 
 {
-	var s = document.getElementById(target_div);
+	let s = document.getElementById(target_div);
 	clearChildren(s);
 
-	var select = document.createElement('select');
+	let select = document.createElement('select');
 	select.name = input_name;
 	// console.log('found plating teams ',plating_teams.length);
 	for (var i = 0; i < chefs.length; i++) {
-		option = document.createElement( 'option' );
+		let option = document.createElement( 'option' );
 		option.value = chefs[i]['id'];
 		option.textContent =  chefs[i]['label'];
 		select.appendChild( option );
@@ -1747,7 +1747,7 @@ function dock_start_component()
 			console.log("dock_start_component success ", result);
 			var comp = JSON.parse(result);
 
-			console.log("start_component id =  ", comp.id);
+			console.log("start_component id = ", comp.id);
 			var qty = document.getElementsByName(qty_input)[0].value;
 
 			active_comp.id = comp.id;
@@ -2031,7 +2031,7 @@ function comp_milestone(temp_reading,force,qa_code)
 		// component.M2_temp = document.getElementsByName('m2_temp')[0].value;
 		component.M1_temp = last_temp;
 		component.M1_chef_id = active_comp['M1_chef_id']; // TODO
-		
+
 		url = RESTHOME + 'M1_comp.php';
 	}
 	else if (active_comp['M2_time'] == '') { 
@@ -2062,9 +2062,8 @@ function comp_milestone(temp_reading,force,qa_code)
 		component.M3_chef_id = 0;
 		url = RESTHOME + 'M3_comp.php';
 	}
-	var data =  {data: JSON.stringify(component)};
-	console.log("Sent Off: ", data);
-	console.log('to ' + url);
+	var data = { data: JSON.stringify(component) };
+	console.log(tag,"sent off: ", data,' to ', url);
 	$.ajax({
 		url: url,
 		type: "POST",
@@ -2476,24 +2475,24 @@ function reprint_labels()
 
 function print_component_labels(qty)
 {
-	console.log("print_component_labels ",qty);
-	console.log(active_comp);
-	var comp = active_comp;
+	let tag = 'print_component_labels: ';
+	console.log(tag,qty, 'active_comp', active_comp);
+	let comp = active_comp;
 	comp.copies = qty;
 	if (!comp.preparedBy) {
-		console.log(comp);
-		var chef = get_chef_by_id(comp['M1_chef_id']);
+		console.log(tag, "comp: ", comp);
+		let chef = get_chef_by_id(comp['M1_chef_id']);
 		if (chef) {
 		        comp.preparedBy = chef['label'];
 		} else {
-			console.log("print_component_labels found no chef");
+			console.log(tag, "found no chef");
 			comp.preparedBy = "ERROR" ; // should be set by now
 		}
 	}
 	
-	var data = {data: JSON.stringify(comp)};
-	console.log("print_component_labels sent off: ", data);
-	console.log(comp);
+	let data = {data: JSON.stringify(comp)};
+	console.log(tag, "sent off: ", data);
+	console.log(tag, "comp: ".comp);
 
 	$.ajax({
 		url: RESTHOME + "comp_label.php",
