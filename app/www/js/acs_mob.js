@@ -742,23 +742,29 @@ function plating_comp_barcode_scanned(cid,batch_change)
 
 function process_scanned_plating_comp(comp,batch_change)
 {
+	let tag = 'process_scanned_plating_comp: ';
 	// console.log('plating_comp_barcode_scanned '  + barcode_id);
 	// find item in active components
 
-	console.log("plating_comp_barcode_scanned found " + comp.description + ' ' + comp.expired);
+	console.log(tag,"plating_comp_barcode_scanned found " + comp.description + ' ' + comp.expired);
 	if (comp.expired == 1) {
-		console.log('item expired');
-		document.getElementById('chk_plat_temp_item_div').innerHTML = comp.description;
-		//document.getElementById('chk_temp_item_time_div').innerHTML = '';
-		//document.getElementById('chk_temp_item_time_div2').innerHTML = '';
-		document.getElementById('m2_pt_sl_div2').innerHTML = 'expired ' + comp.expiry_date;
+		console.log(tag,'item expired');
+		//fail anchor node
+		let anchor = document.getElementById('m2_pt_sl_div');
+		clearChildren(anchor);
+
+		anchor.appendChild(icon_fail());
+		anchor.appendChild(new_node('div',"ITEM EXPIRED","red center"));
+		anchor.appendChild(new_node('div',comp.description,"red center"));
+		anchor.appendChild(new_node('div','expired ' + comp.expiry_date,"red center"));
+
 		openPage('plating_temp_div', this, 'red','mobile_main','tabclass');
 		openPage('m2_sl_plating', this, 'red','m_modal2','tabclass');
 		
 		return; // jump to expired page
 	}
 	if (plating_item && plating_item.items) {
-		var items = plating_item.items;
+		let items = plating_item.items;
 		console.log("now checking plating item " + items.length,batch_change);
 		for (var i = 0; i < items.length; i++) {
 			// clear id if M1_temp not set
@@ -861,6 +867,7 @@ function set_plating_M1_temp(temperature)
 	} else {
 		//set red
 		show_temp(temperature,true);
+		//set recheck text
 		let icon_anchor = document.getElementById('m_plating_temp').children[0].getElementsByClassName('temp_icon_anchor')[0];
 		console.log(tag,'icon_anchor: ',icon_anchor);
 		checkTempDiv(
@@ -1055,7 +1062,7 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 	th.innerHTML=margin('TEMP');
 	tr.appendChild(th);
 	tab.appendChild(tr);
-	var line = 1;
+
 	var all_good = true; // check before useby date and temp measured ok
 	if (plating_item != null) {
 		console.log(tag,"found menu_item ",plating_item.dish_name,plating_item.items.length);
@@ -1072,19 +1079,38 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 			}
 			else {
 				tr = document.createElement('tr');
-				// tr.appendChild(new_td(line++,'item'));
-				var clickdiv = "<div onclick='plating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
+
+				//this does not actually set the right component, resulting in missing shelf life and failure to complete plating
+				//var clickdiv = "<div onclick='plating_comp_selected(" + i + ");'>" + items[i].description + "</div>";
+				var clickdiv = "<div>" + items[i].description + "</div>";
+
 				// show items in coolroom ready to be plated
-			 	//clickdiv += show_plating_comps(items[i].description);
-			//	tr.appendChild(new_td(items[i].description,'item'));
+			 	// clickdiv += show_plating_comps(items[i].description);
+				// tr.appendChild(new_td(items[i].description,'item'));
+
 				tr.appendChild(new_td(clickdiv,'item'));
 				var td = document.createElement('td');
 				td.id = 'plating_item_checked_' + i;
-				td.innerHTML = '-';
+
 				if (items[i].component_id) {
-					td.innerHTML = '<image src="img/icon_pass.svg">';
-				}
-				else {
+					let d = new Date;
+					let dex = new Date(items[i].expiry_date);
+					if (dex.getTime() > d.getTime()) {
+
+						// TODO actually check SL here
+						td.appendChild(icon_pass());
+					} else {
+						console.log(tag, 'item ',i, ' expires', items[i].expiry_date, dex);
+						console.log(tag, 'item ',i, ' not expired: ', dex.getTime() > d.getTime(), dex.getTime(), '>', d.getTime());
+
+						td.appendChild(icon_fail());
+
+						console.log(tag, 'item[',i,'] is expired');
+						all_good = false;
+					}
+				} else {
+					td.innerHTML = '-';
+					console.log(tag, 'item[',i,'].component_id is empty');
 					all_good = false;
 				}
 				tr.appendChild(td);
@@ -2356,24 +2382,22 @@ function load_tracking_data()
 
 function get_comps_for_plating(item)
 {
-	console.log('get_comps_for_plating',item);
+	let tag = 'get_comps_for_plating: ';
+	console.log(tag,item);
 	$.ajax({
 		url: RESTHOME + "get_active_comps.php?finished=true",
 		type: "POST",
 		dataType: 'json',
-		// contentType: "application/json",
 		success: function (result) {
 			plating_comps = result;
-			// document.getElementById('active_comps').innerHTML = result;
-			console.log("got " + result.length + " comps for plating");
-			// m_show_active_components(result);
+			console.log(tag,"got " + result.length + " comps for plating");
 			do_show_menu_item_components(item);
 		},
 		done: function (result) {
-			console.log("done get_comps_for_plating");
+			console.log(tag,"done");
 		},
 		fail: (function (result) {
-			console.log("fail get_comps_for_plating", result);
+			console.log(tag,"fail", result);
 		})
 	});
 }
@@ -2922,6 +2946,14 @@ function iconProbe(){
 
 function iconIR(){
 	return new_img("img/icon_IR.svg","icon_IR");
+}
+
+function icon_pass(){
+	return new_img("img/icon_pass.svg","icon_pass");
+}
+
+function icon_fail(){
+	return new_img("img/icon_fail.svg","icon_fail");
 }
 
 function new_img(source,classname = "") {
