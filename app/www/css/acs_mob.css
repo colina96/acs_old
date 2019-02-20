@@ -841,11 +841,16 @@ td {
 .temp_reading {
 	font-size: 25vw;
 	margin: 0 auto;
-	margin-top: 25px;
+	margin-top: 20px;
 	display: table;
 	font-weight: bold;
 	color:var(--acs_green);
 }
+
+.font-m{
+	font-size: 10vw;
+}
+
 .red {
 	color:var(--acs_red);
 }

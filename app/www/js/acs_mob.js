@@ -1817,10 +1817,10 @@ function force_M3(uid)
 
 function k_qa_override(uid)
 {
-	console.log('k_qa_override');
+	let tag = 'k_qa_override: ';
 	active_comp.qa_override_uid = uid;
 	active_comp.qa_override_temp = last_temp;
-	console.log(active_comp);
+	console.log(tag,'active_comp: ',active_comp);
 	var chef = get_chef_by_id(uid);
 	if (active_comp['M2_time'] && active_comp['M2_time'].length > 1) { // at M3
 		document.getElementById('force_M3_overdue_uid').innerHTML = chef['label'];
