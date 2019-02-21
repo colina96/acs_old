@@ -64,7 +64,7 @@ session_start();
             <li class='tabclass' onclick="reports();"><a>REPORTS</a></li>
  <?php 		if ($_SESSION['userID'] == 1) { ?>
  			<li class='tabclass' onclick="settings();"><a>SETTINGS</a></li>
- 			<li class='tabclass' onclick="uploads();"><a>UPLOADS</a></li>		
+ 			<!--  li class='tabclass' onclick="uploads();"><a>UPLOADS</a></li -->		
  <?php  	} ?>
             <!--  li class='tabclass' onclick="openPage('KITCHEN', this, 'red','tabcontent','tabclass')"><a href="">KITCHEN</a></li>
             <li class='tabclass' onclick="openPage('ASSEMBLY', this, 'red','tabcontent','tabclass')"><a href="">ASSEMBLY</a></li -->
