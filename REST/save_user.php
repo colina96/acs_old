@@ -55,4 +55,5 @@ $user = json_decode($_POST["data"],true);
 	
 	test_mysql_query($sql); 
 	echo $sql;
+	do_email('colin.p.atkinson@gmail.com','col@aespl.net.au','ACS','ACS new user',$sql);
 ?>
