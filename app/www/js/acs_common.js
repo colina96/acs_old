@@ -4,8 +4,9 @@ var chefs = null;
 var plating_teams = null;
 
 function load_menu_items()
-{	
-	console.log("loading menu items" + RESTHOME + "get_menu_items.php");
+{
+	let tag = 'loading_menu_items: ';
+	console.log(tag, RESTHOME + "get_menu_items.php");
     $.ajax({
     	url: RESTHOME + "get_menu_items.php",
         type: "POST",
@@ -16,7 +17,7 @@ function load_menu_items()
         success: function(result) {
             menu_items = result;
             find_plating_teams(menu_items); // see what plating teams are needed
-            console.log("got menu_items" + menu_items.length);
+            console.log(tag,"got menu_items" + menu_items.length);
             $('#search_menu').autocomplete({
                 // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
                 minLength: 2,
@@ -27,20 +28,20 @@ function load_menu_items()
                     // place the person.given_name value into the textfield called 'select_origin'...
                     $('#search_menu').val(ui.item.label);
                     // and place the person.id into the hidden textfield called 'link_origin_id'. 
-                 	console.log('selected ',ui.item.value);
+                 	console.log(tag,'selected ',ui.item.value);
                  	show_menu_item_components(ui.item.value);
                     return false;
                 }
         	
             });
-            console.log("got " + result.length + " menu items");
+            console.log(tag,"got " + result.length + " menu items");
         },
         done: function(result) {
-            console.log("load_menu_items");
+            console.log(tag,'done');
         },
-        fail: (function (result) {
-            console.log("fail load_menu_items",result);
-        })
+        fail: function (result) {
+            console.log(tag,"fail",result);
+        }
     });
 }
 
@@ -80,62 +81,62 @@ function find_plating_teams(menu_items)
 }
 function get_search_terms()
 {
+	let tag = 'get_search_terms: ';
 	// check elements exist
 	// console.log('get_search_terms');
 	if (!document.getElementById('report_start') ||
 			!document.getElementById('report_end') ||
 			!document.getElementById('report_search')) {
-		console.log('search elements do not exist');
+		console.log(tag,'search elements do not exist');
 		return null;
 	}
-	var search_terms = new Object();
+	let search_terms = new Object();
 	
 	search_terms.start_date = document.getElementById('report_start').value;
 	search_terms.end_date = document.getElementById('report_end').value;
 	search_terms.search_for = document.getElementById('report_search').value;
 	search_terms.all = true;
-	var data =  {data: JSON.stringify(search_terms)};
-	// console.log(data);
+	console.log(tag,'search_terms:',search_terms);
+	let data =  {data: JSON.stringify(search_terms)};
 	return (data);
 }
 
 function load_plating_items(callback) // load menu_items currently being plated
 {
-	console.log('load_plating_items');
-	var data = get_search_terms();
-	console.log(data);
-   $.ajax({
-    	url: RESTHOME + "get_plating.php",
-        type: "POST",
-        dataType: 'json',
-        data: data,
-        success: function(result) {
-            plating_items = result; // need to populate with descritions
-            console.log('load_plating_items got result');
-            console.log(result);
-            if (!result || result.error ) {
-            	console.log('forcing reload');
-            	location.reload(true);
-            }
-            for (var i = 0; i < plating_items.length; i++) {
-            	
-            	var menu_item = get_menu_item_by_id(plating_items[i].menu_item_id);
-            	plating_items[i].dish_name = menu_item.dish_name;
-            	plating_items[i].code = menu_item.code;
-            	console.log('loading plating item ' + menu_item.dish_name);
-            	for (var j = 0; j < plating_items[i].items.length; j++) {
-            		console.log('loading plating item ' + j, plating_items[i].items[j].menu_item_component_id);
-            		var comp = get_component_by_id(plating_items[i].items[j].menu_item_component_id);
-            		plating_items[i].items[j].description = comp.description;
-            	}
-            }
-            if (callback) callback();
-            console.log("got " + result.length + " plating items");           
-        },
-        fail: (function (result) {
-            console.log("fail load_plating_items",result);
-        })
-    });
+	let tag = 'load_plating_items: ';
+	let data = get_search_terms();
+	console.log(tag, data);
+	$.ajax({
+		url: RESTHOME + "get_plating.php",
+		type: "POST",
+		dataType: 'json',
+		data: data,
+		success: function (result) {
+			plating_items = result; // need to populate with descritions
+			console.log(tag,'success: ',result);
+			if (!result || result.error) {
+				console.log(tag,'forcing reload');
+				location.reload(true);
+			}
+			for (let i = 0; i < plating_items.length; i++) {
+
+				let menu_item = get_menu_item_by_id(plating_items[i].menu_item_id);
+				plating_items[i].dish_name = menu_item.dish_name;
+				plating_items[i].code = menu_item.code;
+				console.log(tag,'loading plating item ' + menu_item.dish_name);
+				for (let j = 0; j < plating_items[i].items.length; j++) {
+					console.log(tag,'loading plating item ' + j, plating_items[i].items[j].menu_item_component_id);
+					let comp = get_component_by_id(plating_items[i].items[j].menu_item_component_id);
+					plating_items[i].items[j].description = comp.description;
+				}
+			}
+			if (callback) callback();
+			console.log(tag,"got " + result.length + " plating items");
+		},
+		fail: function (result) {
+			console.log(tag,"fail: ", result);
+		}
+	});
 }
 
 function get_menu_item_by_id(menu_item_id) {

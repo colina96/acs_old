@@ -414,12 +414,15 @@ function goto_home()
 
 function goto_plating_teams()
 {
+	let tag = 'goto_plating_teams: ';
+	console.log(tag,'load_menu_items');
 	load_menu_items();
+	console.log(tag,'load_plating_items');
 	load_plating_items();
 	mode = 'plating';
 	openPage('plating_div', this, 'red','mobile_main','tabclass');
 	openPage('m_sel_team', this, 'red','m_modal','tabclass');
-	document.getElementById('plating_comment_div').innerHTML = '';
+	clearChildren(document.getElementById('plating_comment_div'));
 }
 
 function save_plating_team()
@@ -444,10 +447,14 @@ function save_plating_team()
 	});
 }
 
-function show_plating_items(team_id,tab)
-{
-	var item_count = 0;
-	console.log('show_plating_items');
+function show_plating_items(team_id,tab) {
+	let tag= 'show_plating_items: ';
+	let item_count = 0;
+	if(menu_items == null){
+		console.log(tag,'menu_items: ', menu_items, 'returning');
+		return;
+	}
+	console.log(tag,'menu_items.length: ', menu_items.length);
 	for (var i = 0; i < menu_items.length; i++) {
 		if (menu_items[i]['plating_team'] == team_id) {
 			if (item_count == 0 && team_id != active_plating_team) {
@@ -470,7 +477,7 @@ function show_plating_items(team_id,tab)
 
 			// create item entry
 			var plating_item = get_plating_item_by_menu_item_id(menu_items[i]['id']);
-			if (plating_item) console.log(plating_item);
+			if (plating_item) console.log(tag,plating_item);
 			var required = parseInt(menu_items[i]['current_shift']) - parseInt(menu_items[i]['current_shift_done']);
 		//	if (parseInt(menu_items[i]['current_shift']) > 0) {
 			if (required > 0) {
@@ -511,11 +518,15 @@ function show_plating_items(team_id,tab)
 
 function goto_plating()
 {
+	let tag = 'goto_plating: ';
 	// ???? load_menu_items();
 	hide('plating_return');
 	hide('plating_print_labels');
-	if (active_plating_team == null) {
+	console.log(tag, 'active_plating_team: ', active_plating_team );
+	if (active_plating_team == null || active_plating_team == '0' || menu_items==null) {
+		console.log(tag, 'no team set, goto_plating_teams()');
 		goto_plating_teams();
+		return;
 	}
 	openPage('m_plating', this, 'red','mobile_main','tabclass');
 	openPage('m_plating_sched', document.getElementById('m_plating_team_tab'), 'red','m_modal','tabclass');
@@ -1011,7 +1022,6 @@ function start_plating_item()
             console.log("new_plating_item fail ",result);
         }
     });
-	// goto_plating_teams();
 }
 
 function reprint_plating_labels()
