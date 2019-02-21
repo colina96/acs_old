@@ -1,5 +1,10 @@
 <?php
 
+require('PHPMailer/PHPMailer.php');
+require('PHPMailer/Exception.php');
+
+use PHPMailer\PHPMailer\PHPMailer;
+
 	$hostname = '127.0.0.1';
 	$dbuser = 'acs';
 	$dbpw = 'acs'; 
@@ -261,5 +266,21 @@ function get_params()
 	}
 	return $params;
 	
+}
+
+function do_email($to,$from,$fromname,$subject,$bodytext)
+{
+
+	$email = new PHPMailer();
+	$email->From      = $from;
+	$email->FromName  = $fromname;
+	$email->Subject   = $subject;
+
+	$email->AddAddress( $to);
+	$email->Body      = $bodytext;
+
+
+	// echo "sending email";
+	return $email->Send();
 }
 
