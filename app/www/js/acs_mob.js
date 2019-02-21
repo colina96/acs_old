@@ -942,15 +942,15 @@ function find_plating_item(menu_item_id)
 
 function print_plating_labels()
 {
-	
-	console.log(" print_plating_labels ");
+	let tag = "print_plating_labels: ";
+	console.log(tag);
 
 //	var p = Object.assign({}, active_comp);
 //	comp.copies = qty;
 	plating_item.trolley_labels = parseInt(document.getElementById('trolley_labels').innerHTML);
 	plating_item.description_labels = parseInt(document.getElementById('pt_description_labels').innerHTML);
 	var data =  {data: JSON.stringify(plating_item)};
-    console.log("Sent Off: ", data);
+    console.log(tag,"Sent Off: ", data);
     
     $.ajax({
         url: RESTHOME + "plating_labels.php",
@@ -962,21 +962,20 @@ function print_plating_labels()
             
         },
         
-        fail: (function (result) {
+        fail: function (result) {
             console.log("print_plating_labels fail ",result);
-        })
+        }
     });
-	goto_plating_teams();
-	
+	goto_plating();
 }
 
 function start_plating_item()
 {
-	
-	console.log('start_plating_item',plating_item['M1_time'],plating_item['id']);
+	let tag = 'start_plating_item: ';
+	console.log(tag,plating_item['M1_time'],plating_item['id']);
 	
 	if (plating_item['id']) {
-		console.log('already started');
+		console.log(tag,'already started');
 		print_plating_labels();
 		// reprint labels
 		return;
@@ -987,8 +986,7 @@ function start_plating_item()
 	plating_item.trolley_labels = parseInt(document.getElementById('trolley_labels').innerHTML);
 	plating_item.description_labels = parseInt(document.getElementById('pt_description_labels').innerHTML);
 	var data =  {data: JSON.stringify(plating_item)};
-    console.log("Sent Off: ", data);
-    console.log(plating_item);
+    console.log(tag,"Sent Off: ", data, 'for plating_item',plating_item);
     
     $.ajax({
         url: RESTHOME + "new_plating_item.php",
@@ -996,7 +994,7 @@ function start_plating_item()
         data: data,
 
         success: function(result) {
-            console.log("new_plating_item result ",result);
+            console.log(tag,"new_plating_item result ",result);
             var p = JSON.parse(result);
             plating_item['plating_item_id'] = p['id'];
             plating_item['id'] = p['id'];
@@ -1009,12 +1007,11 @@ function start_plating_item()
             print_plating_labels();
         },
         
-        fail: (function (result) {
+        fail: function (result) {
             console.log("new_plating_item fail ",result);
-        })
+        }
     });
 	// goto_plating_teams();
-	
 }
 
 function reprint_plating_labels()
@@ -1028,8 +1025,7 @@ function reprint_plating_labels()
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 }
 
-function do_show_menu_item_components(menu_item_id,batch_change)
-{
+function do_show_menu_item_components(menu_item_id,batch_change) {
 	let tag = 'do_show_menu_item_components: ';
 	set_barcode_mode("PT_comp");
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
@@ -1130,15 +1126,13 @@ function do_show_menu_item_components(menu_item_id,batch_change)
 				hide('plating_print_labels');
 				show('plating_batch_change_btns');
 				set_barcode_mode('plating_batch_change');
-			}
-			else {
+			} else {
 				hide('plating_return');
 				hide('plating_batch_change_btns');
 				show('plating_print_labels');
 				plating_item.checked = true;
 			}
-		}
-		else {
+		} else {
 			show('plating_return');
 			hide('plating_batch_change_btns');
 			hide('plating_print_labels');
