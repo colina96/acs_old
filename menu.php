@@ -335,7 +335,7 @@ function show_menu(filter)
     table.className = 'menu_table';
     table.width='100%';
     var tr = document.createElement('tr');
-    var header = ['ITEM CODE','ITEM DESCRIPTION','LOC','PREP TYPE','SENSOR TYPE','STRAIGHT TO PLATING','PLATING TEAM','SPLIT','',''];
+    var header = ['ITEM CODE','ITEM DESCRIPTION','PREP- LOCATION','STP','HR','PT','SENSOR TYPE','PLATING TEAM','SPLIT','',''];
     for (var i in  header) {
       //   console.log(i);
     	var th = document.createElement('th');
@@ -348,7 +348,7 @@ function show_menu(filter)
     tr.appendChild(document.createElement('th'));
     table.appendChild(tr);
     
-    var menu_fields = ['code','dish_name','','','',''];
+    var menu_fields = ['code','dish_name','','','','',''];
     for (var k in menu_items) {
     	var tr = document.createElement('tr');
     	tr.className = 'menu_item_row';
@@ -365,14 +365,14 @@ function show_menu(filter)
 	    	td.innerHTML = select_plating_team(item.plating_team,item.id);
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
-	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split1_" + item.id + "'value='" +  item.split1 + "' onchange='set_split(this,1," + item.id + ");'>";
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split1_" + item.id + "'value='" +  item.split1 + "' onchange='set_db_field(this,\"MENU_ITEMS\",\"split1\"," + item.id + ");'>";
        		
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
-	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split2_" + item.id + "'value='" +  item.split2 + "' onchange='set_split(this,2," + item.id + ");'>";
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split2_" + item.id + "'value='" +  item.split2 + "' onchange='set_db_field(this,\"MENU_ITEMS\",\"split2\"," + item.id + ");'>";
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
-	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split3_" + item.id + "'value='" +  item.split3 + "' onchange='set_split(this,3," + item.id + ");'>";
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split3_" + item.id + "'value='" +  item.split3 + "' onchange='set_db_field(this,\"MENU_ITEMS\",\"split3\"," + item.id + ");'>";
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
 	    	td.innerHTML = "<div class='btn' id='add' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
@@ -384,6 +384,7 @@ function show_menu(filter)
 	    	td.colSpan = 2;
 	    	tr.appendChild(td);
 	        table.appendChild(tr);
+	        
 	        if (item['components']) {
 	         //   console.log(item['components']);
 	            var components = item['components'];
@@ -399,7 +400,7 @@ function show_menu(filter)
 	            	}
 	            	var innerHTML = "<div";
 	            	if (menu_item_components[mid].high_risk == 1) {
-	            		innerHTML += " onclick='edit_high_risk_component(" + mid + ");'";
+	            	// 	innerHTML += " onclick='edit_high_risk_component(" + mid + ");'";
 	            		
 	            	}
 	            	innerHTML += ">" + menu_item_components[mid].description + "</div>";
@@ -411,12 +412,16 @@ function show_menu(filter)
 	            	td.innerHTML = "<input type='text' maxlength='3' size='3' class='edit_location' name='location_" + mid + "'value='" +  menu_item_components[mid].location + "' onchange='set_location(this," + mid + ");'>";
 	           		// td.innerHTML += 'location';
 	            	tr.appendChild(td);
+	            	// STP
 	            	td = document.createElement('td');
-	            	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,false);
+	            	var innerHTML = "<input type='checkbox' value='1' name='stp_" + mid + "' onclick='set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"stp\"," + menu_item_components[mid].id + ");'";
+	            	if (menu_item_components[mid].stp == 1) {
+	                	innerHTML += ' checked';
+	            	}
+	            	innerHTML += '>';
+	            	td.innerHTML = innerHTML;
 	            	tr.appendChild(td);
-	            	td = document.createElement('td');
-	            	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
-	            	tr.appendChild(td);
+	            	// HR
 	            	td = document.createElement('td');
 	            	var innerHTML = "<input type='checkbox' name='high_risk_" + mid + "' onclick='set_high_risk(this," + mid + ");'";
 	            	if (menu_item_components[mid].high_risk == 1) {
@@ -426,8 +431,15 @@ function show_menu(filter)
 	            	td.innerHTML = innerHTML;
 	            	tr.appendChild(td);
 	            	td = document.createElement('td');
-	            	td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>+ HR ingredient</div>";
-	            	td.colSpan = 2;
+	            	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,false);
+	            	tr.appendChild(td);
+	            	td = document.createElement('td');
+	            	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
+	            	tr.appendChild(td);
+	            	
+	            	td = document.createElement('td');
+	            	//td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>+ HR ingredient</div>";
+	            	td.colSpan = 5;
 	            	if (menu_item_components[mid].subcomponents) {
 	                	// td.innerHTML += 'checked';
 	            	}
@@ -437,6 +449,7 @@ function show_menu(filter)
 	            	td.colSpan = 2;
 	            	tr.appendChild(td);
 	            	table.appendChild(tr);
+	            	/*
 	            	if (menu_item_components[mid].subcomponents) {
 	                	var subs = menu_item_components[mid].subcomponents;
 	                	for (var s in subs) {
@@ -459,13 +472,14 @@ function show_menu(filter)
 	                    	tr.appendChild(td);
 	                    	table.appendChild(tr);
 	                	}
-	            	}
+	            	} */
 	            	
 	            }
 	        }
 	        else {
 	            console.log('no components');
 	        }
+	        
 	        table.appendChild(tr);
         }
       //   console.log(k);
@@ -532,6 +546,43 @@ function set_split(input,split,id)
     });
 }
 
+function set_db_field(input,tablename,field,id)
+{
+	console.log('set_db_field',input,tablename,field,id,input.type);
+	var d = new Object();
+	var data = Object();
+	data['id'] = id;
+	if (input.type == 'checkbox') 
+		data[field] = input.checked?1:'false';
+	else
+		data[field] = input.value;
+	d.data = data;
+	d.TABLENAME = tablename;
+	d['action'] = 'UPDATE';
+	var data =  {data: JSON.stringify(d)};
+    console.log("Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "replace.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { // need to get the id of the new component back to print labels
+            console.log("set_split result ",result);
+            
+            if (result.indexOf('error') >= 0)
+            {
+                let div = document.createElement('div');
+                div.innerHTML = result;
+                document.body.appendChild(div);
+            }
+ 
+        },
+        fail: (function (result) {
+            console.log("set_location fail ",result);
+        })
+    });
+}
 function set_location(input,id)
 {
 	console.log('set_location',input.value,id);

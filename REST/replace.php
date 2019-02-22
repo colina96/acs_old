@@ -141,7 +141,7 @@ function build_update_sql($table_name,$fields,$data)
 		}
 		else if (substr($fieldtype,0,7) == "varchar" )
 		{
-			if (!empty($data[$fieldname])) {
+			if (isset($data[$fieldname])) {
 				$sql .= $delim.$fieldname."='".mysql_escape_string( $data[$fieldname])."'";
 				
 			}
@@ -149,15 +149,23 @@ function build_update_sql($table_name,$fields,$data)
 		
 		else if (substr($fieldtype,0,3) == "int" || $fieldtype == "tinyint(1)")
 		{
-			if (!empty($data[$fieldname])) {
+			if (isset($data[$fieldname])) {
+				if ($data[$fieldname] != '')
+					$sql .= $delim.$fieldname."=".mysql_escape_string( $data[$fieldname])."";
+					else
+						$sql .= $delim.$fieldname."=0";
 				//$sql .= $fieldname."='".mysql_escape_string( $user[$fieldname])."'";
-				$sql .= $delim.$fieldname."=".mysql_escape_string( $data[$fieldname]);
+				// $sql .= $delim.$fieldname."=".mysql_escape_string( $data[$fieldname]);
 				
 			}
 		}
 		else {
-			if (!empty($data[$fieldname])) {
-				$sql .= $delim.$fieldname."='".mysql_escape_string( $data[$fieldname])."'";
+			// if (isset($data[$fieldname])) {
+			if (array_key_exists($fieldname,$data)) {
+				if (isset($data[$fieldname]))
+					$sql .= $delim.$fieldname."='".mysql_escape_string( $data[$fieldname])."'";
+				else 
+					$sql .= $delim.$fieldname."=null";
 			
 			}
 			// 	echo "unknown fieldtype ".$fieldtype;
