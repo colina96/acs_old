@@ -110,6 +110,8 @@ CREATE TABLE MENU_ITEMS (
 	code varchar(20),
 	dish_name varchar(100),
 	plating_team int,
+	split1 int,
+	split2 int,
 	constraint pk_example primary key (id)
 );	
 
@@ -302,3 +304,15 @@ insert into PARAMS values(null,'PLATING_LABELS1_PORT','9100',now());
 insert into PARAMS values(null,'PLATING_LABELS2_IP','10.0.0.99',now());
 insert into PARAMS values(null,'PLATING_LABELS2_PORT','9100',now());
 
+
+create table SUPPLIERS
+(
+	id smallint unsigned not null auto_increment, 
+	name varchar(30) not null,
+	address1 varchar (30),
+	address2 varchar (30),
+	phone varchar (30),
+	lastchange datetime,
+	constraint pk_example primary key (id) 
+);
+insert into SUPPLIERS values(null,'Vic Meats','Mascot','Australia','123456789',now());

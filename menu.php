@@ -335,7 +335,7 @@ function show_menu(filter)
     table.className = 'menu_table';
     table.width='100%';
     var tr = document.createElement('tr');
-    var header = ['ITEM CODE','ITEM DESCRIPTION','LOC','PREP TYPE','SENSOR TYPE','STRAIGHT TO PLATING','PLATING TEAM'];
+    var header = ['ITEM CODE','ITEM DESCRIPTION','LOC','PREP TYPE','SENSOR TYPE','STRAIGHT TO PLATING','PLATING TEAM','SPLIT 1','SPLIT 2'];
     for (var i in  header) {
       //   console.log(i);
     	var th = document.createElement('th');
@@ -363,6 +363,13 @@ function show_menu(filter)
 	        }
 	        td = document.createElement('td');
 	    	td.innerHTML = select_plating_team(item.plating_team,item.id);
+	    	tr.appendChild(td);
+	    	td = document.createElement('td');
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split1_" + item.id + "'value='" +  item.split1 + "' onchange='set_split(this," + item.id + ");'>";
+       		
+	    	tr.appendChild(td);
+	    	td = document.createElement('td');
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split2_" + item.id + "'value='" +  item.split2 + "' onchange='set_split(this," + item.id + ");'>";
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
 	    	td.innerHTML = "<div class='btn' id='add' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";

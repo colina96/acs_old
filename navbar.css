@@ -96,6 +96,9 @@ td { padding: 10px; }
   overflow:auto;
 }
 
+.edit_location {
+	color:black;
+}
 #daily_orders_div {
 	height: 100%;
 	overflow:auto;
