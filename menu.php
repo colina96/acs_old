@@ -1,21 +1,35 @@
-<div class="menu_buttons">
-    <div class="menu_type" id="menu_status">
-        <button type='button' class='acs_menu_btn' href="#" id="active_menu"
-                onclick="show_active_menus()">ACTIVE</button>
-        <button type='button' class='acs_menu_btn' href="#" id="future_menu"
-                onclick="open_future_menus();">FUTURE</button>
-        <button type='button' class='acs_menu_btn' href="#" id="expired_menu"
-                onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
-    </div>
-    
-    <div class="acs_sidebar">
-    <div id='search_menu_div'><input type='text' id='menu_search' onkeyup='filter_menu(this)'  placeholder="Search"></div>
-	
-        <button type='button' class='button_main' href="#" id="add_new_menu"
-                onclick="openPage('new_menu', this, 'red','menu_details','acs_menu_btn')">+ Add new menu</button>
-    </div>
+<div id='menu_buttons1'>
+	<div class="menu_buttons" >
+	    <div class="menu_type" id="menu_status">
+	        <button type='button' class='acs_menu_btn' href="#" id="active_menu"
+	                onclick="show_active_menus()">ACTIVE</button>
+	        <button type='button' class='acs_menu_btn' href="#" id="future_menu"
+	                onclick="open_future_menus();">FUTURE</button>
+	        <button type='button' class='acs_menu_btn' href="#" id="expired_menu"
+	                onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
+	    </div>
+	    
+	   
+	    <div class='acs_sidebar'> 
+		
+	        <button type='button' class='button_main' href="#" id="add_new_menu"
+	                onclick="openPage('new_menu', this, 'red','menu_details','acs_menu_btn')">+ Add new menu</button>
+	   </div>
+	</div>
 </div>
-
+<div id='menu_buttons2'>
+	<div class="menu_buttons">
+		<div class="menu_type">
+			<button type='button' class='acs_menu_btn' href="#" 
+	                onclick="show_active_menus()">back</button>
+		</div>
+		<div class="acs_sidebar">
+	    <input type='text' id='menu_search' onkeyup='filter_menu(this)'  placeholder="Search">
+		
+	        
+	    </div>
+	</div>
+</div>
 <div class='acs_main'>
 
 		<div class="acs_right_content">
@@ -328,7 +342,10 @@ function filter_menu_item(item,filter)
 }
 function show_menu(filter)
 {
-	show('search_menu_div');
+	// show('search_menu_div');
+	// openPage('menu_buttons2',this,'none','menu_buttons');
+	show('menu_buttons2');
+	hide('menu_buttons1');
 	var div = document.getElementById('future_menus');
 	div.innerHTML = show_menu_details(div);
     var table = document.createElement('table');
@@ -342,9 +359,9 @@ function show_menu(filter)
     	th.innerHTML = header[i];
     	tr.appendChild(th);
     } 
-    var th = document.createElement('th')
+ /*   var th = document.createElement('th')
     th.innerHTML = "<div class='btn' id='add' onclick='new_menu_item();'>+</div>";
-    tr.appendChild(th);
+    tr.appendChild(th); */
     tr.appendChild(document.createElement('th'));
     table.appendChild(tr);
     
@@ -374,14 +391,15 @@ function show_menu(filter)
 	    	td = document.createElement('td');
 	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split3_" + item.id + "'value='" +  item.split3 + "' onchange='set_db_field(this,\"MENU_ITEMS\",\"split3\"," + item.id + ");'>";
 	    	tr.appendChild(td);
+	    	/*
 	    	td = document.createElement('td');
 	    	td.innerHTML = "<div class='btn' id='add' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
 	    	
 	    	tr.appendChild(td);
-	
+			*/
 	       	td = document.createElement('td');
 	    	td.innerHTML += "<image class='icon' id='delete_dish' src='app/www/img/icon_delete_white.svg' onclick='del_menuitem("+ item['id'] + "," + k + ");'></image>";
-	    	td.colSpan = 2;
+	    	// td.colSpan = 2;
 	    	tr.appendChild(td);
 	        table.appendChild(tr);
 	        
@@ -439,7 +457,7 @@ function show_menu(filter)
 	            	
 	            	td = document.createElement('td');
 	            	//td.innerHTML += "<div class='add_subcompdiv' onclick='add_subcomponent(" + mid + ");'>+ HR ingredient</div>";
-	            	td.colSpan = 5;
+	            	td.colSpan = 4;
 	            	if (menu_item_components[mid].subcomponents) {
 	                	// td.innerHTML += 'checked';
 	            	}
@@ -479,11 +497,35 @@ function show_menu(filter)
 	        else {
 	            console.log('no components');
 	        }
-	        
-	        table.appendChild(tr);
+	        var tr = document.createElement('tr');
+	    	// tr.className = 'menu_item_row';
+	
+		    td = document.createElement('td');
+		    td.innerHTML = ' -- ';
+		    
+		    tr.appendChild(td);
+		    td = document.createElement('td');
+		    td.innerHTML = "<button type='button' class='button_main' onclick='new_menu_item_component(" + item['id'] + ");'>+ Add new component</button>";
+		    	
+		    tr.appendChild(td);
+				
+	         table.appendChild(tr);
         }
       //   console.log(k);
     }  
+    var tr = document.createElement('tr');
+	// tr.className = 'menu_item_row';
+
+    td = document.createElement('td');
+    td.innerHTML = ' -- ';
+    
+    tr.appendChild(td);
+    td = document.createElement('td');
+    td.innerHTML = "<button type='button' class='button_main' onclick='new_menu_item();'>+ Add new dish</button>";
+    	
+    tr.appendChild(td);
+		
+     table.appendChild(tr);
     div.appendChild(table);
 }
 
@@ -1136,7 +1178,8 @@ function update_prep_type(s,comp_id)
 
 function show_active_menus()
 {
-	hide('search_menu_div');
+	hide('menu_buttons2');
+	show('menu_buttons1');
 	document.getElementById('menu_search').value = '';
 	openPage('active_menus', this, 'red','menu_details','acs_menu_btn');
 	$.ajax({
@@ -1192,11 +1235,15 @@ function show_menus(active,data)
 	tr.appendChild(new_td('Start','comp'));
     tr.appendChild(new_td('End','comp'));
     tr.appendChild(new_td('Name','comp'));
-    tr.appendChild(new_td('Edit','comp'));   
+   // tr.appendChild(new_td('Edit','comp'));   
     tr.appendChild(new_td('Delete','comp'));
    	tab.appendChild(tr);
    	for (i=0; i<data.length; ++i) {
    		var tr = document.createElement('tr');
+   		tr.setAttribute(
+				"onclick",
+				"load_menu(" + data[i]['id'] + ");"
+			);
    		tr.appendChild(new_td(data[i]['description'],'comp'));
    		var start_date = new Date(data[i]['start_date']);
    		tr.appendChild(new_td(show_date(start_date),'comp'));
@@ -1204,8 +1251,8 @@ function show_menus(active,data)
    		tr.appendChild(new_td(show_date(end_date),'comp'));
    		tr.appendChild(new_td(data[i]['code'],'comp'));
    		// tr.appendChild(new_td("<a href='acs_menu.php?menu_id=" + data[i]['id'] + "'>edit</a>",'comp'));
-   		var btn = "<div class='btn' onclick='load_menu(" + data[i]['id'] + ");'>Edit</div>";
-   		tr.appendChild(new_td(btn,'comp'));
+   		//var btn = "<div class='btn' onclick='load_menu(" + data[i]['id'] + ");'>Edit</div>";
+   		//tr.appendChild(new_td(btn,'comp'));
    		var btn = "<image class='icon' id='delete_menu' src='app/www/img/icon_delete.svg' onclick='delete_menu(" + data[i]['id'] + ");'></image>";
    		tr.appendChild(new_td(btn,'comp'));
    		//var del = "<a href=acs_menu?delete_menu=" + data[i]['id'] + ">&#x274c</a>";

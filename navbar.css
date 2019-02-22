@@ -170,10 +170,11 @@ td { padding: 10px; }
 	border: 1px solid lightgrey;
 }
 
-#search_menu_div {
+.search_menu_div {
 	position:absolute;
-	left: -180px;
-	display:none;
+	right: 0px;
+	width:100px;
+	.display:none;
 }
 #menu_search {
 	background-image: url('app/www/img/icon_search.png');
