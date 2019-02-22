@@ -33,6 +33,10 @@ if (!empty($data['action'])) {
 		// build sql
 		$ret['sql'] = build_sql($table_name,$fields,$data['data']);
 	}
+	if ($data['action'] == 'UPDATE') {
+		// build sql
+		$ret['sql'] = build_update_sql($table_name,$fields,$data['data']);
+	}
 	if ($data['action'] == 'GET') {
 		// build sql
 		
@@ -79,31 +83,90 @@ function build_sql($table_name,$fields,$data)
 			else $vals .= 'null';
 			$flds .= "id";
 		}
-		else if (substr($fieldtype,0,7) == "varchar" )
-		{
-				
-			//$sql .= $fieldname."='".mysql_escape_string( $user[$fieldname])."'";
-			$vals .= ",'".mysql_escape_string( $data[$fieldname])."'";
+		else if ($fieldname == "lastchange") {
+			$vals .= ",now()";
 			$flds .= ",".$fieldname;
 		}
+		else if (substr($fieldtype,0,7) == "varchar" )
+		{
+			if (!empty($data[$fieldname])) {	
+			//$sql .= $fieldname."='".mysql_escape_string( $user[$fieldname])."'";
+				$vals .= ",'".mysql_escape_string( $data[$fieldname])."'";
+				$flds .= ",".$fieldname;
+			}
+		}
 		else if ($fieldtype == "tinyint(1)") {
-				
-			if (empty($data[$fieldname]) || $data[$fieldname] != 1) {
-				$vals .= ",false";
-				// $sql .= $fieldname."=false";
+			if (!empty($data[$fieldname])) {	
+				if (empty($data[$fieldname]) || $data[$fieldname] != 1) {
+					$vals .= ",false";
+					// $sql .= $fieldname."=false";
+				}
+				else {
+					$vals .= ",true";
+					// $sql .= $fieldname."=true";
+				}
+				$flds .= ",".$fieldname;
 			}
-			else {
-				$vals .= ",true";
-				// $sql .= $fieldname."=true";
-			}
-			$flds .= ",".$fieldname;
 	
+		}
+		else if (substr($fieldtype,0,3) == "int" )
+		{
+			if (!empty($data[$fieldname])) {
+			//$sql .= $fieldname."='".mysql_escape_string( $user[$fieldname])."'";
+				$vals .= ",".mysql_escape_string( $data[$fieldname]);
+				$flds .= ",".$fieldname;
+			}
 		}
 		else {
 		// 	echo "unknown fieldtype ".$fieldtype;
 		}
 	}
 	$sql .= $flds.$vals.')';
+	test_mysql_query($sql);
+	return $sql;
+}
+
+function build_update_sql($table_name,$fields,$data)
+{
+
+	$sql = "update ".$table_name." set ";
+	$n = 0;
+	$delim = '';
+	foreach ($fields as $field) {
+		$fieldname = $field['Field'];
+		$fieldtype = $field['Type'];
+		
+		if ($fieldname == "lastchange") {
+			$sql .= ",lastchande= now()";
+		}
+		else if (substr($fieldtype,0,7) == "varchar" )
+		{
+			if (!empty($data[$fieldname])) {
+				$sql .= $delim.$fieldname."='".mysql_escape_string( $data[$fieldname])."'";
+				
+			}
+		}
+		
+		else if (substr($fieldtype,0,3) == "int" || $fieldtype == "tinyint(1)")
+		{
+			if (!empty($data[$fieldname])) {
+				//$sql .= $fieldname."='".mysql_escape_string( $user[$fieldname])."'";
+				$sql .= $delim.$fieldname."=".mysql_escape_string( $data[$fieldname]);
+				
+			}
+		}
+		else {
+			if (!empty($data[$fieldname])) {
+				$sql .= $delim.$fieldname."='".mysql_escape_string( $data[$fieldname])."'";
+			
+			}
+			// 	echo "unknown fieldtype ".$fieldtype;
+		}
+		$delim = ', ';
+	}
+
+	$sql .= " where id=".$data['id'];
+		
 	test_mysql_query($sql);
 	return $sql;
 }

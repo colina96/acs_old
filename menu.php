@@ -335,7 +335,7 @@ function show_menu(filter)
     table.className = 'menu_table';
     table.width='100%';
     var tr = document.createElement('tr');
-    var header = ['ITEM CODE','ITEM DESCRIPTION','LOC','PREP TYPE','SENSOR TYPE','STRAIGHT TO PLATING','PLATING TEAM','SPLIT 1','SPLIT 2'];
+    var header = ['ITEM CODE','ITEM DESCRIPTION','LOC','PREP TYPE','SENSOR TYPE','STRAIGHT TO PLATING','PLATING TEAM','SPLIT','',''];
     for (var i in  header) {
       //   console.log(i);
     	var th = document.createElement('th');
@@ -365,11 +365,14 @@ function show_menu(filter)
 	    	td.innerHTML = select_plating_team(item.plating_team,item.id);
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
-	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split1_" + item.id + "'value='" +  item.split1 + "' onchange='set_split(this," + item.id + ");'>";
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split1_" + item.id + "'value='" +  item.split1 + "' onchange='set_split(this,1," + item.id + ");'>";
        		
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
-	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split2_" + item.id + "'value='" +  item.split2 + "' onchange='set_split(this," + item.id + ");'>";
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split2_" + item.id + "'value='" +  item.split2 + "' onchange='set_split(this,2," + item.id + ");'>";
+	    	tr.appendChild(td);
+	    	td = document.createElement('td');
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split3_" + item.id + "'value='" +  item.split3 + "' onchange='set_split(this,3," + item.id + ");'>";
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
 	    	td.innerHTML = "<div class='btn' id='add' onclick='new_menu_item_component(" + item['id'] + ");'>+</div>";
@@ -493,6 +496,40 @@ function remove_subcomponent(menu_item_component_id,ingredient_id)
  	}
  	console.log('ERROR - subcomponent not found',ingredient_id);
 	
+}
+
+function set_split(input,split,id)
+{
+	console.log('set_split',input.value,split,id);
+	var d = new Object();
+	var data = Object();
+	data['id'] = id;
+	data['split' + split ] = input.value;
+	d.data = data;
+	d.TABLENAME = 'MENU_ITEMS';
+	d['action'] = 'UPDATE';
+	var data =  {data: JSON.stringify(d)};
+    console.log("Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "replace.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { // need to get the id of the new component back to print labels
+            console.log("set_split result ",result);
+            if (result.indexOf('error') >= 0)
+            {
+                let div = document.createElement('div');
+                div.innerHTML = result;
+                document.body.appendChild(div);
+            }
+ 
+        },
+        fail: (function (result) {
+            console.log("set_location fail ",result);
+        })
+    });
 }
 
 function set_location(input,id)

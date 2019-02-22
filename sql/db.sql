@@ -112,6 +112,7 @@ CREATE TABLE MENU_ITEMS (
 	plating_team int,
 	split1 int,
 	split2 int,
+	split3 int,
 	constraint pk_example primary key (id)
 );	
 
