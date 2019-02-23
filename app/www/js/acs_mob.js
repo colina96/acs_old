@@ -332,15 +332,27 @@ function check_ingredient(cid)
 	let tag = "check_ingredient: ";
 	console.log(tag, cid);
 	let error_node=document.getElementById('m1_temp_div_1_error');
+	// check if ingredient already scanned - if so ignore
+	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
+		if (new_comp['selected_ingredients'][i]['id'] == cid) {
+			console.log('ingredient already scanned');
+			return;
+		}
+	}
 	clearChildren(error_node);
 	$.ajax({
         url: RESTHOME + "get_active_comps.php?cid=" + cid,
         type: "POST",
 
         success: function(result) {
-        	console.log(tag,"result: ",result);
- 
+        	console.log(tag,"result: ",result,result.length);
+        	if (result == '[]') {
+            	console.log('ingredient not found');
+            	popup_error('INVALID BARCODE','');
+				return;
+            }
             var scanned_ingredient = JSON.parse(result);
+            
             console.log(tag,"got component " + scanned_ingredient[0].description,' expired:' ,scanned_ingredient[0].expired);
             if (scanned_ingredient[0].expired == 1) {
             	console.log(tag,'ingredient expired');
@@ -350,30 +362,36 @@ function check_ingredient(cid)
             	popup_error(scanned_ingredient[0].description,'EXPIRED<br>' + scanned_ingredient[0].expiry_date);
 				return;
 			}
-            var valid_ingredient = false;
-            for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
-    			var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
-    			if (sub['description'] == scanned_ingredient[0].description) {
+            
+     //       var valid_ingredient = false;
+            // new ingredient
+            var i = new_comp['selected_ingredients'].length;
+            if (!new_comp['selected_ingredients']) new_comp['selected_ingredients'] = Array();
+            console.log('adding ingredient ' + i);
+            new_comp['selected_ingredients'][i] = scanned_ingredient[0]; // just store everything
+         //   for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
+    			// var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+           
     				console.log(tag,"found ingredient");
     				valid_ingredient = true;
-    				new_comp['selected_ingredients'][i]['cid'] = scanned_ingredient[0].id;
+    				new_comp['selected_ingredients'][i]['cid'] = scanned_ingredient[0].comp_id;
     				// attach to new_comp and record temperature
     				draw_ingredients();
     				new_comp['read_temp'] = i;
     				read_temp('M0');
     				openPage('m_temp_modal1a', this, 'red','m_modal2','tabclass');
-    				var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+    				// var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
     				// d += "<tr><td>" + sub['description'] + '</td>';
-    				document.getElementById('ms_1_text').innerHTML = sub['description'];
-    				document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
+    			//	document.getElementById('ms_1_text').innerHTML = ''; // sub['description'];
+    			//	document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
     				new_comp['selected_ingredients'][i]['target'] = get_preptype_val(sub['prep_type'],'M1_temp');
     				console.log(tag,'new_comp: ',new_comp);
     				read_temp('M0');
-    			}
-    		}
-            if (!valid_ingredient) {
-				document.getElementById('m1_temp_div_1_error').innerHTML = 'invalid component';
-			}
+    		//	}
+    	//	}
+         //   if (!valid_ingredient) {
+		//		document.getElementById('m1_temp_div_1_error').innerHTML = 'invalid component';
+		//	}
             
         },
         fail: (function (result) {
@@ -1366,11 +1384,12 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 	console.log(tag,'prep_type_id',prep_type_id);
 
 	for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
-		var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+		// var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
+		sub = new_comp['selected_ingredients'][i];
 		d += "<tr><td>" + sub['description'] + '</td>';
 
 		if (new_comp['selected_ingredients'][i]['cid']) {
-			d += "<td>" + new_comp['selected_ingredients'][i]['cid'] + "</td>";
+			d += "<td>" + new_comp['selected_ingredients'][i]['id'] + "</td>";
 		} else {
 			finished = false;
 			d += "<td>-</td>";
@@ -1384,6 +1403,7 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 		}
 		d += "</tr>";
 	}
+
 	d += '</table></div>';
 	div.innerHTML = d;
 	return(finished);
@@ -1432,14 +1452,14 @@ function component_selected(id)
 
 	// document.getElementById('chk_temp_item_div').innerHTML = new_comp['description'];
 
-	if (new_comp['subcomponents']) {
+	if (new_comp['high_risk'] == 1) {
 
 		if (!new_comp['selected_ingredients']) {
 			new_comp['selected_ingredients'] = new Array();
-			for (let i = 0; i < new_comp['subcomponents'].length; i++) {
+			/* for (let i = 0; i < new_comp['subcomponents'].length; i++) {
 				new_comp['selected_ingredients'][i] = new Object();
 				new_comp['selected_ingredients'][i]['id'] = new_comp['subcomponents'][i];
-			}
+			} */
 		}
 		console.log(tag,'has ingredients');
 		set_barcode_mode('scan_ingredients');
@@ -1782,13 +1802,13 @@ function force_M1(uid)
 	var i = new_comp['read_temp'];
 	new_comp['selected_ingredients'][i]['temp'] = last_temp;
 	new_comp.force_M1_uid = uid;
-	if (draw_ingredients()) {
-		// set_barcode_mode('scan_ingredients');
+	//if (draw_ingredients()) {
+	//	set_barcode_mode('scan_ingredients');
 		// save ingredient - new_comp.php
 		start_component(false,true);
-	} else {
-		set_barcode_mode('scan_ingredients');
-	}
+	//} else {
+	//	set_barcode_mode('scan_ingredients');
+	//}
 	console.log(active_comp);
 	new_comp.force_M1_uid = uid;
 	new_comp.force_M1_temp = last_temp;
@@ -2363,17 +2383,20 @@ function m_tracking()
 
 function load_tracking_data()
 {
+	console.log('load_tracking_data');
 	$.ajax({
 		url: RESTHOME + "get_active_comps.php",
 		type: "POST",
-		dataType: 'json',
+		// dataType: 'json',
 		// contentType: "application/json",
 		success: function (result) {
-			active_comps = result;
-			m_show_active_components(result, false);
+			console.log("load_tracking_data ",result);
+			active_comps = JSON.parse(result);
+			console.log('active_comps.length',active_comps.length);
+			m_show_active_components(active_comps, false);
 		},
 		done: function (result) {
-			console.log("done load_comps ");
+			
 		},
 		fail: (function (result) {
 			console.log("fail load_comps", result);
@@ -2630,7 +2653,7 @@ function m_show_active_components(data,reprint)
 		div.innerHTML = "<span>No Active Components</span>";
 		return;
 	}
-
+	console.log(tag," n = ",data.length);
 	clearChildren(div);
 
 	//build table
@@ -2652,6 +2675,9 @@ function m_show_active_components(data,reprint)
 	var tbody = new_node('tbody');
 
 	for (let i=0; i<data.length; ++i) {
+		let this_comp = data[i];
+		console.log(this_comp);
+		
    		tr = document.createElement('tr');
 
    		var clickdiv;

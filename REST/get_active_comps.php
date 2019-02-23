@@ -151,12 +151,12 @@ if ($userID > 0) {
 			
 			if (!empty ($comps[$i]['ingredients'])) {
 				$comps[$i]['subs'] = array();
-				foreach ($comps[$i]['ingredients'] as $ing_id) {
+			/*	foreach ($comps[$i]['ingredients'] as $ing_id) {
 					$comps[$i]['subs'][] = $ingredients[$ing_id];
-				}
+				} */
 			}
 				
-		}
+		} 
 		// now insert ingredient details
 		
 		$ret['comps'] = $comps;
