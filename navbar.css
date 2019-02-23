@@ -181,6 +181,7 @@ td { padding: 10px; }
 	background-size: 25px;
 	background-repeat: no-repeat;
 	background-position: right 20px center;
+	
 }
 #report_start::placeholder, #report_end::placeholder, #report_search::placeholder{
 	padding:5px;

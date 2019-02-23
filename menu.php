@@ -24,7 +24,7 @@
 	                onclick="show_active_menus()">back</button>
 		</div>
 		<div class="acs_sidebar">
-	    <input type='text' id='menu_search' onkeyup='filter_menu(this)'  placeholder="Search">
+	    
 		
 	        
 	    </div>
@@ -298,6 +298,7 @@ function format_date(date)
 }
 function show_menu_details (div)
 {
+	// everything about this is ugly. rewrite TODO
 	console.log(menu[active_menu_id]);
 	
 	var ret = "<table width=100%><tr><td class='user_subtitle' >OVERALL INFORMATION</td></tr>"
@@ -311,7 +312,11 @@ function show_menu_details (div)
 	ret += "<tr><td class='user_subtitle'>DATE RANGE</td></tr>";
 	ret += "<tr><td>From: " + format_date(menu[active_menu_id]['start_date']);
 	ret += "<td>To: " + format_date(menu[active_menu_id]['end_date']);
-	ret += "</table><hr>";
+	ret += "<tr><td class='user_subtitle'>MENU ITEMS</td>";
+	ret += "<td><button type='button' class='button_main' onclick='new_menu_item();'>+ Add new dish</button>";
+	//search doesn't work here because the filter redraws everything - TODO
+	ret += "<td><input type='text' id='menu_search' onkeyup='filter_menu(this)'  placeholder='Search'></td></tr>";
+	ret += "</table>";
 	return ret;
 }
 
@@ -340,14 +345,29 @@ function filter_menu_item(item,filter)
     }
 	return (false);
 }
-function show_menu(filter)
+
+function show_menu_and_header()
 {
-	// show('search_menu_div');
-	// openPage('menu_buttons2',this,'none','menu_buttons');
 	show('menu_buttons2');
 	hide('menu_buttons1');
 	var div = document.getElementById('future_menus');
 	div.innerHTML = show_menu_details(div);
+	var items_div = document.createElement('div');
+	items_div.id = 'menu_items_div';
+	div.appendChild(items_div);
+	show_menu();
+}
+function show_menu(filter)
+{
+	// show('search_menu_div');
+	// openPage('menu_buttons2',this,'none','menu_buttons');
+	//show('menu_buttons2');
+	//hide('menu_buttons1');
+	//clearChildren(anchor);
+	var div = document.getElementById('menu_items_div');
+	div.innerHTML = '';
+	// clearChildren(div);
+	// div.innerHTML = show_menu_details(div);
     var table = document.createElement('table');
     table.className = 'menu_table';
     table.width='100%';
@@ -519,13 +539,7 @@ function show_menu(filter)
     td = document.createElement('td');
     td.innerHTML = ' -- ';
     
-    tr.appendChild(td);
-    td = document.createElement('td');
-    td.innerHTML = "<button type='button' class='button_main' onclick='new_menu_item();'>+ Add new dish</button>";
-    	
-    tr.appendChild(td);
-		
-     table.appendChild(tr);
+  
     div.appendChild(table);
 }
 
@@ -1094,7 +1108,7 @@ function load_menu(menu_id)
         menu_items = result.menu_items;
         menu_item_components = result.menu_item_components;
         preptypes = result.preptypes;
-        show_menu();
+        show_menu_and_header();
  //       console.log(menu);
  //       console.log(preptypes);
  
@@ -1180,7 +1194,7 @@ function show_active_menus()
 {
 	hide('menu_buttons2');
 	show('menu_buttons1');
-	document.getElementById('menu_search').value = '';
+	// document.getElementById('menu_search').value = '';
 	openPage('active_menus', this, 'red','menu_details','acs_menu_btn');
 	$.ajax({
         url: "REST/get_menus.php",
