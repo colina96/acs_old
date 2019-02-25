@@ -99,6 +99,8 @@ function upload_menu()
 							// return(mysql_insert_id());
 							//				add_menu_component($menu_item_id,$row[2],0);
 						}
+/*
+no longer user
 						if ($row[3] != '' && $last_component >= 0) { // menu item high risk component 
 							$description = mysql_escape_string( $row[3]);
 							
@@ -107,6 +109,7 @@ function upload_menu()
 							$sql .= "values (null,".$menu_id.",".$last_component.",".$subcomp_id.")";
 							test_mysql_query($sql);
 						}
+*/ 
 					}
 				}
 			}

@@ -116,8 +116,8 @@ CREATE TABLE MENU_ITEMS (
 	constraint pk_example primary key (id)
 );	
 
-insert into MENU_ITEMS values (1,1,'F0601408','Duck Rillettes, Apple Beetroot Jelly',null);
-insert into MENU_ITEMS values (2,1,'F4489315','Vanilla Sauce',null);
+insert into MENU_ITEMS values (1,1,'F0601408','Duck Rillettes, Apple Beetroot Jelly',null,20,0,0);
+insert into MENU_ITEMS values (2,1,'F4489315','Vanilla Sauce',null,20,0,0);
 
 drop table if exists MENU_ITEM_COMPONENTS;
 CREATE TABLE MENU_ITEM_COMPONENTS (
@@ -129,17 +129,15 @@ CREATE TABLE MENU_ITEM_COMPONENTS (
 	location varchar(10),
 	shelf_life_days int,
 	high_risk BOOLEAN,
-	supplier varchar(100),
-	product varchar(20),
-	spec varchar(50),
-	PT_id int,
+	label_at_dock BOOLEAN,
 	constraint pk_example primary key (id)
 );	
 
-insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1,null,null,FALSE,null,null,null,null);
-insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2,null,null,FALSE,null,null,null,null);
-insert into MENU_ITEM_COMPONENTS values (3,1,'Vanilla Sauce',2,0,null,null,FALSE,null,null,null,null);
-insert into MENU_ITEM_COMPONENTS values (4,1,'Cream',2,0,null,5,FALSE,null,null,null,null);
+insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1,null,null,FALSE,0);
+insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2,null,null,FALSE,0);
+insert into MENU_ITEM_COMPONENTS values (3,1,'Vanilla Sauce',2,0,null,null,FALSE,0);
+insert into MENU_ITEM_COMPONENTS values (4,0,'Cream',6,0,null,5,FALSE,1);
+insert into MENU_ITEM_COMPONENTS values (5,0,'Steak',6,0,null,5,FALSE,1);
 
 drop table if exists MENU_ITEM_LINK;
 CREATE TABLE MENU_ITEM_LINK
@@ -248,7 +246,6 @@ create table INGREDIENTS
 	id smallint unsigned not null auto_increment, 
 	user_id smallint unsigned not null,
 	menu_id int,
-	menu_item_component_id smallint unsigned not null,
 	component_id int,
 	subcomponent_id int,
 	M0_time datetime,
@@ -306,6 +303,7 @@ insert into PARAMS values(null,'PLATING_LABELS2_IP','10.0.0.99',now());
 insert into PARAMS values(null,'PLATING_LABELS2_PORT','9100',now());
 
 
+drop table if exists SUPPLIERS;
 create table SUPPLIERS
 (
 	id smallint unsigned not null auto_increment, 
@@ -317,3 +315,39 @@ create table SUPPLIERS
 	constraint pk_example primary key (id) 
 );
 insert into SUPPLIERS values(null,'Vic Meats','Mascot','Australia','123456789',now());
+insert into SUPPLIERS values(null,'ANDREWS','Mascot','Australia','123456789',now());
+
+drop table if exists PURCHASE_ORDERS;
+create table PURCHASE_ORDERS
+(
+	id smallint unsigned not null auto_increment, 
+	supplier_id int,
+	comment varchar(100),
+	date_created datetime,
+	date_received datetime,
+	lastchange datetime,
+	constraint pk_example primary key (id) 
+);
+
+insert into PURCHASE_ORDERS values (null,1,'Weekly Order',now(),null,now());
+
+
+
+drop table if exists PURCHASE_ORDER_ITEMS;
+create table PURCHASE_ORDER_ITEMS
+(
+	id smallint unsigned not null auto_increment, 
+	purchase_order_id int,
+	menu_item_component_id int,
+	item_code varchar(30),
+	spec varchar(30) not null,
+	UOM varchar(10),
+	open_shelf_life int,
+	prep_type int,
+	date_received datetime,
+	lastchange datetime,
+	constraint pk_example primary key (id) 
+);
+
+insert into PURCHASE_ORDER_ITEMS values (null,1,4,'V100001','diced','each',3,6,null,now());
+insert into PURCHASE_ORDER_ITEMS values (null,1,5,'V100001','diced','each',3,6,null,now());

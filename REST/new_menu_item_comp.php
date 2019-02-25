@@ -18,7 +18,7 @@ $con = $GLOBALS['con'];
 	$sql .= "values (null,".$menu_id.",".$menu_item_id.",".$comp_id.")";
 test_mysql_query($sql);
 
-function get_component_id($description,$menu_id,$supplier,$product,$spec,$shelflife,$preptype,$track)
+function get_component_id($description,$menu_id,$shelflife,$preptype,$track)
 {
 	$sql = "select * from MENU_ITEM_COMPONENTS where description='".$description."' and menu_id=".$menu_id;
 	$result = mysql_query($sql);
@@ -31,14 +31,10 @@ function get_component_id($description,$menu_id,$supplier,$product,$spec,$shelfl
 		$shelflife = intval($shelflife);
 		$preptype = intval($preptype);
 		$sql = "insert into MENU_ITEM_COMPONENTS ";
-		$flds = "(id,menu_id,description,supplier,product,spec,shelf_life_days,high_risk,prep_type)";
+		$flds = "(id,menu_id,description,shelf_life_days,prep_type)";
 		$vals = " values (null,".$menu_id;
 		$vals .= ",'".$description."'";
-		$vals .= ",'".$supplier."'";
-		$vals .= ",'".$product."'";
-		$vals .= ",'".$spec."'";
 		$vals .= ",".$shelflife;
-		$vals .= ",".$track;
 		$vals .= ",".$preptype;
 		$vals .= ")";
 		$sql .= $flds.$vals;

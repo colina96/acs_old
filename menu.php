@@ -487,30 +487,7 @@ function show_menu(filter)
 	            	td.colSpan = 2;
 	            	tr.appendChild(td);
 	            	table.appendChild(tr);
-	            	/*
-	            	if (menu_item_components[mid].subcomponents) {
-	                	var subs = menu_item_components[mid].subcomponents;
-	                	for (var s in subs) {
-	                    	var comp = menu_item_components[subs[s]];
-	                		var tr = document.createElement('tr');
-	                    	var td = document.createElement('td');
-	                    	td.innerHTML = '';
-	                    	tr.appendChild(td);
-	                    	tr.appendChild(td);
-	                		td = document.createElement('td');
-	                    	var innerHTML = "<span class='ingredient small'>Ingredient: </span>";
-	                    	innerHTML += "<div onclick='edit_high_risk_component(" + comp.id + ");'>" + comp.description + "</div>";
-	                    	td.innerHTML= innerHTML;
-	                    	tr.appendChild(td);
-	                    	td = document.createElement('td');
-	                    	td.innerHTML= '-';
-	                    	tr.appendChild(td); // blank
-	                    	td = document.createElement('td');
-	                    	td.innerHTML += "<div class='add_subcompdiv' onclick='remove_subcomponent(" + mid + "," + comp.id + ");'>Remove</div>";
-	                    	tr.appendChild(td);
-	                    	table.appendChild(tr);
-	                	}
-	            	} */
+	            	
 	            	
 	            }
 	        }

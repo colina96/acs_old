@@ -154,6 +154,12 @@ function popup_manual_temp() {
 	document.getElementById('manual_entry').style.display = 'block';
 }
 
+function popup_manual_user_barcode() {
+	// document.getElementsByName('manual_temp')[0].value = '';
+// 	temp_readings = 0;
+	show('manual_barcode');
+}
+
 function read_temp(m)
 {
 	set_temp_mode(m);
@@ -184,6 +190,12 @@ function set_barcode_mode(mode)
 	keyboard_str = '';
 	// document.getElementsByName('kitchen_manual_barcode')[0].value = '';
 	qpack_resume();
+	if (typeof(serial) == 'undefined') { // popup user list for M0
+		console.log('serial undefined');
+		if (mode == 'M1') {
+			popup_manual_barcode();
+		}
+	}
 }
 
 function get_user(id)
@@ -1276,7 +1288,7 @@ function show_dock()
 	var table = document.createElement('table');
 	table.width = '100%';
 	for (var i = 0; i < comps.length;i++) {
-		if (comps[i].high_risk == 1) {
+		if (comps[i].label_at_dock == 1) {
 			var tr = document.createElement('tr');
 
 			var func = '<div class="m-5" onclick="show_dock_component('+comps[i]['id']+');" >';

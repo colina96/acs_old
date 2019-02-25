@@ -64,10 +64,15 @@ if ($M0) { // record ingredients
 	foreach ($comp['items'] as $item) {
 		$component_id = $item['cid'];
 		$M0_temp = $item['temp'];
-		$menu_item_component_id = $item['id'];
+		$subcomponent_id = $item['id'];
+/*
 		$sql = "insert into INGREDIENTS "
             . "(user_id, menu_item_component_id, component_id,subcomponent_id,M0_time,M0_temp) "
             . "values (".$userID.",".$menu_item_component_id.",".$ret['id'].",".$component_id.",now(),".$M0_temp.")";
+*/
+		$sql = "insert into INGREDIENTS "
+            . "(user_id, component_id,subcomponent_id,M0_time,M0_temp) "
+            . "values (".$userID.",".$subcomponent_id.",".$ret['id'].",now(),".$M0_temp.")";
 		test_mysql_query($sql);
 	}
 }
