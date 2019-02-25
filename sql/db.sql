@@ -330,6 +330,7 @@ create table PURCHASE_ORDERS
 );
 
 insert into PURCHASE_ORDERS values (null,1,'Weekly Order',now(),null,now());
+insert into PURCHASE_ORDERS values (null,2,'Weekly Order',now(),null,now());
 
 
 
@@ -350,4 +351,4 @@ create table PURCHASE_ORDER_ITEMS
 );
 
 insert into PURCHASE_ORDER_ITEMS values (null,1,4,'V100001','diced','each',3,6,null,now());
-insert into PURCHASE_ORDER_ITEMS values (null,1,5,'V100001','diced','each',3,6,null,now());
+insert into PURCHASE_ORDER_ITEMS values (null,1,5,'V100001','sliced','each',3,6,null,now());

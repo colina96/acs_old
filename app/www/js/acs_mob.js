@@ -10,6 +10,7 @@ var active_plating_team = 0;
 var active_comp = null; // the component currently being worked on
 var active_menu_item_id = null;
 var new_comp = null; // start a new component - M1
+var purchase_orders = null;
 
 
 var RESTHOME = SERVER_URL+"acs/REST/";
@@ -1225,7 +1226,17 @@ function new_component() {
     });
 }
 
-function show_dock_component(cid)
+function show_dock_component(i,j)
+{
+	console.log('show_dock_component',i,j);
+	purchase_orders.selected_order = i;
+	purchase_orders.selected_item = j;
+	new_comp = purchase_orders[i].items[j].component;
+	document.getElementById('dock_m1_temp_div').innerHTML = null;
+	document.getElementById('dock_m1_temp_div').appendChild(show_product_details(i,j));
+	dock_read_M1temp();
+}
+function Xshow_dock_component(cid)
 {
 	// show('dock_display_comp_div');
 	//
@@ -1276,7 +1287,62 @@ function show_dock_component(cid)
 	dock_read_M1temp()
 }
 
+
 function show_dock()
+{
+	openPage('dock_main', null, 'red','mobile_main','tabclass');
+	openPage('m_dock',document.getElementById('supplier_list_tab'), 'red','m_modal','tabclass');
+	show('dock_search_div');
+	console.log('show_dock');
+	
+	console.log(purchase_orders);
+	$('#dock_search').val('');
+	var dock_items = new Array();
+	var div = document.getElementById('dock_display_comp_div1');
+	div.innerHTML = '';
+	var table = document.createElement('table');
+	table.width = '100%';
+	var tr = document.createElement('tr');
+	var td = document.createElement('td');
+	td.innerHTML = 'SUPPLIER';
+	tr.appendChild(td);
+	var td = document.createElement('td');
+	td.innerHTML = 'PRODUCT';
+	tr.appendChild(td);
+	var td = document.createElement('td');
+	td.innerHTML = 'SPEC';
+	tr.appendChild(td);
+	table.appendChild(tr);
+	// for (var i = 0; i < purchase_orders.length;i++) {
+	for (var i in purchase_orders) {
+		console.log('purchase_order',i);
+		console.log(purchase_orders[i]);
+		console.log('purchase_orders[i].items.length',purchase_orders[i].items.length);
+		for (var j = 0; j < purchase_orders[i].items.length; j++) {
+			console.log('item',j);
+			var tr = document.createElement('tr');
+			tr.setAttribute(
+					"onclick",
+					"show_dock_component(" + i + "," + j + ");"
+				);
+			var td = document.createElement('td');
+			if (j == 0) td.innerHTML = purchase_orders[i].supplier.name;
+			tr.appendChild(td);
+			var td = document.createElement('td');
+			td.innerHTML = purchase_orders[i].items[j].component.description;
+			tr.appendChild(td);
+			var td = document.createElement('td');
+			td.innerHTML = purchase_orders[i].items[j].spec;
+			tr.appendChild(td);
+			table.appendChild(tr);
+		}
+		
+		
+	}
+	div.appendChild(table);
+	// setup_dock_search(dock_items);
+}
+function Xshow_dock()
 {
 	openPage('dock_main', null, 'red','mobile_main','tabclass');
 	openPage('m_dock',document.getElementById('supplier_list_tab'), 'red','m_modal','tabclass');
@@ -1311,6 +1377,7 @@ function show_dock()
 	div.appendChild(table);
 	setup_dock_search(dock_items);
 }
+
 function setup_dock_search(dock_items)
 {
 	$('#dock_search').autocomplete({
@@ -1341,7 +1408,7 @@ function setup_dock_search(dock_items)
 
 function goto_dock()
 {
-	load_comps(show_dock);
+	load_dock_comps(show_dock);
 	mode = 'dock';
 }
 
@@ -1543,20 +1610,28 @@ function appendSensorImage(anchor,comp,onclick){
 	anchor.appendChild(sensor);
 }
 
-function show_product_details(comp) 
+function show_product_details() 
 {
 	// rewrite using array of objects - or table builder......
-	var flds = ['description','product','shelf_life_days','spec','supplier'];
-	var hds = ['Description','Product','Shelf life','Spec','Supplier'];
+	var i = purchase_orders.selected_order;
+	var j = purchase_orders.selected_item;
 	var tab = document.createElement('table');
 	tab.style.position = 'absolute';
 	tab.style.left = '30px';
-	for (var i = 0; i < flds.length; i++) {
+	
 		var tr = document.createElement('tr');
-		tr.appendChild(new_td(hds[i],'comp','m-5'));
-		tr.appendChild(new_td(comp[flds[i]],'comp','m-5'));
+		tr.appendChild(new_td('Supplier','comp','m-5'));
+		tr.appendChild(new_td(purchase_orders[i].supplier.name,'comp','m-5'));
 		tab.appendChild(tr);
-	}
+		var tr = document.createElement('tr');
+		tr.appendChild(new_td('Product','comp','m-5'));
+		tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
+		tab.appendChild(tr);
+		var tr = document.createElement('tr');
+		tr.appendChild(new_td('Spec','comp','m-5'));
+		tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
+		tab.appendChild(tr);
+	
 	return(tab);
 	
 }
@@ -1564,13 +1639,12 @@ function show_product_details(comp)
 function dock_read_M1temp(callback)
 {
 	console.log('dock_read_M1temp');
-	console.log(active_comp);
-	load_chefs(null);
+	console.log(purchase_orders);
+	// load_chefs(null);
 	// document.getElementById('m1_temp_div').innerHTML = 'checking temperature';
 	
 	//document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
-	document.getElementById('dock_m1_temp_div').innerHTML = null;
-	document.getElementById('dock_m1_temp_div').appendChild(show_product_details(new_comp));
+	
 	show('dock_m_temp_modal');
 	read_temp('M1_dock');
 }
@@ -2916,6 +2990,59 @@ function get_plating_item_by_id(id)
 	}
 	return(null);
 }
+
+function load_dock_comps(fn)
+{
+	let tag = 'load_dock_comps: ';
+	console.log(tag,"loading menu item components");
+    $.ajax({
+        url: RESTHOME + "get_dock.php",
+        type: "POST",
+       // data: data,
+       //  data: {points: JSON.stringify(points)},
+        dataType: 'json',
+        // contentType: "application/json",
+        success: function(result) {
+        	console.log(result);
+            // comps = result;
+        	purchase_orders = result.purchase_orders;
+            // TODO - make search work
+            $('#search').autocomplete({
+                // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+                minLength: 2,
+        		source: comps,
+        		response: function( event, ui ) { 
+        			// console.log("search response found " + ui.content.length); console.log(ui);
+        			if (ui.content.length == 0) {
+        				document.getElementById('new_comp_btns').style.display = 'block';
+        			} else {
+        				document.getElementById('new_comp_btns').style.display = 'none';
+        			}
+        		},
+        		select: function(event, ui) {
+                    // place the person.given_name value into the text field called 'select_origin'...
+                    $('#search').val(ui.item.label);
+                    // and place the person.id into the hidden text field called 'link_origin_id'.
+                 	console.log(tag,'selected ',ui.item.value);
+                 	component_selected(ui.item.value);
+                 	$('#search').val(''); // this might go wrong
+                 	// cordova.plugins.Keyboard.close();
+                 	$('#search').blur();
+                    return false;
+                }  
+            });
+            console.log(tag,"got " + result.length + " comps");
+            if (typeof(fn) == 'function') fn();
+        },
+        done: function(result) {
+            console.log(tag,"done ",result);
+        },
+        fail: (function (result) {
+            console.log(tag,"fail ",result);
+        })
+    });
+}
+
 
 function load_comps(fn)
 {
