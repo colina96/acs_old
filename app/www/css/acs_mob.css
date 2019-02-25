@@ -972,7 +972,7 @@ input::-webkit-inner-spin-button{
  }
 
 
-.plating_tab
+.plating_tab, .item_table
 {
 	width:100%;
 	.background:lightblue;

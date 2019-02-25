@@ -180,6 +180,9 @@ function read_temp(m)
 	} */
 }
 
+function popup_manual_barcode()
+{ // dev testing only - saves having to type in barcodes
+}
 
 function set_barcode_mode(mode)
 {
@@ -1236,57 +1239,6 @@ function show_dock_component(i,j)
 	document.getElementById('dock_m1_temp_div').appendChild(show_product_details(i,j));
 	dock_read_M1temp();
 }
-function Xshow_dock_component(cid)
-{
-	// show('dock_display_comp_div');
-	//
-	// var div = document.getElementById('dock_display_comp_div1');
-	// div.innerHTML = '';
-
-	// TODO check if necessary
-	new_comp = get_component_by_id(cid);
-	if (!new_comp) {
-		alert("ERROR");
-		return;
-	}
-	console.log('show_dock_component: ',new_comp);
-
-	// TODO take some to M1?
-	// var flds = ['description','supplier','product','spec','shelf_life_days'];
-	// for (var i =0; i < flds.length; i++) {
-	// 	var d = document.createElement('div');
-	// 	d.className = 'smaller';
-	// 	d.innerHTML = flds[i] + ":";
-	// 	div.appendChild(d);
-	// 	var d = document.createElement('div');
-	// 	d.className = 'small';
-	// 	if (new_comp[flds[i]] == null) {
-	// 		d.innerHTML = "NOT SET";
-	// 	}
-	// 	else {
-	// 		d.innerHTML = new_comp[flds[i]];
-	// 	}
-	//
-	// 	div.appendChild(d);
-	// }
-
-	// show preptype details
-	// var ptid = new_comp['prep_type'];
-	//
-	// var d = document.createElement('div');
-	// d.className = 'smaller';
-	// d.innerHTML = "Prep Type:";
-	// div.appendChild(d);
-	// var d = document.createElement('div');
-	// d.className = 'small';
-	// d.innerHTML = get_preptype_val(ptid,'code');
-	//
-	// div.appendChild(d);
-	// show('dock_comp_selected_btns');
-
-	dock_read_M1temp()
-}
-
 
 function show_dock()
 {
@@ -1301,17 +1253,13 @@ function show_dock()
 	var div = document.getElementById('dock_display_comp_div1');
 	div.innerHTML = '';
 	var table = document.createElement('table');
+	table.className = 'item_table';
 	table.width = '100%';
 	var tr = document.createElement('tr');
-	var td = document.createElement('td');
-	td.innerHTML = 'SUPPLIER';
-	tr.appendChild(td);
-	var td = document.createElement('td');
-	td.innerHTML = 'PRODUCT';
-	tr.appendChild(td);
-	var td = document.createElement('td');
-	td.innerHTML = 'SPEC';
-	tr.appendChild(td);
+	tr.appendChild(new_th('SUPPLIER','comp','m-5'));
+	tr.appendChild(new_th('PRODUCT','comp','m-5'));
+	tr.appendChild(new_th('SPEC','comp','m-5'));
+	
 	table.appendChild(tr);
 	// for (var i = 0; i < purchase_orders.length;i++) {
 	for (var i in purchase_orders) {
@@ -1325,15 +1273,10 @@ function show_dock()
 					"onclick",
 					"show_dock_component(" + i + "," + j + ");"
 				);
-			var td = document.createElement('td');
-			if (j == 0) td.innerHTML = purchase_orders[i].supplier.name;
-			tr.appendChild(td);
-			var td = document.createElement('td');
-			td.innerHTML = purchase_orders[i].items[j].component.description;
-			tr.appendChild(td);
-			var td = document.createElement('td');
-			td.innerHTML = purchase_orders[i].items[j].spec;
-			tr.appendChild(td);
+			tr.appendChild(new_td((j == 0)?purchase_orders[i].supplier.name:'','comp','m-5'));
+			tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
+			tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
+			
 			table.appendChild(tr);
 		}
 		
@@ -3095,6 +3038,13 @@ function load_comps(fn)
 
 function new_td(content,classname,inner_class = 'm-10') {
 	var td = document.createElement('td');
+	td.className = classname;
+	td.innerHTML = "<div class='" + inner_class + "'>" + content + "</div>";
+	return(td);
+}
+
+function new_th(content,classname,inner_class = 'm-10') {
+	var td = document.createElement('th');
 	td.className = classname;
 	td.innerHTML = "<div class='" + inner_class + "'>" + content + "</div>";
 	return(td);
