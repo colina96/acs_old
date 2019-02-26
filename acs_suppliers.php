@@ -28,6 +28,13 @@ var po_data = null; // purchase orders
 var purchase_order = null;
 function suppliers()
 {
+	form_layout['SUPPLIERS'] = {
+		'fields' : {
+			'name' : { 'Title':'SUPPLIER' },
+			'pvalue' : { 'Title':'VALUE' },
+		},
+		'className' : 'menu_table',
+	}
 	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
 	var div = document.getElementById('suppliers_container');
 	div.innerHTML = null;
@@ -78,7 +85,7 @@ function show_purchase_orders()
 	var div = document.getElementById('suppliers_container');
 	div.innerHTML = '';
 	var table = document.createElement('table');
-	table.className = 'item_table';
+	table.className = 'menu_table';
 	table.width = '100%';
 	var tr = document.createElement('tr');
 	tr.appendChild(new_th('SUPPLIER','comp','m-5'));
@@ -115,6 +122,12 @@ function show_purchase_orders()
 		
 	}
 	div.appendChild(table);
+	div.appendChild(new_purchase_order_form());
+}
+
+function new_purchase_order_form()
+{
+	
 }
 
 	</script>

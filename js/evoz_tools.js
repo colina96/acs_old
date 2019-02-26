@@ -174,7 +174,9 @@ function table_results(data,div_id)
 	fields = data.fields;
 	// headings
 	var tab = document.createElement('table');
-	tab.className = 'data';
+	
+	if (form_layout[data.TABLENAME] && form_layout[data.TABLENAME].className) tab.className = form_layout[data.TABLENAME].className;
+	else tab.className = 'data';
 	var tr = document.createElement('tr');
 	for (let i = 0; i < fields.length; i++) { 
 		var td = document.createElement('td');
