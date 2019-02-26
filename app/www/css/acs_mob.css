@@ -1,5 +1,5 @@
 :root {
-    --acs_grey: #8f8f8f;
+    --acs_grey: #4f4f4f;
     --acs_white: #ffffff;
     --acs_lightpurple: #93b3fd;
     --acs_red: #ed165d;
@@ -628,7 +628,7 @@ td {
 	width:60vw;
 	left:20vw;
 	.height:50vh;
-	top:40vh;
+	top:20vh;
 	.border:1px solid var(--acs_blue);
 	background:#dddddd;
 	color:var(--acs_text_normal_dark);

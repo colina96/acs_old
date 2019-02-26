@@ -15,6 +15,9 @@ session_start();
 <link href="bootstrap.min.css" rel="stylesheet">
 <script src="jquery/jquery.min.js"></script>
 <script src="jquery/jquery-ui.min.js"></script>
+<script src="js/evoz_tools.js"></script>
+
+<link href="css/evoz_tools.css" rel="stylesheet">
 <link rel="stylesheet" href="jquery/jquery-ui.min.css"/>
   <!--  link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
   
@@ -57,6 +60,7 @@ session_start();
           <ul class="nav navbar-nav" id="navbar_top">
             <li class='tabclass' onclick="openPage('USERS', this, 'red','tabcontent','tabclass')"><a onclick="users();">USERS</a></li>
             <li class='tabclass' onclick="openPage('MENU', this, 'red','tabcontent','tabclass')"><a>MENU</a></li>
+            <li class='tabclass' onclick="suppliers();"><a>SUPPLIERS</a></li>
             <li class='tabclass' onclick="daily_orders();"><a>DAILY ORDERS</a></li>
             <li class='tabclass' onclick="load_show_preptypes()"><a>PT SETTINGS</a></li>
             <!--  li class='tabclass' onclick="openPage('SUPPLIERS', this, 'red','tabcontent','tabclass')"><a onclick="openPage('SUPPLIERS', this, 'red')">SUPPLIER LIST</a></li -->
@@ -88,7 +92,7 @@ session_start();
 </div>
 
 <div id="SETTINGS" class="tabcontent"><?php include 'acs_settings.php' ?></div>
-<div id="SUPPLIERS" class="tabcontent">suppliers</div>
+<div id="SUPPLIERS" class="tabcontent"><?php include 'acs_suppliers.php' ?></div>
 <div id="ORDERS" class="tabcontent"><?php include 'acs_orders.php' ?></div>
 
 <div id="APP" class="tabcontent">

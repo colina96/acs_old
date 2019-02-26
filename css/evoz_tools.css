@@ -1,0 +1,10 @@
+
+table {
+	width:100%;
+	color:black;
+}
+
+.data:tr:first-of-type {
+	    background-image: linear-gradient(to right, #9D2CE3, #9323E4, #7A0FE7);
+    color: white;
+}
