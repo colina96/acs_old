@@ -350,5 +350,6 @@ create table PURCHASE_ORDER_ITEMS
 	constraint pk_example primary key (id) 
 );
 
-insert into PURCHASE_ORDER_ITEMS values (null,1,4,'V100001','diced','each',3,6,null,now());
 insert into PURCHASE_ORDER_ITEMS values (null,1,5,'V100001','sliced','each',3,6,null,now());
+insert into PURCHASE_ORDER_ITEMS values (null,1,4,'V100001','diced','each',3,6,null,now());
+insert into PURCHASE_ORDER_ITEMS values (null,2,5,'V100001','chunks','each',3,6,null,now());
