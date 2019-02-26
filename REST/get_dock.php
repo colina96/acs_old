@@ -7,6 +7,7 @@ $userID = $_SESSION['userID'];
 // echo "userID ".$userID."\n";
 if ($userID > 0) {
 	$suppliers = get_table("SUPPLIERS",""); 
+	$prep_types = get_table('PREP_TYPES','');
 	$pos = get_table('PURCHASE_ORDERS','where date_received is null');
 	$pois = get_table('PURCHASE_ORDER_ITEMS','where date_received is null');
 	$component_list = null;
@@ -21,7 +22,8 @@ if ($userID > 0) {
 		$component_list .= $poi['menu_item_component_id'];
 		
 	}
-	$comps = get_table('MENU_ITEM_COMPONENTS','where id in ('.$component_list.')');
+	// $comps = get_table('MENU_ITEM_COMPONENTS','where id in ('.$component_list.')');
+	$comps = get_table('MENU_ITEM_COMPONENTS','where label_at_dock = 1');
 	foreach ($pois as $poi) { // attach component details to purchase order items
 		if (!empty($comps[$poi['menu_item_component_id']])) $pois[$poi['id']]['menu_item_component'] = $comps[$poi['menu_item_component_id']];
 	}
@@ -35,14 +37,16 @@ if ($userID > 0) {
 		foreach ($po['items'] as $j => $poi) {
 			$comp_id = $poi['menu_item_component_id'];
 			$pos[$i]['items'][$j]['component'] = $comps[$comp_id];
+			$pos[$i]['items'][$j]['PT'] = $prep_types[$poi['prep_type']];
 		}
 	}
 	$ret = array();
 
 	
 	$ret['purchase_orders'] = $pos;
-// 	$ret['comps'] = $comps;
-	// $ret['suppliers'] = $suppliers;
+	$ret['prep_types'] = $prep_types;
+ 	$ret['comps'] = $comps;
+	$ret['suppliers'] = $suppliers;
 	echo json_encode($ret);
 }
 

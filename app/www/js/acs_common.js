@@ -251,4 +251,16 @@ function hide(div_id)
 	}
 }
 
+function new_td(content,classname,inner_class = 'm-10') {
+	var td = document.createElement('td');
+	td.className = classname;
+	td.innerHTML = "<div class='" + inner_class + "'>" + content + "</div>";
+	return(td);
+}
 
+function new_th(content,classname,inner_class = 'm-10') {
+	var td = document.createElement('th');
+	td.className = classname;
+	td.innerHTML = "<div class='" + inner_class + "'>" + content + "</div>";
+	return(td);
+}

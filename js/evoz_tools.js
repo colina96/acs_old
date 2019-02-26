@@ -283,7 +283,7 @@ function build_form(data,div_id)
 function close_popups()
 {
 	tabcontent = document.getElementsByClassName('popup');
-    for (i = 0; i < tabcontent.length; i++) {
+    for (let i = 0; i < tabcontent.length; i++) {
     	// console.log("found tab ",tabcontent[i].id);
         tabcontent[i].style.display = "none";
     }
@@ -299,7 +299,7 @@ function openPage(pageName, elmnt, color,content_class,tab_class) {
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName(content_class);
-    for (i = 0; i < tabcontent.length; i++) {
+    for (let i = 0; i < tabcontent.length; i++) {
     	// console.log("found tab ",tabcontent[i].id);
         tabcontent[i].style.display = "none";
     }
@@ -307,7 +307,7 @@ function openPage(pageName, elmnt, color,content_class,tab_class) {
     // Remove the background color of all tablinks/buttons
     tablinks = document.getElementsByClassName(tab_class);
     // console.log("found tablinks ",tablinks.length);
-    for (i = 0; i < tablinks.length; i++) {
+    for (let i = 0; i < tablinks.length; i++) {
         tablinks[i].style.backgroundColor = "";
     }
     //  elmnt.style.border-bottom = '1px solid black';
