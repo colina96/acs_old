@@ -134,12 +134,9 @@ function get_component_id($description,$menu_id,$supplier,$product,$spec,$shelfl
 		$shelflife = intval($shelflife);
 		$preptype = intval($preptype);
 		$sql = "insert into MENU_ITEM_COMPONENTS ";
-		$flds = "(id,menu_id,description,supplier,product,spec,shelf_life_days,high_risk,prep_type)";
+		$flds = "(id,menu_id,description,shelf_life_days,high_risk,prep_type)";
 		$vals = " values (null,".$menu_id;
 		$vals .= ",'".$description."'";
-		$vals .= ",'".$supplier."'";
-		$vals .= ",'".$product."'";
-		$vals .= ",'".$spec."'";
 		$vals .= ",".$shelflife;
 		$vals .= ",".$track;
 		$vals .= ",".$preptype;
