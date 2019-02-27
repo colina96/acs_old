@@ -19,7 +19,7 @@ var form_layout = {
 
 function evoz_tools(tablename,div_id,csv_format,conditions)
 {
-	console.log('evoz_tool init',tablename,div_id,conditions);
+	console.log('1 evoz_tool init',tablename,div_id,conditions);
 	this.tablename = tablename;
 	this.div_id = div_id;
 	this.csv_format = csv_format;

@@ -56,14 +56,22 @@ function suppliers()
 
 function load_dock_components()
 {
+	let tag = 'load_dock_components';
 	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
 	var div = document.getElementById('suppliers_container');
 	div.innerHTML = null;
 	
-	var data = new evoz_tools('MENU_ITEM_COMPONENTS','suppliers_container',null,'label_at_dock = 1');
-
+	var comp_data = new evoz_tools('MENU_ITEM_COMPONENTS','suppliers_container',null,'label_at_dock = 1');
+	var prep_type_data = new evoz_tools('PREP_TYPES',null,null,null);
+/*	for (let id in comp_data.data) {
+		comp_data.data['PT_CODE'] = 'bananaa';
+	} */
+	console.log(tag);
+	console.log(comp_data);
+	// comp_data.fields.push({ 'Field':'PT_CODE' ,'Type':'varchar(20)' });
+//	console.log(comp_data);
 	// openPage('PARAMS', this, 'red','tabcontent','tabclass');
-	data.build_form();
+	comp_data.build_form();
 }
 function Xload_purchase_orders()
 {
