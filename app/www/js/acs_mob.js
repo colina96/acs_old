@@ -1428,6 +1428,7 @@ function draw_ingredients() // returns true if all ingredients are selected and 
 
 	d += '</table></div>';
 	div.innerHTML = d;
+	set_barcode_mode('scan_ingredients');
 	return(finished);
 }
 // called when user searchs for and selects a component - M1 only 

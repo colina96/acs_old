@@ -206,11 +206,11 @@ function process(text)
 	else if (text.indexOf('[') >= 0 && text.indexOf(']') > 0) {
 		var i = text.indexOf('[');
 		var j = text.indexOf(']');
-		var s = text.substring(i + 1, j);
+		var s = text.substring(i + 1, j -1 ); //TODO
 		log("barcode " + s);
 		serial.write('!');
 		process_barcode(s);
-		show_readout(s);
+		show_readout(text);
 		// serial_write('?');
 	}
 	else if (text.indexOf('T') == 0) {

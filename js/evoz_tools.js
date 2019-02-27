@@ -436,9 +436,7 @@ function upload_json(target)
 }
 function show_json(json,target)
 {
-	if (!param) {
-		console.log('show_json fail - no target div');
-	}
+	
 	console.log('show_json',target.div_id);
 	var div = document.getElementById(target.div_id);
 	div.innerHTML = '';
@@ -474,7 +472,7 @@ function show_json(json,target)
 	div.appendChild(upload_btn);
 }
 
-var openFile = function(event,target) {
+var evoz_openFile = function(event,target) {
     var input = event.target;
     console.log('openFile');
     console.log(target);
