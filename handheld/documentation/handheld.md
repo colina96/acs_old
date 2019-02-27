@@ -86,3 +86,78 @@ Schematics are in `QPack R3.2.pdf`. The following mail should explain some speci
 
 ### Earlier versions
 Previous attempts used an IOIO chip and Bluetooth for communication. Some references to these will still be visible in parts of code and documentation.
+
+
+## Basic Cordova setup
+The best place to start will be with Kean's test    
+code. Here are his instructions:    
+    
+1. Cordova build environment for sample code (qpacktest3)    
+    
+2. ```
+    cd \src\cordova
+    ```
+    (or wherever your Cordova code lives)    
+    ```bash
+    cordova create qpacktest3
+    cd qpacktest3
+    ```
+
+3. Add the necessary plugins and platforms
+   * Android
+    ```    
+    cordova platform add android@6.2.0    
+    ```
+   * Cordovarduino (for serial connection to Q-Pack handheld)
+    ```
+    cordova plugin add https://github.com/xseignard/cordovarduino    
+    ```
+    (Kean originally send this command:
+    ```
+    plugman install --platform android --project ./platforms/android --plugin https://github.com/xseignard/cordovarduino
+    ```    
+    It does not work due to `Cannot read property 'fail' of undefined`. Plugman seems to have been halfway deprecated.
+  )   
+   
+4. Get the [test app](https://github.com/elfalko/qpacktest3)     
+    
+5. Build the app
+    ```
+    cordova build
+    ```
+   You should now be able to find the app under `<project_root>/platforms/android/build/outputs/apk/android-debug.apk`    
+   There are two ways to get the app on your phone
+   #### Download it to the phone
+   The best practice for the Q-Pack as you don't have to open the casing to attach a USB cable. Run a simple http server on your PC, and download it from there. 
+   For example use the one provided by the node.js package [http-server](https://www.npmjs.com/package/http-server): 
+   1. Run it with `'http-server /opt/lampp/htdocs/acs/app/platforms/android/build/outputs/apk/`
+   2. With the phone's browser, connect to the ip shown in the terminal window where you ran the server.
+   3. Select the apk
+   4. Install it
+   
+   #### Build and flash
+   This requires a connection to your phone, either via USB or if [the phone is started with an open tcpip port over adb](https://developer.android.com/studio/command-line/adb#wireless "Android documentation") (note that that connection gets terminated after installing, and would require the USB connection to start in the first place)
+   ```
+   cordova run android
+   ```    
+   Troubleshooting:
+   ```
+   no target specified -> switch to emulator    
+    exit code 2
+   ```
+   No attached android device is found.
+   Make sure you have adb and the android development tools installed and in your path. This should help:
+   ```
+    cordova requirements    
+      android target not installed - exit code 2
+   ```
+   Once you have them installed, you might need to reinstall the android platform
+   ```
+    cordova platforms remove android    
+    cordova platforms add android   
+   ``` 
+   The emulator should now be running    
+    
+6. Installing
+   1. The first time you try to install a homebrewn app, you need to allow apps from unsigned sources in the settings
+   2. You need to give the app permission to use the connected USB device. This permission request pops up once you start the app and the USB device is connected
