@@ -15,7 +15,9 @@ if [ ! "$basename" = "acs" ] ; then
   exit -1;
 fi
 
+echo "setting up log and printjob folder"
 mkdir -p REST/logs REST/tmp
 chmod -R 777 REST/logs REST/tmp
 
+echo "compiling printer driver"
 gcc monarch_9419/print_lbl.c -o monarch_9419/print_lbl
