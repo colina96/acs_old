@@ -13,6 +13,18 @@ This contains the actual app. It is supposed to be used with the __cordova__ env
 ## Web interface
 The web interface is designed to run on a classic LAMP stack.
 After setting up a linux server with apache, clone this repo into the htdocs folder.
+
+Set yourself as the owner of the folder. 
+```bash
+sudo chown -R <username>:<username> acs
+```
+Then run the setup script.
+```bash
+cd acs
+. setup/setup.sh
+```
+Also make sure you run set up the database. Access your MySQL and run the `sql/db.sql` script.
+
 You should be able to access it in the system under `localhost/acs`.
 Now you can find out your label printers ip and set it in the web portal
 

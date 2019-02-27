@@ -49,10 +49,8 @@ function dblog($s)
 	$t = date("D M d y h:i A");
 	$u = ' UID:'.(empty($_SESSION['userID'])? 0:$_SESSION['userID']);
 	$txt = $t.$u.' : '.$s;
-	if (!file_exists('REST/logs')) {
-	    //if you fail here, make sure to create this folder manually as the rights in the REST folder dont usually allow this
-    	mkdir('REST/logs', 0777, true);
-	}
+
+	// if you fail here, make sure you have the folder and it has rwx rights for everyone
 	file_put_contents('REST/logs/dblog_'.$Dt.'.log', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
 	/*
 	$myfile = fopen("dblog.log", "ar");
