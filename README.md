@@ -1,4 +1,5 @@
-# QAmC App
+# Advanced Catering Solutions/ACS
+
 ## Quality Assurance meets Chefs
 This Repository contains all code necessary to run the [QAmC](http://qamc.co "QAmC's homepage") app.
 
@@ -8,6 +9,18 @@ This toplevel acts as the codebase for the __Q-Admin__ system, which is the serv
 
 ### app
 This contains the actual app. It is supposed to be used with the __cordova__ environment (called __phonegap__ before), enabling builds for android devices.
+
+## Web interface
+The web interface is designed to run on a classic LAMP stack.
+After setting up a linux server with apache, clone this repo into the htdocs folder.
+You should be able to access it in the system under `localhost/acs`.
+Now you can find out your label printers ip and set it in the web portal
+
+### Local development
+Install an [XAMPP Server](https://www.apachefriends.org/index.html "Apache Friends XAMPP homepage") and clone this repo directly into `<XAMPP root>/htdocs`
+
+## App
+The QAmC app is designed to run on a Galaxy J2 Pro phone with a connected handheld device allowing access to a temperature probe, IR sensor and barcode scanner.
 
 #### To setup
 

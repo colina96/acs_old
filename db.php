@@ -49,11 +49,11 @@ function dblog($s)
 	$t = date("D M d y h:i A");
 	$u = ' UID:'.(empty($_SESSION['userID'])? 0:$_SESSION['userID']);
 	$txt = $t.$u.' : '.$s;
-	if (!file_exists('logs')) {
+	if (!file_exists('REST/logs')) {
 	    //if you fail here, make sure to create this folder manually as the rights in the REST folder dont usually allow this
-    	mkdir('logs', 0755, true);
+    	mkdir('REST/logs', 0777, true);
 	}
-	file_put_contents('logs/dblog_'.$Dt.'.log', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
+	file_put_contents('REST/logs/dblog_'.$Dt.'.log', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
 	/*
 	$myfile = fopen("dblog.log", "ar");
 	if ($myfile) {
