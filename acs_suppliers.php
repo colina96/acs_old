@@ -9,9 +9,14 @@
 <div class='acs_main' id="suppliers_frame">
 
 	
-<div id='suppliers_container' class='acs_container'>
+	<div id='suppliers_container' class='acs_container'>
     suppliers stuff
-</div>
+	</div>
+	
+	<div id='csv_upload_div' style='display:none'>
+		<input type='file' accept='text/plain' onchange='open_suppliers_csv(event)'><br>
+	
+	</div>
 </div>
 
 <script>
@@ -24,9 +29,28 @@ var data_formats = { // map csv columns to database fields
 		}
 			
 }
-var supplier_data = null;
+var supplier_obj = null;
 var po_data = null; // purchase orders
 var purchase_order = null;
+
+var open_suppliers_csv = function(event) {
+		var input = event.target;
+	    console.log('open_suppliers_csv');
+	   
+	    var reader = new FileReader();
+	    reader.onload = function(){
+	      var text = reader.result;
+	      var json = CSVToArray(text);
+	      suppliers_obj.json = json;
+	      console.log(json);
+	      show_json(json,suppliers_obj);
+	      
+			// document.getElementById('output').innerHTML = text;
+	      console.log(reader.result.substring(0, 200));
+	    };
+	    reader.readAsText(input.files[0]);
+	  };
+
 function suppliers()
 {
 	form_layout['SUPPLIERS'] = {
@@ -48,10 +72,11 @@ function suppliers()
 	var div = document.getElementById('suppliers_container');
 	div.innerHTML = null;
 	
-	var e = new evoz_tools('SUPPLIERS','suppliers_container',data_formats['SUPPLIERS']);
+	suppliers_obj = new evoz_tools('SUPPLIERS','suppliers_container',data_formats['SUPPLIERS']);
 	
 	// openPage('PARAMS', this, 'red','tabcontent','tabclass');
-	e.build_form();
+	suppliers_obj.build_form();
+	document.getElementById('csv_upload_div').style.display = 'block';
 }
 
 function load_dock_components()
@@ -97,7 +122,7 @@ function load_purchase_orders()
         	console.log(result);
             // comps = result;
         	purchase_orders = result.purchase_orders;
-        	supplier_data = result.suppliers;
+        	// supplier_obj.data = result.suppliers;
             // TODO - make search work
            
             console.log(tag,"got " + result.length + " comps");
@@ -163,10 +188,10 @@ function new_purchase_order_form()
 	var div = document.createElement('div');
 	var select = document.createElement('select');
 	select.id = 'select_supplier';
-	for (var s in supplier_data) {
-		console.log(supplier_data[s]);
+	for (var s in supplier_obj.data) {
+		console.log(supplier_obj.data[s]);
 		var opt = document.createElement('option');
-		opt.innerHTML = supplier_data[s].name;
+		opt.innerHTML = supplier_obj.data[s].name;
 		opt.value = s;
 		select.appendChild(opt);
 		
