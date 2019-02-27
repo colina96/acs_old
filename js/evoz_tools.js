@@ -17,12 +17,13 @@ var form_layout = {
 		}
 	}
 
-function evoz_tools(tablename,div_id,csv_format)
+function evoz_tools(tablename,div_id,csv_format,conditions)
 {
-	console.log('evoz_tool init',tablename,div_id);
+	console.log('evoz_tool init',tablename,div_id,conditions);
 	this.tablename = tablename;
 	this.div_id = div_id;
 	this.csv_format = csv_format;
+	this.conditions = conditions;
 	this.div = document.getElementById(div_id);
 	
 	this.get_data = get_data(this.tablename,div_id);
@@ -33,6 +34,7 @@ function evoz_tools(tablename,div_id,csv_format)
 		var q = new Object();
 		q.TABLENAME = this.tablename;
 		q.action = 'GET';
+		if (conditions) q.conditions = conditions;
 		var div_id = this.div_id; // can't use this.div_id in ajax return
 		var data =  {data: JSON.stringify(q)}; // just gets field definitions
 		
@@ -131,7 +133,7 @@ function submit_form(tablename)
 		}
 		else {
 			data[elements[i].id] = elements[i].value;
-			if (elements[i].value.length > 1) valid ++;
+			if (elements[i].value.length > 0) valid ++;
 			elements[i].value = ''; // clear form
 		}
 		
@@ -169,7 +171,10 @@ function table_results(data,div_id)
 	var div = document.getElementById(div_id);
 	div.innerHTML = '';
 	var h1 = document.createElement('H1');
-	h1.innerHTML = data.TABLENAME;
+	if (form_layout[data.TABLENAME] && form_layout[data.TABLENAME].title)
+		h1.innerHTML = form_layout[data.TABLENAME].title;
+	else
+		h1.innerHTML = data.TABLENAME;
 	div.appendChild(h1);
 	fields = data.fields;
 	// headings
@@ -179,16 +184,19 @@ function table_results(data,div_id)
 	else tab.className = 'data';
 	var tr = document.createElement('tr');
 	for (let i = 0; i < fields.length; i++) { 
-		var td = document.createElement('td');
-		if (form_layout[data.TABLENAME] && 
-				form_layout[data.TABLENAME].fields && 
-				form_layout[data.TABLENAME].fields[fields[i].Field] &&
-				form_layout[data.TABLENAME].fields[fields[i].Field]['Title'])
-			td.innerHTML = form_layout[data.TABLENAME].fields[fields[i].Field]['Title'];
-		else 
-			td.innerHTML = fields[i].Field;
-		
-		tr.appendChild(td);
+		if (form_layout[data.TABLENAME] && form_layout[data.TABLENAME].fields) {
+			if (form_layout[data.TABLENAME].fields[fields[i].Field] &&
+					form_layout[data.TABLENAME].fields[fields[i].Field]['Title']) {
+				var td = document.createElement('td');
+				td.innerHTML = form_layout[data.TABLENAME].fields[fields[i].Field]['Title'];
+				tr.appendChild(td);
+			}
+		}		
+		else {
+			var td = document.createElement('td');
+			td.innerHTML = fields[i].Field;			
+			tr.appendChild(td);
+		}
 	}
 	tab.appendChild(tr);
 	
@@ -199,11 +207,25 @@ function table_results(data,div_id)
 				"get_data('" + data.TABLENAME + "','" + div_id + "','id=" +  data.data[i]['id'] + "');"
 			);
 		for (let j = 0; j < fields.length; j++) { 
+			if (form_layout[data.TABLENAME] && form_layout[data.TABLENAME].fields) {
+				if (form_layout[data.TABLENAME].fields[fields[i].Field] &&
+						form_layout[data.TABLENAME].fields[fields[i].Field]['Title']) {
+					var td = document.createElement('td');
+					td.innerHTML = data.data[i][fields[j].Field];
+					tr.appendChild(td);
+				}
+			}		
+			else {
+				var td = document.createElement('td');
+				td.innerHTML = data.data[i][fields[j].Field];			
+				tr.appendChild(td);
+			}
+			/*
 			var td = document.createElement('td');
 			if (data.data && data.data[i][fields[j].Field] ){
 				td.innerHTML = data.data[i][fields[j].Field];
 			}
-			tr.appendChild(td);
+			tr.appendChild(td); */
 		}
 		tab.appendChild(tr);
 	}
