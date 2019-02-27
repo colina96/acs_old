@@ -1,7 +1,7 @@
-/* drop database acs; */;
-/* CREATE database acs;  */;
+/* drop database acs; */
+/* CREATE database acs;  */
 use acs;
-/* GRANT ALL PRIVILEGES ON *.* TO 'acs'@'localhost' IDENTIFIED BY 'acs';  */;
+/* GRANT ALL PRIVILEGES ON *.* TO 'acs'@'localhost' IDENTIFIED BY 'acs';  */
 
 drop table if exists USERS;
 CREATE TABLE USERS (
@@ -19,20 +19,6 @@ supervisor BOOLEAN,
 active BOOLEAN default true,
 last_login datetime,
 constraint pk_example primary key (id) );
-INSERT INTO USERS (email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
-VALUES
-('col','acs','Colin','Atkinson','admin',1,1,1,1,1),
-('david@qamc.co','acs','David','Cox','admin',1,1,1,1,1),
-('dock','acs','Dock','One','Dock',0,1,0,0,0),
-('ds','acs','Dock','Super','super',0,1,0,0,1),
-('bob','acs','Bob the','Chef','chef',0,0,1,0,1),
-('plating','acs','Plating','Person','chef',0,0,0,1,0),
-('PS','acs','Plating','Super','chef',0,0,0,1,1),
-('kean','acs','Kean','Maizels','guru',1,1,1,1,1),
-('falk','acs','Falk','Schoenfeld','admin',1,1,1,1,1),
-('mari','acs','Mari','Scotto','admin',1,1,1,1,1);
-
-select * from USERS;
 
 drop table if exists PREP_TYPES;
 CREATE table PREP_TYPES (
@@ -54,16 +40,6 @@ CREATE table PREP_TYPES (
 	probe_type int,
 	constraint pk_example primary key (id) 
 );
-insert into PREP_TYPES values
-(1,'CC',	0, 3	,	75,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,6,0),
-(2,'HF',	0, 3 * 7,	80,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,28,0),
-(3,'ESL',	0, 3 * 7,	75,	 1,	120, 20, 21,0, 6 * 60,60,  5   ,0,90,0),
-(4,'LR',	0, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0),
-(5,'AHR' ,	0, 3,		5,   0,	45,  20, 15,0, null  ,null,null,0,6,0),
-(6,'FRESH' ,1, 3,		5,   0,	null,  0, 0,0, null  ,null,null,0,6,0),
-(7,'FROZEN',1, 3,		-5,   0,	null,  0, 0,0, null  ,null,null,0,6,0),
-(8,'DRY'   ,1, 3,		15,   0,	null,  0, 0,0, null  ,null,null,0,6,0),
-(9,'DECANT'   ,2, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0);
 
 drop table if exists CORRECTIVE_ACTIONS;
 CREATE table CORRECTIVE_ACTIONS
@@ -73,21 +49,6 @@ CREATE table CORRECTIVE_ACTIONS
 	action_text varchar(100),
 	constraint pk_example primary key (id)
 );
-
-insert into CORRECTIVE_ACTIONS values
-(1,1,'Evacuate Blast Chiller, Hard Chill'),
-(2,1,'Decant Product into Shallow Metal - Continue Chilling'),
-(3,2,'Add more ice to ice bath'),
-(4,3,'Evacuate Blast Chiller, Hard Chill'),
-(5,3,'Decant Product into Shallow Metal - Continue Chilling'),
-(6,5,'Refrigerate Product'),
-(7,5,'Discard Product'),
-(8,5,'Retrain Staff'),
-(9,5,'Low Risk Item, QA Sign-Off'),
-(10,6,'QA Sign-Off'),
-(11,6,'Client Request'),
-(12,7,'QA Sign-Off'),
-(13,8,'QA Sign-Off');
 
 drop table if exists MENUS;
 CREATE TABLE MENUS (
@@ -101,8 +62,6 @@ CREATE TABLE MENUS (
 	constraint pk_example primary key (id)
 );
 
-insert into MENUS values (1,now(),now(),'INTERNATIONAL','35A','N/A');
-
 drop table if exists MENU_ITEMS;
 CREATE TABLE MENU_ITEMS (
 	id int not null  auto_increment,
@@ -115,9 +74,6 @@ CREATE TABLE MENU_ITEMS (
 	split3 int,
 	constraint pk_example primary key (id)
 );	
-
-insert into MENU_ITEMS values (1,1,'F0601408','Duck Rillettes, Apple Beetroot Jelly',null,20,0,0);
-insert into MENU_ITEMS values (2,1,'F4489315','Vanilla Sauce',null,20,0,0);
 
 drop table if exists MENU_ITEM_COMPONENTS;
 CREATE TABLE MENU_ITEM_COMPONENTS (
@@ -133,12 +89,6 @@ CREATE TABLE MENU_ITEM_COMPONENTS (
 	constraint pk_example primary key (id)
 );	
 
-insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1,null,null,FALSE,0);
-insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2,null,null,FALSE,0);
-insert into MENU_ITEM_COMPONENTS values (3,1,'Vanilla Sauce',2,0,null,null,FALSE,0);
-insert into MENU_ITEM_COMPONENTS values (4,0,'Cream',6,0,null,5,FALSE,1);
-insert into MENU_ITEM_COMPONENTS values (5,0,'Steak',6,0,null,5,FALSE,1);
-
 drop table if exists MENU_ITEM_LINK;
 CREATE TABLE MENU_ITEM_LINK
 (
@@ -148,9 +98,6 @@ CREATE TABLE MENU_ITEM_LINK
 	component_id int,
 	constraint pk_example primary key (id) 
 );
-insert into MENU_ITEM_LINK values (null,1,1,1);
-insert into MENU_ITEM_LINK values (null,1,1,2);
-insert into MENU_ITEM_LINK values (null,1,2,3);
 
 /* component link links components with subcompoents that need to be tracked - ie high risk components */;
 drop table if exists COMPONENT_LINK;
@@ -162,7 +109,6 @@ CREATE TABLE COMPONENT_LINK
 	subcomponent_id smallint unsigned not null,
 	constraint pk_example primary key (id) 
 );
-insert into COMPONENT_LINK values (null,1,3,4);
 
 drop table if exists COMPONENT;
 CREATE table COMPONENT (
@@ -263,10 +209,6 @@ create table SHIFTS
 	constraint pk_example primary key (id) 
 );
 
-insert into SHIFTS values (null,'09:30 AM','5:00','9:30');
-insert into SHIFTS values (null,'11:00 AM','9:30','11:00');
-insert into SHIFTS values (null,'05:00 AM','11:00','5:40');
-
 drop table if exists SHIFT_ORDERS;
 create table SHIFT_ORDERS
 (
@@ -293,15 +235,6 @@ create table PARAMS
 	lastchange datetime,
 	constraint pk_example primary key (id) 
 );
-insert into PARAMS values(null,'DOCK_LABELS_IP','10.0.0.99',now());
-insert into PARAMS values(null,'DOCK_LABELS_PORT','9100',now());
-insert into PARAMS values(null,'KITCHEN_LABELS_IP','10.0.0.99',now());
-insert into PARAMS values(null,'KITCHEN_LABELS_PORT','9100',now());
-insert into PARAMS values(null,'PLATING_LABELS1_IP','10.0.0.99',now());
-insert into PARAMS values(null,'PLATING_LABELS1_PORT','9100',now());
-insert into PARAMS values(null,'PLATING_LABELS2_IP','10.0.0.99',now());
-insert into PARAMS values(null,'PLATING_LABELS2_PORT','9100',now());
-
 
 drop table if exists SUPPLIERS;
 create table SUPPLIERS
@@ -314,8 +247,6 @@ create table SUPPLIERS
 	lastchange datetime,
 	constraint pk_example primary key (id) 
 );
-insert into SUPPLIERS values(null,'Vic Meats','Mascot','Australia','123456789',now());
-insert into SUPPLIERS values(null,'ANDREWS','Mascot','Australia','123456789',now());
 
 drop table if exists PURCHASE_ORDERS;
 create table PURCHASE_ORDERS
@@ -328,11 +259,6 @@ create table PURCHASE_ORDERS
 	lastchange datetime,
 	constraint pk_example primary key (id) 
 );
-
-insert into PURCHASE_ORDERS values (null,1,'Weekly Order',now(),null,now());
-insert into PURCHASE_ORDERS values (null,2,'Weekly Order',now(),null,now());
-
-
 
 drop table if exists PURCHASE_ORDER_ITEMS;
 create table PURCHASE_ORDER_ITEMS
@@ -349,6 +275,83 @@ create table PURCHASE_ORDER_ITEMS
 	lastchange datetime,
 	constraint pk_example primary key (id) 
 );
+
+/* SEEDING */
+
+INSERT INTO USERS (email,password,firstname ,lastname,function,admin,dock,kitchen,plating,supervisor)
+VALUES
+('col','acs','Colin','Atkinson','admin',1,1,1,1,1),
+('david@qamc.co','acs','David','Cox','admin',1,1,1,1,1),
+('dock','acs','Dock','One','Dock',0,1,0,0,0),
+('ds','acs','Dock','Super','super',0,1,0,0,1),
+('bob','acs','Bob the','Chef','chef',0,0,1,0,1),
+('plating','acs','Plating','Person','chef',0,0,0,1,0),
+('PS','acs','Plating','Super','chef',0,0,0,1,1),
+('kean','acs','Kean','Maizels','guru',1,1,1,1,1),
+('falk','acs','Falk','Schoenfeld','admin',1,1,1,1,1),
+('mari','acs','Mari','Scotto','admin',1,1,1,1,1);
+
+insert into PREP_TYPES values
+(1,'CC',	0, 3	,	75,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,6,0),
+(2,'HF',	0, 3 * 7,	80,  1,	120, 20, 21,0, 6 * 60,60,  5   ,0,28,0),
+(3,'ESL',	0, 3 * 7,	75,	 1,	120, 20, 21,0, 6 * 60,60,  5   ,0,90,0),
+(4,'LR',	0, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0),
+(5,'AHR' ,	0, 3,		5,   0,	45,  20, 15,0, null  ,null,null,0,6,0),
+(6,'FRESH' ,1, 3,		5,   0,	null,  0, 0,0, null  ,null,null,0,6,0),
+(7,'FROZEN',1, 3,		-5,   0,	null,  0, 0,0, null  ,null,null,0,6,0),
+(8,'DRY'   ,1, 3,		15,   0,	null,  0, 0,0, null  ,null,null,0,6,0),
+(9,'DECANT'   ,2, 3,		null,1,	null, 0,  0,0, null  ,null,null,0,6,0);
+
+insert into CORRECTIVE_ACTIONS values
+(1,1,'Evacuate Blast Chiller, Hard Chill'),
+(2,1,'Decant Product into Shallow Metal - Continue Chilling'),
+(3,2,'Add more ice to ice bath'),
+(4,3,'Evacuate Blast Chiller, Hard Chill'),
+(5,3,'Decant Product into Shallow Metal - Continue Chilling'),
+(6,5,'Refrigerate Product'),
+(7,5,'Discard Product'),
+(8,5,'Retrain Staff'),
+(9,5,'Low Risk Item, QA Sign-Off'),
+(10,6,'QA Sign-Off'),
+(11,6,'Client Request'),
+(12,7,'QA Sign-Off'),
+(13,8,'QA Sign-Off');
+
+insert into MENUS values (1,now(),now(),'INTERNATIONAL','35A','N/A');
+
+insert into MENU_ITEMS values (1,1,'F0601408','Duck Rillettes, Apple Beetroot Jelly',null,20,0,0);
+insert into MENU_ITEMS values (2,1,'F4489315','Vanilla Sauce',null,20,0,0);
+
+insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1,null,null,FALSE,0);
+insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2,null,null,FALSE,0);
+insert into MENU_ITEM_COMPONENTS values (3,1,'Vanilla Sauce',2,0,null,null,FALSE,0);
+insert into MENU_ITEM_COMPONENTS values (4,0,'Cream',6,0,null,5,FALSE,1);
+insert into MENU_ITEM_COMPONENTS values (5,0,'Steak',6,0,null,5,FALSE,1);
+
+insert into MENU_ITEM_LINK values (null,1,1,1);
+insert into MENU_ITEM_LINK values (null,1,1,2);
+insert into MENU_ITEM_LINK values (null,1,2,3);
+
+insert into COMPONENT_LINK values (null,1,3,4);
+
+insert into SHIFTS values (null,'09:30 AM','5:00','9:30');
+insert into SHIFTS values (null,'11:00 AM','9:30','11:00');
+insert into SHIFTS values (null,'05:00 AM','11:00','5:40');
+
+insert into PARAMS values(null,'DOCK_LABELS_IP','10.0.0.99',now());
+insert into PARAMS values(null,'DOCK_LABELS_PORT','9100',now());
+insert into PARAMS values(null,'KITCHEN_LABELS_IP','10.0.0.99',now());
+insert into PARAMS values(null,'KITCHEN_LABELS_PORT','9100',now());
+insert into PARAMS values(null,'PLATING_LABELS1_IP','10.0.0.99',now());
+insert into PARAMS values(null,'PLATING_LABELS1_PORT','9100',now());
+insert into PARAMS values(null,'PLATING_LABELS2_IP','10.0.0.99',now());
+insert into PARAMS values(null,'PLATING_LABELS2_PORT','9100',now());
+
+insert into SUPPLIERS values(null,'Vic Meats','Mascot','Australia','123456789',now());
+insert into SUPPLIERS values(null,'ANDREWS','Mascot','Australia','123456789',now());
+
+insert into PURCHASE_ORDERS values (null,1,'Weekly Order',now(),null,now());
+insert into PURCHASE_ORDERS values (null,2,'Weekly Order',now(),null,now());
 
 insert into PURCHASE_ORDER_ITEMS values (null,1,5,'V100001','sliced','each',3,6,null,now());
 insert into PURCHASE_ORDER_ITEMS values (null,1,4,'V100001','diced','each',3,6,null,now());
