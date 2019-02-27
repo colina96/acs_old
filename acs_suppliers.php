@@ -1,6 +1,7 @@
 <div class='top_menu_container'>
 			<div class='top_menu'  onclick="suppliers(this)">SUPPLIERS</div>
 			<div class='top_menu'   onclick="load_purchase_orders(this)">PURCHASE ORDERS</div>
+			<div class='top_menu'   onclick="load_dock_components(this)">ORDER ITEMS</div>
 		
 			
 			
@@ -29,22 +30,41 @@ var purchase_order = null;
 function suppliers()
 {
 	form_layout['SUPPLIERS'] = {
-		'fields' : {
+		'XX-fields' : {
 			'name' : { 'Title':'SUPPLIER' },
 			'pvalue' : { 'Title':'VALUE' },
 		},
 		'className' : 'menu_table',
-	}
+	};
+	form_layout['MENU_ITEM_COMPONENTS'] = {
+			'XX-fields' : {
+				'name' : { 'Title':'SUPPLIER' },
+				'pvalue' : { 'Title':'VALUE' },
+			},
+			'className' : 'menu_table',
+			'title' : 'Components to label at dock',
+		};
 	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
 	var div = document.getElementById('suppliers_container');
 	div.innerHTML = null;
-	if (supplier_data == null) {
-		supplier_data = new evoz_tools('SUPPLIERS','suppliers_container',data_formats['SUPPLIERS']);
-	}
+	
+	var e = new evoz_tools('SUPPLIERS','suppliers_container',data_formats['SUPPLIERS']);
+	
 	// openPage('PARAMS', this, 'red','tabcontent','tabclass');
-	supplier_data.build_form();
+	e.build_form();
 }
 
+function load_dock_components()
+{
+	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
+	var div = document.getElementById('suppliers_container');
+	div.innerHTML = null;
+	
+	var data = new evoz_tools('MENU_ITEM_COMPONENTS','suppliers_container',null,'label_at_dock = 1');
+
+	// openPage('PARAMS', this, 'red','tabcontent','tabclass');
+	data.build_form();
+}
 function Xload_purchase_orders()
 {
 	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
@@ -69,6 +89,7 @@ function load_purchase_orders()
         	console.log(result);
             // comps = result;
         	purchase_orders = result.purchase_orders;
+        	supplier_data = result.suppliers;
             // TODO - make search work
            
             console.log(tag,"got " + result.length + " comps");
@@ -127,7 +148,23 @@ function show_purchase_orders()
 
 function new_purchase_order_form()
 {
-	
+	/* two part form - create purchase order and list of items. 
+	*/
+	let tag = 'new_purchase_order_form';
+	console.log(tag);
+	var div = document.createElement('div');
+	var select = document.createElement('select');
+	select.id = 'select_supplier';
+	for (var s in supplier_data) {
+		console.log(supplier_data[s]);
+		var opt = document.createElement('option');
+		opt.innerHTML = supplier_data[s].name;
+		opt.value = s;
+		select.appendChild(opt);
+		
+	}
+	div.appendChild(select);
+	return(div);
 }
 
 	</script>
