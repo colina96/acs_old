@@ -51,7 +51,7 @@ function dblog($s)
 	$txt = $t.$u.' : '.$s;
 
 	// if you fail here, make sure you have the folder and it has rwx rights for everyone
-	file_put_contents('REST/logs/dblog_'.$Dt.'.log', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
+	file_put_contents('logs/dblog_'.$Dt.'.log', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
 	/*
 	$myfile = fopen("dblog.log", "ar");
 	if ($myfile) {

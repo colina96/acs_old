@@ -3,6 +3,7 @@
 var shift_data = null;
 function daily_orders()
 {
+    let tag = 'daily_orders: ';
 	openPage('ORDERS', this, 'red','tabcontent','tabclass');
 	var div = document.getElementById('daily_orders_div');
 	div.innerHTML = '';
@@ -13,18 +14,19 @@ function daily_orders()
         dataType: 'json',	      
         success: function(result) {
             shift_data = result;	          
-            console.log("got " + result.length + " shift items");
+            console.log(tag,"success: got " + result.length + " shift items");
             show_shift_orders(result);	            
         },
-        fail: (function (result) {
-            console.log("fail shifts",result);
-        })
+        fail: function (result) {
+            console.log(tag,"fail",result);
+        }
     });
 }
 
 function show_shift_orders(shift_data) // horrible hack TODO - work out what is really needed and write that properly
 {
-	console.log(shift_data);
+    let tag = 'show_shift_orders: ';
+	console.log(tag, 'shift_data: ', shift_data);
 	var div = document.getElementById('daily_orders_div');
 	div.innerHTML = '';
 	var tab = document.createElement('table');
@@ -74,47 +76,46 @@ function show_shift_orders(shift_data) // horrible hack TODO - work out what is 
 	div.appendChild(tab);
 	var btn = document.createElement('button');
 	btn.className= 'button_main';
-	
-	
 }
 
-function set_shift_qty(menu_item_id,shift_id)
-{
-	console.log('set_shift_qty',menu_item_id,shift_id);
+function set_shift_qty(menu_item_id,shift_id) {
+    let tag = 'set_shift_qty: ';
+	console.log(tag,menu_item_id,shift_id);
 	var name = 'S' + menu_item_id + '_' + shift_id;
 	var val = document.getElementsByName(name)[0].value;
-	console.log(val);
-	
-		$.post("REST/update_shift_data.php",
-			    {
-			        menu_item_id: menu_item_id,
-			        shift_id: shift_id,
-			        val: val
-			    },
-			    function(data, status){
-			        console.log("Data: " + data + "\nStatus: " + status);
-			    });
-	
-		
+	console.log(tag,val);
+
+    $.post(
+        "REST/update_shift_data.php",
+        {
+            menu_item_id: menu_item_id,
+            shift_id: shift_id,
+            val: val
+        },
+        function (data, status) {
+            console.log(tag,"Data: " + data + "\nStatus: " + status);
+        }
+    );
 }
 function clear_daily_completed()
 {
-	console.log('clear_daily_completed');
-	var data =  {clear: 'true'};
+    let tag = 'clear_daily_completed: ';
+	console.log(tag);
+	let data =  {clear: 'true'};
 	$.ajax({
         url:  "REST/get_shifts.php",
         type: "POST",
         data: data,
         dataType: 'json',	      
         success: function(result) {
-            console.log(result);
+            console.log(tag, 'success: '.result);
             shift_data = result;	          
-            console.log("got " + result.length + " shift items");
+            console.log(tag,"got " + result.length + " shift items");
             show_shift_orders(result);	            
         },
-        fail: (function (result) {
-            console.log("fail shifts",result);
-        })
+        fail: function (result) {
+            console.log(tag, "fail",result);
+        }
     });
 }
 </script>
