@@ -17,6 +17,7 @@
 		<input type='file' accept='text/plain' onchange='open_suppliers_csv(event)'><br>
 	
 	</div>
+	<div id='csv_errors'></div>
 </div>
 
 <script>
@@ -32,24 +33,59 @@ var data_formats = { // map csv columns to database fields
 var supplier_obj = null;
 var po_data = null; // purchase orders
 var purchase_order = null;
+var upload_suppliers_obj = null;
 
-var open_suppliers_csv = function(event) {
+//var open_suppliers_csv = function(event) {
+function open_suppliers_csv(event) {
 		var input = event.target;
+	//	upload_suppliers_obj = new evoz_tools('SUPPLIERS','suppliers_container',data_formats['SUPPLIERS']);
+		
 	    console.log('open_suppliers_csv');
 	   
 	    var reader = new FileReader();
 	    reader.onload = function(){
 	      var text = reader.result;
 	      var json = CSVToArray(text);
-	      suppliers_obj.json = json;
+	   //   upload_suppliers_obj.json = json;
 	      console.log(json);
-	      show_json(json,suppliers_obj);
+	    //  upload_suppliers_obj = array();
+	   //   upload_suppliers_obj.raw_data = json;
+	      /*
+	      chain of events - get existing suppliers and components then insert new values where needed
+	      */
+	      process_suppliers_csv(json); 
+	    	show_json(json,'suppliers_container');
 	      
 			// document.getElementById('output').innerHTML = text;
 	      console.log(reader.result.substring(0, 200));
 	    };
 	    reader.readAsText(input.files[0]);
 	  };
+
+function process_suppliers_csv(json)
+{
+	// quick and dirty to meet deadline - rewrite to make REST interface more generic
+	var ret = Object();
+	
+	ret.json = json;
+	console.log(ret);
+	var postdata =  {data: JSON.stringify(ret)};
+	$.ajax({
+    	url: RESTHOME + "upload_suppliers.php",
+        type: "POST",
+        // dataType: 'json',
+        data: postdata,
+        success: function(result) {
+            console.log('got result');
+            console.log(result);    
+            document.getElementById('csv_errors').innerHTML = result;
+            
+        },
+        fail: (function (result) {
+            console.log("fail ",result);
+        })
+    });
+}
 
 function suppliers()
 {

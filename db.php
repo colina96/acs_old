@@ -90,7 +90,7 @@ function get_fieldnames($table_name)
 	return($fieldnames);
 }
 
-function get_table($tablename,$conditions)
+function get_indexed_table($tablename,$conditions,$index_field)
 {
 	$fieldnames = get_fieldnames($tablename);
 	$sql = "select * from ".$tablename;
@@ -107,10 +107,15 @@ function get_table($tablename,$conditions)
 			foreach ($fieldnames as $f) {
 				$comp[$f] = utf8_encode($row[$f]);
 			}
-			$comps[$row['id']] = $comp;
+			$comps[$row[$index_field]] = $comp;
 		}
 	}
 	return($comps);
+}
+
+function get_table($tablename,$conditions)
+{
+	return(get_indexed_table($tablename,$conditions,'id'));
 }
 
 function test_mysql_query($sql)

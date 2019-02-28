@@ -434,15 +434,15 @@ function upload_json(target)
 	console.log('upload_json');
 	console.log(target);
 }
-function show_json(json,target)
+function show_json(json,div_id)
 {
 	
-	console.log('show_json',target.div_id);
-	var div = document.getElementById(target.div_id);
+	console.log('show_json',div_id);
+	var div = document.getElementById(div_id);
 	div.innerHTML = '';
-	var h1 = document.createElement('H1');
+/*	var h1 = document.createElement('H1');
 	h1.innerHTML = target.tablename;
-	div.appendChild(h1);
+	div.appendChild(h1); */
 	console.log('got json rows = ', json.length,json[0].length);
 	var tab = document.createElement('table');
 	tab.className = 'data';
@@ -463,13 +463,13 @@ function show_json(json,target)
 		tab.appendChild(tr);
 	}
 	div.appendChild(tab);
-	var upload_btn = document.createElement('button');
+/*	var upload_btn = document.createElement('button');
 	upload_btn.innerHTML = 'Upload to ' + target.tablename;
 	upload_btn.addEventListener("click", function(event) { 
 		upload_json(target); 
 		event.preventDefault();
 		});
-	div.appendChild(upload_btn);
+	div.appendChild(upload_btn); */
 }
 
 var evoz_openFile = function(event,target) {

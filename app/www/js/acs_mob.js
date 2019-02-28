@@ -1267,6 +1267,7 @@ function show_dock()
 		console.log(purchase_orders[i]);
 		console.log('purchase_orders[i].items.length',purchase_orders[i].items.length);
 		for (var j = 0; j < purchase_orders[i].items.length; j++) {
+			let dock_item = Array();
 			console.log('item',j);
 			var tr = document.createElement('tr');
 			tr.setAttribute(
@@ -1276,14 +1277,14 @@ function show_dock()
 			tr.appendChild(new_td((j == 0)?purchase_orders[i].supplier.name:'','comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
-			
+			dock_item['value'] = purchase_orders[i].items[j].id;
+			dock_item['label'] = purchase_orders[i].supplier.name + ": " + purchase_orders[i].items[j].component.description;
 			table.appendChild(tr);
+			dock_items.push(dock_item);
 		}
-		
-		
 	}
 	div.appendChild(table);
-	// setup_dock_search(dock_items);
+	setup_dock_search(dock_items);
 }
 function Xshow_dock()
 {
@@ -1342,7 +1343,14 @@ function setup_dock_search(dock_items)
 			$('#dock_search').val(ui.item.label);
 			// and place the person.id into the hidden textfield called 'link_origin_id'.
 			console.log('setup_dock_search: selected ', ui.item.value);
-			show_dock_component(ui.item.value);
+			for (var i in purchase_orders) {
+				for (var j = 0; j < purchase_orders[i].items.length; j++) {	
+					if (ui.item.value == purchase_orders[i].items[j].id) {
+						show_dock_component(i,j);
+					};
+				}
+			}
+			// show_dock_component(ui.item.value);
 			// cordova.plugins.Keyboard.close();
 			return false;
 		}
