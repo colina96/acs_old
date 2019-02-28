@@ -387,8 +387,9 @@ function check_ingredient(cid)
             new_comp['selected_ingredients'][i] = scanned_ingredient[0]; // just store everything
          //   for (var i = 0; i < new_comp['selected_ingredients'].length; i++) {
     			// var sub = get_component_by_id(new_comp['selected_ingredients'][i]['id']);
-           
-    				console.log(tag,"found ingredient");
+            		sub = scanned_ingredient[0];
+    				console.log(tag,"found ingredient",i);
+    				console.log(sub);
     				valid_ingredient = true;
     				new_comp['selected_ingredients'][i]['cid'] = scanned_ingredient[0].comp_id;
     				// attach to new_comp and record temperature
@@ -400,7 +401,7 @@ function check_ingredient(cid)
     				// d += "<tr><td>" + sub['description'] + '</td>';
     			//	document.getElementById('ms_1_text').innerHTML = ''; // sub['description'];
     			//	document.getElementById('ms_2_target').innerHTML = ' < ' + get_preptype_val(sub['prep_type'],'M1_temp');
-    				new_comp['selected_ingredients'][i]['target'] = get_preptype_val(sub['prep_type'],'M1_temp');
+    				new_comp['selected_ingredients'][i]['target'] = get_preptype_val(sub['prep_type_id'],'M1_temp');
     				console.log(tag,'new_comp: ',new_comp);
     				read_temp('M0');
     		//	}
@@ -1390,6 +1391,8 @@ function get_preptype_val(id,fld)
 			return(preptypes[i][fld]);
 		}
 	}
+	console.log('prep_type not found',id);
+	console.log(preptypes);
 	return("not found");
 }
 
