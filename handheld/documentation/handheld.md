@@ -13,6 +13,23 @@ The PCB was developed by Kean Maizels for ACS.
 
 ## Versions
 
+### Version 7
+This version adds the option to save values on the non volatile memory (NVM) of the arduino
+> After updating the firmware, to get the calibration values working you'll need to set the serial number and hardware revision
+> You can use these commands (or similar) from the Arduino terminal (57600 baud)
+> 
+> `:1,0W` - serial number 0 for prototypes
+>
+> `:2,33W` - hardware rev 3.3 (or use 32 if you like for the R3.2 PCBs)
+>
+> `:3,600W` - 600 second activity timeout
+>
+> `:4,0W` - zero offset for thermocouple
+>
+> `:5,0W` - zero offset for IR sensor
+>
+> You can also manually try out the new V & R command, and see how the C/c/F/f commands alter the output of T & t commands.
+
 ### Version 3.2
 
 Schematics are in `QPack R3.2.pdf`. The following mail should explain some specifics in more detail
