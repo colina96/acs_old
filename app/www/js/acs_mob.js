@@ -102,7 +102,10 @@ function temp_callback(s) // works out where to send the temperature reading
 	else if (temp_mode == 'M2_plating') {
 		// component.M2_temp = temp_reading;
 		set_plating_M2_temp(s);
-	} 
+	} else if (temp_mode == 'S') {
+		// setup
+		set_setup_temp(s);
+	}
 	else {
 		log ("don't know what to do with temperature reading " + temp_mode);
 	}
@@ -938,9 +941,6 @@ function set_plating_M2_temp(temperature)
 	document.getElementById('plating_num_completed').value = plating_item.num_labels;
 	console.log('open page m_plating_finished');
 	openPage('m_plating_finished', this, 'red','m_modal2','tabclass');
-
-
-	
 }
 
 function show_menu_item_components(menu_item_id) {
