@@ -172,6 +172,52 @@ function save_pt_time()
 		        load_show_preptypes();
 		    });
 }
+function calc_max_serves()
+{
+	// if only 2 serving sizes the split is 80 - 20
+	let min1 = 20; // minimum percentage of units in two serving size split
+	let min2_1 = 10;// minimum percentage of units in three serving size split
+	let min2_2 = 30;
+	var div = document.getElementById('max_serve_div');
+	var nserves = document.getElementById('serve_no').value;
+	var ss1 = document.getElementById('max_serve_in1').value;
+	var ss2 = document.getElementById('max_serve_in2').value;
+	console.log('calc_max_serves_2',nserves,ss1,ss2);
+	if (nserves == 0 || ss1 == 0) {
+		console.log('silly values');
+		return;
+	}
+	if (!ss2 || ss2 < 1) {
+		console.log('80 - 20 split');
+		let units = Math.floor(nserves * min1 / 100);
+		let rem = nserves - units; // assign the min number of units
+		let ss1_no = Math.floor (rem / ss1);
+		console.log ('assigned units :' + units + ' s1 ' + ss1_no);
+		units += rem - (ss1_no * ss1);
+		console.log ('final assigned units :' + units + ' s1 ' + ss1_no);
+		div.innerHTML = ss1_no + 'of ' + ss1 + ', ' + units + ' units';
+		// 
+	}
+	else {
+		console.log('60 -30 - 10 split');
+		console.log('80 - 20 split');
+		let units = Math.floor(nserves * min2_1 / 100);
+		
+		let rem = nserves - units; // assign the min number of units
+		
+		let ss2_no = Math.floor(nserves * min2_2 / 100 / ss2);
+		console.log ('assigned units :' + units + ' s1 ' + ss2_no);
+		rem -= ss2_no * ss2;
+		let ss1_no = Math.floor (rem / ss1);
+		console.log ('final assigned units :' + units + ' s1 ' + ss1_no);
+		units += rem - (ss1_no * ss1);
+		div.innerHTML = ss1_no + ' of ' + ss1 + ', ' + ss2_no + ' of ' + ss2 + ', ' + units + ' units';
+	}	
+	
+	
+	
+	// calc 
+}
 </script>
 
 <div class='acs_main'>
@@ -189,6 +235,18 @@ function save_pt_time()
 
 
 
+</div>
+<div class='acs_container'>
+<div>
+	<h1>Max Serve Calculator</h1>
+	<table>
+	<tr><td>Number of serves :</td><td><input id='serve_no' type='number' onchange="calc_max_serves();">
+	</td><td rowspan='3'><div id='max_serve_div'></div>
+	<tr><td>Serve size 1 :</td><td><input id='max_serve_in1' type='number' onchange="calc_max_serves();">
+	<tr><td>Serve size 2 :</td><td><input id='max_serve_in2' type='number' onchange="calc_max_serves();">
+	
+	</table>
+</div>
 </div>
 </div>
 
