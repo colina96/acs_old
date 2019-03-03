@@ -394,6 +394,7 @@ td {
     text-align: center;
 }
 
+
 .milestone_achieved {
     display: flex;
     justify-content: center;
@@ -502,6 +503,7 @@ td {
 	position: relative;
 	margin:0;
 	top:0;
+	background: var(--acs_background_dark);
 }
 
 
@@ -561,6 +563,12 @@ td {
 	display: table;
 	margin: 0 auto;
 	text-align: center;
+}
+.centerflex {
+	display: flex;
+	margin: 0px auto;
+	text-align: center;
+	padding: 15px;
 }
 .centerpad {
 	display:table;

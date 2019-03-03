@@ -134,6 +134,7 @@
 
     <!--  dock pages -->
     <!--  there is some duplication of kitchen pages and functionality but safer to have copies -->
+    <div class='mobile_main' hidden id='main_1'></div>
     <div class='mobile_main hidden' id='dock_main'>
         <div class='m_modal_shadow'></div>
         <img class="bg-image" src="img/qac_mobile.png">
@@ -157,7 +158,7 @@
                        onchange='manual_barcode_submit("dock_manual_code")'>
             </div>
             <div class='hidden' id='current_time_dock'></div>
-
+			<div class='m_modal' id='blank_1'></div>
             <div class='m_modal' id='m_dock'>
                 
                     <div id='dock_display_comp_div'>
@@ -231,7 +232,7 @@
                     </button>
                 </div>
             </div>
-
+<!-- no longer used
             <div class='m_modal' id='dock_m_temp_modal_labels'>
                 <div class='center modal_head'><span class="temperature_label">TEMPERATURE</span></div>
                 <div id='dock_m1_temp_div_4' class='temp_reading'></div>
@@ -245,7 +246,7 @@
                     <button type='button' class='m_btn' onclick="dock_start_component();">Print Labels</button>
                 </div>
             </div>
-
+ -->
             <div class='m_modal' id='dock_m_temp_modal_high'>
                 <div class='center modal_head'><span class="temperature_label">TEMPERATURE</span></div>
                 <div id='dock_m1_temp_div_6' class='temp_reading red'></div>

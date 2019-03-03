@@ -243,7 +243,7 @@ function process_barcode(s)
 		
 		var user = get_user(uid);
 		if (!user) {
-			set_info('INVALID USER');
+			set_info('USER NOT FOUND ' + uid);
 			return;
 		}
 		set_info('');
@@ -1248,7 +1248,7 @@ function show_dock()
 	show('dock_search_div');
 	console.log('show_dock');
 	
-	console.log(purchase_orders);
+	// console.log(purchase_orders);
 	$('#dock_search').val('');
 	var dock_items = new Array();
 	var div = document.getElementById('dock_display_comp_div1');
@@ -1269,7 +1269,7 @@ function show_dock()
 		console.log('purchase_orders[i].items.length',purchase_orders[i].items.length);
 		for (var j = 0; j < purchase_orders[i].items.length; j++) {
 			let dock_item = Array();
-			console.log('item',j);
+			// console.log('item',j);
 			var tr = document.createElement('tr');
 			tr.setAttribute(
 					"onclick",
@@ -1630,6 +1630,94 @@ function read_plating_M1temp(callback){
 	read_temp('M1_plating');
 }
 
+function new_div(innerHTML,classes)
+{
+	var div = document.createElement('div');
+	div.className = classes;
+	if (innerHTML) div.innerHTML = innerHTML;
+	return(div);
+}
+
+function label_cluster(id)
+{
+	var div = document.createElement('div');
+	div.className = 'centerflex';
+	
+	div.appendChild(new_div('LABEL QUANTITY','center grey'));
+	var input_fld = document.createElement('input');
+	input_fld.type = 'number';
+	input_fld.className = 'label_num';
+	input_fld.name = id;
+	input_fld.value  = 1;
+	input_fld.length = 3;
+	div.appendChild(input_fld);
+	return(div);
+}
+
+function date_picker(id,tag)
+{
+	var div = document.createElement('div');
+	div.className = 'centerflex';
+	div.appendChild(new_div(tag,'center grey'));
+	var input_fld = document.createElement('input');
+	
+	input_fld.id=id;
+	input_fld.placeholder='dd-mm-yy';
+	input_fld.className ='datepicker';
+	input_fld.readonly=true;
+	div.appendChild(input_fld);
+	$( function() { $( "#" + id ).datepicker({ dateFormat: 'dd-mm-yy' });} );
+	return(div);
+}
+
+function add_btns(blist)
+{
+	btns = new_div(null,'btns');
+	if (blist) {
+		for (let i = 0; i < blist.length; i++) {
+			let ret = document.createElement('button');
+			ret.className = 'm_btn';
+			ret.setAttribute("onclick",blist[i].fn);
+			ret.className = 'm_btn';
+			ret.innerHTML = blist[i].text;
+			btns.appendChild(ret);
+		}
+	}
+	return(btns);
+}
+
+function add_return_icon(return_fn)
+{
+	let img = document.createElement('img');
+	img.src = 'img/icon_logout.png';
+	
+	img.setAttribute("onclick",return_fn);
+	img.className = 'm_top_menu larger left icon_logout';
+	return (img);
+}
+
+function dock_labels()
+{
+	// var div = document.getElementById('blank_1');
+	// var div = openPage('blank_1', this, 'red','m_modal','tabclass');
+	var div = openPage('main_1', this, 'red','mobile_main','tabclass');
+	div.innerHTML = null; // clear everything
+	var top_div = new_div(null,'m_top_menu_container');
+	top_div.appendChild(add_return_icon('goto_dock()'));
+	div.appendChild(top_div);
+	var modal_div = new_div(null, 'm_modal');
+	
+	
+	modal_div.appendChild(new_div('<span>TEMPERATURE</span>','m_label'));
+	modal_div.appendChild(new_div(parseInt(new_comp.M1_temp * 10) / 10 + "&#176C",'temp_reading'));
+	modal_div.appendChild(date_picker('dock_expiry','USE BY'));
+	modal_div.appendChild(label_cluster('dock_m1_label_qty'));
+	
+	btns = add_btns([{'fn':'dock_start_component()','text':'Print Labels'}])
+	modal_div.appendChild(btns);
+	div.appendChild(modal_div);
+}
+
 function check_temp_m1_dock(t)
 {
 	console.log("check temp dock",t);
@@ -1661,10 +1749,12 @@ function check_temp_m1_dock(t)
 			if (parseInt(t * 10 ) > parseInt(M1_temp_target * 10)) { // round to one decimal place
 				show_temp(t,true);
 				console.log("DOCK M1 temp too high");
+				load_chefs(); // reload user data
 				openPage('dock_m_temp_modal_high', this, 'red','m_modal','tabclass');
 			}
 			else {
-				openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
+				// openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
+				dock_labels();
 			}
 		}
 	}
@@ -1688,13 +1778,15 @@ function dock_QA_scan(uid)
 function dock_qa_client_request()
 {
 	new_comp.M1_action_code = 11; // TODO must fix
-	openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
+	dock_labels();
+	// openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
 }
 
 function dock_qa_signof()
 {
 	new_comp.M1_action_code = 10; // TODO must fix
-	openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
+	dock_labels();
+	// openPage('dock_m_temp_modal_labels', this, 'red','m_modal','tabclass');
 }
 
 function dock_qa_override()

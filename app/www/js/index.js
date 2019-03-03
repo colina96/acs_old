@@ -334,4 +334,5 @@ function openPage(pageName, elmnt, color, content_class, tab_class, callback) {
     // Add the specific color to the button used to open the tab content
     // elmnt.style.backgroundColor = color;
     if (typeof (callback) == 'function') callback();
+	return(d);
 }

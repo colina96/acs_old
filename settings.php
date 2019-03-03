@@ -1,12 +1,9 @@
 <script>
 
 var params = null;
-function settings()
+
+function get_params(callback_fn)
 {
-	openPage('PARAMS', this, 'red','tabcontent','tabclass');
-	var div = document.getElementById('settings_div');
-	div.innerHTML = '';
-	
 	$.ajax({
         url:  "REST/get_params.php",
         type: "POST",
@@ -15,12 +12,21 @@ function settings()
             console.log(result);
             params = result;	          
             console.log("get_params got " + result.length + " items");
-            show_settings(result);	            
+				if (callback_fn) callback_fn(result);
         },
         fail: (function (result) {
             console.log("fail get_params",result);
         })
     });
+}
+
+function settings()
+{
+	openPage('PARAMS', this, 'red','tabcontent','tabclass');
+	var div = document.getElementById('settings_div');
+	div.innerHTML = '';
+   get_params(show_settings);
+	
 }
 
 

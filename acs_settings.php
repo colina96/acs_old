@@ -178,16 +178,18 @@ function calc_max_serves()
 	let min1 = 20; // minimum percentage of units in two serving size split
 	let min2_1 = 10;// minimum percentage of units in three serving size split
 	let min2_2 = 30;
-	var div = document.getElementById('max_serve_div');
+	
 	var nserves = document.getElementById('serve_no').value;
 	var ss1 = document.getElementById('max_serve_in1').value;
 	var ss2 = document.getElementById('max_serve_in2').value;
 	console.log('calc_max_serves_2',nserves,ss1,ss2);
+	var ret = Array();
 	if (nserves == 0 || ss1 == 0) {
 		console.log('silly values');
-		return;
+		return(null);
 	}
 	if (!ss2 || ss2 < 1) {
+		
 		console.log('80 - 20 split');
 		let units = Math.floor(nserves * min1 / 100);
 		let rem = nserves - units; // assign the min number of units
@@ -195,7 +197,10 @@ function calc_max_serves()
 		console.log ('assigned units :' + units + ' s1 ' + ss1_no);
 		units += rem - (ss1_no * ss1);
 		console.log ('final assigned units :' + units + ' s1 ' + ss1_no);
-		div.innerHTML = ss1_no + 'of ' + ss1 + ', ' + units + ' units';
+		ret.ss1 = ss1;
+		ret.ss1_no = ss1_no;
+		ret.units = units;
+		
 		// 
 	}
 	else {
@@ -207,16 +212,31 @@ function calc_max_serves()
 		
 		let ss2_no = Math.floor(nserves * min2_2 / 100 / ss2);
 		console.log ('assigned units :' + units + ' s1 ' + ss2_no);
+		if (ss2_no == 0 && ss2 < rem) ss2_no = Math.floor(rem/ss2);
 		rem -= ss2_no * ss2;
 		let ss1_no = Math.floor (rem / ss1);
 		console.log ('final assigned units :' + units + ' s1 ' + ss1_no);
 		units += rem - (ss1_no * ss1);
-		div.innerHTML = ss1_no + ' of ' + ss1 + ', ' + ss2_no + ' of ' + ss2 + ', ' + units + ' units';
-	}	
-	
-	
-	
-	// calc 
+		ret.ss1 = ss1;
+		ret.ss1_no = ss1_no;
+		ret.ss2 = ss2;
+		ret.ss2_no = ss2_no;
+		ret.units = units;
+		// div.innerHTML = ss1_no + ' of ' + ss1 + ', ' + ss2_no + ' of ' + ss2 + ', ' + units + ' units';
+	}		
+	return(ret);
+}
+
+function disp_max_serves()
+{
+	var div = document.getElementById('max_serve_div');
+	var ret = calc_max_serves();
+	if (ret) {
+		if (ret.ss2) 
+			div.innerHTML = ret.ss1_no + ' of ' + ret.ss1 + ', ' + ret.ss2_no + ' of ' + ret.ss2 + ', ' + ret.units + ' units';
+		else
+			div.innerHTML = ret.ss1_no + 'of ' + ret.ss1 + ', ' + ret.units + ' units';
+	}
 }
 </script>
 
@@ -240,10 +260,10 @@ function calc_max_serves()
 <div>
 	<h1>Max Serve Calculator</h1>
 	<table>
-	<tr><td>Number of serves :</td><td><input id='serve_no' type='number' onchange="calc_max_serves();">
+	<tr><td>Number of serves :</td><td><input id='serve_no' type='number' onchange="disp_max_serves();">
 	</td><td rowspan='3'><div id='max_serve_div'></div>
-	<tr><td>Serve size 1 :</td><td><input id='max_serve_in1' type='number' onchange="calc_max_serves();">
-	<tr><td>Serve size 2 :</td><td><input id='max_serve_in2' type='number' onchange="calc_max_serves();">
+	<tr><td>Serve size 1 :</td><td><input id='max_serve_in1' type='number' onchange="disp_max_serves();">
+	<tr><td>Serve size 2 :</td><td><input id='max_serve_in2' type='number' onchange="disp_max_serves();">
 	
 	</table>
 </div>
