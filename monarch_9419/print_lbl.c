@@ -337,10 +337,10 @@ int parse_job_file(char *jobfile, char *labeldir)
 					if (!find_and_replace(tlnt,sdbuf,val))
 					{
 						printf("Cannot find key %s\n",sdbuf);
-						close(fp);
+						// close(fp);
 						// free(tlnt);
 						// free(input_LNT);
-						return 0;
+						// return 0;
 					}
 					else
 						ffound++;

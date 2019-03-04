@@ -855,6 +855,7 @@ td {
 	height:10vh;
 }
 
+.w25 { width:25%; }
 .temp_reading {
 	font-size: 25vw;
 	margin: 0 auto;

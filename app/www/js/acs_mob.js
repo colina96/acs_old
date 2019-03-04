@@ -1573,18 +1573,19 @@ function show_product_details()
 	var tab = document.createElement('table');
 	tab.style.position = 'absolute';
 	tab.style.left = '30px';
+	tab.style.width = '70vw';
 	
 		var tr = document.createElement('tr');
-		tr.appendChild(new_td('Supplier','comp','m-5'));
-		tr.appendChild(new_td(purchase_orders[i].supplier.name,'comp','m-5'));
+		tr.appendChild(new_td('Supplier','comp w25','m-5'));
+		tr.appendChild(new_td(': ' + purchase_orders[i].supplier.name,'comp','m-5'));
 		tab.appendChild(tr);
 		var tr = document.createElement('tr');
 		tr.appendChild(new_td('Product','comp','m-5'));
-		tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
+		tr.appendChild(new_td(': ' + purchase_orders[i].items[j].component.description,'comp','m-5'));
 		tab.appendChild(tr);
 		var tr = document.createElement('tr');
 		tr.appendChild(new_td('Spec','comp','m-5'));
-		tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
+		tr.appendChild(new_td(': ' + purchase_orders[i].items[j].spec,'comp','m-5'));
 		tab.appendChild(tr);
 	
 	return(tab);

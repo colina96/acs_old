@@ -37,8 +37,22 @@ if (!empty($_POST['data'])) {
 	$copies = $comp['copies'];
 	if ($copies <= 0) exit;
 	$description = $comp['description'];
+	$desc2 = '';
 	if (strlen($description) > 25) {
-		$description = substr($description,0,25);
+		echo 'description too long for one line '.strlen($description);
+		for ($i = 25; $i < strlen($description); $i++) {
+			$s = substr($description,$i,1);
+			echo $s;
+			if ($s == ' ') {
+				echo 'found space at '.$i;
+				$desc2 = substr($description,$i);
+				$description = substr($description,0,$i);
+				
+				echo '2nd line'.$desc2;
+				break;
+			}
+		}
+		
 	}
 	$expiry_date = $comp['expiry_date'];
 	$prepped_date = $comp['M1_time'];
@@ -74,9 +88,13 @@ if (!empty($_POST['data'])) {
 	fwrite($handle,"Endheader"."\n");
 	fwrite($handle,"Copies:".$copies."\n");
 	fwrite($handle,"NAME:".$description."\n");
-	if (!$dock) {
+	fwrite($handle,"NAME2:".$desc2."\n");
+	if (!$dock) 
 		fwrite($handle,"PREPAREDBY:".$preparedBy."\n");
-	}
+	else
+		fwrite($handle,"Received by:".$preparedBy."\n");
+	
+	
 	$facility = 1; //TODO not used yet.... maybe one day
 	$barcode = sprintf("BARCODE:c%02d%06d",$facility,$id);
 	fwrite($handle,$barcode."\n");
@@ -89,7 +107,11 @@ if (!empty($_POST['data'])) {
 		$barcodeTxt = "EXPIRYDATE:".date("d M y H:i",$d);
 	fwrite($handle,$barcodeTxt."\n");
 	$d = strtotime($prepped_date);
-	$barcodeTxt = "PREPPED:".date("d M y H:i",$d);
+	if (!$dock) 
+	
+		$barcodeTxt = "PREPPED:".date("d M y H:i",$d);
+	else
+		$barcodeTxt = "RECEIVED:".date("d M y H:i",$d);
 	fwrite($handle,$barcodeTxt."\n");
 	if ($dock) {
 		fwrite($handle,"M1_ACTION:".$action_code."\n");
