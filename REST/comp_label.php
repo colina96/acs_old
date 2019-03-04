@@ -39,19 +39,21 @@ if (!empty($_POST['data'])) {
 	$description = $comp['description'];
 	$desc2 = '';
 	if (strlen($description) > 25) {
+		$bestpos = 35;
 		echo 'description too long for one line '.strlen($description);
-		for ($i = 25; $i < strlen($description); $i++) {
+		for ($i = 20; $i < strlen($description); $i++) {
 			$s = substr($description,$i,1);
 			echo $s;
-			if ($s == ' ') {
+			if ($s == ' ' && $i < 35) {
 				echo 'found space at '.$i;
-				$desc2 = substr($description,$i);
-				$description = substr($description,0,$i);
+				$bestpos = $i;
 				
 				echo '2nd line'.$desc2;
-				break;
+				// break;
 			}
 		}
+		$desc2 = substr($description,$bestpos + 1);
+		$description = substr($description,0,$bestpos);
 		
 	}
 	$expiry_date = $comp['expiry_date'];

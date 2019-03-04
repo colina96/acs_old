@@ -83,14 +83,23 @@
 
 #chk_temp_item_div, .chk_temp_item{
 	position:absolute;
-	top: 6vh;
+	top: 5vh;
 	left: 6vw;
 	color:var(--acs_text_normal_light);
 	font-size:6vw;
 	font-weight: bold;
 
 }
-#chk_temp_item_id_div{
+.chk_temp_item2 {
+	position:absolute;
+	top: 10vh;
+	left: 6vw;
+	color:var(--acs_text_normal_light);
+	font-size:4vw;
+	font-weight: bold;
+
+}
+#chk_temp_item_id_div {
 	position:absolute;
 	top: 15vh;
 	left: 6vw;
@@ -244,9 +253,9 @@
 }
 
 #m_home_tab, #plating_home_tab {
-	height:20px;
+	height:25px;
 	transform: rotate(180deg);
-	margin: 0;
+	margin: 0 5px;
 }
 
 
@@ -342,14 +351,15 @@ thead tr {
 tbody {
 	display:block;
 	overflow:auto;
-	height:500px;
+	.height:500px;
 	width:inherit;
 
 }
 
 table {
 	border-spacing: 0;
-    width: 87vw;
+    .width: 87vw;
+    width:100%;
 	table-layout: fixed;
 }
 
@@ -707,10 +717,10 @@ td {
 }
 
 .icon_logout {
-	height: 20px;
+	height: 25px;
 	width: auto;
 	transform: rotate(180deg);
-	margin: 0;
+	margin: 0 5px;
 }
 
 .m_top_menu {

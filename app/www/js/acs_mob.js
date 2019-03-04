@@ -1699,12 +1699,16 @@ function add_return_icon(return_fn)
 
 function dock_labels()
 {
+	console.log('dock_labels');
 	var div = openPage('main_1', this, 'red','mobile_main','tabclass');
 	div.innerHTML = null; // clear everything
 	var top_div = new_div(null,'m_top_menu_container');
 	top_div.appendChild(add_return_icon('goto_dock()'));
 	div.appendChild(top_div);
-	div.appendChild(new_div(new_comp.description,'chk_temp_item'));
+	var desc_div = new_div(new_comp.description,'chk_temp_item');
+	
+	div.appendChild(desc_div);
+	div.appendChild(new_div('REQUIRED: < ' + new_comp.M1_temp_target + "&#176C",'chk_temp_item2'));
 	var modal_div = new_div(null, 'm_modal');
 		
 	modal_div.appendChild(new_div('<span>TEMPERATURE</span>','m_label'));
@@ -1715,6 +1719,9 @@ function dock_labels()
 	btns = add_btns([{'fn':'dock_start_component()','text':'Print Labels'}]);
 	modal_div.appendChild(btns);
 	div.appendChild(modal_div);
+	var rect = desc_div.getBoundingClientRect();
+	console.log(rect);
+	if (rect.height > 30) desc_div.style.fontSize = '4vw'; // was originally 6
 	load_chefs(); // make sure up to date - and exists. 
 }
 
@@ -1729,6 +1736,7 @@ function check_temp_m1_dock(t)
 	// var t = document.getElementsByName('m1_temp')[0].value;
 	var prep_type_id = new_comp['prep_type']; // should always be 6,7 or 8 (DOCK)
 	var M1_temp_target = get_preptype_val(prep_type_id,'M1_temp');
+	new_comp.M1_temp_target = M1_temp_target;
 	var M1_temp_sign = get_preptype_val(prep_type_id,'M1_temp_above');
 	// document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
 	document.getElementById('dock_m1_temp_div').innerHTML = '';
