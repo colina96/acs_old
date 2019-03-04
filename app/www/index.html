@@ -56,6 +56,8 @@
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/acs_mob.js"></script>
     <script type="text/javascript" src="js/acs_common.js"></script>
+    <script type="text/javascript" src="js/acs_admin.js"></script>
+
     <script type="text/javascript" src="js/qpack.js"></script>
 
     <link rel="stylesheet" type="text/css" href="css/acs_mob.css"/>
@@ -63,9 +65,7 @@
 </head>
 
 <script>
-
-    var keyboard_str = '';
-
+    let keyboard_str = '';
     function global_key(event) {
         // this is mostly to handle barcode scanner input.
         // on a pc the barcode scanner arrives as a string
@@ -78,7 +78,6 @@
             keyboard_str = '';
         }
     }
-
     function show_dims() {
         var div = document.getElementById('log_div');
         div.style.display = 'block';
@@ -105,6 +104,23 @@
     <div class='mobile_main hidden' id='setup'>
         <div class='center'><input name='resthome' id='resthome' onchange='test_rest()'></div>
         <div id='setup_result'>ADMIN</div>
+        <div id='sensor_tuning'>
+            <h3>Temperature Sensor offsets</h3>
+            <div>IR</div>
+            <input type="number" id="ir_offset">
+            <input type="submit" onclick="new_offset_ir()">
+            <input type="submit" onclick="test_ir();" value="Check IR">
+
+            <div>Probe</div>
+            <input type="number" id="probe_offset">
+            <input type="submit" onclick="new_offset_probe()">
+            <input type="submit" onclick="test_probe();" value="Check Probe">
+
+            <div>Test Temperature</div>
+            <div id='setup_temp'>Select sensor</div>
+
+            <div id='setup_log'></div>
+        </div>
         <div class='btns'>
             <button id='escape_btn' type='button' class='m_btn' onclick="exit_app();">Exit Kiosk Mode</button>
             <button id='plat_btn' type='button' class='m_btn' onclick="save_resthome();">Save</button>
@@ -804,7 +820,7 @@
 <div class='popup' id='manual_entry'>
     <div class='center'><h2>DEV: Enter Temperature</h2></div>
     <div class='enter_temp center'>
-        <input name='manual_temp' id='manual_temp' length='3' size='3' type='number'>
+        <input name='manual_temp' id='manual_temp' size='3' type='number'>
         <button type='button' class='m_btn' onclick='manual_temp_submit()'>Submit</button>
     </div>
     <button type='button' class='btn_preset_temp' onclick='manual_temp_submit("3");'>3</button>

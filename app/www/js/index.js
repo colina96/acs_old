@@ -195,18 +195,6 @@ function set_admin() {
     document.getElementsByName('resthome')[0].value = RESTHOME;
 }
 
-function save_resthome() {
-    RESTHOME = document.getElementsByName('resthome')[0].value;
-    var storage = window.localStorage;
-
-    storage.setItem('RESTHOME', RESTHOME);
-    test_rest();
-}
-
-function exit_app() {
-    KioskPlugin.exitKiosk();
-}
-
 function login(barcode_uid) {
     //var email= "colin.p.atkinson@gmail.com";
     //var password= "acs";

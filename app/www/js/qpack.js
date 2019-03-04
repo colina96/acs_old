@@ -10,8 +10,14 @@ var temp_timer = null;
 var loglines = 0;
 var serial_connected = false;
 
-function status(t)
-{
+// nvm/EEPROM save slot numbers
+const IR_OFFSET = 5;
+const PROBE_OFFSET = 4;
+const INACTIVITY_TIMER = 3; // set to 0 to disable
+const HW_REV = 2; // BOARD VERSION
+const SERIAL_NUMBER = 1;
+
+function status(t){
     document.getElementById('status').innerHTML += "<br>" + t;
 }
 function show_readout(readout)
@@ -28,12 +34,22 @@ function log(t)
 {
 	if (loglines++ > 100) {
 		loglines = 0;
-		document.getElementById('log').innerHTML  = '';
+		clearChildren(document.getElementById('log'));
 	}
-	d=new Date();
-	logtime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+	let d=new Date();
+	let logtime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
     document.getElementById('log').innerHTML += "<br>[" + logtime + "] " + t;
     
+}
+
+function setup_log(t){
+    if (loglines++ > 5) {
+        loglines = 0;
+        clearChildren(document.getElementById('setup_log'));
+    }
+    let d=new Date();
+    let logtime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+    document.getElementById('setup_log').innerHTML += "<br>[" + logtime + "] " + t;
 }
 
 function logclear()
@@ -158,8 +174,53 @@ function qpack_temp()
 
 function read_barcode()
 {
-        serial.write("BS");
+    serial.write("BS");
 }
+
+function read_nvm(slot){
+    serial.write(":"+slot+"R");
+}
+
+function write_nvm(slot,value){
+    let negate = (value<0);
+    let str = ":"+slot+","+Math.abs(value);
+    if(negate){
+        str+='-';
+    }
+    str+='W';
+    console.log("write_nvm: writing ",value," to ",slot,": ",str);
+    setup_log(str);
+    serial.write(str);
+}
+
+function set_IR_offset(value){
+    write_nvm(IR_OFFSET,value);
+}
+
+function get_IR_offset(){
+    read_nvm(IR_OFFSET);
+}
+
+function set_probe_offset(value) {
+    write_nvm(PROBE_OFFSET,value);
+}
+
+function get_probe_offset(){
+    read_nvm(PROBE_OFFSET);
+}
+
+function get_hw_serial_number(){
+    read_nvm(SERIAL_NUMBER);
+}
+
+function get_hw_rev(){
+    read_nvm(HW_REV);
+}
+
+function get_board_firmware_version(){
+    serial.write('V');
+}
+
 function process(text)
 {
     log(text);
@@ -215,12 +276,12 @@ function process(text)
 	}
 	else if (text.indexOf('T') == 0) {
 		log ("IR temp reading " + text);
-		var s = text.substring(1);
+		let s = text.substring(1);
 		temp_callback(s);
 	}
 	else if (text.indexOf('t') == 0) {
 		log ("Probe temp reading " + text);
-		var s = text.substring(1);
+		let s = text.substring(1);
 		temp_callback(s);
 	}
 	else if (text.indexOf('?') == 0) {
@@ -237,5 +298,12 @@ function process(text)
 	    log ("QPack charging");
 	    show('log');
 	    qpack_pause();
+    }else if (text.indexOf('V') == 0){
+	    log("QPack firmware version: ",text);
+	    show('log');
+    }else if (text.indexOf('R') == 0){
+	    setup_log("QPack NVM readout:",text);
+    }else if (text.indexOf('W') == 0){
+        setup_log("QPack NVM write:",text);
     }
 }
