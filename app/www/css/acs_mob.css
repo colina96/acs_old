@@ -697,6 +697,15 @@ td {
 	width:80%;
 }
 
+.datepicker {
+	width:60%;
+	font-size:160%;
+	background-image: url('../img/calendar.png');
+	background-size: 25px;
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+}
+
 .icon_logout {
 	height: 20px;
 	width: auto;
@@ -846,6 +855,7 @@ td {
 	height:10vh;
 }
 
+.w25 { width:25%; }
 .temp_reading {
 	font-size: 25vw;
 	margin: 0 auto;

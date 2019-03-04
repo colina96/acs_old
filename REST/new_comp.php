@@ -24,15 +24,17 @@ $M0 = false;
 
 
 $userID = $_SESSION['userID'];
+$expiry_date = "DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY)";
+if (!empty($comp['entered_expiry_date'])) $expiry_date = "'".$comp['entered_expiry_date']."'";
 if (!empty($comp['M1_temp'])) {
 	$M1_temp = $comp['M1_temp'];
-	$sql = "insert into COMPONENT "
+	$sql = "INSERT INTO COMPONENT "
 	    . "(comp_id,description, prep_type_id, started, M1_check_id, M1_temp, M1_time, M1_chef_id,M1_action_code,M1_action_id,shelf_life_days,expiry_date,finished) "
 	    . "values (".$comp_id.",'".$description."',".$prep_type.",now(),".$userID.",".$M1_temp.",now(),".$M1_chef_id.",".$M1_action_code.",".$M1_action_id.",".$shelf_life_days
-	    . ",DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY),".$finished.")";
+	    . ",".$expiry_date.",".$finished.")";
 }
 else if (!empty($comp['finished'])) {
-	$sql = "insert into COMPONENT "
+		$sql = "INSERT into COMPONENT "
         . "(comp_id,description, prep_type_id, started, M1_check_id, M1_time, M1_chef_id,M1_action_code,M1_action_id,finished,shelf_life_days,expiry_date) "
         . "values (".$comp_id.",'".$description."',".$prep_type.",now(),".$userID.",now(),".$M1_chef_id.",".$M1_action_code.",".$M1_action_id.",now(),".$shelf_life_days
         . ",DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY))";
@@ -50,11 +52,14 @@ $ret['id'] = mysql_insert_id();
 $ret['description'] = $description;
 $ret['comp_id'] = $comp_id;
 $ret['dock'] = $dock;
+$ret['sql'] = $sql;
+// $ret['XXexpiry_date'] = empty($comp['expiry_date']) ? 'null':$comp['expiry_date'];
 $result = mysql_query("select now() as now,DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY) as expiry_date");
 if ($result) {
 	while($row = mysql_fetch_array($result)) {
 		$ret['now'] = $row['now'];
 		$ret['expiry_date'] = $row['expiry_date'];
+		if (!empty($comp['entered_expiry_date'])) $ret['expiry_date'] = "'".$comp['entered_expiry_date']."'"; // need for labels
 		$ret['M1_time'] = $row['now'];
 	}
 }

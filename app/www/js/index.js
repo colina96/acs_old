@@ -246,6 +246,7 @@ function login(barcode_uid) {
                     set_info('OK');
                     load_comps();
                     load_preptypes();
+                    load_chefs();
                     user_name = data['user'];
                     document.getElementById('m_login').innerHTML = user_name;
                     setup_front_page();
