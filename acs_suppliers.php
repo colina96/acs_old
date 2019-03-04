@@ -35,6 +35,8 @@ var po_data = null; // purchase orders
 var purchase_order = null;
 var upload_suppliers_obj = null;
 
+
+
 //var open_suppliers_csv = function(event) {
 function open_suppliers_csv(event) {
 		var input = event.target;
@@ -150,7 +152,7 @@ function Xload_purchase_orders()
 function load_purchase_orders()
 {
 	let tag = 'purchase_orders: ';
-	console.log(tag,"loading ");
+	console.log(tag,"will update ");
     $.ajax({
         url: RESTHOME + "get_dock.php",
         type: "POST",
@@ -171,6 +173,7 @@ function load_purchase_orders()
 
 }
 
+
 function show_purchase_orders()
 {
 	var div = document.getElementById('suppliers_container');
@@ -186,6 +189,7 @@ function show_purchase_orders()
 	tr.appendChild(new_th('UOM','comp','m-5'));
 	tr.appendChild(new_th('SHELF LIFE<br>AFTER OPENING','comp','m-5'));
 	tr.appendChild(new_th('ITEM TYPE','comp','m-5'));
+	//tr.appendChild(new_th('EDIT','comp','m-5')); 	<< This one is a column for the Save button
 
 	table.appendChild(tr);
 	for (var i in purchase_orders) {
@@ -206,15 +210,76 @@ function show_purchase_orders()
 			tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].UOM,'comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].open_shelf_life,'comp','m-5'));
-			tr.appendChild(new_td(purchase_orders[i].items[j].PT.code,'comp','m-5'));
 
+//			tr.appendChild(new_td(purchase_orders[i].items[j].PT.code,'comp','m-5'));
+			tr.appendChild(new_td(
+				select_prep_type(i,j),
+				'comp','m-5'));
+
+			// This one is a SAVE button element	
+			// tr.appendChild(new_td(
+			// 	edit_or_save(i,j),
+			// 	'comp','m-5'));
+			
 			table.appendChild(tr);
 		}
-
-
 	}
 	div.appendChild(table);
 	div.appendChild(new_purchase_order_form());
+}
+
+// Function taken from menu.php and modified to simplify creating a Dropdown to choose prep type
+// i and j are coordinates
+function select_prep_type(i, j){
+
+	item = purchase_orders[i].items[j];
+	poi_id = item.id;
+	pt_code = item.PT.code;
+
+	console.log("select prep type", item);
+
+	var ret =  "<select name='pt_" + 6 + "' onchange='update_prep_type(this,"+ poi_id +");'>";
+	var idx = 1;
+	// need to make a call and load from DB
+	var preptypes = ['CC', 'HF', 'ESL', 'LR', 'AHR', 'FRESH','FROZEN','DRY', 'DECANT'];
+	for (var i in preptypes) {
+		ret += "<option value='" + i + "'";
+		if (preptypes[i] == pt_code) { ret += " selected"; }
+		ret += ">" + preptypes[i] + "</option>";
+	}
+	ret +=  "</select>";
+	return (ret);
+
+}
+
+
+// We should be able to create standard POST and PATCH, GET and DELETE requests and just pass the data we want to send. 
+// It would save a lot of space. Something to do when the time allows.
+
+// Function to update Purchase Order Item prep type, when a different value is chosen in Drop Down. 
+function update_prep_type(s,id){
+	
+	// var s = document.getElementById("pt_" + comp_id);
+	
+	var idx = s.selectedIndex + 1; // temp fix to pass the PT code. In the array it starts from 0, but in DB it starts with 1
+	var val = s.options[idx].value;
+	console.log("update PO Item ",id,idx,val);
+	
+	$.post(RESTHOME + "POI" + "/update_pois.php",
+		    {
+		        poi_id: id,
+		        pt_id: idx
+			},
+		    function(data, status){
+		        console.log("Data: " + data + "\nStatus: " + status);
+		    });
+}
+
+function edit_or_save(i, j){
+	var ret = "<button type='button' class='button_main' \
+		onclick='update_purchase_order_item("+i+","+j+");'>Save</button> ";
+	console.log(ret);
+	return (ret);
 }
 
 function new_purchase_order_form()
