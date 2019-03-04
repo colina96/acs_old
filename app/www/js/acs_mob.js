@@ -1264,8 +1264,8 @@ function show_dock()
 	table.appendChild(tr);
 	// for (var i = 0; i < purchase_orders.length;i++) {
 	for (var i in purchase_orders) {
-		console.log('purchase_order',i);
-		console.log(purchase_orders[i]);
+	//	console.log('purchase_order',i);
+	//	console.log(purchase_orders[i]);
 		console.log('purchase_orders[i].items.length',purchase_orders[i].items.length);
 		for (var j = 0; j < purchase_orders[i].items.length; j++) {
 			let dock_item = Array();
@@ -1698,24 +1698,23 @@ function add_return_icon(return_fn)
 
 function dock_labels()
 {
-	// var div = document.getElementById('blank_1');
-	// var div = openPage('blank_1', this, 'red','m_modal','tabclass');
 	var div = openPage('main_1', this, 'red','mobile_main','tabclass');
 	div.innerHTML = null; // clear everything
 	var top_div = new_div(null,'m_top_menu_container');
 	top_div.appendChild(add_return_icon('goto_dock()'));
 	div.appendChild(top_div);
+	div.appendChild(new_div(new_comp.description,'chk_temp_item'));
 	var modal_div = new_div(null, 'm_modal');
-	
-	
+		
 	modal_div.appendChild(new_div('<span>TEMPERATURE</span>','m_label'));
 	modal_div.appendChild(new_div(parseInt(new_comp.M1_temp * 10) / 10 + "&#176C",'temp_reading'));
 	modal_div.appendChild(date_picker('dock_expiry','USE BY'));
 	modal_div.appendChild(label_cluster('dock_m1_label_qty'));
 	
-	btns = add_btns([{'fn':'dock_start_component()','text':'Print Labels'}])
+	btns = add_btns([{'fn':'dock_start_component()','text':'Print Labels'}]);
 	modal_div.appendChild(btns);
 	div.appendChild(modal_div);
+	load_chefs(); // make sure up to date - and exists. 
 }
 
 function check_temp_m1_dock(t)
@@ -1733,13 +1732,8 @@ function check_temp_m1_dock(t)
 	// document.getElementById('dock_m1_temp_div').innerHTML = new_comp['description'];
 	document.getElementById('dock_m1_temp_div').innerHTML = '';
 	document.getElementById('dock_m1_temp_div').appendChild(show_product_details(new_comp));
-	show_product_details(new_comp) 
+	show_product_details(new_comp);
 	
-// 	document.getElementById('dock_m1_temp_div_2').innerHTML=parseInt(t) + "&#176C"
-	//document.getElementById('m1_temp_div_3').innerHTML=parseInt(t) + "&#176C"
-/*	document.getElementById('dock_m1_temp_div_4').innerHTML= parseInt(t * 10) / 10 + "&#176C";
-	document.getElementById('dock_m1_temp_div_5').innerHTML= new_comp['description'];
-	document.getElementById('dock_m1_temp_div_6').innerHTML= parseInt(t * 10) / 10 + "&#176C"; */
 	console.log("check temp",t,M1_temp_target);
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {// should never happen
@@ -1878,10 +1872,19 @@ function add_chef_select(target_div,input_name)
 function dock_start_component()
 {
 	console.log('dock_start_component');
+	// reformate date from date picker
+	var expiry_date = document.getElementById('dock_expiry').value;
+	var expiry_date = $('#dock_expiry').datepicker({ dateFormat: 'yy-mm-dd'}).val();
+	var dateTypeVar = $('#dock_expiry').datepicker('getDate');
+	var expiry_date = $.datepicker.formatDate('yy-mm-dd', dateTypeVar);
+	// console.log('expiry date ', expiry_date,ddd);
+	
 	console.log(new_comp);
 	console.log(active_comp);
 
 	active_comp.dock = true;
+	active_comp.entered_expiry_date = expiry_date;
+	console.log('expiry date ', active_comp.entered_expiry_date);
 	active_comp.comp_id = new_comp['id'];
 	
 	active_comp.finished = 'true';
@@ -1889,7 +1892,7 @@ function dock_start_component()
 
 	let data = {data: JSON.stringify(active_comp)};
 
-	console.log("dock_start_component Sent Off: ");
+	console.log("XXXX dock_start_component Sent Off: ",data);
 	console.log(active_comp);
 	let qty_input = 'dock_m1_label_qty';
 
@@ -1901,12 +1904,12 @@ function dock_start_component()
 		success: function (result) { // need to get the id of the new component back to print labels
 			console.log("dock_start_component success ", result);
 			var comp = JSON.parse(result);
-
+			console.log(comp);
 			console.log("start_component id = ", comp.id);
 			var qty = document.getElementsByName(qty_input)[0].value;
 
 			active_comp.id = comp.id;
-			active_comp.expiry_date = comp.expiry_date;
+			active_comp.expiry_date = comp.expiry_date; // probably wrong ... TODO
 			active_comp.M1_time = comp.M1_time;
 
 			// active_comp.M1_chef_id = comp.M1_chef_id;

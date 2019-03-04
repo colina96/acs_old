@@ -697,6 +697,15 @@ td {
 	width:80%;
 }
 
+.datepicker {
+	width:60%;
+	font-size:160%;
+	background-image: url('../img/calendar.png');
+	background-size: 25px;
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+}
+
 .icon_logout {
 	height: 20px;
 	width: auto;

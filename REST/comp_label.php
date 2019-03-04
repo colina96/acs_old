@@ -83,7 +83,10 @@ if (!empty($_POST['data'])) {
 	//$barcodeTxt = sprintf("BARCODETXT:c%02d%06d",$facility,$id);
 	//fwrite($handle,$barcodeTxt."\n");
 	$d = strtotime($expiry_date);
-	$barcodeTxt = "EXPIRYDATE:".date("d M y H:i",$d);
+	if ($d == 0) 
+		$barcodeTxt = "EXPIRYDATE:".$expiry_date;
+	else	
+		$barcodeTxt = "EXPIRYDATE:".date("d M y H:i",$d);
 	fwrite($handle,$barcodeTxt."\n");
 	$d = strtotime($prepped_date);
 	$barcodeTxt = "PREPPED:".date("d M y H:i",$d);
