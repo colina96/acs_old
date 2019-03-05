@@ -247,10 +247,13 @@ function show(div_id)
 
 function hide(div_id) 
 {
-	document.getElementById(div_id).style.display='none';
-	if (document.getElementById('shield')) {
-		document.getElementById('shield').style.display='none';
+	if (document.getElementById(div_id)) {
+		document.getElementById(div_id).style.display='none';
+		if (document.getElementById('shield')) {
+			document.getElementById('shield').style.display='none';
+		}
 	}
+	else console.log('ERROR!!!!! hide:',div_id);
 }
 
 function new_td(content,classname,inner_class = 'm-10') {
@@ -266,3 +269,56 @@ function new_th(content,classname,inner_class = 'm-10') {
 	td.innerHTML = "<div class='" + inner_class + "'>" + content + "</div>";
 	return(td);
 }
+
+function calc_max_serves(nserves,ss1,ss2)
+{
+	// if only 2 serving sizes the split is 80 - 20
+	let min1 = 20; // minimum percentage of units in two serving size split
+	let min2_1 = 10;// minimum percentage of units in three serving size split
+	let min2_2 = 30;
+	
+	console.log('calc_max_serves_2',nserves,ss1,ss2);
+	var ret = Array();
+	if (nserves == 0 || ss1 == 0) {
+		console.log('silly values');
+		return(null);
+	}
+	if (!ss2 || ss2 < 1) {
+		
+		console.log('80 - 20 split');
+		let units = Math.floor(nserves * min1 / 100);
+		let rem = nserves - units; // assign the min number of units
+		let ss1_no = Math.floor (rem / ss1);
+		console.log ('assigned units :' + units + ' s1 ' + ss1_no);
+		units += rem - (ss1_no * ss1);
+		console.log ('final assigned units :' + units + ' s1 ' + ss1_no);
+		ret.ss1 = ss1;
+		ret.ss1_no = ss1_no;
+		ret.units = units;
+		
+		// 
+	}
+	else {
+		console.log('60 -30 - 10 split');
+		console.log('80 - 20 split');
+		let units = Math.floor(nserves * min2_1 / 100);
+		
+		let rem = nserves - units; // assign the min number of units
+		
+		let ss2_no = Math.floor(nserves * min2_2 / 100 / ss2);
+		console.log ('assigned units :' + units + ' s1 ' + ss2_no);
+		if (ss2_no == 0 && ss2 < rem) ss2_no = Math.floor(rem/ss2);
+		rem -= ss2_no * ss2;
+		let ss1_no = Math.floor (rem / ss1);
+		console.log ('final assigned units :' + units + ' s1 ' + ss1_no);
+		units += rem - (ss1_no * ss1);
+		ret.ss1 = ss1;
+		ret.ss1_no = ss1_no;
+		ret.ss2 = ss2;
+		ret.ss2_no = ss2_no;
+		ret.units = units;
+		// div.innerHTML = ss1_no + ' of ' + ss1 + ', ' + ss2_no + ' of ' + ss2 + ', ' + units + ' units';
+	}		
+	return(ret);
+}
+

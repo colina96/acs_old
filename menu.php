@@ -259,7 +259,7 @@ function select_plating_team(plating_team,menu_item_id)
 	ret += "</select>";
 	return(ret);
 }
-function select_prep_type(preptypes,prep_type_id,comp_id,dock)
+function menu_select_prep_type(preptypes,prep_type_id,comp_id,dock)
 {
 //	console.log('select_prep_type');
 //	console.log(preptypes);
@@ -469,7 +469,7 @@ function show_menu(filter)
 	            	td.innerHTML = innerHTML;
 	            	tr.appendChild(td);
 	            	td = document.createElement('td');
-	            	td.innerHTML = select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,false);
+	            	td.innerHTML = menu_select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,false);
 	            	tr.appendChild(td);
 	            	td = document.createElement('td');
 	            	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);

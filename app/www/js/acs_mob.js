@@ -561,7 +561,6 @@ function show_plating()
 	let tag = 'goto_plating: ';
 	// ???? load_menu_items();
 	hide('plating_return');
-	// hide('plating_print_labels');
 	console.log(tag, 'active_plating_team: ', active_plating_team );
 	if (active_plating_team == null || active_plating_team == '0' || menu_items==null) {
 		console.log(tag, 'no team set, goto_plating_teams()');
@@ -615,6 +614,8 @@ function show_plating_options(id)
 {
 	plating_item = get_plating_item_by_id(id);
 	console.log("show_plating_options " + id);
+	plating_item.menu_item = get_menu_item_by_id(plating_item.menu_item_id);
+	
 	console.log(plating_item);
 	document.getElementById('plating_options_item_div').innerHTML = plating_item.dish_name;
 	openPage('m_plating_options', this, 'red','m_modal','tabclass');
@@ -1000,7 +1001,9 @@ function print_plating_labels()
 //	comp.copies = qty;
 	plating_item.trolley_labels = 0 // parseInt(document.getElementById('trolley_labels').innerHTML);
 	plating_item.description_labels = document.getElementsByName('pt_description_labels')[0].value;
+	plating_item.serves = calc_max_serves(plating_item.description_labels,plating_item.menu_item.split1,plating_item.menu_item.split2);
 		// parseInt(document.getElementById('pt_description_labels').value);
+	console.log(plating_item);
 	var data =  {data: JSON.stringify(plating_item)};
     console.log(tag,"Sent Off: ", data);
     
@@ -1073,7 +1076,6 @@ function reprint_plating_labels()
 	div.appendChild(label_cluster('pt_description_labels',plating_item.current_shift));
 	let btns = add_btns([{'fn':'start_plating_item()','text':'Print Labels'}]);
 	div.appendChild(btns);
-	// show('plating_print_labels');
 	console.log('reprint_plating_labels');
 	console.log(plating_item);
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
@@ -1187,7 +1189,6 @@ function do_show_menu_item_components(menu_item_id,batch_change) {
 		if (plating_item.all_good) {
 			if (batch_change) {
 				hide('plating_return');
-				hide('plating_print_labels');
 				show('plating_batch_change_btns');
 				set_barcode_mode('plating_batch_change');
 			} else {
@@ -1197,14 +1198,11 @@ function do_show_menu_item_components(menu_item_id,batch_change) {
 				let btns = add_btns([{'fn':'start_plating_item()','text':'Print Labels'}]);
 				div.appendChild(btns);
 				
-				
-				// show('plating_print_labels');
 				plating_item.checked = true;
 			}
 		} else {
 			show('plating_return');
 			hide('plating_batch_change_btns');
-			hide('plating_print_labels');
 			plating_item.checked = false;
 		}
 	}
