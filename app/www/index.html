@@ -366,8 +366,6 @@
             <div id='m1_temp_div_1'></div>
             <div id='m1_temp_div_1_error' class='red'></div>
             <div class='btns'>
-                <button type='button' class='m_submit' onclick="goto_m_main();">RETURN</button>
-
                 <button type='button' class='m_btn hidden' id='confirm_start_comp_btn'
                         onclick="start_component(false,true);">CONFIRM
                 </button>
@@ -673,7 +671,7 @@
             <div class='btns' id='plating_return'>
                 <button type='button' class='m_btn' onclick="goto_plating();">Return</button>
             </div>
-
+<!--  
             <div id='plating_print_labels' class='btns hidden'>
                 <div class='label_qty_cont'>
                     <div class='label_txt'>TROLLEY LABELS</div>
@@ -691,6 +689,7 @@
                     Labels
                 </button>
             </div>
+ -->
             <div class='btns' id='plating_batch_change_btns'>
             </div>
         </div>
@@ -712,9 +711,14 @@
         <div class='m_modal hidden' id='m_plating_temp_decant'>
             <div class='center modal_head'><span>CHECK THE TEMPERATURE</span></div>
             <div id='chk_plating_item_temp_divA' class='m-10'></div>
+            <img class="icon_IR" src="img/icon_IR.svg" onclick="read_plating_M1temp();">
+            <div class='center temp_instruction'>
+            	<b>CHECK THE TEMPERATURE</b>
+            	<br>USER IR SENSOR
+            </div>
             <div class='btns'>
                 <button type='button' class='m_submit' onclick="show('popup-labels');">Decant</button>
-                <button type='button' class='m_submit' onclick="read_plating_M1temp();">Check Now</button>
+                
                 <button type='button' class='m_btn' onclick="goto_active_plating();">Return</button>
             </div>
         </div>

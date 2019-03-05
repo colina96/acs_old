@@ -41,8 +41,9 @@ else if (!empty($comp['finished'])) {
 }
 else { // can only be M0 - 
 	$sql = "insert into COMPONENT "
-        . "(comp_id,description, prep_type_id,started, M1_check_id) "
-        . "values (".$comp_id.",'".$description."',".$prep_type.",now(),".$userID.")";
+        . "(comp_id,description, prep_type_id,started, M1_check_id,shelf_life_days,expiry_date) "
+        . "values (".$comp_id.",'".$description."',".$prep_type.",now(),".$userID.",".$shelf_life_days
+		. ",DATE_ADD(now(), INTERVAL ".$shelf_life_days." DAY))";
 	$M0 = true;
 }
 

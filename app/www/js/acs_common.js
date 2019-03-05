@@ -141,10 +141,12 @@ function load_plating_items(callback) // load menu_items currently being plated
 
 function get_menu_item_by_id(menu_item_id) {
 	// menu_items not a hashed array because the search fn needs it that way
-	for (var i = 0; i < menu_items.length; i++) {
-		if (menu_items[i].id == menu_item_id) return(menu_items[i]);
+	if (menu_items) {
+	 	for (var i = 0; i < menu_items.length; i++) {
+			if (menu_items[i].id == menu_item_id) return(menu_items[i]);
+		}
 	}
-	console.log('ERROR - could not find menu_item id',menu_item_id,menu_items.length);
+	console.log('ERROR - could not find menu_item id',menu_item_id,menu_items);
 	return(null);
 }
 function show_time(d)

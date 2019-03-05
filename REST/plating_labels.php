@@ -18,7 +18,7 @@ if (!empty($_POST['data'])) {
 	}
 	$expiry_date = $comp['expiry_date'];
 	$code = $comp['code'];
-	
+/*	
 	$tmp_file = $job_dir.'trolley'.$id.".tmp";
 	$job_file = $job_dir.'trolley'.$id.".job";
 	echo "opening ".$tmp_file;
@@ -48,6 +48,7 @@ if (!empty($_POST['data'])) {
 	fclose($handle);
 	chmod ($tmp_file,0666);
 	rename($tmp_file,$job_file);
+*/
 	// now do plating label
 	$tmp_file = $job_dir.'plate'.$id.".tmp";
 	$job_file = $job_dir.'plate'.$id.".job";

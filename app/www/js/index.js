@@ -167,6 +167,7 @@ function check_login() {
                     console.log("Login OK");
                     load_comps();
                     load_preptypes();
+                    load_menu_items();
                     user_name = data['user'];
                     document.getElementById('m_login').innerHTML = user_name;
                     openPage('mm1', this, 'red', 'mobile_main', 'tabclass');

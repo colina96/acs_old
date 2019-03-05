@@ -259,7 +259,7 @@
 }
 
 
-#temp_instruction {
+#temp_instruction, .temp_instruction {
 	text-align: center;
 	color: var(--acs_text_scan);
 	line-height: 1.7em;

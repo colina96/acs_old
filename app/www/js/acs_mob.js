@@ -553,10 +553,15 @@ function show_plating_items(team_id,tab) {
 
 function goto_plating()
 {
+	load_plating_items(show_plating);
+}
+	
+function show_plating()
+{
 	let tag = 'goto_plating: ';
 	// ???? load_menu_items();
 	hide('plating_return');
-	hide('plating_print_labels');
+	// hide('plating_print_labels');
 	console.log(tag, 'active_plating_team: ', active_plating_team );
 	if (active_plating_team == null || active_plating_team == '0' || menu_items==null) {
 		console.log(tag, 'no team set, goto_plating_teams()');
@@ -993,8 +998,9 @@ function print_plating_labels()
 
 //	var p = Object.assign({}, active_comp);
 //	comp.copies = qty;
-	plating_item.trolley_labels = parseInt(document.getElementById('trolley_labels').innerHTML);
-	plating_item.description_labels = parseInt(document.getElementById('pt_description_labels').innerHTML);
+	plating_item.trolley_labels = 0 // parseInt(document.getElementById('trolley_labels').innerHTML);
+	plating_item.description_labels = document.getElementsByName('pt_description_labels')[0].value;
+		// parseInt(document.getElementById('pt_description_labels').value);
 	var data =  {data: JSON.stringify(plating_item)};
     console.log(tag,"Sent Off: ", data);
     
@@ -1029,8 +1035,8 @@ function start_plating_item()
 
 //	var p = Object.assign({}, active_comp);
 //	comp.copies = qty;
-	plating_item.trolley_labels = parseInt(document.getElementById('trolley_labels').innerHTML);
-	plating_item.description_labels = parseInt(document.getElementById('pt_description_labels').innerHTML);
+	plating_item.trolley_labels = 0; // parseInt(document.getElementById('trolley_labels').innerHTML);
+	plating_item.description_labels = document.getElementsByName('pt_description_labels')[0].value;
 	var data =  {data: JSON.stringify(plating_item)};
     console.log(tag,"Sent Off: ", data, 'for plating_item',plating_item);
     
@@ -1064,33 +1070,25 @@ function reprint_plating_labels()
 	var div = document.getElementById('plating_sched_list');
 	div.innerHTML = '<div class="modal_head center orange">RE-PRINT LABELS</div>';
 	hide('plating_return');
-	show('plating_print_labels');
+	div.appendChild(label_cluster('pt_description_labels',plating_item.current_shift));
+	let btns = add_btns([{'fn':'start_plating_item()','text':'Print Labels'}]);
+	div.appendChild(btns);
+	// show('plating_print_labels');
 	console.log('reprint_plating_labels');
 	console.log(plating_item);
 	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
 }
 
-function do_show_menu_item_components(menu_item_id,batch_change) {
-	let tag = 'do_show_menu_item_components: ';
-	set_barcode_mode("PT_comp");
-	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
-	active_menu_item_id = menu_item_id; // global - so we can come back to it
-	// var div = document.getElementById('menu_item_components_div');
-	plating_item = find_plating_item(menu_item_id);
-	console.log(tag,"plating_item: ",plating_item);
-	if (plating_item == null) { // 
-		console.log(tag, "ERROR plating item is null");
-		// plating_item = Object.create(get_menu_item_by_id(menu_item_id)); // possibly dangerous .....
-	}
-	var div = document.getElementById('plating_sched_list');
-	clearChildren(div);
+function show_plating_details()
+{
+	let tag = 'show_plating_details: ';
 	var tab = document.createElement('table');
 	tab.className = 'item_table';
 	var tr = document.createElement('tr');
 	var th = document.createElement('th');
 	th.width = '70%';
 	th.innerHTML= margin(plating_item.dish_name + "<br>" + plating_item.code + "<BR>Required: " + plating_item.current_shift);
-	document.getElementById('pt_description_labels').innerHTML = plating_item.current_shift;
+// 	document.getElementById('pt_description_labels').innerHTML = plating_item.current_shift;
 	tr.appendChild(th);
 	th = document.createElement('th');
 	th.innerHTML=margin('S/L');
@@ -1100,8 +1098,9 @@ function do_show_menu_item_components(menu_item_id,batch_change) {
 	tr.appendChild(th);
 	tab.appendChild(tr);
 
-	var all_good = true; // check before useby date and temp measured ok
+	
 	if (plating_item != null) {
+		plating_item.all_good = true; // check before useby date and temp measured ok
 		console.log(tag,"found menu_item ",plating_item.dish_name,plating_item.items.length);
 		console.log(tag, 'plating_item: ', plating_item, JSON.stringify(plating_item));
 		var items = plating_item.items;	
@@ -1143,12 +1142,12 @@ function do_show_menu_item_components(menu_item_id,batch_change) {
 						td.appendChild(icon_fail());
 
 						console.log(tag, 'item[',i,'] is expired');
-						all_good = false;
+						plating_item.all_good = false;
 					}
 				} else {
 					td.innerHTML = '-';
 					console.log(tag, 'item[',i,'].component_id is empty');
-					all_good = false;
+					plating_item.all_good = false;
 				}
 				tr.appendChild(td);
 				td = document.createElement('td');
@@ -1157,15 +1156,35 @@ function do_show_menu_item_components(menu_item_id,batch_change) {
 				if (items[i].M1_temp) {
 					td.innerHTML = items[i].M1_temp;
 				} else {
-					all_good = false;
+					plating_item.all_good = false;
 				}
 				tr.appendChild(td);
 				tab.appendChild(tr);
 			}
 		}
+	}
+	return(tab);
+}
+
+function do_show_menu_item_components(menu_item_id,batch_change) {
+	let tag = 'do_show_menu_item_components: ';
+	set_barcode_mode("PT_comp");
+	openPage('m_plating_sched', this, 'red','m_modal','tabclass');
+	active_menu_item_id = menu_item_id; // global - so we can come back to it
+	// var div = document.getElementById('menu_item_components_div');
+	plating_item = find_plating_item(menu_item_id);
+	console.log(tag,"plating_item: ",plating_item);
+	if (plating_item == null) { // 
+		console.log(tag, "ERROR plating item is null");
+		// plating_item = Object.create(get_menu_item_by_id(menu_item_id)); // possibly dangerous .....
+	}
+	var div = document.getElementById('plating_sched_list');
+	clearChildren(div);
+	let tab = show_plating_details();
+	if (plating_item) {
 		div.appendChild(tab);
 		
-		if (all_good) {
+		if (plating_item.all_good) {
 			if (batch_change) {
 				hide('plating_return');
 				hide('plating_print_labels');
@@ -1174,7 +1193,12 @@ function do_show_menu_item_components(menu_item_id,batch_change) {
 			} else {
 				hide('plating_return');
 				hide('plating_batch_change_btns');
-				show('plating_print_labels');
+				div.appendChild(label_cluster('pt_description_labels',plating_item.current_shift));
+				let btns = add_btns([{'fn':'start_plating_item()','text':'Print Labels'}]);
+				div.appendChild(btns);
+				
+				
+				// show('plating_print_labels');
 				plating_item.checked = true;
 			}
 		} else {
@@ -1639,7 +1663,7 @@ function new_div(innerHTML,classes)
 	return(div);
 }
 
-function label_cluster(id)
+function label_cluster(id,initial_value)
 {
 	var div = document.createElement('div');
 	div.className = 'centerflex';
@@ -1649,7 +1673,8 @@ function label_cluster(id)
 	input_fld.type = 'number';
 	input_fld.className = 'label_num';
 	input_fld.name = id;
-	input_fld.value  = 1;
+	input_fld.id = id;
+	input_fld.value  = (initial_value)?initial_value:1;
 	input_fld.length = 3;
 	div.appendChild(input_fld);
 	return(div);
@@ -2178,7 +2203,7 @@ function comp_milestone(temp_reading,force,qa_code) {
 	console.log(tag, 'active_comp: ',active_comp);
 	let prep_type_id = active_comp['prep_type_id'];
 
-	document.getElementById('dock_m1_temp_div_4').innerHTML=parseInt(temp_reading * 10) / 10 + "&#176C"
+// 	document.getElementById('dock_m1_temp_div_4').innerHTML=parseInt(temp_reading * 10) / 10 + "&#176C";
 	let temp_target = get_preptype_val(prep_type_id,'M2_temp');
 		
 	let component = new Object();
@@ -3189,7 +3214,7 @@ function refresh_times()
 {
 	console.log("time!");
 	load_tracking_data();
-	setTimeout(refresh_times,60 * 1000);
+	// setTimeout(refresh_times,60 * 1000); disabled for testing TODO put back
 	document.getElementById('battery_div').innerHTML = " - " + refresh_count++;
 	get_internal_battery_voltage();
 	qpack_resume();
