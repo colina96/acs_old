@@ -23,7 +23,7 @@ if ($userID > 0) {
 		
 	}
 	// $comps = get_table('MENU_ITEM_COMPONENTS','where id in ('.$component_list.')');
-	$comps = get_table('MENU_ITEM_COMPONENTS','where label_at_dock = 1');
+	$comps = get_table('MENU_ITEM_COMPONENTS',''/*where label_at_dock = 1' */);
 	foreach ($pois as $poi) { // attach component details to purchase order items
 		if (!empty($comps[$poi['menu_item_component_id']])) $pois[$poi['id']]['menu_item_component'] = $comps[$poi['menu_item_component_id']];
 	}

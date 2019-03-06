@@ -51,9 +51,9 @@ if ($userID > 0) {
 	}
 	else {
 		$sql .= " where user_id = ".$userID;
-    	$sql.= " and DATE(time_started) = CURDATE()";
+    	// $sql.= " and DATE(time_started) = CURDATE()";
 	}
-	// echo $sql;
+	 // echo $sql;
 	$log .= ' sql= '.$sql;
 	$result = mysql_query($sql);
 	$items = array();
