@@ -189,6 +189,7 @@ function show_purchase_orders()
 	tr.appendChild(new_th('UOM','comp','m-5'));
 	tr.appendChild(new_th('SHELF LIFE<br>AFTER OPENING','comp','m-5'));
 	tr.appendChild(new_th('ITEM TYPE','comp','m-5'));
+	tr.appendChild(new_th('LABEL','comp','m-5'));
 	//tr.appendChild(new_th('EDIT','comp','m-5')); 	<< This one is a column for the Save button
 
 	table.appendChild(tr);
@@ -199,10 +200,10 @@ function show_purchase_orders()
 		for (var j = 0; j < purchase_orders[i].items.length; j++) {
 			console.log('item',j);
 			var tr = document.createElement('tr');
-			tr.setAttribute(
+		/*	tr.setAttribute(
 					"onclick",
 					"show_dock_component(" + i + "," + j + ");"
-				);
+				); */
 			// reference from acs.js : new_td(content, classname)
 			tr.appendChild(new_td((j == 0)?purchase_orders[i].supplier.name:'','comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].item_code,'comp','m-5'));
@@ -215,7 +216,15 @@ function show_purchase_orders()
 			tr.appendChild(new_td(
 				select_prep_type(i,j),
 				'comp','m-5'));
-
+		//	var poi_id = purchase_orders[i].items[j].id;
+			var menu_item_component_id = purchase_orders[i].items[j].menu_item_component_id;
+			var innerHTML = "<input type='checkbox' value='1' name='label_at_dock_" + poi_id + "' onclick='set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"label_at_dock\"," + menu_item_component_id + ");'";
+        	if (purchase_orders[i].items[j].component.label_at_dock == 1) {
+            	innerHTML += ' checked';
+        	}
+        	innerHTML += '>';
+        	tr.appendChild(new_td(innerHTML,'comp','m-5'));
+			// tr.appendChild(new_td(purchase_orders[i].items[j].label_at_dock,'comp','m-5'));
 			// This one is a SAVE button element	
 			// tr.appendChild(new_td(
 			// 	edit_or_save(i,j),

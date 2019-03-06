@@ -195,6 +195,9 @@ td { padding: 10px; }
 	font-size: 16.8px;
 }
 
+.return_icon {
+	height:15px;
+}
 .icon  {
     height:15px;
 	float: right;
@@ -554,7 +557,7 @@ tabclass a {
 	.width:80%;
 	border:1px solid black;
 	border-radius: 15px;
-	zindex:1000;
+	z-index:100;
 	display:none;
 	background:white;
 	padding:20px;
@@ -607,6 +610,7 @@ btns {
 	text-align:center;
 	border-radius: 5px;
 }
+#new_comp_description { width:400px;}
 .top_menu_container {
 	.position:absolute;
 	.top:0;

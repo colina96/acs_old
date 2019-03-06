@@ -999,6 +999,12 @@ function print_plating_labels()
 
 //	var p = Object.assign({}, active_comp);
 //	comp.copies = qty;
+	
+	if (!plating_item.menu_item) {
+		console.log('WARNING !!! plating_item.menu_item not set');
+		console.log(plating_item);
+		plating_item.menu_item = get_menu_item_by_id(plating_item.menu_item_id);
+	}
 	plating_item.trolley_labels = 0 // parseInt(document.getElementById('trolley_labels').innerHTML);
 	plating_item.description_labels = document.getElementsByName('pt_description_labels')[0].value;
 	plating_item.serves = calc_max_serves(plating_item.description_labels,plating_item.menu_item.split1,plating_item.menu_item.split2);

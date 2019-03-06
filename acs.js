@@ -36,6 +36,8 @@ function openPage(pageName, elmnt, color,content_class,tab_class) {
 
     // Add the specific color to the button used to open the tab content
     // elmnt.style.backgroundColor = color;
+    var div = document.getElementById(pageName);
+    return(div);
 }
 
 function add_menu_component(menu_id,menu_item_id,menu_name) 

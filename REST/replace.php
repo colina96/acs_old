@@ -135,9 +135,11 @@ function build_update_sql($table_name,$fields,$data)
 	foreach ($fields as $field) {
 		$fieldname = $field['Field'];
 		$fieldtype = $field['Type'];
-		
+		if ($fieldname == "id") {
+			// ignore
+		}
 		if ($fieldname == "lastchange") {
-			$sql .= ",lastchande= now()";
+			$sql .= ",lastchange= now()";
 		}
 		else if (substr($fieldtype,0,7) == "varchar" )
 		{

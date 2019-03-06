@@ -19,7 +19,8 @@
 </div>
 <div id='menu_buttons2'>
 	<div class="menu_buttons">
-		<div class="menu_type">
+		<div class="menu_type" onclick="show_active_menus();">
+		<img onclick="show_active_menus();" class="return_icon" src="app/www/img/icon_arrow_black.png" <="" a="">
 			<button type='button' class='acs_menu_btn' href="#" 
 	                onclick="show_active_menus()">back</button>
 		</div>
@@ -65,7 +66,7 @@
 				
 				<input type='hidden' id='new_comp_miid'>
 				<input type='hidden' id='new_comp_menu_id'>
-				<input id='new_comp_description'>
+				<input id='new_comp_description' style.width='400px'>
 				<div class='m-10'>
 					<div class='btn' onclick='do_new_comp()'>Add</div>
 					<div class='btn' onclick='dont_new_comp()'>Cancel</div>
@@ -846,6 +847,43 @@ function new_menu_item_component(menu_item_id)
 	document.getElementById('new_comp_menu_id').value = active_menu_id;
 	
 	show('new_comp_popup');
+	
+	$('#new_comp_description').val('');
+	var data = Array();
+	for (var c in menu_item_components) {
+		var d = Array();
+		d.label = menu_item_components[c].description;
+		d.value = menu_item_components[c].id;
+		data.push(d);
+	}
+	$('#new_comp_description').autocomplete({
+        // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+        minLength: 2,
+		source: data,
+		// Once a value in the drop down list is selected, do the following:
+		response: function( event, ui ) { 
+        			console.log("search response found " + ui.content.length); console.log(ui);
+        			if (ui.content.length == 0) {
+        				// document.getElementById('new_comp_btns').style.display = 'block';
+        			}
+        			else {
+        				// document.getElementById('new_comp_btns').style.display = 'none';
+        			}
+        		},
+        select: function(event, ui) {
+        	
+            // place the person.given_name value into the textfield called 'select_origin'...
+            $('#new_comp_description').val(ui.item.label);
+            // and place the person.id into the hidden textfield called 'link_origin_id'. 
+         	console.log('selected ',ui.item.value);
+         	
+           //  hide('add_sub_popup');
+         	
+         // 	show_menu_item_components(ui.item.value);
+            return false;
+        }
+	
+    })
 }
 
 function new_menu_item()
@@ -981,6 +1019,7 @@ function clear_flds(flds)
 }
 function add_subcomponent(menu_item_component_id)
 {
+	console.log('add_subcomponent');
 	show('add_sub_popup');
 	document.getElementById('component_title').innerHTML = 'Add high risk ingredient';
 	active_menu_item_component_id = menu_item_component_id;
@@ -1045,7 +1084,8 @@ var menu_item_components = null;
 var preptypes = null;
 function open_future_menus() // dummy code for now
 {
-	openPage('future_menus', this, 'red','menu_details','acs_menu_btn');
+	var div = openPage('future_menus', this, 'red','menu_details','acs_menu_btn');
+	div.innerHTML = null;
 }
 var active_menu_id = null;
 
