@@ -87,43 +87,7 @@
 					<div class='btn' onclick='dont_new_item()'>Cancel</div>
 				</div>
 			</div>
-			<div id='add_sub_popup'>
-				<div id='component_title' class='h2'>Add subcomponent</div>
-				<form id='menu_item_component_form'>
-                    <input name='comp_id' type='hidden'>
-                    <table>
-				    <tr><td>Description</td><td><input name='description' id='comp_description'></td></tr>
-				    <tr><td>Supplier</td><td><input name='comp_supplier'></td></tr>
-				    <tr><td>Product</td><td><input name='comp_product'></td></tr>
-				    <tr><td>Spec</td><td><input name='comp_spec'></td></tr>
-			    <!--
-			        <tr><td>PT</td><td>
-					<select name='comp_PT_id'>
-						<option value='1'>Fresh</option>
-						<option value='2'>Frozen</option>
-						<option value='3'>Dry</option>
-					</select>
-					</td></tr>
-				-->
-				    <tr><td>Shelf life (days)</td><td><input type='number' name='comp_shelf_life_days'></td></tr>
-				    <tr><td>Track from dock</td><td><input type='checkbox' name='comp_high_risk' value='1'></td></tr>
-				    <tr>
-                        <td>Prep type</td>
-                        <td><div id='prep_type_div'>
-                                <?php select_prep_type(null,'comp_prep_type'); ?>
-                        </div></td>
-                    </tr>
-				    <tr>
-                        <td colspan='2'>
-                            <div class='btns'>
-                                <div class='btn' onclick='new_subcomponent();'>Done</div>
-                                <div class='btn' onclick='cancel_add_sub();'>Cancel</div>
-                            </div>
-                        </td>
-                    </tr>
-				</table>
-				</form>
-			</div>
+			
 			<div id='new_menu' class='menu_details'>
 				
 				<h1>CREATE NEW MENU</h1>
@@ -168,54 +132,11 @@
 
 		
 			</div>
-			<div id='active_menus' class='menu_details menu_details_active'>
-			<!--  ?php load_active_menus(); ? --></div>
-			<div id='future_menus' class='menu_details'>
-			</div>
-			<div id='expired_menus' class='menu_details'>
-			</div>
-			<div id='add_menu_component_modal'>
-				<div class='modal_header'>
-                    <span>Add menu item component</span>
-				    <div id='menu_item_name_div'></div>
-				    <div class='close_modal' onclick='close_menu_component_modal("add_menu_component_modal");'>X</div>
-				</div>
+			<div id='active_menus' class='menu_details menu_details_active'></div>
+			<div id='future_menus' class='menu_details'></div>
+			<div id='expired_menus' class='menu_details'></div>
 			
-				<div id='menu_item_component_div'>
-				    <form method='POST' action='acs_menu.php'>
-				        <input type='hidden' name='cc_menu_item_id' >
-                        <input type='hidden' name='cc_menu_id' >
-                        <input name='menu_item_component_description' size='30'>
-                        <select name='prep_type'>
-<?php 
-$sql = "select * from PREP_TYPES order by ID";
-$result = mysql_query($sql);
-if ($result) { 
-	while($row = mysql_fetch_array($result)) {
-		echo "<option value='".$row['id']."'>".$row['code']."</option>";
-	}
-}
-?>
-                        </select>
-                        <input type='submit' name='add_menu_component' value='Add'>
-                    </form>
-                </div>
-		    </div>
-		<div id='del_menu_component_modal'>
-			<div class='modal_header'>
-				<span>Delete menu item component</span>
-			
-				<div class='close_modal' onclick='close_menu_component_modal("del_menu_component_modal");'>X</div>
-			</div>
-			<div id='menu_item_component_del_div'>
-				<form method='POST'>
-				<input type='hidden' name='cc_menu_item_component_id' >
-				<input type='hidden' name='cc_menu_id' >
-				<div id='menu_item_component_description'>----</div>
-				<input type='submit' name='del_menu_component' value='Delete'>
-				</form>
-			</div>
-		</div>
+		
     </div>
 </div>
 <script>
@@ -453,7 +374,7 @@ function show_menu(filter)
 	            	tr.appendChild(td);
 	            	// STP
 	            	td = document.createElement('td');
-	            	var innerHTML = "<input type='checkbox' value='1' name='stp_" + mid + "' onclick='set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"stp\"," + menu_item_components[mid].id + ");'";
+	            	var innerHTML = "<input type='checkbox' value='1' name='stp_" + mid + "' onclick='set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"label_at_dock\"," + menu_item_components[mid].id + ");'";
 	            	if (menu_item_components[mid].stp == 1) {
 	                	innerHTML += ' checked';
 	            	}
@@ -602,7 +523,7 @@ function set_db_field(input,tablename,field,id)
         data: data,
 
         success: function(result) { // need to get the id of the new component back to print labels
-            console.log("set_split result ",result);
+            console.log("set_db_field result ",result);
             
             if (result.indexOf('error') >= 0)
             {
@@ -1295,69 +1216,7 @@ function show_menus(active,data)
 }
 
 </script>
-<!--   div class='new_menu'>
-	<div class='new_menu_heading'><div class='new_menu_title'>CREATE A NEW MENU</div></div>
-	<div class='new_menu_body'>
-	</div>
-</div -->
-<?php 
 
 
-function select_chef($s_name)
-{
-	
-	echo "<select name='$s_name'>";
-
-	$sql = "select * from USERS where function='chef' order by ID";
-	$result = mysql_query($sql);
-	if ($result) {
-		while($row = mysql_fetch_array($result)) {
-			echo "<option value='".$row['id']."'>".$row['firstname'].' '.$row['lastname']."</option>";
-		}
-	}
-
-	echo "</select>";
-}
-
-
-function select_prep_type($prep_type_id,$comp_id)
-{
-	$sql = "select * from PREP_TYPES order by ID";
-	$result = mysql_query($sql);
-	$preptypes = array();
-	if ($result) {
-		while($row = mysql_fetch_array($result)) {
-			$preptypes[$row['id']] = $row['code'];
-		}
-	}
-	if (is_int($comp_id)) {
-		echo "<select name='pt_".$comp_id."' onchange='menu_update_prep_type(this,".$comp_id.");'>";
-	}
-	else {
-		echo "<select name='".$comp_id."'>";
-	}
-	foreach ($preptypes as $key => $p) {
-		echo "<option value='".$key."'";
-		if ($key == $prep_type_id) { echo " selected"; }
-		echo ">".$p."</option>";
-	}
-	echo "</select>";
-}
-
-function select_probe_type($probe_type_id,$comp_id)
-{
-	echo "<select name='probe_".$comp_id."' onchange='update_probe_type(this,".$comp_id.");'>";
-	$idx = 1;
-	$probetypes = ['IR','Probe','N/A'];
-	foreach ($probetypes as $p) {
-		echo "<option value='".$p."'";
-		if ($idx++ == $probe_type_id) { echo " selected"; }
-		echo ">".$p."</option>";
-	}
-	echo "</select>";
-}
-
-
-?>
 <script src="navigation_select.js"></script>
 
