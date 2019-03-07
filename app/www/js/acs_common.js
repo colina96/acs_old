@@ -278,7 +278,7 @@ function calc_max_serves(nserves,ss1,ss2)
 	let min2_2 = 30;
 	
 	console.log('calc_max_serves_2',nserves,ss1,ss2);
-	var ret = Array();
+	var ret = Object();
 	if (nserves == 0 || ss1 == 0) {
 		console.log('silly values');
 		return(null);

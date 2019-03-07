@@ -265,7 +265,7 @@ function menu_select_prep_type(preptypes,prep_type_id,comp_id,dock)
 //	console.log('select_prep_type');
 //	console.log(preptypes);
 	
-	var ret =  "<select name='pt_" + comp_id + "' onchange='update_prep_type(this," + comp_id +");'>";
+	var ret =  "<select name='pt_" + comp_id + "' onchange='menu_update_prep_type(this," + comp_id +");'>";
 	var idx = 1;
 	for (var i in preptypes) {
 		// console.log(i);
@@ -1184,7 +1184,7 @@ function update_probe_type(s,comp_id)
 }
 
 
-function update_prep_type(s,comp_id)
+function menu_update_prep_type(s,comp_id)
 {
 	
 	// var s = document.getElementById("pt_" + comp_id);
@@ -1331,7 +1331,7 @@ function select_prep_type($prep_type_id,$comp_id)
 		}
 	}
 	if (is_int($comp_id)) {
-		echo "<select name='pt_".$comp_id."' onchange='update_prep_type(this,".$comp_id.");'>";
+		echo "<select name='pt_".$comp_id."' onchange='menu_update_prep_type(this,".$comp_id.");'>";
 	}
 	else {
 		echo "<select name='".$comp_id."'>";

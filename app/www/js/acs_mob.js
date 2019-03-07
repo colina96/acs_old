@@ -1007,6 +1007,7 @@ function print_plating_labels()
 	}
 	plating_item.trolley_labels = 0 // parseInt(document.getElementById('trolley_labels').innerHTML);
 	plating_item.description_labels = document.getElementsByName('pt_description_labels')[0].value;
+	console.log(tag,'serves',plating_item.serves);
 	plating_item.serves = calc_max_serves(plating_item.description_labels,plating_item.menu_item.split1,plating_item.menu_item.split2);
 		// parseInt(document.getElementById('pt_description_labels').value);
 	console.log(plating_item);
@@ -1079,7 +1080,9 @@ function reprint_plating_labels()
 	var div = document.getElementById('plating_sched_list');
 	div.innerHTML = '<div class="modal_head center orange">RE-PRINT LABELS</div>';
 	hide('plating_return');
-	div.appendChild(label_cluster('pt_description_labels',plating_item.current_shift));
+	console.log('reprint_plating_labels');
+	console.log(plating_item);
+	div.appendChild(label_cluster('pt_description_labels',plating_item.menu_item.current_shift));
 	let btns = add_btns([{'fn':'start_plating_item()','text':'Print Labels'}]);
 	div.appendChild(btns);
 	console.log('reprint_plating_labels');

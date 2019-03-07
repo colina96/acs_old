@@ -51,7 +51,7 @@ if ($userID > 0) {
 	}
 	else {
 		$sql .= " where user_id = ".$userID;
-    	// $sql.= " and DATE(time_started) = CURDATE()";
+    	$sql.= " and DATE(time_started) = CURDATE()"; // left to make testing easier - TODO remove
 	}
 	 // echo $sql;
 	$log .= ' sql= '.$sql;

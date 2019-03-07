@@ -8,7 +8,9 @@ $job_dir = "tmp/";
 $params = get_params();
 
 if (!empty($_POST['data'])) {
+	
 	$comp = json_decode($_POST["data"],true);
+	var_dump($comp);
 	$id = $comp['id'];
 	$d_copies = $comp['description_labels'];
 
