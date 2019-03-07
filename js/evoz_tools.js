@@ -166,6 +166,8 @@ function submit_form(tablename)
 	return(false);
 }
 
+
+
 function table_results(data,div_id)
 {
 	var div = document.getElementById(div_id);
@@ -569,4 +571,30 @@ function hide(div_id)
 	}
 }
 
+function get_db_data(tablename,conditions,callback) // simple single table REST call
+{
+	var q = new Object();
+	q.TABLENAME = tablename;
+	q.action = 'GET';
+	if (conditions) q.conditions = conditions;
+	var data =  {data: JSON.stringify(q)}; // just gets field definitions
+	
+	console.log(data);
+	$.ajax({
+    	url: RESTHOME + "replace.php",
+        type: "POST",
+        dataType: 'json',
+        data: data,
+        success: function(result) {
+        	// this.result = result;
+            console.log(result);  
+            console.log('get_db_data result');
+            if (callback) callback(result);
+              
+        },
+        fail: (function (result) {
+            console.log("fail ",result);
+        })
+    });
+}
   

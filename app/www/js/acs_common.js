@@ -270,6 +270,18 @@ function new_th(content,classname,inner_class = 'm-10') {
 	return(td);
 }
 
+function new_td_text_input(id,td_classname,in_classname,def)
+{ // TODO
+	var new_input = document.createElement('input');
+	new_input.id = id;
+	new_input.className = in_classname;
+	
+	var td = document.createElement('td');
+	td.className = td_classname;
+	td.appendChild(new_input);
+	return(td);
+}
+
 function calc_max_serves(nserves,ss1,ss2)
 {
 	// if only 2 serving sizes the split is 80 - 20

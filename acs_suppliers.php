@@ -1,7 +1,8 @@
 <div class='top_menu_container' id="suppliers_subtabs">
 			<div class='top_menu'  onclick="suppliers(this)">SUPPLIERS</div>
 			<div class='top_menu'   onclick="load_purchase_orders(this)">PURCHASE ORDERS</div>
-			<div class='top_menu'   onclick="load_dock_components(this)">ORDER ITEMS</div>
+		<!-- 	<div class='top_menu'   onclick="load_dock_components(this)">ORDER ITEMS</div> -->
+			<div class='top_menu'   onclick="goto_new_po(this)">NEW PURCHASE ORDER</div>
 
 
 
@@ -18,6 +19,12 @@
 
 	</div>
 	<div id='csv_errors'></div>
+</div>
+<div class='acs_main' id="po_frame">
+	<div id='po_container' class='acs_container'></div>
+</div>
+<div class='acs_main' id="new_po_frame">
+	<div id='new_po_container' class='acs_container'></div>
 </div>
 
 <script>
@@ -108,6 +115,8 @@ function suppliers()
 		};
 
 	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
+//	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
+	var div = openPage('suppliers_frame', this, 'red','acs_main');
 	var div = document.getElementById('suppliers_container');
 	div.innerHTML = null;
 
@@ -117,6 +126,97 @@ function suppliers()
 	suppliers_obj.build_form();
 	document.getElementById('csv_upload_div').style.display = 'block';
 }
+
+/*
+ * function new_po
+ * open the form for a new purchase order
+ */
+function goto_new_po() 
+{
+	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
+	var div = openPage('new_po_frame', this, 'red','acs_main');
+	var div = document.getElementById('new_po_container');
+	div.innerHTML = null;
+	/* bootstrap layout might work here - use tables to get started */
+	var d = document.createElement('div');
+	var tab = document.createElement('table');
+	var tr = document.createElement('tr');
+	/*	tr.setAttribute(
+				"onclick",
+				"show_dock_component(" + i + "," + j + ");"
+		); */
+	// reference from acs.js : new_td(content, classname)
+	tr.appendChild(new_td('SUPPLIER :','comp','m-5'));
+	tr.appendChild(new_td_text_input('supplier_input','comp','td_input',''));
+	tr.appendChild(new_td('NOTES :','comp','m-5'));
+	tr.appendChild(new_td_text_input('notes_input','comp','td_input',''));
+	tab.appendChild(tr);
+	d.appendChild(tab);
+	div.appendChild(d);
+	// add purchare order items
+	var tab = document.createElement('table');
+	tab.id = 'po_item_table';
+	var tr = document.createElement('tr');
+	tr.appendChild(new_td('ITEM_NAME :','comp','m-5'));
+	// tr.appendChild(new_td('ITEM_CODE :','comp','m-5')); not used ....yet
+	tr.appendChild(new_td('SPEC :','comp','m-5'));
+	tr.appendChild(new_td('UOM :','comp','m-5'));
+	tab.appendChild(tr);
+	var tr = document.createElement('tr');
+	tr.appendChild(new_td_text_input('po_item_name','comp','td_input',''));
+	tr.appendChild(new_td_text_input('po_spec','comp','td_input',''));
+	tr.appendChild(new_td_text_input('po_uom','comp','td_input',''));
+	tab.appendChild(tr);
+	
+	div.appendChild(tab);
+	// tr.appendChild(new_td('SHELF LIFE :','comp','m-5'));
+	get_db_data('SUPPLIERS','',setup_supplier_search);
+	get_db_data('MENU_ITEM_COMPONENTS','',setup_po_comp_search);
+}
+
+function setup_po_comp_search(data)
+{
+	console.log('setup_po_comp_search',data);
+	var items = new Array();
+	for (let i = 0; i < data.data.length; i++) {
+		let s = new Object();
+		s.label = data.data[i].description;
+		s.value = data.data[i].id;
+		items.push(s);
+	}
+	setup_search('po_item_name',items);
+}
+
+function setup_supplier_search(data)
+{
+	console.log('setup_supplier_search',data);
+	var items = new Array();
+	for (let i = 0; i < data.data.length; i++) {
+		let s = new Object();
+		s.label = data.data[i].name;
+		s.value = data.data[i].id;
+		items.push(s);
+	}
+	setup_search('supplier_input',items);
+}
+function setup_search(fld,data)
+{
+	$('#' + fld).autocomplete({
+		// This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+		minLength: 2,
+		source: data,
+		response: function (event, ui) {
+			console.log("search response found " + ui.content.length); console.log(ui);
+			
+		},
+		select: function (event, ui) {			
+			$('#' + fld).val(ui.item.label);		
+			console.log('setup_search: selected ', ui.item.value);
+			return false;
+		}
+	})
+}
+
 
 function load_dock_components()
 {
@@ -137,17 +237,7 @@ function load_dock_components()
 	// openPage('PARAMS', this, 'red','tabcontent','tabclass');
 	comp_data.build_form();
 }
-function Xload_purchase_orders()
-{
-	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
-	var div = document.getElementById('suppliers_container');
-	div.innerHTML = null;
-	if (po_data == null) {
-		po_data = new evoz_tools('PURCHASE_ORDERS','suppliers_container',data_formats['PURCHASE_ORDERS']);
-	}
-	// openPage('PARAMS', this, 'red','tabcontent','tabclass');
-	po_data.build_form();
-}
+
 
 function load_purchase_orders()
 {
@@ -176,7 +266,10 @@ function load_purchase_orders()
 
 function show_purchase_orders()
 {
-	var div = document.getElementById('suppliers_container');
+	
+	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
+	var div = openPage('po_frame', this, 'red','acs_main');
+	var div = document.getElementById('po_container');
 	div.innerHTML = '';
 	var table = document.createElement('table');
 	table.className = 'menu_table';

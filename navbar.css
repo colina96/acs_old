@@ -551,6 +551,9 @@ tabclass a {
     margin-left:10px;
 }
 
+.td_input {
+	width:100%;
+}
 .popup {
 	position:absolute;
 	top:10px;
