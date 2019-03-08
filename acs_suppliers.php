@@ -305,6 +305,7 @@ function load_purchase_orders()
         	console.log(result);
             // comps = result;
         	purchase_orders = result.purchase_orders;
+        	preptypes = result.prep_types;
         	// supplier_obj.data = result.suppliers;
             // TODO - make search work
 
@@ -396,13 +397,23 @@ function select_prep_type(i, j){
 
 	var ret =  "<select name='pt_" + 6 + "' onchange='update_prep_type(this,"+ poi_id +");'>";
 	var idx = 1;
+	var dock = 1;
 	// need to make a call and load from DB
-	var preptypes = ['CC', 'HF', 'ESL', 'LR', 'AHR', 'FRESH','FROZEN','DRY', 'DECANT'];
+	// var preptypes = ['CC', 'HF', 'ESL', 'LR', 'AHR', 'FRESH','FROZEN','DRY', 'DECANT'];
+	for (var i in preptypes) {
+		// console.log(i);
+		if ((!dock && preptypes[i].dock == 0) || (dock && preptypes[i].dock == 1)) { 
+			ret += "<option value='" + i + "'";
+			if (preptypes[i].code == pt_code) { ret += " selected"; }
+			ret +=  ">"+ preptypes[i].code + "</option>";
+		}
+	}
+	/*
 	for (var i in preptypes) {
 		ret += "<option value='" + i + "'";
 		if (preptypes[i] == pt_code) { ret += " selected"; }
 		ret += ">" + preptypes[i] + "</option>";
-	}
+	} */
 	ret +=  "</select>";
 	return (ret);
 
