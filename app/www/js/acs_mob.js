@@ -1382,10 +1382,12 @@ function setup_dock_search(dock_items)
 			// and place the person.id into the hidden textfield called 'link_origin_id'.
 			console.log('setup_dock_search: selected ', ui.item.value);
 			for (var i in purchase_orders) {
-				for (var j = 0; j < purchase_orders[i].items.length; j++) {	
-					if (ui.item.value == purchase_orders[i].items[j].id) {
-						show_dock_component(i,j);
-					};
+				if (purchase_orders[i].items) {
+					for (var j = 0; j < purchase_orders[i].items.length; j++) {	
+						if (ui.item.value == purchase_orders[i].items[j].id) {
+							show_dock_component(i,j);
+						};
+					}
 				}
 			}
 			// show_dock_component(ui.item.value);
@@ -1787,9 +1789,10 @@ function check_temp_m1_dock(t)
 	console.log(new_comp);
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {// should never happen
-			alert("incorrect prep type");
+			console.log("incorrect prep type");
+			M1_temp_target = 5; // assume fresh
 		}
-		else { 
+		{ 
 			if (parseInt(t * 10 ) > parseInt(M1_temp_target * 10)) { // round to one decimal place
 				show_temp(t,true);
 				console.log("DOCK M1 temp too high");
