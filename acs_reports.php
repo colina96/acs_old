@@ -74,7 +74,7 @@ var dock_report_fmt = {
 		'M1 TEMP':'M1_temp',
 		'Use By':'expiry_date',
 		'Q/A':'M1_action_text',
-		'CHEF':'M1_action'},
+		'RECEIVED BY':'M1_check'},
 	'FROZEN': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
@@ -82,7 +82,7 @@ var dock_report_fmt = {
 		'M1 TEMP':'M1_temp',
 		'Use By':'expiry_date',
 		'Q/A':'M1_action_text',
-		'CHEF':'M1_action'},
+		'RECEIVED BY':'M1_check'},
 	'DRY': {
 		'COMPONENT NAME':'description',
 		'BATCH CODE':'id',
@@ -90,7 +90,7 @@ var dock_report_fmt = {
 		'M1 TEMP':'M1_temp',
 		'Use By':'expiry_date',
 		'Q/A':'M1_action_text',
-		'CHEF':'M1_action'}
+		'RECEIVED BY':'M1_check'}
 }
 
 var plating_report_fmt = {
@@ -167,7 +167,8 @@ function report_components(data,format,target)
 			}
 		//	tab.appendChild(tr);
 			var data_count = new Object();
-		   	for (var i=0; i<data.length; i++) {
+		  // 	for (var i=0; i<data.length; i++) {
+		  	for (var i = data.length - 1; i >= 0; i--) {
 		/*	   	console.log('item ' + data[i]['description'] + ' prep ' + data[i]['prep_type_id'] + 
 					  " : " + preptype_id); */
 			   	if (data[i]['prep_type_id'] == preptype_id) {

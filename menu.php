@@ -375,7 +375,7 @@ function show_menu(filter)
 	            	tr.appendChild(td);
 	            	// STP
 	            	td = document.createElement('td');
-	            	var innerHTML = "<input type='checkbox' value='1' name='label_at_dock_" + mid + "' onclick='set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"label_at_dock\"," + menu_item_components[mid].id + ",reload_menu);'";
+	            	var innerHTML = "<input type='checkbox' value='1' name='label_at_dock_" + mid + "' onclick='update_label_at_dock(this,\"MENU_ITEM_COMPONENTS\",\"label_at_dock\"," + menu_item_components[mid].id + ",reload_menu);'";
 	            	if (menu_item_components[mid].label_at_dock == 1) {
 	                	innerHTML += ' checked';
 	            	}
@@ -507,9 +507,48 @@ function reload_menu()
 	load_menu(active_menu_id);
 }
 
-function update_label_at_dock(input)
+function update_label_at_dock(input,tablename,field,id,callback)
 {
-	
+	var d = new Object();
+	var data = Object();
+	data['id'] = id;
+	if (input.checked) {
+		data[field] = 1;
+		data['prep_type'] = 6;
+	}
+	else {
+		data[field] = 0;
+		data['prep_type'] = 1;
+	}
+	d.data = data;
+	d.TABLENAME = tablename;
+	d['action'] = 'UPDATE';
+	var data =  {data: JSON.stringify(d)};
+    console.log("Sent Off: %j", data);
+ 
+    $.ajax({
+        url: RESTHOME + "replace.php",
+        type: "POST",
+        data: data,
+
+        success: function(result) { // need to get the id of the new component back to print labels
+            console.log("set_db_field result ",result);
+            
+            if (result.indexOf('error') >= 0)
+            {
+                let div = document.createElement('div');
+                div.innerHTML = result;
+                document.body.appendChild(div);
+            }
+            else {
+                if (callback) callback();
+            	// load_menu(active_menu_id);
+            }
+        },
+        fail: (function (result) {
+            console.log("set_location fail ",result);
+        })
+    });
 }
 function set_db_field(input,tablename,field,id,callback)
 {

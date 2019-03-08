@@ -1945,7 +1945,10 @@ function dock_start_component()
 	
 	active_comp.finished = 'true';
 	active_comp.M1_chef_id = get_user_id();
-
+	if (active_comp.prep_type < 6) {
+		console.log('WARNING - invalid prep type for dock item');
+		active_comp.prep_type = 6; // this should never happen - force it now to show up in reports
+	}
 	let data = {data: JSON.stringify(active_comp)};
 
 	console.log("XXXX dock_start_component Sent Off: ",data);
