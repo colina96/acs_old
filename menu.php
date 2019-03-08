@@ -192,7 +192,7 @@ function menu_select_prep_type(preptypes,prep_type_id,comp_id,dock)
 	for (var i in preptypes) {
 		// console.log(i);
 		if ((!dock && preptypes[i].dock == 0) || (dock && preptypes[i].dock == 1)) { 
-			ret += "<option value='" + i + "'";
+			ret += "<option value='" + preptypes[i].id + "'";
 			if (preptypes[i].id == prep_type_id) { ret += " selected"; }
 			ret +=  ">"+ preptypes[i].code + "</option>";
 		}
@@ -392,7 +392,7 @@ function show_menu(filter)
 	            	td.innerHTML = innerHTML;
 	            	tr.appendChild(td);
 	            	td = document.createElement('td');
-	            	td.innerHTML = menu_select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,false);
+	            	td.innerHTML = menu_select_prep_type(preptypes,menu_item_components[mid].prep_type,mid,menu_item_components[mid].label_at_dock == 1);
 	            	tr.appendChild(td);
 	            	td = document.createElement('td');
 	            	td.innerHTML = select_probe_type(menu_item_components[mid].probe_type,mid);
@@ -507,6 +507,10 @@ function reload_menu()
 	load_menu(active_menu_id);
 }
 
+function update_label_at_dock(input)
+{
+	
+}
 function set_db_field(input,tablename,field,id,callback)
 {
 	console.log('set_db_field',input,tablename,field,id,input.type);
@@ -1130,7 +1134,7 @@ function menu_update_prep_type(s,comp_id)
 	$.post("REST/update_component.php",
 		    {
 		        id: comp_id,
-		        prep_type: idx + 1
+		        prep_type: val
 		    },
 		    function(data, status){
 		        console.log("Data: " + data + "\nStatus: " + status);
