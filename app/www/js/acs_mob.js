@@ -1297,23 +1297,26 @@ function show_dock()
 	for (var i in purchase_orders) {
 	//	console.log('purchase_order',i);
 	//	console.log(purchase_orders[i]);
-		console.log('purchase_orders[i].items.length',purchase_orders[i].items.length);
-		for (var j = 0; j < purchase_orders[i].items.length; j++) {
-			if (purchase_orders[i].items[j].component.label_at_dock == 1) {
-				let dock_item = Array();
-				// console.log('item',j);
-				var tr = document.createElement('tr');
-				tr.setAttribute(
-						"onclick",
-						"show_dock_component(" + i + "," + j + ");"
-					);
-				tr.appendChild(new_td((j == 0)?purchase_orders[i].supplier.name:'','comp','m-5'));
-				tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
-				tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
-				dock_item['value'] = purchase_orders[i].items[j].id;
-				dock_item['label'] = purchase_orders[i].supplier.name + ": " + purchase_orders[i].items[j].component.description;
-				table.appendChild(tr);
-				dock_items.push(dock_item);
+		
+		if (purchase_orders[i].items) {
+			console.log('purchase_orders[i].items.length',purchase_orders[i].items.length);
+			for (var j = 0; j < purchase_orders[i].items.length; j++) {
+				if (purchase_orders[i].items[j].component.label_at_dock == 1) {
+					let dock_item = Array();
+					// console.log('item',j);
+					var tr = document.createElement('tr');
+					tr.setAttribute(
+							"onclick",
+							"show_dock_component(" + i + "," + j + ");"
+						);
+					tr.appendChild(new_td((j == 0)?purchase_orders[i].supplier.name:'','comp','m-5'));
+					tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
+					tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
+					dock_item['value'] = purchase_orders[i].items[j].id;
+					dock_item['label'] = purchase_orders[i].supplier.name + ": " + purchase_orders[i].items[j].component.description;
+					table.appendChild(tr);
+					dock_items.push(dock_item);
+				}
 			}
 		}
 	}
@@ -1777,8 +1780,11 @@ function check_temp_m1_dock(t)
 	document.getElementById('dock_m1_temp_div').innerHTML = '';
 	document.getElementById('dock_m1_temp_div').appendChild(show_product_details(new_comp));
 	show_product_details(new_comp);
+	active_comp.purchase_order_id = purchase_orders[purchase_orders.selected_order].id;
+	active_comp.purchase_order_item_id = purchase_orders[purchase_orders.selected_order].items[purchase_orders.selected_item].id;
 	
 	console.log("check temp",t,M1_temp_target);
+	console.log(new_comp);
 	if (t.length > 0) {
 		if (M1_temp_sign == 1) {// should never happen
 			alert("incorrect prep type");

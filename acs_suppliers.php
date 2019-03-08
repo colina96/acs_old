@@ -244,7 +244,7 @@ function load_purchase_orders()
 	let tag = 'purchase_orders: ';
 	console.log(tag,"will update ");
     $.ajax({
-        url: RESTHOME + "get_dock.php",
+        url: RESTHOME + "get_dock.php?all=true",
         type: "POST",
         dataType: 'json',
         success: function(result) {

@@ -241,7 +241,7 @@ function show(div_id)
 	console.log('show ' + div_id);
 	if (document.getElementById('shield')) {
 		console.log('showing shield');
-		document.getElementById('shield').style.display='block';
+	// 	document.getElementById('shield').style.display='block';
 	}
 }
 

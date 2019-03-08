@@ -12,7 +12,7 @@ upload_suppliers($data['json']);
 function upload_suppliers($data)
 {
 	$suppliers = 
-	$comps = get_indexed_table('MENU_ITEM_COMPONENTS','where label_at_dock = 1','description');
+	$comps = get_indexed_table('MENU_ITEM_COMPONENTS','','description');
 	$suppliers = get_indexed_table('SUPPLIERS','','name');
 	$purchase_orders = get_indexed_table('PURCHASE_ORDERS','','comment'); //temporary hack to get some data into the system for testing
 	//var_dump($comps);
@@ -30,12 +30,14 @@ function upload_suppliers($data)
 					$supplier_id = -1;
 					if (array_key_exists($supplier_name,$suppliers)) {
 						$supplier_id = $suppliers[$supplier_name]['id'];
-						$purchase_order_id = -1; // don't create a new purchase_order
+						// $purchase_order_id = -1; // don't create a new purchase_order
+						$purchase_order_id = get_purchase_order_id($supplier_name,$supplier_id); // create a new dummy purchase order for this supplier
+						
 					}
-					else {
+					else { 
 						$supplier_id = get_supplier_id($supplier_name);
 						$purchase_order_id = get_purchase_order_id($supplier_name,$supplier_id); // create a new dummy purchase order for this supplier
-					}
+				} 
 					echo 'Supplier -'.$supplier_id.': '.$supplier_name.'<br>';
 				}
 				else if ($row[1] != '') {

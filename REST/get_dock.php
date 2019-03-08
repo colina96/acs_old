@@ -8,12 +8,14 @@ $userID = $_SESSION['userID'];
 if ($userID > 0) {
 	$suppliers = get_table("SUPPLIERS",""); 
 	$prep_types = get_table('PREP_TYPES','');
-	$pos = get_table('PURCHASE_ORDERS','where date_received is null');
-	$pois = get_table('PURCHASE_ORDER_ITEMS','where date_received is null');
+	$conditions = 'where date_received is null';
+	if (!empty(get_url_token('all'))) $conditions = '';
+	$pos = get_table('PURCHASE_ORDERS',$conditions);
+	$pois = get_table('PURCHASE_ORDER_ITEMS',$conditions);
 	$component_list = null;
 	foreach ($pois as $poi) { // attach items to purchase orders
 		$po_id = $poi['purchase_order_id'];
-		if ($pos[$po_id]) {
+		if (array_key_exists($po_id,$pos) && $pos[$po_id]) {
 			if (empty($pos[$po_id]['items'])) $pos[$po_id]['items'] = array();
 			$pos[$po_id]['items'][] = $poi;
 		}
@@ -34,10 +36,12 @@ if ($userID > 0) {
 		// echo $po['supplier_id'];
 		// if (!empty($suppliers[$po['supplier_id']])) $pos[$po['id']]['supplier'] = $suppliers[$po['supplier_id']];
 		if (!empty($suppliers[$po['supplier_id']])) $pos[$i]['supplier'] = $suppliers[$po['supplier_id']];
-		foreach ($po['items'] as $j => $poi) {
-			$comp_id = $poi['menu_item_component_id'];
-			$pos[$i]['items'][$j]['component'] = $comps[$comp_id];
-			$pos[$i]['items'][$j]['PT'] = $prep_types[$poi['prep_type']];
+		if (array_key_exists('items',$po)) {
+			foreach ($po['items'] as $j => $poi) {
+				$comp_id = $poi['menu_item_component_id'];
+				$pos[$i]['items'][$j]['component'] = $comps[$comp_id];
+				$pos[$i]['items'][$j]['PT'] = $prep_types[$poi['prep_type']];
+			}
 		}
 	}
 	$ret = array();

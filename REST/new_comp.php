@@ -81,7 +81,11 @@ if ($M0) { // record ingredients
 		}
 	}
 }
-	
+if (!empty($comp['purchase_order_item_id'])) {
+	$sql2 = 'update PURCHASE_ORDER_ITEMS set date_received = now() where id = '.$comp['purchase_order_item_id'];
+	$ret['sql2'] = $sql2;
+	test_mysql_query($sql2);
+}
 $json = json_encode($ret);
 echo $json;
 // echo $sql."\n\n";
