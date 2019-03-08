@@ -1304,17 +1304,20 @@ function show_dock()
 				if (purchase_orders[i].items[j].component.label_at_dock == 1) {
 					let dock_item = Array();
 					// console.log('item',j);
-					var tr = document.createElement('tr');
-					tr.setAttribute(
-							"onclick",
-							"show_dock_component(" + i + "," + j + ");"
-						);
-					tr.appendChild(new_td((j == 0)?purchase_orders[i].supplier.name:'','comp','m-5'));
-					tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
-					tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
+					if (purchase_orders[i].items[j].date_received == '') {
+						var tr = document.createElement('tr');
+						tr.setAttribute(
+								"onclick",
+								"show_dock_component(" + i + "," + j + ");"
+							);
+						tr.appendChild(new_td((j == 0)?purchase_orders[i].supplier.name:'','comp','m-5'));
+						tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
+						tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
+						table.appendChild(tr);
+					}
 					dock_item['value'] = purchase_orders[i].items[j].id;
 					dock_item['label'] = purchase_orders[i].supplier.name + ": " + purchase_orders[i].items[j].component.description;
-					table.appendChild(tr);
+					
 					dock_items.push(dock_item);
 				}
 			}
@@ -3099,7 +3102,7 @@ function load_dock_comps(fn)
 	let tag = 'load_dock_comps: ';
 	console.log(tag,"loading menu item components");
     $.ajax({
-        url: RESTHOME + "get_dock.php",
+        url: RESTHOME + "get_dock.php?all=true",
         type: "POST",
        // data: data,
        //  data: {points: JSON.stringify(points)},

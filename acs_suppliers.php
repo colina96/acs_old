@@ -213,7 +213,7 @@ function upload_new_purchase_order()
 	row[1] = 'Description';
 	row[2] = 'Code';
 	json[0] = ['Unit','Description','Code'];
-	json[1] = ['','Bruce',''];
+	json[1] = ['',document.getElementById('supplier_input').value,''];
 	
 	for (let i = 0; i < po.n_items; i++) {
 		let row = Array();
