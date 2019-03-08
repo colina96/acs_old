@@ -324,14 +324,14 @@ function show_menu(filter)
 	    	td.innerHTML = select_plating_team(item.plating_team,item.id);
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
-	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split1_" + item.id + "'value='" +  item.split1 + "' onchange='menu_set_db_field(this,\"MENU_ITEMS\",\"split1\"," + item.id + ");'>";
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split1_" + item.id + "'value='" +  item.split1 + "' onchange='set_db_field(this,\"MENU_ITEMS\",\"split1\"," + item.id + ");'>";
        		
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
-	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split2_" + item.id + "'value='" +  item.split2 + "' onchange='menu_set_db_field(this,\"MENU_ITEMS\",\"split2\"," + item.id + ");'>";
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split2_" + item.id + "'value='" +  item.split2 + "' onchange='set_db_field(this,\"MENU_ITEMS\",\"split2\"," + item.id + ");'>";
 	    	tr.appendChild(td);
 	    	td = document.createElement('td');
-	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split3_" + item.id + "'value='" +  item.split3 + "' onchange='menu_set_db_field(this,\"MENU_ITEMS\",\"split3\"," + item.id + ");'>";
+	    	td.innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='split3_" + item.id + "'value='" +  item.split3 + "' onchange='set_db_field(this,\"MENU_ITEMS\",\"split3\"," + item.id + ");'>";
 	    	tr.appendChild(td);
 	    	/*
 	    	td = document.createElement('td');
@@ -374,7 +374,7 @@ function show_menu(filter)
 	            	tr.appendChild(td);
 	            	// STP
 	            	td = document.createElement('td');
-	            	var innerHTML = "<input type='checkbox' value='1' name='label_at_dock_" + mid + "' onclick='menu_set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"label_at_dock\"," + menu_item_components[mid].id + ");'";
+	            	var innerHTML = "<input type='checkbox' value='1' name='label_at_dock_" + mid + "' onclick='set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"label_at_dock\"," + menu_item_components[mid].id + ");'";
 	            	if (menu_item_components[mid].label_at_dock == 1) {
 	                	innerHTML += ' checked';
 	            	}
@@ -501,9 +501,14 @@ function set_split(input,split,id)
     });
 }
 
-function menu_set_db_field(input,tablename,field,id)
+function reload_menu()
 {
-	console.log('menu_set_db_field',input,tablename,field,id,input.type);
+	load_menu(active_menu_id);
+}
+
+function set_db_field(input,tablename,field,id,callback)
+{
+	console.log('set_db_field',input,tablename,field,id,input.type);
 	var d = new Object();
 	var data = Object();
 	data['id'] = id;
@@ -523,7 +528,7 @@ function menu_set_db_field(input,tablename,field,id)
         data: data,
 
         success: function(result) { // need to get the id of the new component back to print labels
-            console.log("menu_set_db_field result ",result);
+            console.log("set_db_field result ",result);
             
             if (result.indexOf('error') >= 0)
             {
@@ -532,7 +537,8 @@ function menu_set_db_field(input,tablename,field,id)
                 document.body.appendChild(div);
             }
             else {
-            	load_menu(active_menu_id);
+                if (callback) callback();
+            	// load_menu(active_menu_id);
             }
         },
         fail: (function (result) {
