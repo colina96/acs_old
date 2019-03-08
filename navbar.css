@@ -110,7 +110,7 @@ td { padding: 10px; }
   .padding: 100px 20px;
   height: 100%;
 }
-.acs_main {
+.acs_main, supplier_main {
 	position: relative;
 	height:80%;
 	width:100%;

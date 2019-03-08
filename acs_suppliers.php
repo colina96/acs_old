@@ -7,7 +7,7 @@
 
 
 </div>
-<div class='acs_main' id="suppliers_frame">
+<div class='supplier_main' id="suppliers_frame">
 
 
 	<div id='suppliers_container' class='acs_container'>
@@ -20,10 +20,10 @@
 	</div>
 	<div id='csv_errors'></div>
 </div>
-<div class='acs_main' id="po_frame">
+<div class='supplier_main' id="po_frame">
 	<div id='po_container' class='acs_container'></div>
 </div>
-<div class='acs_main' id="new_po_frame">
+<div class='supplier_main' id="new_po_frame">
 	<div id='new_po_container' class='acs_container'></div>
 </div>
 
@@ -116,7 +116,7 @@ function suppliers()
 
 	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
 //	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
-	var div = openPage('suppliers_frame', this, 'red','acs_main');
+	var div = openPage('suppliers_frame', this, 'red','supplier_main');
 	var div = document.getElementById('suppliers_container');
 	div.innerHTML = null;
 
@@ -131,10 +131,27 @@ function suppliers()
  * function new_po
  * open the form for a new purchase order
  */
+var po = null;
+function add_purchase_order_item()
+{
+	
+	var tab = document.getElementById('po_item_table');
+	var tr = document.createElement('tr');
+	tr.appendChild(new_td_text_input('po_item_name_' + po.n_items,'comp','td_input',''));
+	tr.appendChild(new_td_text_input('po_spec_' + po.n_items,'comp','td_input',''));
+	tr.appendChild(new_td_text_input('po_uom_' + po.n_items,'comp','td_input',''));
+	tab.appendChild(tr);
+	setup_search('po_item_name_' + po.n_items,comp_search_items);
+	po.n_items ++;
+}
+
 function goto_new_po() 
 {
+	
+	po = new Object();
+	po.n_items = 0;
 	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
-	var div = openPage('new_po_frame', this, 'red','acs_main');
+	var div = openPage('new_po_frame', this, 'red','supplier_main');
 	var div = document.getElementById('new_po_container');
 	div.innerHTML = null;
 	/* bootstrap layout might work here - use tables to get started */
@@ -162,29 +179,66 @@ function goto_new_po()
 	tr.appendChild(new_td('SPEC :','comp','m-5'));
 	tr.appendChild(new_td('UOM :','comp','m-5'));
 	tab.appendChild(tr);
-	var tr = document.createElement('tr');
-	tr.appendChild(new_td_text_input('po_item_name','comp','td_input',''));
-	tr.appendChild(new_td_text_input('po_spec','comp','td_input',''));
-	tr.appendChild(new_td_text_input('po_uom','comp','td_input',''));
-	tab.appendChild(tr);
+	
+	var more_items = document.createElement('button');
+	more_items.innerHTML = 'Add item';
+	more_items.setAttribute(
+			"onclick",
+			"add_purchase_order_item();"
+	);
+
+	
 	
 	div.appendChild(tab);
-	// tr.appendChild(new_td('SHELF LIFE :','comp','m-5'));
+	div.appendChild(more_items);
+	var save_po = document.createElement('button');
+	save_po.innerHTML = 'Save';
+	save_po.setAttribute(
+			"onclick",
+			"upload_new_purchase_order();"
+	);
+	div.appendChild(save_po);
+	
 	get_db_data('SUPPLIERS','',setup_supplier_search);
 	get_db_data('MENU_ITEM_COMPONENTS','',setup_po_comp_search);
+	// add_purchase_order_item(); // cant do here because come data hasn't loaded yet
 }
 
+function upload_new_purchase_order()
+{
+	var json = Array();
+	// row 1 is just headings
+	var row = Array();
+	row[0] = 'Unit';
+	row[1] = 'Description';
+	row[2] = 'Code';
+	json[0] = ['Unit','Description','Code'];
+	json[1] = ['','Bruce',''];
+	
+	for (let i = 0; i < po.n_items; i++) {
+		let row = Array();
+		row[0] = document.getElementById('po_uom_' + i).value;
+		row[1] = document.getElementById('po_item_name_' + i).value;
+		row[2] = document.getElementById('po_spec_' + i).value;
+		json.push(row);
+	}
+	console.log(json);
+	process_suppliers_csv(json);
+}
+
+
+var comp_search_items = null;
 function setup_po_comp_search(data)
 {
 	console.log('setup_po_comp_search',data);
-	var items = new Array();
+	comp_search_items = new Array();
 	for (let i = 0; i < data.data.length; i++) {
 		let s = new Object();
 		s.label = data.data[i].description;
 		s.value = data.data[i].id;
-		items.push(s);
+		comp_search_items.push(s);
 	}
-	setup_search('po_item_name',items);
+	
 }
 
 function setup_supplier_search(data)
@@ -268,7 +322,7 @@ function show_purchase_orders()
 {
 	
 	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
-	var div = openPage('po_frame', this, 'red','acs_main');
+	var div = openPage('po_frame', this, 'red','supplier_main');
 	var div = document.getElementById('po_container');
 	div.innerHTML = '';
 	var table = document.createElement('table');
@@ -327,11 +381,11 @@ function show_purchase_orders()
 		}
 	}
 	div.appendChild(table);
-	div.appendChild(new_purchase_order_form());
+// 	div.appendChild(new_purchase_order_form());
 }
 
 // Function taken from menu.php and modified to simplify creating a Dropdown to choose prep type
-// i and j are coordinates
+// i and j are coordinates - should get prep_types from database
 function select_prep_type(i, j){
 
 	item = purchase_orders[i].items[j];
@@ -384,7 +438,7 @@ function edit_or_save(i, j){
 	return (ret);
 }
 
-function new_purchase_order_form()
+function XXnew_purchase_order_form()
 {
 	/* two part form - create purchase order and list of items.
 	*/
