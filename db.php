@@ -41,17 +41,35 @@ function get_url_token($tok)
 	}
 	return(NULL);
 }
+/* exceptions_error_handler
+ * this might cause problems debugging SQL errors 
+ * 
+ */
+function exceptions_error_handler($severity, $message, $filename, $lineno) {
+	if (error_reporting() == 0) {
+		return;
+	}
+	if (error_reporting() & $severity) {
+		throw new ErrorException($message, 0, $severity, $filename, $lineno);
+	}
+}
 
 function dblog($s)
 {
 	// stub
+	set_error_handler('exceptions_error_handler');
 	$Dt = date('Y-m-d');
 	$t = date("D M d y h:i A");
 	$u = ' UID:'.(empty($_SESSION['userID'])? 0:$_SESSION['userID']);
 	$txt = $t.$u.' : '.$s;
-
+	try {
 	// if you fail here, make sure you have the folder and it has rwx rights for everyone
-	file_put_contents('logs/dblog_'.$Dt.'.log', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
+		file_put_contents('logs/dblog_'.$Dt.'.log', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
+	}
+	catch(Exception $e)
+	{
+		file_put_contents('PANIC.log', $e->getMessage());
+	}
 	/*
 	$myfile = fopen("dblog.log", "ar");
 	if ($myfile) {
