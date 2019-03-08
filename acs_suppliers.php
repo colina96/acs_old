@@ -71,7 +71,7 @@ function open_suppliers_csv(event) {
 	    reader.readAsText(input.files[0]);
 	  };
 
-function process_suppliers_csv(json)
+function process_suppliers_csv(json,callback)
 {
 	// quick and dirty to meet deadline - rewrite to make REST interface more generic
 	var ret = Object();
@@ -87,7 +87,8 @@ function process_suppliers_csv(json)
         success: function(result) {
             console.log('got result');
             console.log(result);
-            document.getElementById('csv_errors').innerHTML = result;
+            if (typeof(callback) === 'function') callback(result);
+           //  document.getElementById('csv_errors').innerHTML = result;
 
         },
         fail: (function (result) {
@@ -214,16 +215,27 @@ function upload_new_purchase_order()
 	row[2] = 'Code';
 	json[0] = ['Unit','Description','Code'];
 	json[1] = ['',document.getElementById('supplier_input').value,''];
-	
+	if (json[1] == '') return;
+	let n_valid = 0;
 	for (let i = 0; i < po.n_items; i++) {
 		let row = Array();
 		row[0] = document.getElementById('po_uom_' + i).value;
+		if (row[0] == '') row[0] = 'Not Set'; 
 		row[1] = document.getElementById('po_item_name_' + i).value;
 		row[2] = document.getElementById('po_spec_' + i).value;
-		json.push(row);
+		if (row[2] == '') row[2] = 'Not Set'; 
+		if (row[1] != '') {
+			n_valid ++;
+			json.push(row);
+		}
 	}
-	console.log(json);
-	process_suppliers_csv(json);
+	if (n_valid > 0) {
+		console.log(json);
+		process_suppliers_csv(json,load_purchase_orders);
+	}
+	else 
+		console.log('no valid purchase order items');
+	
 }
 
 

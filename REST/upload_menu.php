@@ -18,8 +18,13 @@ function upload_menu()
 	$file = $_FILES["fileToUpload"]["tmp_name"];
 	echo "uploading ".$_FILES["fileToUpload"]["name"]."\n";
 	echo "tmp name ".$_FILES["fileToUpload"]["tmp_name"]."\n";
+	$menu_start = $_POST['menu_start'];
+	$menu_end = $_POST['menu_end'];
+	if ($menu_start == '') $menu_start = '1970-01-01';
+	if ($menu_end == '') $menu_end = '2030-01-01';
 	echo "start ".$_POST['menu_start']."<br>\n";
 	echo "end ".$_POST['menu_end']."<br>\n";
+	
 	if(/* isset($_POST["submit_menu"]) &&  */ strlen($file) > 3) {
 		//	echo "menu name ".$_POST['menu_description']."<br>\n";
 		//	echo "comment ".$_POST['menu_comment']."<br>\n";
@@ -38,7 +43,7 @@ function upload_menu()
 		$sql = "insert into MENUS ";
 		$flds = "(id,start_date,end_date,description,code,comment)";
 
-		$vals = " values (null,'".$_POST['menu_start']."','".$_POST['menu_end']."',";
+		$vals = " values (null,'".$menu_start."','".$menu_end."',";
 		$vals .= "'".mysql_escape_string( $_POST['menu_name'])."',";
 		$vals .= "'".mysql_escape_string( $_POST['menu_description'])."',";
 		$vals .= "'".mysql_escape_string($_POST['menu_comment'])."')";

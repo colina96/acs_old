@@ -148,6 +148,7 @@ function upload_menu()
 	console.log('uploading menu');
 	var form = document.getElementById('menuform');
 	var formData = new FormData(form);
+	console.log(formData);
 	$.ajax({
         url: "REST/upload_menu.php",
         type: 'POST',
@@ -374,7 +375,7 @@ function show_menu(filter)
 	            	tr.appendChild(td);
 	            	// STP
 	            	td = document.createElement('td');
-	            	var innerHTML = "<input type='checkbox' value='1' name='label_at_dock_" + mid + "' onclick='set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"label_at_dock\"," + menu_item_components[mid].id + ");'";
+	            	var innerHTML = "<input type='checkbox' value='1' name='label_at_dock_" + mid + "' onclick='set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"label_at_dock\"," + menu_item_components[mid].id + ",reload_menu);'";
 	            	if (menu_item_components[mid].label_at_dock == 1) {
 	                	innerHTML += ' checked';
 	            	}
