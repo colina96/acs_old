@@ -19,7 +19,7 @@ function upload_suppliers($data)
 	$n = 0;
 	$purchase_order_id = -1;
 	foreach ($data as $i => $row) {
-		for ($i = 0; $i < 3; $i ++) {
+		for ($i = 0; $i < 4; $i ++) {
 			if (array_key_exists($i,$row)) $row[$i] = trim($row[$i]);
 			else $row[$i] = '';
 		}
@@ -27,17 +27,21 @@ function upload_suppliers($data)
 			if ($row[0] == '') { // supplier
 				if ($row[1] != '' && $row[2] == '') {
 					$supplier_name = $row[1];
+					$comment = $row[3];
 					$supplier_id = -1;
+					if ($comment == '') $comment = $supplier_name;
 					if (array_key_exists($supplier_name,$suppliers)) {
 						$supplier_id = $suppliers[$supplier_name]['id'];
 						// $purchase_order_id = -1; // don't create a new purchase_order
-						$purchase_order_id = get_purchase_order_id($supplier_name,$supplier_id); // create a new dummy purchase order for this supplier
+						
+						$purchase_order_id = get_purchase_order_id($comment,$supplier_id); // create a new dummy purchase order for this supplier
 						
 					}
 					else { 
 						$supplier_id = get_supplier_id($supplier_name);
-						$purchase_order_id = get_purchase_order_id($supplier_name,$supplier_id); // create a new dummy purchase order for this supplier
-				} 
+						
+						$purchase_order_id = get_purchase_order_id($comment,$supplier_id); // create a new dummy purchase order for this supplier
+					} 
 					echo 'Supplier -'.$supplier_id.': '.$supplier_name.'<br>';
 				}
 				else if ($row[1] != '') {

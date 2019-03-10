@@ -214,7 +214,7 @@ function upload_new_purchase_order()
 	row[1] = 'Description';
 	row[2] = 'Code';
 	json[0] = ['Unit','Description','Code'];
-	json[1] = ['',document.getElementById('supplier_input').value,''];
+	json[1] = ['',document.getElementById('supplier_input').value,'',document.getElementById('notes_input').value];
 	if (json[1] == '') return;
 	let n_valid = 0;
 	for (let i = 0; i < po.n_items; i++) {
@@ -331,7 +331,122 @@ function load_purchase_orders()
 }
 
 
+function show_purchase_order(i)
+{
+	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
+	var div = openPage('po_frame', this, 'red','supplier_main');
+	var div = document.getElementById('po_container');
+	div.innerHTML = '<h1>PURCHASE ORDER</h1><hr>';
+	var table = document.createElement('table');
+	var tr = document.createElement('tr');
+	tr.appendChild(new_th('SUPPLIER: ','comp','m-5'));
+	tr.appendChild(new_td(purchase_orders[i].supplier.name,'comp','m-5'));
+	//table.appendChild(tr);
+	// var tr = document.createElement('tr');
+	tr.appendChild(new_th('NOTES: ','comp','m-5'));
+	tr.appendChild(new_td(purchase_orders[i].comment,'comp','m-5'));
+	tr.appendChild(new_th('DATE: ','comp','m-5'));
+	tr.appendChild(new_td(purchase_orders[i].date_created,'comp','m-5'));
+	table.appendChild(tr);
+	div.appendChild(table);
+	var table = document.createElement('table');
+	table.className = 'menu_table';
+	table.width = '100%';
+	var tr = document.createElement('tr');
+	// tr.appendChild(new_th('SUPPLIER','comp','m-5'));
+	tr.appendChild(new_th('ITEM CODE','comp','m-5'));
+	tr.appendChild(new_th('ITEM NAME','comp','m-5'));
+	tr.appendChild(new_th('SPEC','comp','m-5'));
+	tr.appendChild(new_th('UOM','comp','m-5'));
+	tr.appendChild(new_th('SHELF LIFE<br>AFTER OPENING','comp','m-5'));
+	tr.appendChild(new_th('ITEM TYPE','comp','m-5'));
+	tr.appendChild(new_th('LABEL','comp','m-5'));
+	//tr.appendChild(new_th('EDIT','comp','m-5')); 	<< This one is a column for the Save button
+
+	table.appendChild(tr);
+	// for (var i in purchase_orders) {
+		console.log('purchase_order',i);
+		console.log(purchase_orders[i]);
+		console.log('purchase_orders[i].items.length',purchase_orders[i].items.length);
+		for (var j = 0; j < purchase_orders[i].items.length; j++) {
+			console.log('item',j);
+			var tr = document.createElement('tr');
+		/*	tr.setAttribute(
+					"onclick",
+					"show_dock_component(" + i + "," + j + ");"
+				); */
+			// reference from acs.js : new_td(content, classname)
+		// 	tr.appendChild(new_td((j == 0)?purchase_orders[i].supplier.name:'','comp','m-5'));
+			tr.appendChild(new_td(purchase_orders[i].items[j].item_code,'comp','m-5'));
+			tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
+			tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
+			tr.appendChild(new_td(purchase_orders[i].items[j].UOM,'comp','m-5'));
+			tr.appendChild(new_td(purchase_orders[i].items[j].open_shelf_life,'comp','m-5'));
+
+//			tr.appendChild(new_td(purchase_orders[i].items[j].PT.code,'comp','m-5'));
+			tr.appendChild(new_td(
+				select_prep_type(i,j),
+				'comp','m-5'));
+		//	var poi_id = purchase_orders[i].items[j].id;
+			var menu_item_component_id = purchase_orders[i].items[j].menu_item_component_id;
+			var innerHTML = "<input type='checkbox' value='1' name='label_at_dock_" + poi_id + "' onclick='set_db_field(this,\"MENU_ITEM_COMPONENTS\",\"label_at_dock\"," + menu_item_component_id + ");'";
+        	if (purchase_orders[i].items[j].component.label_at_dock == 1) {
+            	innerHTML += ' checked';
+        	}
+        	innerHTML += '>';
+        	tr.appendChild(new_td(innerHTML,'comp','m-5'));
+			// tr.appendChild(new_td(purchase_orders[i].items[j].label_at_dock,'comp','m-5'));
+			// This one is a SAVE button element	
+			// tr.appendChild(new_td(
+			// 	edit_or_save(i,j),
+			// 	'comp','m-5'));
+			
+			table.appendChild(tr);
+		}
+	// }
+	div.appendChild(table);
+// 	div.appendChild(new_purchase_order_form());
+}
+
+
 function show_purchase_orders()
+{
+	
+	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
+	var div = openPage('po_frame', this, 'red','supplier_main');
+	var div = document.getElementById('po_container');
+	div.innerHTML = '';
+	var table = document.createElement('table');
+	table.className = 'menu_table';
+	table.width = '100%';
+	var tr = document.createElement('tr');
+	tr.appendChild(new_th('SUPPLIER','comp','m-5'));
+	tr.appendChild(new_th('NOTES','comp','m-5'));
+	tr.appendChild(new_th('DATE','comp','m-5'));
+	
+
+	table.appendChild(tr);
+	for (var i in purchase_orders) {
+		console.log('purchase_order',i);
+		console.log(purchase_orders[i]);
+		console.log('purchase_orders[i].items.length',purchase_orders[i].items.length);
+		
+		var tr = document.createElement('tr');
+		tr.setAttribute("onclick","show_purchase_order(" + i + ");"); 
+		
+			// reference from acs.js : new_td(content, classname)
+		tr.appendChild(new_td(purchase_orders[i].supplier.name,'comp','m-5'));
+		tr.appendChild(new_td(purchase_orders[i].comment,'comp','m-5'));
+		tr.appendChild(new_td(purchase_orders[i].date_created,'comp','m-5'));
+	
+		table.appendChild(tr);
+		
+	}
+	div.appendChild(table);
+// 	div.appendChild(new_purchase_order_form());
+}
+
+function Xshow_purchase_orders()
 {
 	
 	openPage('SUPPLIERS', this, 'red','tabcontent','tabclass');
@@ -405,7 +520,7 @@ function select_prep_type(i, j){
 	poi_id = item.id;
 	pt_code = item.PT.code;
 
-	console.log("select prep type", item);
+	// console.log("select prep type", item);
 
 	var ret =  "<select name='pt_" + 6 + "' onchange='update_prep_type(this,"+ poi_id +");'>";
 	var idx = 1;

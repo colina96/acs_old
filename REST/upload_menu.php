@@ -82,16 +82,17 @@ function upload_menu()
 						if ($row[2] == '' && $row[3] == '') {
 							$ignore_next = true;
 						}
+						/*
 						$supplier = mysql_escape_string( $row[4]);
 						$product = mysql_escape_string( $row[5]);
 						$spec = mysql_escape_string( $row[6]);
 						$shelflife = $row[7];
-						$preptype_str = $row[8];
+						$preptype_str = $row[8]; */
 						$preptype = 0;
 						// horrible hack - should get values from db ... TODO
-						if ($preptype_str == 'FRESH') $preptype = 6;
+					/*	if ($preptype_str == 'FRESH') $preptype = 6;
 						if ($preptype_str == 'FROZEN') $preptype = 7;
-						if ($preptype_str == 'DRY') $preptype = 8;
+						if ($preptype_str == 'DRY') $preptype = 8; */
 						if (!$ignore_next && $row[2] != '') {
 							// search for component - only create new if not in already there
 							$description = mysql_escape_string( $row[2]);
