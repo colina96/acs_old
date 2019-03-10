@@ -379,9 +379,16 @@ function show_purchase_order(i)
 		// 	tr.appendChild(new_td((j == 0)?purchase_orders[i].supplier.name:'','comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].item_code,'comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
-			tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
-			tr.appendChild(new_td(purchase_orders[i].items[j].UOM,'comp','m-5'));
-			tr.appendChild(new_td(purchase_orders[i].items[j].open_shelf_life,'comp','m-5'));
+			 var innerHTML = "<input maxlength='20' size='20' class='edit_location' name='spec_" + purchase_orders[i].items[j].id + "'value='" +  purchase_orders[i].items[j].spec + "' onchange='set_db_field(this,\"PURCHASE_ORDER_ITEMS\",\"spec\"," + purchase_orders[i].items[j].id + ");'>";
+			 tr.appendChild(new_td(innerHTML,'comp','m-5'));
+			 var innerHTML = "<input maxlength='20' size='20' class='edit_location' name='spec_" + purchase_orders[i].items[j].id + "'value='" +  purchase_orders[i].items[j].UOM + "' onchange='set_db_field(this,\"PURCHASE_ORDER_ITEMS\",\"UOM\"," + purchase_orders[i].items[j].id + ");'>";
+			 tr.appendChild(new_td(innerHTML,'comp','m-5'));
+			 var innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='spec_" + purchase_orders[i].items[j].id + "'value='" +  purchase_orders[i].items[j].open_shelf_life + "' onchange='set_db_field(this,\"PURCHASE_ORDER_ITEMS\",\"open_shelf_life\"," + purchase_orders[i].items[j].id + ");'>";
+			 tr.appendChild(new_td(innerHTML,'comp','m-5'));
+			 
+			// tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
+		// 	tr.appendChild(new_td(purchase_orders[i].items[j].UOM,'comp','m-5'));
+		// 	tr.appendChild(new_td(purchase_orders[i].items[j].open_shelf_life,'comp','m-5'));
 
 //			tr.appendChild(new_td(purchase_orders[i].items[j].PT.code,'comp','m-5'));
 			tr.appendChild(new_td(
