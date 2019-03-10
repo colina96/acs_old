@@ -74,7 +74,11 @@ function set_temp_mode(new_mode)
 // var temp_callback = null;
 function temp_callback(s) // works out where to send the temperature reading
 {
-	console.log('temp_callback',s,temp_mode);
+	console.log('temp_callback',s,temp_mode,parseInt(s * 10));
+	if (isNaN(s * 10)) {
+		console.log('not a number');
+		return;
+	}
 //	temp_probe = probe;
 	if (temp_mode == null) {
 		log ('temp_mode not set');
@@ -232,6 +236,10 @@ function process_barcode(s)
 		if (s.indexOf('acsadmin') >= 0) {
 			set_admin();
 		}
+	}
+	if ((s.indexOf('t') >= 0) || (s.indexOf('T') >= 0) && button_mode == 'T') {
+		var temp = parseFloat(s.substring(1));
+		if (!isNaN(temp)) temp_callback(s.substring(1));
 	}
 	if ((s.indexOf('u') >= 0) || (s.indexOf('U') >= 0)) { // user barcode scanned
 		
@@ -1269,7 +1277,9 @@ function show_dock_component(i,j)
 	new_comp = purchase_orders[i].items[j].component;
 	document.getElementById('dock_m1_temp_div').innerHTML = null;
 	document.getElementById('dock_m1_temp_div').appendChild(show_product_details(i,j));
-	dock_read_M1temp();
+	set_temp_mode('M1_dock');
+	show('dock_m_temp_modal');
+	// dock_read_M1temp();
 }
 
 function show_dock()

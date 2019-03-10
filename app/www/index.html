@@ -69,11 +69,22 @@
     function global_key(event) {
         // this is mostly to handle barcode scanner input.
         // on a pc the barcode scanner arrives as a string
-//	console.log(">>>" + event.keyCode);
-        keyboard_str += String.fromCharCode(event.keyCode);
-//	console.log(">>>" + keyboard_str);
+	console.log(">>>" + event.keyCode);
+        
+		if (event.keyCode == 8) { // delete
+			if (keyboard_str.length > 0) keyboard_str = keyboard_str.substring(0, keyboard_str.length - 1);
+		}
+		else if (event.keyCode == 190) {
+			keyboard_str += '.';
+		}
+		else {
+			keyboard_str += String.fromCharCode(event.keyCode);
+			
+		}
+		console.log(">>>" + keyboard_str + "<<");
         if (event.keyCode == 13) {
-            console.log(">>>" + keyboard_str);
+            console.log(">>>" + keyboard_str + "<<");
+            
             process_barcode(keyboard_str);
             keyboard_str = '';
         }
@@ -98,7 +109,7 @@
     <div class='center'>Advanced Catering Solutions</div>
     <div id='current_time_kitchen'>TIME</div>
 </div>
-<div class='background_div' tabindex="0" onkeypress='global_key(event);'>
+<div class='background_div' tabindex="0" onkeyup='global_key(event);'>
     <div class='mobile_main' id='splash'></div>
 
     <!-- Admin -->
@@ -199,7 +210,7 @@
 
             <div class='m_modal' id='dock_m_temp_modal'>
 
-                <div class="temp_scan">
+                <div class="temp_scan" onclick='dock_read_M1temp();''>
                     <img src="img/icon_IR.svg" class="icon_IR">
                     <div class='m_label' id="temp_instruction">
                         <span>
