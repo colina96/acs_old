@@ -12,8 +12,9 @@ var active_menu_item_id = null;
 var new_comp = null; // start a new component - M1
 var purchase_orders = null;
 
-
-var RESTHOME = SERVER_URL+"acs/REST/";
+//this is probably called before the document is ready which is why it generates an error - CPA
+var RESTHOME = null;
+if (typeof SERVER_URL !== 'undefined') RESTHOME = SERVER_URL+"acs/REST/";
 
 var barcode_mode = null;
 var mode = null; // kitchen or plating
@@ -150,7 +151,10 @@ function popup_error(head,msg) {
 }
 
 function close_popup(div) {
-	document.getElementById(div).style.display = 'none';
+	if (document.getElementById(div))
+		document.getElementById(div).style.display = 'none';
+	else 
+		console.log('close popup div does not exist',div);
 }
 
 function popup_manual_temp() {
