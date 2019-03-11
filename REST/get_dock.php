@@ -39,7 +39,13 @@ if ($userID > 0) {
 		if (array_key_exists('items',$po)) {
 			foreach ($po['items'] as $j => $poi) {
 				$comp_id = $poi['menu_item_component_id'];
-				$pos[$i]['items'][$j]['component'] = $comps[$comp_id];
+				if (array_key_exists($comp_id,$comps)) 
+					$pos[$i]['items'][$j]['component'] = $comps[$comp_id];
+				else {
+					echo 'ERROR - '.$comp_id .'<br><hr>';
+					var_dump($comps);
+				}
+				
 				$pos[$i]['items'][$j]['PT'] = $prep_types[$poi['prep_type']];
 			}
 		}
@@ -51,6 +57,7 @@ if ($userID > 0) {
 	$ret['prep_types'] = $prep_types;
  	$ret['comps'] = $comps;
 	$ret['suppliers'] = $suppliers;
+	$ret['pois'] = $pois;
 	echo json_encode($ret);
 }
 

@@ -140,7 +140,7 @@ function add_purchase_order_item()
 	var tr = document.createElement('tr');
 	tr.appendChild(new_td_text_input('po_item_name_' + po.n_items,'comp','td_input',''));
 	tr.appendChild(new_td_text_input('po_spec_' + po.n_items,'comp','td_input',''));
-	tr.appendChild(new_td_text_input('po_uom_' + po.n_items,'comp','td_input',''));
+	tr.appendChild(new_td_text_input('po_item_code_' + po.n_items,'comp','td_input',''));
 	tab.appendChild(tr);
 	setup_search('po_item_name_' + po.n_items,comp_search_items);
 	po.n_items ++;
@@ -178,7 +178,7 @@ function goto_new_po()
 	tr.appendChild(new_td('ITEM_NAME :','comp','m-5'));
 	// tr.appendChild(new_td('ITEM_CODE :','comp','m-5')); not used ....yet
 	tr.appendChild(new_td('SPEC :','comp','m-5'));
-	tr.appendChild(new_td('UOM :','comp','m-5'));
+	tr.appendChild(new_td('ITEM CODE :','comp','m-5'));
 	tab.appendChild(tr);
 	
 	var more_items = document.createElement('button');
@@ -219,10 +219,10 @@ function upload_new_purchase_order()
 	let n_valid = 0;
 	for (let i = 0; i < po.n_items; i++) {
 		let row = Array();
-		row[0] = document.getElementById('po_uom_' + i).value;
+		row[0] = document.getElementById('po_spec_' + i).value;
 		if (row[0] == '') row[0] = 'Not Set'; 
 		row[1] = document.getElementById('po_item_name_' + i).value;
-		row[2] = document.getElementById('po_spec_' + i).value;
+		row[2] = document.getElementById('po_item_code_' + i).value;
 		if (row[2] == '') row[2] = 'Not Set'; 
 		if (row[1] != '') {
 			n_valid ++;
@@ -357,7 +357,7 @@ function show_purchase_order(i)
 	tr.appendChild(new_th('ITEM CODE','comp','m-5'));
 	tr.appendChild(new_th('ITEM NAME','comp','m-5'));
 	tr.appendChild(new_th('SPEC','comp','m-5'));
-	tr.appendChild(new_th('UOM','comp','m-5'));
+	tr.appendChild(new_th('ITEM CODE','comp','m-5'));
 	tr.appendChild(new_th('SHELF LIFE<br>AFTER OPENING','comp','m-5'));
 	tr.appendChild(new_th('ITEM TYPE','comp','m-5'));
 	tr.appendChild(new_th('LABEL','comp','m-5'));
@@ -381,7 +381,7 @@ function show_purchase_order(i)
 			tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
 			 var innerHTML = "<input maxlength='20' size='20' class='edit_location' name='spec_" + purchase_orders[i].items[j].id + "'value='" +  purchase_orders[i].items[j].spec + "' onchange='set_db_field(this,\"PURCHASE_ORDER_ITEMS\",\"spec\"," + purchase_orders[i].items[j].id + ");'>";
 			 tr.appendChild(new_td(innerHTML,'comp','m-5'));
-			 var innerHTML = "<input maxlength='20' size='20' class='edit_location' name='spec_" + purchase_orders[i].items[j].id + "'value='" +  purchase_orders[i].items[j].UOM + "' onchange='set_db_field(this,\"PURCHASE_ORDER_ITEMS\",\"UOM\"," + purchase_orders[i].items[j].id + ");'>";
+			 var innerHTML = "<input maxlength='20' size='20' class='edit_location' name='spec_" + purchase_orders[i].items[j].id + "'value='" +  purchase_orders[i].items[j].item_code + "' onchange='set_db_field(this,\"PURCHASE_ORDER_ITEMS\",\"item_code\"," + purchase_orders[i].items[j].id + ");'>";
 			 tr.appendChild(new_td(innerHTML,'comp','m-5'));
 			 var innerHTML = "<input type='number' maxlength='3' size='3' class='edit_location' name='spec_" + purchase_orders[i].items[j].id + "'value='" +  purchase_orders[i].items[j].open_shelf_life + "' onchange='set_db_field(this,\"PURCHASE_ORDER_ITEMS\",\"open_shelf_life\"," + purchase_orders[i].items[j].id + ");'>";
 			 tr.appendChild(new_td(innerHTML,'comp','m-5'));
@@ -468,7 +468,7 @@ function Xshow_purchase_orders()
 	tr.appendChild(new_th('ITEM CODE','comp','m-5'));
 	tr.appendChild(new_th('ITEM NAME','comp','m-5'));
 	tr.appendChild(new_th('SPEC','comp','m-5'));
-	tr.appendChild(new_th('UOM','comp','m-5'));
+	tr.appendChild(new_th('ITEM CODE','comp','m-5'));
 	tr.appendChild(new_th('SHELF LIFE<br>AFTER OPENING','comp','m-5'));
 	tr.appendChild(new_th('ITEM TYPE','comp','m-5'));
 	tr.appendChild(new_th('LABEL','comp','m-5'));
@@ -491,7 +491,7 @@ function Xshow_purchase_orders()
 			tr.appendChild(new_td(purchase_orders[i].items[j].item_code,'comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].component.description,'comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].spec,'comp','m-5'));
-			tr.appendChild(new_td(purchase_orders[i].items[j].UOM,'comp','m-5'));
+			tr.appendChild(new_td(purchase_orders[i].items[j].item_code,'comp','m-5'));
 			tr.appendChild(new_td(purchase_orders[i].items[j].open_shelf_life,'comp','m-5'));
 
 //			tr.appendChild(new_td(purchase_orders[i].items[j].PT.code,'comp','m-5'));

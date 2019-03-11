@@ -325,8 +325,6 @@ insert into MENU_ITEMS values (2,1,'F4489315','Vanilla Sauce',null,20,0,0);
 insert into MENU_ITEM_COMPONENTS values (1,1,'Duck Rillettes',1,1,null,null,FALSE,0);
 insert into MENU_ITEM_COMPONENTS values (2,1,'Apple Beetroot Jelly',1,2,null,null,FALSE,0);
 insert into MENU_ITEM_COMPONENTS values (3,1,'Vanilla Sauce',2,0,null,null,FALSE,0);
-insert into MENU_ITEM_COMPONENTS values (4,0,'Cream',6,0,null,5,FALSE,1);
-insert into MENU_ITEM_COMPONENTS values (5,0,'Steak',6,0,null,5,FALSE,1);
 
 insert into MENU_ITEM_LINK values (null,1,1,1);
 insert into MENU_ITEM_LINK values (null,1,1,2);
@@ -346,7 +344,7 @@ insert into PARAMS values(null,'PLATING_LABELS1_IP','10.0.0.99',now());
 insert into PARAMS values(null,'PLATING_LABELS1_PORT','9100',now());
 insert into PARAMS values(null,'PLATING_LABELS2_IP','10.0.0.99',now());
 insert into PARAMS values(null,'PLATING_LABELS2_PORT','9100',now());
-
+/*
 insert into SUPPLIERS values(null,'Vic Meats','Mascot','Australia','123456789',now());
 insert into SUPPLIERS values(null,'ANDREWS','Mascot','Australia','123456789',now());
 
@@ -356,3 +354,4 @@ insert into PURCHASE_ORDERS values (null,2,'Weekly Order',now(),null,now());
 insert into PURCHASE_ORDER_ITEMS values (null,1,5,'V100001','sliced','each',3,6,null,now());
 insert into PURCHASE_ORDER_ITEMS values (null,1,4,'V100001','diced','each',3,6,null,now());
 insert into PURCHASE_ORDER_ITEMS values (null,2,5,'V100001','chunks','each',3,6,null,now());
+*/

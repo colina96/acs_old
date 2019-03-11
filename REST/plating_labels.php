@@ -52,8 +52,8 @@ if (!empty($_POST['data'])) {
 			fwrite($handle,"Port:".$params['PLATING_LABELS1_PORT']."\n");
 			fwrite($handle,"Label:ACS_PL_SERVE.LBL"."\n");
 			fwrite($handle,"Endheader"."\n");
-			// fwrite($handle,"Copies:".$serve['n']."\n");
-			fwrite($handle,"Copies:".'1'."\n");
+			fwrite($handle,"Copies:".$serve['n']."\n");
+			// fwrite($handle,"Copies:".'1'."\n");
 			fwrite($handle,"SERVESIZE:".$serve['servesize'].$units."\n");
 			$d = strtotime($comp['expiry_date']);
 			$expiryTxt = "USE BY:".date("d M y H:i",$d);
