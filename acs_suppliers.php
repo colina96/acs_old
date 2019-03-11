@@ -15,7 +15,7 @@
 	</div>
 
 	<div id='csv_upload_div' style='display:none'>
-		<input type='file' accept='text/plain' onchange='open_suppliers_csv(event)'><br>
+		<input type='file' accept='.csv' onchange='open_suppliers_csv(event)'><br>
 
 	</div>
 	<div id='csv_errors'></div>
@@ -50,6 +50,7 @@ function populate_purchase_order(json)
 	innerHTML += "<tr><td class='comp'><div class='m-5'>ITEM NAME</div></td>";
 	innerHTML += "<td class='comp'><div class='m-5'>SPEC</div></td>";
 	innerHTML += "<td class='comp'><div class='m-5'>ITEM CODE</div></td></tr>";
+	po.n_items = 0;
    	for (var i = 2; i < json.length; i++) {
 	   console.log('adding item');
 	   if (json[i][1] && json[i][1] != '') {
@@ -58,8 +59,10 @@ function populate_purchase_order(json)
 		   innerHTML += "<td class='comp'><input class='td_input' id='po_item_code_" + n + "' value='" + json[i][2] + "'></div></td>";
 		
 			n++;
+			po.n_items ++;
 	   } 
    }  
+    console.log('n items = ',po.n_items);
    	innerHTML += "</table>";
     	document.getElementById('po_items_div').innerHTML = innerHTML;
  //  	console.log(innerHTML);
@@ -248,7 +251,7 @@ function goto_new_po()
 	);
 	div.appendChild(save_po);
 	var csv_div = document.createElement('div');
-	csv_div.innerHTML = "Upload purchase order: <input type='file' accept='text/plain' onchange='open_purchase_order_csv(event)'>"
+	csv_div.innerHTML = "Upload purchase order: <input type='file' accept='.csv' onchange='open_purchase_order_csv(event)'>"
 	div.appendChild(csv_div);
 	
 	get_db_data('SUPPLIERS','',setup_supplier_search);
