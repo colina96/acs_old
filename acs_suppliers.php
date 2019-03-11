@@ -42,8 +42,53 @@ var po_data = null; // purchase orders
 var purchase_order = null;
 var upload_suppliers_obj = null;
 
+function populate_purchase_order(json)
+{
+	document.getElementById('supplier_input').value = json[1][1];
+	var n = 0;
+	var innerHTML = "<table id='po_item_table'>";
+	innerHTML += "<tr><td class='comp'><div class='m-5'>ITEM NAME</div></td>";
+	innerHTML += "<td class='comp'><div class='m-5'>SPEC</div></td>";
+	innerHTML += "<td class='comp'><div class='m-5'>ITEM CODE</div></td></tr>";
+   	for (var i = 2; i < json.length; i++) {
+	   console.log('adding item');
+	   if (json[i][1] && json[i][1] != '') {
+		   innerHTML += "<tr><td class='comp'><input class='td_input' id='po_item_name_" + n + "' value='" + json[i][1] + "'></div></td>";
+		   innerHTML += "<td class='comp'><input class='td_input' id='po_spec_" + n + "' value='" + json[i][0] + "'></div></td>";
+		   innerHTML += "<td class='comp'><input class='td_input' id='po_item_code_" + n + "' value='" + json[i][2] + "'></div></td>";
+		
+			n++;
+	   } 
+   }  
+   	innerHTML += "</table>";
+    	document.getElementById('po_items_div').innerHTML = innerHTML;
+ //  	console.log(innerHTML);
+}
 
+function open_purchase_order_csv(event)
+{
+	var input = event.target;
+	
+	console.log('open_purchase_order_csv');
 
+	var reader = new FileReader();
+	reader.onload = function(){
+	    var text = reader.result;
+	    var json = CSVToArray(text);
+	   //   upload_suppliers_obj.json = json;
+	   console.log(json);
+	   // now populate form
+	   if (json.length < 3) { 
+		   console.log('not enough data');
+		   return;
+	   }
+	   
+	   console.log('got records',json.length);
+	   populate_purchase_order(json);
+	  
+	};
+	reader.readAsText(input.files[0]);
+}
 //var open_suppliers_csv = function(event) {
 function open_suppliers_csv(event) {
 		var input = event.target;
@@ -143,7 +188,7 @@ function add_purchase_order_item()
 	tr.appendChild(new_td_text_input('po_item_code_' + po.n_items,'comp','td_input',''));
 	tab.appendChild(tr);
 	setup_search('po_item_name_' + po.n_items,comp_search_items);
-	po.n_items ++;
+	return(po.n_items ++);
 }
 
 function goto_new_po() 
@@ -172,6 +217,8 @@ function goto_new_po()
 	d.appendChild(tab);
 	div.appendChild(d);
 	// add purchare order items
+	var items_div = document.createElement('div');
+	items_div.id = 'po_items_div';
 	var tab = document.createElement('table');
 	tab.id = 'po_item_table';
 	var tr = document.createElement('tr');
@@ -189,9 +236,10 @@ function goto_new_po()
 	);
 
 	
-	
-	div.appendChild(tab);
+	items_div.appendChild(tab);
+	div.appendChild(items_div);
 	div.appendChild(more_items);
+	add_purchase_order_item();
 	var save_po = document.createElement('button');
 	save_po.innerHTML = 'Save';
 	save_po.setAttribute(
@@ -199,6 +247,9 @@ function goto_new_po()
 			"upload_new_purchase_order();"
 	);
 	div.appendChild(save_po);
+	var csv_div = document.createElement('div');
+	csv_div.innerHTML = "Upload purchase order: <input type='file' accept='text/plain' onchange='open_purchase_order_csv(event)'>"
+	div.appendChild(csv_div);
 	
 	get_db_data('SUPPLIERS','',setup_supplier_search);
 	get_db_data('MENU_ITEM_COMPONENTS','',setup_po_comp_search);
