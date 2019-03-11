@@ -317,13 +317,13 @@ function close_popups()
 		document.getElementById('shield').style.display='none';
 	}
 }
-
-function openPage(pageName, elmnt, color,content_class,tab_class) {
+/*
+function XopenPage(pageName, elmnt, color,content_class,tab_class) {
 	close_popups();
     // console.log("opening page ",pageName,content_class);
 
-    // Hide all elements with class="tabcontent" by default */
-    var i, tabcontent, tablinks;
+    // Hide all elements with class="tabcontent" by default 
+    var tabcontent, tablinks;
     tabcontent = document.getElementsByClassName(content_class);
     for (let i = 0; i < tabcontent.length; i++) {
     	// console.log("found tab ",tabcontent[i].id);
@@ -342,7 +342,8 @@ function openPage(pageName, elmnt, color,content_class,tab_class) {
 
     // Add the specific color to the button used to open the tab content
     // elmnt.style.backgroundColor = color;
-}
+} 
+*/
 
 // ref: http://stackoverflow.com/a/1293163/2343
 // This will parse a delimited string into an array of
