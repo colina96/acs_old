@@ -583,8 +583,7 @@ function select_prep_type(i, j){
 	var ret =  "<select name='pt_" + 6 + "' onchange='update_prep_type(this,"+ poi_id +");'>";
 	var idx = 1;
 	var dock = 1;
-	// need to make a call and load from DB
-	// var preptypes = ['CC', 'HF', 'ESL', 'LR', 'AHR', 'FRESH','FROZEN','DRY', 'DECANT'];
+
 	for (var i in preptypes) {
 		// console.log(i);
 		if ((!dock && preptypes[i].dock == 0) || (dock && preptypes[i].dock == 1)) { 
@@ -593,12 +592,7 @@ function select_prep_type(i, j){
 			ret +=  ">"+ preptypes[i].code + "</option>";
 		}
 	}
-	/*
-	for (var i in preptypes) {
-		ret += "<option value='" + i + "'";
-		if (preptypes[i] == pt_code) { ret += " selected"; }
-		ret += ">" + preptypes[i] + "</option>";
-	} */
+
 	ret +=  "</select>";
 	return (ret);
 
@@ -613,19 +607,20 @@ function update_prep_type(s,id){
 	
 	// var s = document.getElementById("pt_" + comp_id);
 	
-	var idx = s.selectedIndex + 1; // temp fix to pass the PT code. In the array it starts from 0, but in DB it starts with 1
+	var idx = s.selectedIndex; // temp fix to pass the PT code. In the array it starts from 0, but in DB it starts with 1
 	var val = s.options[idx].value;
 	console.log("update PO Item ",id,idx,val);
 	
-	$.post(RESTHOME + "POI" + "/update_pois.php",
+	$.post(RESTHOME + "/update_pois.php",
 		    {
 		        poi_id: id,
-		        pt_id: idx
+		        prep_type: val
 			},
 		    function(data, status){
 		        console.log("Data: " + data + "\nStatus: " + status);
 		    });
 }
+
 
 function edit_or_save(i, j){
 	var ret = "<button type='button' class='button_main' \

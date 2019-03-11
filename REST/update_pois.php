@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include '../../db.php';
+include '../db.php';
 
 $userID = $_SESSION['userID'];
 // echo "userID ".$userID."\n";
@@ -15,7 +15,7 @@ if ($userID > 0) {
 	//$mic_id = $_POST['mic_id'];
 
 // DATA to update with 	
-	$new_pt = $_POST['pt_id'];
+	$new_pt = $_POST['prep_type'];
 
 
 	$sql = "update PURCHASE_ORDER_ITEMS set prep_type = ".$new_pt." 
