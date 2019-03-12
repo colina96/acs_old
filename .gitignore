@@ -10,3 +10,5 @@ REST/tmp/*
 */logs/*
 logs/*
 monarch_9419/print_lbl
+
+PANIC.log

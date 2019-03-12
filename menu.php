@@ -4,9 +4,11 @@
 	        <button type='button' class='acs_menu_btn' href="#" id="active_menu"
 	                onclick="show_active_menus()">ACTIVE</button>
 	        <button type='button' class='acs_menu_btn' href="#" id="future_menu"
-	                onclick="open_future_menus();">FUTURE</button>
-	        <button type='button' class='acs_menu_btn' href="#" id="expired_menu"
-	                onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button>
+	                onclick="show_future_menus();">FUTURE</button>
+			<button type='button' class='acs_menu_btn' href="#" id="expired_menu"
+	                onclick="show_expired_menus();">EXPIRED</button>
+			<!-- <button type='button' class='acs_menu_btn' href="#" id="expired_menu"
+	                onclick="openPage('future_menus', this, 'red','menu_details','acs_menu_btn')">EXPIRED</button> -->
 	    </div>
 	    
 	   
@@ -1055,11 +1057,71 @@ var menu = null;
 var menu_items = null;
 var menu_item_components = null;
 var preptypes = null;
-function open_future_menus() // dummy code for now
+
+function show_future_menus()
 {
-	var div = openPage('future_menus', this, 'red','menu_details','acs_menu_btn');
-	div.innerHTML = null;
+	// var div = openPage('future_menus', this, 'red','menu_details','acs_menu_btn');
+	// div.innerHTML = null;
+
+	hide('menu_buttons2');
+	show('menu_buttons1');
+	// document.getElementById('menu_search').value = '';
+	openPage('active_menus', this, 'red','menu_details','acs_menu_btn');
+	$.ajax({
+        url: "REST/get_menus.php?type=future",
+        type: "POST",
+        dataType: 'json',
+        // contentType: "application/json",
+        success: function(result) {
+            menus = result;
+           // document.getElementById('active_comps').innerHTML = result;
+            console.log("got " + result.length + " menus");
+            document.getElementById('active_menus').innerHTML = result;
+            show_menus('active',result);
+            
+        },
+        done: function(result) {
+            console.log("done load_comps ");
+        },
+        fail: (function (result) {
+            console.log("fail load_comps",result);
+        })
+    });
+
 }
+
+function show_expired_menus()
+{
+	// var div = openPage('future_menus', this, 'red','menu_details','acs_menu_btn');
+	// div.innerHTML = null;
+
+	hide('menu_buttons2');
+	show('menu_buttons1');
+	// document.getElementById('menu_search').value = '';
+	openPage('active_menus', this, 'red','menu_details','acs_menu_btn');
+	$.ajax({
+        url: "REST/get_menus.php?type=expired",
+        type: "POST",
+        dataType: 'json',
+        // contentType: "application/json",
+        success: function(result) {
+            menus = result;
+           // document.getElementById('active_comps').innerHTML = result;
+            console.log("got " + result.length + " menus");
+            document.getElementById('active_menus').innerHTML = result;
+            show_menus('active',result);
+            
+        },
+        done: function(result) {
+            console.log("done load_comps ");
+        },
+        fail: (function (result) {
+            console.log("fail load_comps",result);
+        })
+    });
+
+}
+
 var active_menu_id = null;
 
 function delete_menu(menu_id)
